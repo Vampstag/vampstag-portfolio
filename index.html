@@ -86,6 +86,114 @@
                 transform: translateY(-2px);
                 box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             }
+
+            @keyframes wave {
+                0% { transform: rotate( 0.0deg) }
+                10% { transform: rotate(14.0deg) }
+                20% { transform: rotate(-8.0deg) }
+                30% { transform: rotate(14.0deg) }
+                40% { transform: rotate(-4.0deg) }
+                50% { transform: rotate(10.0deg) }
+                60% { transform: rotate( 0.0deg) }
+                100% { transform: rotate( 0.0deg) }
+            }
+
+            .hi-emoji {
+                animation-name: wave;
+                animation-duration: 2.5s;
+                animation-iteration-count: infinite;
+                transform-origin: 70% 70%;
+                display: inline-block;
+            }
+        </style>
+        <style>
+            /* --- PRELOADER CSS --- */
+            :root {
+                --bg-color: #000000;
+                --text-color: #ffffff;
+                --ease-smooth: cubic-bezier(0.19, 1, 0.22, 1);
+            }
+
+            body.preloader-active {
+                overflow: hidden;
+            }
+
+            #preloader {
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background-color: var(--bg-color); color: var(--text-color);
+                z-index: 99999;
+                display: flex; justify-content: center; align-items: center; flex-direction: column;
+                transition: transform 1.6s var(--ease-smooth);
+                transform-origin: top;
+                font-family: 'Space Grotesk', sans-serif;
+            }
+
+            #preloader.finished { 
+                transform: translateY(-100%); 
+            }
+
+            .counter-wrapper { 
+                position: relative; 
+                overflow: visible;
+                text-align: center;
+                padding: 20px;
+            }
+
+            #counter {
+                font-size: 15vw; 
+                font-weight: 700;
+                letter-spacing: -0.04em;
+                font-variant-numeric: tabular-nums; 
+                display: block;
+            }
+
+            .corner-text {
+                font-size: 11px; font-weight: 600;
+                text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.6;
+            }
+
+            .top-corners, .bottom-corners {
+                position: absolute;
+                width: calc(100% - 60px);
+                left: 30px;
+                right: 30px;
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .top-corners {
+                top: 30px;
+            }
+
+            .bottom-corners {
+                bottom: 40px;
+            }
+
+            .progress-track {
+                position: absolute; bottom: 0; left: 0; width: 100%; height: 6px; background: #1a1a1a;
+            }
+            .progress-fill {
+                height: 100%; width: 0%; background: #ffffff; transition: width 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+            }
+
+            @media (max-width: 768px) {
+                #counter { font-size: 20vw; }
+                .corner-text { font-size: 9px; }
+                
+                .top-corners, .bottom-corners {
+                    width: calc(100% - 40px);
+                    left: 20px;
+                    right: 20px;
+                }
+
+                .top-corners {
+                    top: 20px;
+                }
+
+                .bottom-corners {
+                    bottom: 25px;
+                }
+            }
         </style>
         <link href="https://fonts.googleapis.com" rel="preconnect"/>
         <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous"/>
@@ -120,16 +228,31 @@
             };
         </script>
     </head>
-    <body class="body-2">
-        <div class="body-wrapper">
+        <body class="body-2">
+                    <div id="preloader">
+                        <div class="top-corners">
+                            <div class="corner-text">LOADING</div>
+                            <div class="corner-text">PLEASE WAIT</div>
+                        </div>
+                        <div class="counter-wrapper">
+                            <span id="counter">00</span>
+                        </div>
+                        <div class="bottom-corners">
+                            <div class="corner-text">SYSTEM CHECK</div>
+                            <div class="corner-text">ASSETS v.2.0</div>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="bar"></div>
+                        </div>
+                    </div>            <div class="body-wrapper">
             <div id="navbar-container"></div>
-            <section id="top" class="home-hero-section fade-in-section">
+            <section id="top" class="home-hero-section">
                 <div class="w-layout-blockcontainer global-wrapper w-container">
                     <div class="global-padding">
                         <div class="home-hero-wrapper">
                             <div data-w-id="17981745-b76c-fdb8-d5a0-45626b3a0f94" style="opacity:0" class="home-hero-headline-wrapper">
                                 <div class="home-hero-headline-text-2">Hello there</div>
-                                <img data-w-id="17981745-b76c-fdb8-d5a0-45626b3a0f97" loading="lazy" alt="Hi emoji" data-src="https://cdn.prod.website-files.com/68b88ad5bf41a0f5c752eab7/67631cf992d0c17f2b67e7de_%F0%9F%91%8B.webp" class="hi-emoji lazy-image"/>
+                                <img data-w-id="17981745-b76c-fdb8-d5a0-45626b3a0f97" loading="eager" alt="Hi emoji" src="https://cdn.prod.website-files.com/68b88ad5bf41a0f5c752eab7/67631cf992d0c17f2b67e7de_%F0%9F%91%8B.webp" class="hi-emoji"/>
                             </div>
                             <div data-w-id="54610587-6550-bd5f-42d1-d80780465257" style="opacity:0" class="home-hero-images-wrapper section-margin">
                                 <div class="home-hero-image-card-wrapper-01-2">
@@ -137,7 +260,7 @@
                                         <div class="home-hero-image-card-01-headine-text-2">Based in Bandung</div>
                                     </div>
                                     <div class="home-hero-card-image-block-2">
-                                        <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933e15b9e0519802dd84c93_af2a0d4520a664ec7eda2d68a0f33de6_gedung-sate-public-building-bandung-600nw-2421312955.jpg" alt="" class="home-hero-card-image-2 lazy-image"/>
+                                        <img loading="eager" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933e15b9e0519802dd84c93_af2a0d4520a664ec7eda2d68a0f33de6_gedung-sate-public-building-bandung-600nw-2421312955.jpg" alt="" class="home-hero-card-image-2"/>
                                     </div>
                                 </div>
                                 <div class="home-hero-image-card-wrapper-02">
@@ -146,7 +269,7 @@
                                         <div class="home-hero-image-card-02-headine-text-2">Dimas</div>
                                     </div>
                                     <div class="home-hero-card-image-block-2">
-                                        <img sizes="(max-width: 479px) 31vw, (max-width: 767px) 16vw, (max-width: 991px) 75.38310241699219px, (max-width: 1279px) 8vw, (max-width: 1439px) 75.38310241699219px, (max-width: 1919px) 5vw, 4vw" height="70" alt="Hero Image" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047.jpg" loading="lazy" data-srcset="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-800.jpg 800w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-1080.jpg 1080w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-1600.jpg 1600w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-2000.jpg 2000w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047.jpg 2205w" class="home-hero-card-image-2 lazy-image"/>
+                                        <img sizes="(max-width: 479px) 31vw, (max-width: 767px) 16vw, (max-width: 991px) 75.38310241699219px, (max-width: 1279px) 8vw, (max-width: 1439px) 75.38310241699219px, (max-width: 1919px) 5vw, 4vw" height="70" alt="Hero Image" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047.jpg" loading="eager" srcset="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-800.jpg 800w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-1080.jpg 1080w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-1600.jpg 1600w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-2000.jpg 2000w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047.jpg 2205w" class="home-hero-card-image-2"/>
                                     </div>
                                 </div>
                                 <div class="home-hero-image-card-wrapper-03-2">
@@ -155,7 +278,7 @@
                                         <div class="home-hero-image-card-03-headine-text-2">Marketer</div>
                                     </div>
                                     <div class="home-hero-card-image-block-2">
-                                        <img sizes="(max-width: 767px) 100vw, (max-width: 991px) 727.984375px, 939.984375px" data-srcset="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69351a0d96e0c9d238a0b6a5_WhatsApp%2520Image%25202025-12-06%2520at%252021.26.01_9bdde82a-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69351a0d96e0c9d238a0b6a5_WhatsApp%2520Image%25202025-12-06%2520at%252021.26.01_9bdde82a-p-800.jpg 800w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69351a0d96e0c9d238a0b6a5_WhatsApp%2520Image%25202025-12-06%2520at%252021.26.01_9bdde82a-p-1080.jpg 1080w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69351a0d96e0c9d238a0b6a5_WhatsApp%20Image%202025-12-06%20at%2021.26.01_9bdde82a.jpg 1326w" alt="" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69351a0d96e0c9d238a0b6a5_WhatsApp%20Image%202025-12-06%20at%2021.26.01_9bdde82a.jpg" loading="lazy" class="home-hero-card-image-2 lazy-image"/>
+                                        <img sizes="(max-width: 767px) 100vw, (max-width: 991px) 727.984375px, 939.984375px" srcset="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69351a0d96e0c9d238a0b6a5_WhatsApp%2520Image%25202025-12-06%2520at%252021.26.01_9bdde82a-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69351a0d96e0c9d238a0b6a5_WhatsApp%2520Image%25202025-12-06%2520at%252021.26.01_9bdde82a-p-800.jpg 800w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69351a0d96e0c9d238a0b6a5_WhatsApp%2520Image%25202025-12-06%2520at%252021.26.01_9bdde82a-p-1080.jpg 1080w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69351a0d96e0c9d238a0b6a5_WhatsApp%20Image%202025-12-06%20at%2021.26.01_9bdde82a.jpg 1326w" alt="" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69351a0d96e0c9d238a0b6a5_WhatsApp%20Image%202025-12-06%20at%2021.26.01_9bdde82a.jpg" loading="eager" class="home-hero-card-image-2"/>
                                     </div>
                                 </div>
                             </div>
@@ -1495,61 +1618,139 @@
         </script>
         <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Lazy load images
-            const lazyImages = [].slice.call(document.querySelectorAll("img.lazy-image"));
+            // Draggable Card and Hover Effect Logic for "My Name 's Dimas"
+            const heroImagesWrapper = document.querySelector('.home-hero-images-wrapper');
+            const draggableCard = document.querySelector('.home-hero-image-card-wrapper-02');
 
-            if ("IntersectionObserver" in window) {
-                let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
-                    entries.forEach(function(entry) {
-                        if (entry.isIntersecting) {
-                            let lazyImage = entry.target;
-                            lazyImage.src = lazyImage.dataset.src;
-                            if (lazyImage.dataset.srcset) {
-                                lazyImage.srcset = lazyImage.dataset.srcset;
-                            }
-                            lazyImage.classList.add("is-loaded");
-                            lazyImageObserver.unobserve(lazyImage);
-                        }
-                    });
+            if (heroImagesWrapper && draggableCard) {
+                let isDragging = false;
+                let startX, startY;
+
+                draggableCard.style.cursor = 'grab';
+                draggableCard.style.touchAction = 'none'; // Prevent default touch actions
+
+                // Prevent default browser drag behavior on images
+                draggableCard.querySelectorAll('img').forEach(img => {
+                    img.addEventListener('dragstart', e => e.preventDefault());
                 });
 
-                lazyImages.forEach(function(lazyImage) {
-                    lazyImageObserver.observe(lazyImage);
-                });
-            } else {
-                // Fallback for browsers that don't support IntersectionObserver
-                lazyImages.forEach(function(lazyImage) {
-                    lazyImage.src = lazyImage.dataset.src;
-                    if (lazyImage.dataset.srcset) {
-                        lazyImage.srcset = lazyImage.dataset.srcset;
-                    }
-                    lazyImage.classList.add("is-loaded");
-                });
-            }
+                const startDrag = (e) => {
+                    isDragging = true;
+                    draggableCard.classList.add('is-dragging');
+                    draggableCard.style.cursor = 'grabbing';
+                    draggableCard.style.transition = 'none';
+                    
+                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                    
+                    startX = clientX;
+                    startY = clientY;
+                };
 
-            // Scroll animations for sections
-            const sections = [].slice.call(document.querySelectorAll(".fade-in-section"));
+                const onDrag = (e) => {
+                    if (!isDragging) return;
+                    if (e.cancelable) e.preventDefault();
+                    
+                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                    
+                    const dx = clientX - startX;
+                    const dy = clientY - startY;
 
-            if ("IntersectionObserver" in window) {
-                let sectionObserver = new IntersectionObserver(function(entries, observer) {
-                    entries.forEach(function(entry) {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add("is-visible");
-                            sectionObserver.unobserve(entry.target);
-                        }
-                    });
-                }, { threshold: 0.1 });
+                    // Move the card with a slight rotation during drag
+                    draggableCard.style.transform = `translate3d(${dx}px, ${dy}px, 0) rotate(${dx * 0.02}deg)`;
+                };
 
-                sections.forEach(function(section) {
-                    sectionObserver.observe(section);
+                const endDrag = () => {
+                    if (!isDragging) return;
+                    isDragging = false;
+                    draggableCard.classList.remove('is-dragging');
+                    draggableCard.style.cursor = 'grab';
+                    
+                    // Rubber band snap back effect
+                    draggableCard.style.transition = 'transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                    draggableCard.style.transform = 'translate3d(0, 0, 0) rotate(0deg)';
+                };
+
+                // Mouse hover follow effect (only when not dragging)
+                heroImagesWrapper.addEventListener('mousemove', (e) => {
+                    if (isDragging) return;
+
+                    const rect = heroImagesWrapper.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+
+                    const deltaX = (x - centerX) * 0.05;
+                    const deltaY = (y - centerY) * 0.05;
+
+                    draggableCard.style.transition = 'transform 0.2s ease-out';
+                    draggableCard.style.transform = `translate3d(${deltaX}px, ${deltaY}px, 0) scale(1.1)`;
                 });
-            } else {
-                // Fallback for browsers that don't support IntersectionObserver
-                sections.forEach(function(section) {
-                    section.classList.add("is-visible");
+
+                heroImagesWrapper.addEventListener('mouseleave', () => {
+                    if (isDragging) return;
+                    
+                    draggableCard.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                    draggableCard.style.transform = 'translate3d(0, 0, 0) scale(1)';
                 });
+
+                // Drag event listeners
+                draggableCard.addEventListener('mousedown', startDrag);
+                draggableCard.addEventListener('touchstart', startDrag, { passive: true });
+
+                window.addEventListener('mousemove', onDrag);
+                window.addEventListener('touchmove', onDrag, { passive: false });
+
+                window.addEventListener('mouseup', endDrag);
+                window.addEventListener('touchend', endDrag);
             }
         });
         </script>
-    </body>
-</html>
+                <script>
+                    // Preloader Script as provided by user
+                    document.addEventListener("DOMContentLoaded", () => {
+                        document.body.style.overflow = 'hidden'; // Prevent scrolling initially
+        
+                        const counter = document.getElementById('counter');
+                        const bar = document.getElementById('bar');
+                        const preloader = document.getElementById('preloader');
+                        
+                        let currentProgress = 0;
+        
+                        function updateCounter() {
+                            const jump = Math.floor(Math.random() * 23) + 1;
+                            currentProgress += jump;
+                            if (currentProgress > 100) currentProgress = 100;
+        
+                            if (counter) counter.innerText = currentProgress.toString().padStart(2, '0');
+                            if (bar) bar.style.width = currentProgress + "%";
+        
+                            let delay = Math.floor(Math.random() * 200) + 50;
+        
+                            if (currentProgress > 70 && currentProgress < 85 && Math.random() > 0.3) {
+                                delay = 800 + Math.random() * 1000;
+                            } else if (currentProgress > 90 && currentProgress < 98) {
+                                delay = 400 + Math.random() * 400; 
+                            }
+        
+                            if (currentProgress < 100) {
+                                setTimeout(updateCounter, delay);
+                            } else {
+                                setTimeout(finishLoading, 500);
+                            }
+                        }
+        
+                        function finishLoading() {
+                            if (preloader) {
+                                preloader.classList.add('finished');
+                            }
+                            document.body.style.overflow = "auto";
+                        }
+        
+                        setTimeout(updateCounter, 500);
+                    });
+                </script>
+            </body></html>
