@@ -40,6 +40,60 @@
     animation: slideInFromBottom 0.8s ease-out 0.8s forwards;
     opacity: 0; /* initial state */
 }
+
+/* --- ANIMASI EMOJI MELAMBAI (HIGH QUALITY WAVE) --- */
+.hi-emoji {
+    display: inline-block; /* Agar transformasi rotasi bekerja */
+    transform-origin: 70% 70%; /* Titik putar di pergelangan tangan (kanan bawah) */
+    animation: wave-hand 2.5s infinite; /* Durasi 2.5 detik, berulang selamanya */
+}
+
+@keyframes wave-hand {
+    0% { transform: rotate(0deg); }
+    10% { transform: rotate(14deg); }  /* Melambai ke kanan */
+    20% { transform: rotate(-8deg); }  /* Balik ke kiri */
+    30% { transform: rotate(14deg); }  /* Kanan lagi */
+    40% { transform: rotate(-4deg); }  /* Kiri sedikit */
+    50% { transform: rotate(10deg); }  /* Kanan sedikit */
+    60% { transform: rotate(0deg); }   /* Kembali normal */
+    100% { transform: rotate(0deg); }  /* Jeda diam (pause) sebelum ulang lagi */
+}
+
+/* --- EFEK KILAUAN / SPARKLES --- */
+.emoji-container {
+    position: relative;
+    display: inline-block;
+}
+
+.sparkle-1, .sparkle-2, .sparkle-3 {
+    position: absolute;
+    color: #FFC107; /* Warna emas */
+    opacity: 0;
+    pointer-events: none;
+    font-family: sans-serif; /* Agar karakter render konsisten */
+    line-height: 1;
+}
+
+.sparkle-1 {
+    top: -15%; right: -15%; font-size: 24px;
+    animation: sparkle-pop 2.5s ease-in-out infinite;
+}
+
+.sparkle-2 {
+    top: 30%; right: -30%; font-size: 16px;
+    animation: sparkle-pop 2.5s ease-in-out infinite 0.5s;
+}
+
+.sparkle-3 {
+    top: -30%; right: 10%; font-size: 14px;
+    animation: sparkle-pop 2.5s ease-in-out infinite 1s;
+}
+
+@keyframes sparkle-pop {
+    0% { transform: scale(0) rotate(0deg); opacity: 0; }
+    50% { transform: scale(1) rotate(45deg); opacity: 1; }
+    100% { transform: scale(0) rotate(90deg); opacity: 0; }
+}
 </style>
         <style>
 @media (max-width: 767px) {
@@ -118,6 +172,11 @@
                 overflow: visible;
                 text-align: center;
                 padding: 20px;
+                transition: opacity 0.5s ease;
+            }
+
+            .counter-wrapper.fade-out {
+                opacity: 0;
             }
 
             #counter {
@@ -194,6 +253,131 @@
                     bottom: 25px;
                 }
             }
+
+            /* --- HOVER IMAGE EFFECT (ABOUT SECTION) --- */
+            .hover-trigger {
+                position: relative;
+                display: inline-block;
+                font-weight: 700;
+                cursor: pointer;
+                color: inherit; /* Mengikuti warna teks asli */
+                text-decoration: underline;
+                text-decoration-thickness: 2px;
+                text-decoration-color: #ccc;
+                transition: color 0.2s, text-decoration-color 0.2s;
+            }
+
+            .hover-trigger:hover {
+                color: #000;
+                text-decoration-color: #000;
+            }
+
+            .hover-image {
+                position: absolute;
+                bottom: 100%;
+                left: 50%;
+                transform: translate(-50%, 10px) scale(0.8);
+                width: 150px; /* Lebar gambar tooltip */
+                height: auto;
+                border-radius: 8px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                border: 1px solid rgba(0,0,0,0.1);
+                background: #fff;
+                z-index: 10;
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Efek membal */
+            }
+
+            .hover-trigger:hover .hover-image {
+                opacity: 1;
+                visibility: visible;
+                transform: translate(-50%, -15px) scale(1);
+            }
+
+            /* Panah kecil di bawah gambar */
+            .hover-image::after {
+                content: '';
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -6px;
+                border-width: 6px;
+                border-style: solid;
+                border-color: #fff transparent transparent transparent;
+            }
+
+            /* --- LENIS SMOOTH SCROLL CSS --- */
+            html.lenis, html.lenis body { height: auto; }
+            .lenis.lenis-smooth { scroll-behavior: auto !important; }
+            .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+            .lenis.lenis-stopped { overflow: hidden; }
+            .lenis.lenis-scrolling iframe { pointer-events: none; }
+
+            /* --- CUSTOM CURSOR CSS --- */
+            .custom-cursor {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 15px;
+                height: 15px;
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 999999;
+                transform: translate(-50%, -50%);
+                transition: width 0.3s ease, height 0.3s ease, transform 0.05s linear;
+                background-color: #fff; 
+                mix-blend-mode: difference; /* Agar kontras (negatif) di background apapun */
+            }
+
+            .custom-cursor.hovered {
+                width: 60px;
+                height: 60px;
+            }
+
+            /* Sembunyikan kursor asli hanya di Desktop */
+            @media (min-width: 992px) {
+                body, a, button, input, textarea, .hover-trigger {
+                    cursor: none !important;
+                }
+            }
+
+            /* Matikan custom cursor di HP/Tablet (Touch Device) */
+            @media (max-width: 991px) {
+                .custom-cursor {
+                    display: none !important;
+                }
+            }
+
+            /* --- SPACING / JARAK ANTAR SECTION (LEBIH LEGA) --- */
+            /* Mengatur margin bawah untuk semua section utama agar tidak mepet */
+            .home-hero-section,
+            .home-about-section,
+            .latest-work-section,
+            .hardskills-section,
+            .experience-section,
+            .journal-section,
+            .bits-and-pieces-section-desktop,
+            .bits-and-pieces-section-mobile,
+            .faq-section {
+                margin-bottom: 160px !important; /* Jarak Desktop yang luas (Cinematic) */
+            }
+
+            /* Memberi jarak antara Judul Section dengan Konten di bawahnya */
+            .section-headline-margin {
+                margin-bottom: 80px !important;
+            }
+
+            /* Penyesuaian untuk Mobile (HP) agar tidak terlalu jauh */
+            @media (max-width: 991px) {
+                .home-hero-section, .home-about-section, .latest-work-section, .hardskills-section, .experience-section, .journal-section, .bits-and-pieces-section-desktop, .bits-and-pieces-section-mobile, .faq-section {
+                    margin-bottom: 80px !important;
+                }
+                .section-headline-margin {
+                    margin-bottom: 40px !important;
+                }
+            }
         </style>
         <script>
             document.addEventListener("DOMContentLoaded", () => {
@@ -204,24 +388,42 @@
                 let currentProgress = 0;
 
                 function updateCounter() {
-                    const jump = Math.floor(Math.random() * 23) + 1;
+                    // UBAH DI SINI: Angka lompatan (jump).
+                    // Ganti 23 menjadi angka lebih besar (misal 40) agar lebih cepat selesai.
+                    const jump = Math.floor(Math.random() * 43) + 1;
                     currentProgress += jump;
                     if (currentProgress > 100) currentProgress = 100;
 
-                    if(counter) counter.innerText = currentProgress.toString().padStart(2, '0');
+                    if(counter) counter.innerText = currentProgress.toString().padStart(2, '0') + "%";
                     if(bar) bar.style.width = currentProgress + "%";
 
+                    // UBAH DI SINI: Delay dasar (dalam milidetik).
+                    // Semakin kecil angkanya, semakin cepat angkanya berganti.
                     let delay = Math.floor(Math.random() * 200) + 50;
 
+                    // LOGIKA JEDA BUATAN (Simulasi loading macet di angka tertentu)
                     if (currentProgress > 70 && currentProgress < 85 && Math.random() > 0.3) {
-                        delay = 800 + Math.random() * 1000;
+                        // Ini membuat loading terasa "berat" di 70-85%. Kurangi angka 800/1000 jika ingin lebih cepat.
+                        delay = 800 + Math.random() * 1000; 
                     } else if (currentProgress > 90 && currentProgress < 98) {
+                        // Ini membuat loading melambat di akhir (90-98%).
                         delay = 400 + Math.random() * 400; 
                     }
 
                     if (currentProgress < 100) {
                         setTimeout(updateCounter, delay);
                     } else {
+                        // Tambahkan kelas fade-out agar angka menghilang perlahan
+                        const counterWrapper = document.querySelector('.counter-wrapper');
+                        if (counterWrapper) counterWrapper.classList.add('fade-out');
+
+                        // MAINKAN SFX SAAT SELESAI
+                        // Browser mungkin memblokir ini jika user belum klik apapun (Autoplay Policy)
+                        const sfx = document.getElementById('completion-sound');
+                        if (sfx) {
+                            sfx.play().catch(e => console.log("Audio autoplay blocked:", e));
+                        }
+
                         // Once the counter reaches 100, fetch the footer
                         Promise.all([
                             fetch('footer.html').then(response => response.text())
@@ -255,6 +457,8 @@
                         preloader.classList.add('finished');
                     }
                     document.body.style.overflow = "auto";
+                    // Mulai Lenis scroll setelah loading selesai
+                    if (window.lenis) window.lenis.start();
                 }
 
                 document.body.classList.add('preloader-active');
@@ -301,15 +505,20 @@
                 <div class="corner-text">PLEASE WAIT</div>
             </div>
             <div class="counter-wrapper">
-                <span id="counter">00</span>
+                <span id="counter">0%</span>
             </div>
             <div class="bottom-corners">
                 <div class="corner-text">SYSTEM CHECK</div>
-                <div class="corner-text">ASSETS v.2.0</div>
+                <div class="corner-text">DOWNLOADING ASSETS</div>
             </div>
             <div class="progress-track">
                 <div class="progress-fill" id="bar"></div>
             </div>
+            <!-- Audio Element: Ganti 'src' dengan file audio lokal Anda jika ada (misal: audio/success.mp3) -->
+            <!-- Link di bawah adalah contoh suara interface futuristik -->
+            <audio id="completion-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3" preload="auto"></audio>
+            <!-- Audio Klik Halus -->
+            <audio id="click-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-modern-technology-select-3124.mp3" preload="auto"></audio>
         </div>
         <div class="body-wrapper">
             <div data-w-id="6f1a5f9d-504f-fce2-7e2d-a153e097ea25" data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="navbar-3 w-nav">
@@ -406,7 +615,12 @@
                         <div class="home-hero-wrapper">
                             <div class="home-hero-headline-wrapper animate-on-load-hello">
                                 <div class="home-hero-headline-text-2">Hello there</div>
-                                <img loading="lazy" alt="Hi emoji" data-src="https://cdn.prod.website-files.com/68b88ad5bf41a0f5c752eab7/67631cf992d0c17f2b67e7de_%F0%9F%91%8B.webp" class="hi-emoji lazy-image"/>
+                                <div class="emoji-container">
+                                    <img loading="lazy" alt="Hi emoji" data-src="https://cdn.prod.website-files.com/68b88ad5bf41a0f5c752eab7/67631cf992d0c17f2b67e7de_%F0%9F%91%8B.webp" class="hi-emoji lazy-image"/>
+                                    <div class="sparkle-1">✦</div>
+                                    <div class="sparkle-2">✦</div>
+                                    <div class="sparkle-3">✦</div>
+                                </div>
                             </div>
                             <div class="home-hero-images-wrapper section-margin animate-on-load-card">
                                 <div class="home-hero-image-card-wrapper-01-2">
@@ -444,13 +658,22 @@
                 <div class="w-layout-blockcontainer global-wrapper w-container">
                     <div class="global-padding">
                         <section id="about-section" class="about-section-wrapper">
-                            <div data-w-id="17981745-b76c-fdb8-d5a0-45626b3a0fb1" style="opacity:0" class="about-headline-block">
-                                <div class="section-headline-text text-3xl text-weight-semibold text-color-black-900">About me</div>
+                            <div class="about-headline-block">
+                                <div class="section-headline-text text-3xl text-weight-semibold text-color-black-900 text-reveal">About me</div>
                             </div>
                             <div data-w-id="17981745-b76c-fdb8-d5a0-45626b3a0fb4" style="opacity:0" class="about-text-block">
                                 <p class="about-text text-xl text-weight-medium text-color-black-900 big-black leading-edit">
-                                    I’m a Marketing student based in Bandung, Indonesia. I combine design and marketing strategy to create work that’s visually engaging and data driven.<br/>
-                                    <br/>My experience focuses on content creation and brand storytelling, connecting ideas with real audiences. I value growth, collaboration, and bringing fresh ideas to the table.
+                                    I’m a Marketing student based in Bandung, Indonesia. On 
+                                    <a href="/about" class="hover-trigger">
+                                        About
+                                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop" class="hover-image" alt="My Portrait"/>
+                                    </a>, 
+                                    you'll find how I combine design and marketing strategy to create work that’s visually engaging and data driven. My 
+                                    <a href="/portfolio" class="hover-trigger">
+                                        Portfolio
+                                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=200&auto=format&fit=crop" class="hover-image" alt="My Work"/>
+                                    </a> 
+                                    highlights projects focused on content creation and brand storytelling.
                                 </p>
                             </div>
                         </section>
@@ -462,8 +685,8 @@
                     <div class="global-padding">
                         <div class="home-services-wrapper">
                             <div class="home-services-headlne-content-wrapper section-headline-margin">
-                                <div data-w-id="17981745-b76c-fdb8-d5a0-45626b3a0fbc" style="opacity:0" class="home-services-headline">
-                                    <div class="section-headline-text text-3xl text-weight-semibold text-color-black-900">My Latest Work</div>
+                                <div class="home-services-headline">
+                                    <div class="section-headline-text text-3xl text-weight-semibold text-color-black-900 text-reveal">My Latest Work</div>
                                 </div>
                                 <div data-w-id="17981745-b76c-fdb8-d5a0-45626b3a0fbf" style="opacity:0" class="home-section-contact-button">
                                     <a href="https://webflow.com/templates/designers/quix-studio" target="_blank" class="button-normal-white-wrapper-2 w-inline-block">
@@ -1628,6 +1851,124 @@
                 });
             }
         });
+        </script>
+        
+        <!-- LENIS SMOOTH SCROLL SCRIPT -->
+        <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
+        <script>
+            // Inisialisasi Lenis
+            window.lenis = new Lenis({
+                duration: 1.2, // Durasi scroll (semakin besar = semakin halus/lambat berhentinya)
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Easing function "Exponential Out"
+                smooth: true,
+            });
+
+            // Stop scroll saat awal (karena ada preloader)
+            window.lenis.stop();
+
+            function raf(time) {
+                window.lenis.raf(time);
+                requestAnimationFrame(raf);
+            }
+            requestAnimationFrame(raf);
+        </script>
+
+        <!-- CUSTOM CURSOR SCRIPT -->
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                // Cek jika bukan device touch (desktop) agar tidak mengganggu di HP
+                if (window.matchMedia("(min-width: 992px)").matches) {
+                    const cursor = document.createElement('div');
+                    cursor.classList.add('custom-cursor');
+                    document.body.appendChild(cursor);
+
+                    // Gerakkan cursor mengikuti mouse
+                    document.addEventListener('mousemove', (e) => {
+                        cursor.style.left = e.clientX + 'px';
+                        cursor.style.top = e.clientY + 'px';
+                    });
+
+                    // Efek membesar saat hover (Event Delegation untuk performa & elemen dinamis)
+                    const hoverSelectors = 'a, button, .hover-trigger, img, .w-inline-block, .w-nav-button, input, textarea';
+                    
+                    document.addEventListener('mouseover', (e) => {
+                        if (e.target.closest(hoverSelectors)) {
+                            cursor.classList.add('hovered');
+                        }
+                    });
+
+                    document.addEventListener('mouseout', (e) => {
+                        if (e.target.closest(hoverSelectors)) {
+                            cursor.classList.remove('hovered');
+                        }
+                    });
+                }
+            });
+        </script>
+
+        <!-- GSAP & SCROLLTRIGGER (Untuk Text Reveal) -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                // --- 1. LOGIKA EFEK SUARA KLIK ---
+                const clickSound = document.getElementById('click-sound');
+                if (clickSound) {
+                    // Kecilkan volume agar tidak kaget (0.0 sampai 1.0)
+                    clickSound.volume = 0.4; 
+
+                    document.addEventListener('click', (e) => {
+                        // Cek jika yang diklik adalah link, tombol, atau elemen interaktif
+                        if (e.target.closest('a, button, .hover-trigger, .w-inline-block')) {
+                            clickSound.currentTime = 0; // Reset suara ke awal
+                            clickSound.play().catch(() => {}); // Play (abaikan error jika diblokir browser)
+                        }
+                    });
+                }
+
+                // --- 2. LOGIKA TEXT REVEAL (GSAP) ---
+                gsap.registerPlugin(ScrollTrigger);
+
+                const revealElements = document.querySelectorAll('.text-reveal');
+
+                revealElements.forEach(element => {
+                    // Pecah teks menjadi kata-kata (Split Text manual)
+                    const text = element.innerText;
+                    const words = text.split(' '); // Pisahkan berdasarkan spasi
+                    // Gunakan regex \s+ untuk menangani spasi ganda/newline, dan trim() untuk hapus spasi awal/akhir
+                    const words = text.trim().split(/\s+/); 
+                    element.innerHTML = ''; // Kosongkan elemen asli
+                    
+                    // Bungkus setiap kata dengan <span>
+                    words.forEach(word => {
+                    words.forEach((word, index) => {
+                        const span = document.createElement('span');
+                        span.innerText = word + ' '; // Tambah spasi lagi
+                        span.innerText = word;
+                        // Tambahkan margin kanan (0.25em) agar kata tidak menyatu
+                        if (index < words.length - 1) span.style.marginRight = '0.25em';
+                        span.style.display = 'inline-block';
+                        span.style.opacity = '0'; // Mulai transparan
+                        span.style.transform = 'translateY(30px)'; // Mulai dari bawah
+                        element.appendChild(span);
+                    });
+
+                    // Animasi GSAP
+                    gsap.to(element.children, {
+                        scrollTrigger: {
+                            trigger: element,
+                            start: "top 85%", // Mulai saat elemen masuk 85% viewport
+                            toggleActions: "play none none reverse" // Play saat masuk, reverse saat keluar
+                        },
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.8,
+                        stagger: 0.1, // Jeda antar kata (efek satu per satu)
+                        ease: "power3.out"
+                    });
+                });
+            });
         </script>
     </body>
 </html>
