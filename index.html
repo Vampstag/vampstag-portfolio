@@ -14,9 +14,46 @@
         <meta content="width=device-width, initial-scale=1" name="viewport"/>
         <meta content="Webflow" name="generator"/>
         <link href="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/css/mdkg.webflow.shared.4d3ebba11.css" rel="stylesheet" type="text/css" integrity="sha384-TT67oRMLIgdE62QKbLJVm4qWzvpdYU5Fte9HrMLErE4YLOwPeNlX0FQVkvPHI9IX" crossorigin="anonymous"/>
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "Person",
+          "name": "M. Dimas K. G.",
+          "alternateName": "Dimas",
+          "jobTitle": "Creative Marketer",
+          "url": "https://vampstag-portfolio.github",
+          "image": "https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/693913757ee65e6f4176fa25_home.jpg",
+          "description": "Hi, I'm a Marketing Student from Bandung with a passion for creativity. Dive into this site to see my latest projects, thoughts, and what I’ve been working on.",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Bandung",
+            "addressRegion": "West Java",
+            "addressCountry": "Indonesia"
+          },
+          "sameAs": [
+            "https://www.linkedin.com/in/dimasghadavi",
+            "https://www.instagram.com/vampstag/"
+          ],
+          "email": "dhiitakrisnaa@gmail.com",
+          "telephone": "+62859106526627",
+          "alumniOf": {
+            "@type": "CollegeOrUniversity",
+            "name": "Politeknik Negeri Bandung"
+          }
+        }
+        </script>
         <style>
         .navbar-3 {
+            position: fixed !important;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 999;
+            transition: transform 0.3s ease-in-out;
             transform: translateY(0%) !important;
+        }
+        .navbar-3.navbar-hidden {
+            transform: translateY(-100%) !important;
         }
         </style>
         <style>
@@ -284,6 +321,7 @@
                 border: 1px solid rgba(0,0,0,0.1);
                 background: #fff;
                 z-index: 10;
+                z-index: 1000; /* Naikkan Z-Index agar di atas elemen lain */
                 opacity: 0;
                 visibility: hidden;
                 pointer-events: none;
@@ -306,6 +344,22 @@
                 border-width: 6px;
                 border-style: solid;
                 border-color: #fff transparent transparent transparent;
+            }
+
+            /* FIX: Pastikan container text tidak memotong tooltip (overflow visible) */
+            .body-wrapper,
+            .home-about-section, 
+            .global-wrapper, 
+            .global-padding, 
+            .about-section-wrapper, 
+            .about-text-block {
+                overflow: visible !important;
+                position: relative;
+            }
+            
+            /* Pastikan section About berada di layer yang cukup tinggi agar tooltip tidak tertutup section sebelumnya */
+            .home-about-section {
+                z-index: 50 !important;
             }
 
             /* --- LENIS SMOOTH SCROLL CSS --- */
@@ -377,6 +431,24 @@
                 .section-headline-margin {
                     margin-bottom: 40px !important;
                 }
+            }
+
+            /* --- SCROLL PROGRESS BAR --- */
+            .navbar-progress-container {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 3px; /* Ketebalan bar (Tipis) */
+                background: transparent;
+                z-index: 2000; /* Pastikan di atas elemen navbar lainnya */
+                pointer-events: none;
+            }
+            .navbar-progress-bar {
+                height: 100%;
+                width: 0%;
+                background-color: #000000; /* Warna Bar (Hitam sesuai tema) */
+                transition: width 0.1s ease-out;
             }
         </style>
         <script>
@@ -522,6 +594,10 @@
         </div>
         <div class="body-wrapper">
             <div data-w-id="6f1a5f9d-504f-fce2-7e2d-a153e097ea25" data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="navbar-3 w-nav">
+                <!-- Scroll Progress Bar -->
+                <div class="navbar-progress-container">
+                    <div class="navbar-progress-bar" id="scroll-progress"></div>
+                </div>
                 <div class="global-wrapper w-container">
                     <div class="global-padding">
                         <div class="nav-wrapper">
@@ -740,8 +816,8 @@
                     <div class="global-padding">
                         <div class="whjy-choose-me-section-wrapper">
                             <div class="skills--headline-content-wrapper section-headline-margin">
-                                <div data-w-id="17981745-b76c-fdb8-d5a0-45626b3a1035" style="opacity:0" class="why-choose-me-headline">
-                                    <div class="section-headline-text text-3xl text-weight-semibold text-color-black-900">What I Do</div>
+                                <div class="why-choose-me-headline">
+                                    <div class="section-headline-text text-3xl text-weight-semibold text-color-black-900 text-reveal">What I Do</div>
                                 </div>
                                 <div data-w-id="17981745-b76c-fdb8-d5a0-45626b3a1038" style="opacity:0" class="why-choose-me-button-wrappe">
                                     <a href="https://webflow.com/templates/designers/quix-studio" target="_blank" class="button-normal-white-wrapper-2 w-inline-block">
@@ -812,8 +888,8 @@
                     <div class="global-padding">
                         <div class="experience-wrapper">
                             <div class="section-headlne-content-wrapper section-headline-margin">
-                                <div data-w-id="17981745-b76c-fdb8-d5a0-45626b3a107b" style="opacity:0" class="experience-headline">
-                                    <div class="section-headline-text text-3xl text-weight-semibold text-color-black-900">Experience</div>
+                                <div class="experience-headline">
+                                    <div class="section-headline-text text-3xl text-weight-semibold text-color-black-900 text-reveal">Experience</div>
                                 </div>
                                 <div data-w-id="17981745-b76c-fdb8-d5a0-45626b3a107e" style="opacity:0" class="experience-section-contact-button">
                                     <a href="https://webflow.com/templates/designers/quix-studio" target="_blank" class="button-normal-white-wrapper-2 w-inline-block">
@@ -926,8 +1002,8 @@
                     <div class="global-padding">
                         <div class="blogs-section-wrappar">
                             <div class="section-headlne-content-wrapper section-headline-margin">
-                                <div data-w-id="566b70c1-bcff-6434-151c-4be76f85e574" style="opacity:0" class="section-headline">
-                                    <div class="section-headline-text text-3xl text-weight-semibold text-color-black-900">Latest Insights</div>
+                                <div class="section-headline">
+                                    <div class="section-headline-text text-3xl text-weight-semibold text-color-black-900 text-reveal">Latest Insights</div>
                                 </div>
                                 <div data-w-id="566b70c1-bcff-6434-151c-4be76f85e577" style="opacity:0" class="experience-section-contact-button">
                                     <a href="/journal" target="_blank" class="button-normal-white-wrapper-2 w-inline-block">
@@ -1106,7 +1182,7 @@
                                     <div data-w-tab="Tab 1" class="w-tab-pane w--tab-active">
                                         <div class="section-headlne-content-wrapper section-headline-margin">
                                             <div class="best-seller-headings mobile">
-                                                <div class="section-headline-text text-3xl text-weight-semibold text-color-black-900">My Journal</div>
+                                                <div class="section-headline-text text-3xl text-weight-semibold text-color-black-900 text-reveal">My Journal</div>
                                             </div>
                                             <div data-w-id="17981745-b76c-fdb8-d5a0-45626b3a1108" style="opacity:0" class="experience-section-contact-button">
                                                 <a href="/journal" target="_blank" class="button-normal-white-wrapper-2 w-inline-block">
@@ -1338,8 +1414,8 @@
                 <div class="w-layout-blockcontainer global-wrapper w-container">
                     <div class="global-padding">
                         <div class="section-headlne-content-wrapper section-headline-margin">
-                            <div data-w-id="c2d97c26-1960-dea7-fec6-020eb794a5c8" style="opacity:0" class="section-headline">
-                                <div class="section-headline-text text-3xl text-weight-semibold text-color-black-900">Bits and Pieces</div>
+                            <div class="section-headline">
+                                <div class="section-headline-text text-3xl text-weight-semibold text-color-black-900 text-reveal">Bits and Pieces</div>
                             </div>
                         </div>
                         <div class="slices-of-life-section">
@@ -1547,8 +1623,8 @@
                     <div class="global-padding">
                         <div class="faq-section-wrapper">
                             <div class="section-headlne-content-wrapper section-headline-margin">
-                                <div data-w-id="2a0ce4e1-fca5-c56f-f8a8-c760690d6a9e" class="section-headline">
-                                    <div class="section-headline-text text-3xl text-weight-semibold text-color-black-900">FAQ</div>
+                                <div class="section-headline">
+                                    <div class="section-headline-text text-3xl text-weight-semibold text-color-black-900 text-reveal">FAQ</div>
                                 </div>
                                 <div data-w-id="2a0ce4e1-fca5-c56f-f8a8-c760690d6aa1" class="section-headline-contact-button-block">
                                     <a href="https://webflow.com/templates/designers/quix-studio" target="_blank" class="button-normal-white-wrapper-2 w-inline-block">
@@ -1935,27 +2011,37 @@
                 revealElements.forEach(element => {
                     // Pecah teks menjadi kata-kata (Split Text manual)
                     const text = element.innerText;
-                    const words = text.split(' '); // Pisahkan berdasarkan spasi
                     // Gunakan regex \s+ untuk menangani spasi ganda/newline, dan trim() untuk hapus spasi awal/akhir
                     const words = text.trim().split(/\s+/); 
                     element.innerHTML = ''; // Kosongkan elemen asli
                     
-                    // Bungkus setiap kata dengan <span>
-                    words.forEach(word => {
+                    // Loop setiap kata
                     words.forEach((word, index) => {
-                        const span = document.createElement('span');
-                        span.innerText = word + ' '; // Tambah spasi lagi
-                        span.innerText = word;
-                        // Tambahkan margin kanan (0.25em) agar kata tidak menyatu
-                        if (index < words.length - 1) span.style.marginRight = '0.25em';
-                        span.style.display = 'inline-block';
-                        span.style.opacity = '0'; // Mulai transparan
-                        span.style.transform = 'translateY(30px)'; // Mulai dari bawah
-                        element.appendChild(span);
+                        // Buat container untuk kata (agar tidak putus di tengah baris saat wrap)
+                        const wordSpan = document.createElement('span');
+                        wordSpan.style.display = 'inline-block';
+                        wordSpan.style.whiteSpace = 'nowrap';
+                        
+                        // Tambahkan margin kanan untuk spasi antar kata
+                        if (index < words.length - 1) wordSpan.style.marginRight = '0.25em';
+
+                        // Pecah kata menjadi huruf (characters)
+                        const chars = word.split('');
+                        chars.forEach(char => {
+                            const charSpan = document.createElement('span');
+                            charSpan.innerText = char;
+                            charSpan.style.display = 'inline-block';
+                            charSpan.style.opacity = '0';
+                            charSpan.style.transform = 'translateY(40px) rotate(10deg)'; // Efek dramatis: dari bawah & miring
+                            charSpan.classList.add('char-anim'); // Class target untuk GSAP
+                            wordSpan.appendChild(charSpan);
+                        });
+                        
+                        element.appendChild(wordSpan);
                     });
 
-                    // Animasi GSAP
-                    gsap.to(element.children, {
+                    // Animasi GSAP (Target ke huruf/char)
+                    gsap.to(element.querySelectorAll('.char-anim'), {
                         scrollTrigger: {
                             trigger: element,
                             start: "top 85%", // Mulai saat elemen masuk 85% viewport
@@ -1963,12 +2049,44 @@
                         },
                         opacity: 1,
                         y: 0,
-                        duration: 0.8,
-                        stagger: 0.1, // Jeda antar kata (efek satu per satu)
-                        ease: "power3.out"
+                        rotation: 0,
+                        duration: 1,
+                        stagger: 0.02, // Jeda sangat cepat antar huruf
+                        ease: "back.out(1.7)" // Efek membal sedikit di akhir
                     });
                 });
             });
+
+            // --- SCROLL PROGRESS BAR LOGIC ---
+            window.addEventListener('scroll', () => {
+                const progressBar = document.getElementById('scroll-progress');
+                if (progressBar) {
+                    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+                    const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                    const scrolled = (scrollTop / docHeight) * 100;
+                    
+                    progressBar.style.width = scrolled + "%";
+                }
+            });
+
+            // --- NAVBAR HIDE/SHOW ON SCROLL ---
+            let lastScrollTop = 0;
+            const navbar = document.querySelector('.navbar-3');
+
+            if (navbar) {
+                window.addEventListener('scroll', () => {
+                    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+                    
+                    // Logic: Hide on scroll down (> 50px), Show on scroll up
+                    if (scrollTop > lastScrollTop && scrollTop > 50) {
+                        navbar.classList.add('navbar-hidden');
+                    } else {
+                        navbar.classList.remove('navbar-hidden');
+                    }
+                    
+                    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // Mencegah angka negatif di mobile
+                });
+            }
         </script>
     </body>
 </html>
