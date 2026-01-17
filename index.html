@@ -436,6 +436,7 @@
             /* --- SCROLL PROGRESS BAR --- */
             .navbar-progress-container {
                 position: absolute;
+                position: fixed;
                 top: 0;
                 left: 0;
                 width: 100%;
@@ -593,6 +594,10 @@
             <audio id="click-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-modern-technology-select-3124.mp3" preload="auto"></audio>
         </div>
         <div class="body-wrapper">
+            <!-- Scroll Progress Bar (Dipindah keluar navbar agar tetap fixed di atas layar) -->
+            <div class="navbar-progress-container">
+                <div class="navbar-progress-bar" id="scroll-progress"></div>
+            </div>
             <div data-w-id="6f1a5f9d-504f-fce2-7e2d-a153e097ea25" data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="navbar-3 w-nav">
                 <!-- Scroll Progress Bar -->
                 <div class="navbar-progress-container">
