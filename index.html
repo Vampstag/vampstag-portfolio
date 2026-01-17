@@ -42,463 +42,7 @@
           }
         }
         </script>
-        <style>
-        .navbar-3 {
-            position: fixed !important;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 999;
-            transition: transform 0.3s ease-in-out;
-            transform: translateY(0%) !important;
-        }
-        .navbar-3.navbar-hidden {
-            transform: translateY(-100%) !important;
-        }
-        </style>
-        <style>
-@keyframes slideInFromBottom {
-    from {
-        transform: translateY(50px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-.animate-on-load-hello {
-    animation: slideInFromBottom 0.8s ease-out 0.5s forwards;
-    opacity: 0; /* initial state */
-}
-
-.animate-on-load-card {
-    animation: slideInFromBottom 0.8s ease-out 0.8s forwards;
-    opacity: 0; /* initial state */
-}
-
-/* --- ANIMASI EMOJI MELAMBAI (HIGH QUALITY WAVE) --- */
-.hi-emoji {
-    display: inline-block; /* Agar transformasi rotasi bekerja */
-    transform-origin: 70% 70%; /* Titik putar di pergelangan tangan (kanan bawah) */
-    animation: wave-hand 2.5s infinite; /* Durasi 2.5 detik, berulang selamanya */
-}
-
-@keyframes wave-hand {
-    0% { transform: rotate(0deg); }
-    10% { transform: rotate(14deg); }  /* Melambai ke kanan */
-    20% { transform: rotate(-8deg); }  /* Balik ke kiri */
-    30% { transform: rotate(14deg); }  /* Kanan lagi */
-    40% { transform: rotate(-4deg); }  /* Kiri sedikit */
-    50% { transform: rotate(10deg); }  /* Kanan sedikit */
-    60% { transform: rotate(0deg); }   /* Kembali normal */
-    100% { transform: rotate(0deg); }  /* Jeda diam (pause) sebelum ulang lagi */
-}
-
-/* --- EFEK KILAUAN / SPARKLES --- */
-.emoji-container {
-    position: relative;
-    display: inline-block;
-}
-
-.sparkle-1, .sparkle-2, .sparkle-3 {
-    position: absolute;
-    color: #FFC107; /* Warna emas */
-    opacity: 0;
-    pointer-events: none;
-    font-family: sans-serif; /* Agar karakter render konsisten */
-    line-height: 1;
-}
-
-.sparkle-1 {
-    top: -15%; right: -15%; font-size: 24px;
-    animation: sparkle-pop 2.5s ease-in-out infinite;
-}
-
-.sparkle-2 {
-    top: 30%; right: -30%; font-size: 16px;
-    animation: sparkle-pop 2.5s ease-in-out infinite 0.5s;
-}
-
-.sparkle-3 {
-    top: -30%; right: 10%; font-size: 14px;
-    animation: sparkle-pop 2.5s ease-in-out infinite 1s;
-}
-
-@keyframes sparkle-pop {
-    0% { transform: scale(0) rotate(0deg); opacity: 0; }
-    50% { transform: scale(1) rotate(45deg); opacity: 1; }
-    100% { transform: scale(0) rotate(90deg); opacity: 0; }
-}
-</style>
-        <style>
-@media (max-width: 767px) {
-    @keyframes fallAndBounce {
-        0% {
-            transform: translateY(-200px);
-            opacity: 0;
-        }
-        60% {
-            transform: translateY(10px);
-            opacity: 1;
-        }
-        80% {
-            transform: translateY(-5px);
-        }
-        100% {
-            transform: translateY(0);
-        }
-    }
-
-    .home-hero-images-wrapper.animate-on-load-card {
-        animation: none;
-        opacity: 1;
-    }
-
-    .home-hero-image-card-wrapper-02.mobile-fall-animation {
-        animation: fallAndBounce 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s forwards;
-        opacity: 0; /* initial state */
-    }
-
-    .home-hero-image-card-wrapper-01-2, .home-hero-image-card-wrapper-03-2 {
-         opacity: 0;
-         animation: fadeIn 0.8s ease-out 1s forwards;
-    }
-
-    @keyframes fadeIn {
-        to { opacity: 1; }
-    }
-}
-</style>
-        <style>
-            /* --- PRELOADER CSS --- */
-            :root {
-                --bg-color: #000000;
-                --text-color: #ffffff;
-                --ease-smooth: cubic-bezier(0.19, 1, 0.22, 1);
-            }
-
-            body.preloader-active {
-                overflow: hidden;            }
-
-            #preloader {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background-color: var(--bg-color);
-                color: var(--text-color);
-                z-index: 99999;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                flex-direction: column;
-                transition: transform 1.6s var(--ease-smooth);
-                transform-origin: top;
-                font-family: 'Space Grotesk', sans-serif;
-            }
-
-            #preloader.finished {
-                transform: translateY(-100%);
-            }
-
-            .counter-wrapper {
-                position: relative;
-                overflow: visible;
-                text-align: center;
-                padding: 20px;
-                transition: opacity 0.5s ease;
-            }
-
-            .counter-wrapper.fade-out {
-                opacity: 0;
-            }
-
-            #counter {
-                font-size: 15vw;
-                font-weight: 700;
-                letter-spacing: -0.04em;
-                font-variant-numeric: tabular-nums;
-                display: block;
-            }
-
-            .corner-text {
-                font-size: 11px;
-                font-weight: 600;
-                text-transform: uppercase;
-                letter-spacing: 1.5px;
-                opacity: 0.6;
-            }
-
-            .top-corners,
-            .bottom-corners {
-                position: absolute;
-                width: calc(100% - 60px);
-                left: 30px;
-                right: 30px;
-                display: flex;
-                justify-content: space-between;
-            }
-
-            .top-corners {
-                top: 30px;
-            }
-
-            .bottom-corners {
-                bottom: 40px;
-            }
-            
-            .progress-track {
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                height: 6px;
-                background: #1a1a1a;
-            }
-
-            .progress-fill {
-                height: 100%;
-                width: 0%;
-                background: #ffffff;
-                transition: width 0.2s cubic-bezier(0.25, 1, 0.5, 1);
-            }
-
-            @media (max-width: 768px) {
-                #counter {
-                    font-size: 20vw;
-                }
-
-                .corner-text {
-                    font-size: 9px;
-                }
-
-                .top-corners,
-                .bottom-corners {
-                    width: calc(100% - 40px);
-                    left: 20px;
-                    right: 20px;
-                }
-
-                .top-corners {
-                    top: 20px;
-                }
-
-                .bottom-corners {
-                    bottom: 25px;
-                }
-            }
-
-            /* --- HOVER IMAGE EFFECT (ABOUT SECTION) --- */
-            .hover-trigger {
-                position: relative;
-                display: inline-block;
-                font-weight: 700;
-                cursor: pointer;
-                color: inherit; /* Mengikuti warna teks asli */
-                text-decoration: underline;
-                text-decoration-thickness: 2px;
-                text-decoration-color: #ccc;
-                transition: color 0.2s, text-decoration-color 0.2s;
-            }
-
-            .hover-trigger:hover {
-                color: #000;
-                text-decoration-color: #000;
-            }
-
-            .hover-image {
-                position: absolute;
-                bottom: 100%;
-                left: 50%;
-                transform: translate(-50%, 10px) scale(0.8);
-                width: 150px; /* Lebar gambar tooltip */
-                height: auto;
-                border-radius: 8px;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-                border: 1px solid rgba(0,0,0,0.1);
-                background: #fff;
-                z-index: 10;
-                z-index: 1000; /* Naikkan Z-Index agar di atas elemen lain */
-                opacity: 0;
-                visibility: hidden;
-                pointer-events: none;
-                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Efek membal */
-            }
-
-            .hover-trigger:hover .hover-image {
-                opacity: 1;
-                visibility: visible;
-                transform: translate(-50%, -15px) scale(1);
-            }
-
-            /* Panah kecil di bawah gambar */
-            .hover-image::after {
-                content: '';
-                position: absolute;
-                top: 100%;
-                left: 50%;
-                margin-left: -6px;
-                border-width: 6px;
-                border-style: solid;
-                border-color: #fff transparent transparent transparent;
-            }
-
-            /* FIX: Pastikan container text tidak memotong tooltip (overflow visible) */
-            .body-wrapper,
-            .home-about-section, 
-            .global-wrapper, 
-            .global-padding, 
-            .about-section-wrapper, 
-            .about-text-block {
-                overflow: visible !important;
-                position: relative;
-            }
-            
-            /* Pastikan section About berada di layer yang cukup tinggi agar tooltip tidak tertutup section sebelumnya */
-            .home-about-section {
-                z-index: 50 !important;
-            }
-
-            /* --- LENIS SMOOTH SCROLL CSS --- */
-            html.lenis, html.lenis body { height: auto; }
-            .lenis.lenis-smooth { scroll-behavior: auto !important; }
-            .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
-            .lenis.lenis-stopped { overflow: hidden; }
-            .lenis.lenis-scrolling iframe { pointer-events: none; }
-
-            /* --- CUSTOM CURSOR CSS --- */
-            .custom-cursor {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 15px;
-                height: 15px;
-                border-radius: 50%;
-                pointer-events: none;
-                z-index: 999999;
-                transform: translate(-50%, -50%);
-                transition: width 0.3s ease, height 0.3s ease, transform 0.05s linear;
-                background-color: #fff; 
-                mix-blend-mode: difference; /* Agar kontras (negatif) di background apapun */
-            }
-
-            .custom-cursor.hovered {
-                width: 60px;
-                height: 60px;
-            }
-
-            /* Sembunyikan kursor asli hanya di Desktop */
-            @media (min-width: 992px) {
-                body, a, button, input, textarea, .hover-trigger {
-                    cursor: none !important;
-                }
-            }
-
-            /* Matikan custom cursor di HP/Tablet (Touch Device) */
-            @media (max-width: 991px) {
-                .custom-cursor {
-                    display: none !important;
-                }
-            }
-
-            /* --- SPACING / JARAK ANTAR SECTION (LEBIH LEGA) --- */
-            /* Mengatur margin bawah untuk semua section utama agar tidak mepet */
-            .home-hero-section,
-            .home-about-section,
-            .latest-work-section,
-            .hardskills-section,
-            .experience-section,
-            .journal-section,
-            .bits-and-pieces-section-desktop,
-            .bits-and-pieces-section-mobile,
-            .faq-section {
-                margin-bottom: 160px !important; /* Jarak Desktop yang luas (Cinematic) */
-            }
-
-            /* Memberi jarak antara Judul Section dengan Konten di bawahnya */
-            .section-headline-margin {
-                margin-bottom: 80px !important;
-            }
-
-            /* Penyesuaian untuk Mobile (HP) agar tidak terlalu jauh */
-            @media (max-width: 991px) {
-                .home-hero-section, .home-about-section, .latest-work-section, .hardskills-section, .experience-section, .journal-section, .bits-and-pieces-section-desktop, .bits-and-pieces-section-mobile, .faq-section {
-                    margin-bottom: 80px !important;
-                }
-                /* FIX: Sembunyikan section desktop di mobile agar margin tidak dobel */
-                .bits-and-pieces-section-desktop {
-                    display: none !important;
-                }
-                /* FIX: Jarak Bits and Pieces Mobile max 40px */
-                .bits-and-pieces-section-mobile {
-                    display: block !important;
-                    margin-bottom: 40px !important;
-                    padding-bottom: 0 !important;
-                }
-                /* FIX: Reset margin/padding pada elemen slider di dalamnya */
-                .bits-and-pieces-section-mobile .bits-and-pieces-wrapper,
-                .bits-and-pieces-section-mobile .slider-wrapper,
-                .bits-and-pieces-section-mobile .swiper-container {
-                .bits-and-pieces-section-mobile .slider-wrapper {
-                    margin-bottom: 0 !important;
-                    padding-bottom: 0 !important;
-                }
-                .bits-and-pieces-section-mobile .swiper-container {
-                    margin-bottom: 0 !important;
-                    padding-bottom: 50px !important; /* Space for shadow & dots */
-                    padding: 20px 10px 60px 10px !important; /* Padding keliling agar shadow tidak kepotong */
-                }
-                .section-headline-margin {
-                    margin-bottom: 40px !important;
-                }
-            }
-
-            /* --- MOBILE CARD SHADOW --- */
-            .bits-and-pieces-section-mobile .slide-content-wrapper img {
-                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Shadow halus */
-                border-radius: 8px; /* Memperhalus sudut gambar */
-            }
-
-            /* --- SWIPER PAGINATION DOTS --- */
-            .swiper-pagination-bullet {
-                background: #000 !important;
-                opacity: 0.3;
-                transition: all 0.3s ease;
-            }
-            .swiper-pagination-bullet-active {
-                opacity: 1;
-                width: 20px; /* Efek memanjang */
-                border-radius: 5px;
-            }
-
-            /* --- HIDE SLIDER ARROWS (MOBILE) --- */
-            .bits-and-pieces-section-mobile .slider-left-arrow,
-            .bits-and-pieces-section-mobile .slider-right-arrow {
-                display: none !important;
-            }
-
-            /* --- SCROLL PROGRESS BAR --- */
-            .navbar-progress-container {
-                position: absolute;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 3px; /* Ketebalan bar (Tipis) */
-                background: transparent;
-                z-index: 2000; /* Pastikan di atas elemen navbar lainnya */
-                pointer-events: none;
-            }
-            .navbar-progress-bar {
-                height: 100%;
-                width: 0%;
-                background-color: #000000; /* Warna Bar (Hitam sesuai tema) */
-                transition: width 0.1s ease-out;
-            }
-        </style>
+        <link rel="stylesheet" href="style.css">
         <script>
             document.addEventListener("DOMContentLoaded", () => {
                 const counter = document.getElementById('counter');
@@ -579,6 +123,18 @@
                     document.body.style.overflow = "auto";
                     // Mulai Lenis scroll setelah loading selesai
                     if (window.lenis) window.lenis.start();
+
+                    // Attempt to play background music (Autoplay)
+                    const bgMusic = document.getElementById('bg-music');
+                    const player = document.getElementById('music-player');
+                    const playerText = player ? player.querySelector('.player-text') : null;
+                    
+                    if (bgMusic) {
+                        bgMusic.play().then(() => {
+                            if (player) player.classList.add('playing');
+                            if (playerText) playerText.innerText = "SOUND ON";
+                        }).catch(() => console.log("Autoplay blocked - waiting for interaction"));
+                    }
                 }
 
                 document.body.classList.add('preloader-active');
@@ -750,8 +306,8 @@
                                     <div class="sparkle-3">✦</div>
                                 </div>
                             </div>
-                            <div class="home-hero-images-wrapper section-margin animate-on-load-card">
-                                <div class="home-hero-image-card-wrapper-01-2">
+                            <div class="home-hero-images-wrapper section-margin">
+                                <div class="home-hero-image-card-wrapper-01-2 hero-card">
                                     <div class="home-hero-image-card-headline-block">
                                         <div class="home-hero-image-card-01-headine-text-2">Based in Bandung</div>
                                     </div>
@@ -759,7 +315,7 @@
                                         <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933e15b9e0519802dd84c93_af2a0d4520a664ec7eda2d68a0f33de6_gedung-sate-public-building-bandung-600nw-2421312955.jpg" alt="" class="home-hero-card-image-2 lazy-image"/>
                                     </div>
                                 </div>
-                                <div class="home-hero-image-card-wrapper-02">
+                                <div class="home-hero-image-card-wrapper-02 hero-card">
                                     <div class="home-hero-image-card-headline-block">
                                         <div class="home-hero-image-card-02-headine-text-2">My Name &#x27;s</div>
                                         <div class="home-hero-image-card-02-headine-text-2">Dimas</div>
@@ -768,7 +324,7 @@
                                         <img sizes="(max-width: 479px) 31vw, (max-width: 767px) 16vw, (max-width: 991px) 75.38310241699219px, (max-width: 1279px) 8vw, (max-width: 1439px) 75.38310241699219px, (max-width: 1919px) 5vw, 4vw" height="70" alt="Hero Image" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047.jpg" loading="lazy" data-srcset="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-800.jpg 800w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-1080.jpg 1080w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-1600.jpg 1600w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-2000.jpg 2000w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047.jpg 2205w" class="home-hero-card-image-2 lazy-image"/>
                                     </div>
                                 </div>
-                                <div class="home-hero-image-card-wrapper-03-2">
+                                <div class="home-hero-image-card-wrapper-03-2 hero-card">
                                     <div class="home-hero-image-card-headline-block">
                                         <div class="home-hero-image-card-03-headine-text-2">Creative</div>
                                         <div class="home-hero-image-card-03-headine-text-2">Marketer</div>
@@ -1629,7 +1185,6 @@
                 </div>
             </section>
             <div class="bits-and-pieces-section-mobile">
-            <div class="bits-and-pieces-section-mobile fade-in-section">
                 <div class="w-layout-blockcontainer global-wrapper w-container">
                     <div class="global-padding">
                         <div class="section-headlne-content-wrapper section-headline-margin">
@@ -1669,14 +1224,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="slider-left-arrow w-slider-arrow-left">
-                                <div class="slider-icon-2 w-icon-slider-left"></div>
-                            </div>
-                            <div class="slider-right-arrow w-slider-arrow-right">
-                                <div class="slider-icon-2 w-icon-slider-right"></div>
-                            </div>
                             <div class="swiper-pagination"></div>
-                            <div class="d-none-all w-slider-nav w-round"></div>
                         </div>
                     </div>
                 </div>
@@ -1908,6 +1456,35 @@
                 });
         </script>
         </div>
+        <!-- Music Player Widget -->
+        <div id="music-player" class="music-player hover-trigger">
+            <audio id="bg-music" loop>
+                <!-- GANTI 'src' DI BAWAH INI DENGAN FILE MUSIK ANDA (Contoh: 'audio/lagu-saya.mp3') -->
+                <source src="/audio/Robot_Swing_-_I_Think_We're_Ok.mp3" type="audio/mpeg">
+            </audio>
+            <div class="player-icon">
+                <!-- Icon Speaker Muted/Play (Default) -->
+                <svg class="icon-muted" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11 5L6 9H2V15H6L11 19V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M23 9L17 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M17 9L23 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <!-- Icon Speaker Playing/Pause -->
+                <svg class="icon-playing" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                    <path d="M11 5L6 9H2V15H6L11 19V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M15.54 8.46C16.4774 9.39764 17.004 10.6692 17.004 11.995C17.004 13.3208 16.4774 14.5924 15.54 15.53" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M19.07 4.93C20.9447 6.80527 21.9979 9.34836 21.9979 12C21.9979 14.6516 20.9447 17.1947 19.07 19.07" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div class="player-content">
+                <span class="player-text">PLAY</span>
+                <div class="visualizer">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                </div>
+            </div>
+        </div>
         <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=6933c25a0996b0f96f5c2bc3" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
         <script src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/js/webflow.schunk.f3a08821b4e31f89.js" type="text/javascript" integrity="sha384-jdiRdsaXtUN5LkaeQxuxSJeDi/u9yfDo8k3p7iBrSa0ZxuEsPQsdVokoQHgyJGi/" crossorigin="anonymous"></script>
         <script src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/js/webflow.schunk.a0696411b8212572.js" type="text/javascript" integrity="sha384-dwg30zM2jU7kUnZxcdPhSjuLVIUiLbiVi44KYUrE1jEzOLwj+a1sT1s4b+0HG1Kf" crossorigin="anonymous"></script>
@@ -1915,248 +1492,13 @@
         <script src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/js/webflow.schunk.d659be6dcd9af708.js" type="text/javascript" integrity="sha384-fkZ6Md26P2haMCtqf4f0HB23dTQgjwR09RGdpu3VVDV0Zif+FEMEoIw0sewn8NM8" crossorigin="anonymous"></script>
         <script src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/js/webflow.68ccafdb.96c19bd230e42fc3.js" type="text/javascript" integrity="sha384-2Gg0jo0+ykKe902FwuSM0IpzRc+bq8KTSOUw36jNNWJxclLGXolsR1N1zHWBg3Yj" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-        <script>
-            var swiper = new Swiper('.swiper-container', {
-                grabCursor: true,
-                centeredSlides: true,
-                slidesPerView: 'auto',
-                loop: true,
-                spaceBetween: 20,
-                speed: 1000, /* Perhalus animasi transisi (1 detik) */
-                autoplay: {
-                    delay: 3000,
-                    delay: 4000, /* Delay lebih lama agar nyaman dilihat */
-                    disableOnInteraction: false,
-                },
-                navigation: {
-                    nextEl: '.slider-right-arrow',
-                    prevEl: '.slider-left-arrow',
-                },
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                },
-            });
-        </script>
-        
-        <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Lazy load images
-            const lazyImages = [].slice.call(document.querySelectorAll("img.lazy-image"));
-
-            if ("IntersectionObserver" in window) {
-                let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
-                    entries.forEach(function(entry) {
-                        if (entry.isIntersecting) {
-                            let lazyImage = entry.target;
-                            lazyImage.src = lazyImage.dataset.src;
-                            if (lazyImage.dataset.srcset) {
-                                lazyImage.srcset = lazyImage.dataset.srcset;
-                            }
-                            lazyImage.classList.add("is-loaded");
-                            lazyImageObserver.unobserve(lazyImage);
-                        }
-                    });
-                });
-
-                lazyImages.forEach(function(lazyImage) {
-                    lazyImageObserver.observe(lazyImage);
-                });
-            } else {
-                // Fallback for browsers that don't support IntersectionObserver
-                lazyImages.forEach(function(lazyImage) {
-                    lazyImage.src = lazyImage.dataset.src;
-                    if (lazyImage.dataset.srcset) {
-                        lazyImage.srcset = lazyImage.dataset.srcset;
-                    }
-                    lazyImage.classList.add("is-loaded");
-                });
-            }
-
-            // Scroll animations for sections
-            const sections = [].slice.call(document.querySelectorAll(".fade-in-section"));
-
-            if ("IntersectionObserver" in window) {
-                let sectionObserver = new IntersectionObserver(function(entries, observer) {
-                    entries.forEach(function(entry) {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add("is-visible");
-                            sectionObserver.unobserve(entry.target);
-                        }
-                    });
-                }, { threshold: 0.1 });
-
-                sections.forEach(function(section) {
-                    sectionObserver.observe(section);
-                });
-            } else {
-                // Fallback for browsers that don't support IntersectionObserver
-                sections.forEach(function(section) {
-                    section.classList.add("is-visible");
-                });
-            }
-        });
-        </script>
-        
-        <!-- LENIS SMOOTH SCROLL SCRIPT -->
         <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
-        <script>
-            // Inisialisasi Lenis
-            window.lenis = new Lenis({
-                duration: 1.2, // Durasi scroll (semakin besar = semakin halus/lambat berhentinya)
-                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Easing function "Exponential Out"
-                smooth: true,
-            });
-
-            // Stop scroll saat awal (karena ada preloader)
-            window.lenis.stop();
-
-            function raf(time) {
-                window.lenis.raf(time);
-                requestAnimationFrame(raf);
-            }
-            requestAnimationFrame(raf);
-        </script>
-
-        <!-- CUSTOM CURSOR SCRIPT -->
-        <script>
-            document.addEventListener("DOMContentLoaded", () => {
-                // Cek jika bukan device touch (desktop) agar tidak mengganggu di HP
-                if (window.matchMedia("(min-width: 992px)").matches) {
-                    const cursor = document.createElement('div');
-                    cursor.classList.add('custom-cursor');
-                    document.body.appendChild(cursor);
-
-                    // Gerakkan cursor mengikuti mouse
-                    document.addEventListener('mousemove', (e) => {
-                        cursor.style.left = e.clientX + 'px';
-                        cursor.style.top = e.clientY + 'px';
-                    });
-
-                    // Efek membesar saat hover (Event Delegation untuk performa & elemen dinamis)
-                    const hoverSelectors = 'a, button, .hover-trigger, img, .w-inline-block, .w-nav-button, input, textarea';
-                    
-                    document.addEventListener('mouseover', (e) => {
-                        if (e.target.closest(hoverSelectors)) {
-                            cursor.classList.add('hovered');
-                        }
-                    });
-
-                    document.addEventListener('mouseout', (e) => {
-                        if (e.target.closest(hoverSelectors)) {
-                            cursor.classList.remove('hovered');
-                        }
-                    });
-                }
-            });
-        </script>
-
         <!-- GSAP & SCROLLTRIGGER (Untuk Text Reveal) -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-        
-        <script>
-            document.addEventListener("DOMContentLoaded", () => {
-                // --- 1. LOGIKA EFEK SUARA KLIK ---
-                const clickSound = document.getElementById('click-sound');
-                if (clickSound) {
-                    // Kecilkan volume agar tidak kaget (0.0 sampai 1.0)
-                    clickSound.volume = 0.4; 
-
-                    document.addEventListener('click', (e) => {
-                        // Cek jika yang diklik adalah link, tombol, atau elemen interaktif
-                        if (e.target.closest('a, button, .hover-trigger, .w-inline-block')) {
-                            clickSound.currentTime = 0; // Reset suara ke awal
-                            clickSound.play().catch(() => {}); // Play (abaikan error jika diblokir browser)
-                        }
-                    });
-                }
-
-                // --- 2. LOGIKA TEXT REVEAL (GSAP) ---
-                gsap.registerPlugin(ScrollTrigger);
-
-                const revealElements = document.querySelectorAll('.text-reveal');
-
-                revealElements.forEach(element => {
-                    // Pecah teks menjadi kata-kata (Split Text manual)
-                    const text = element.innerText;
-                    // Gunakan regex \s+ untuk menangani spasi ganda/newline, dan trim() untuk hapus spasi awal/akhir
-                    const words = text.trim().split(/\s+/); 
-                    element.innerHTML = ''; // Kosongkan elemen asli
-                    
-                    // Loop setiap kata
-                    words.forEach((word, index) => {
-                        // Buat container untuk kata (agar tidak putus di tengah baris saat wrap)
-                        const wordSpan = document.createElement('span');
-                        wordSpan.style.display = 'inline-block';
-                        wordSpan.style.whiteSpace = 'nowrap';
-                        
-                        // Tambahkan margin kanan untuk spasi antar kata
-                        if (index < words.length - 1) wordSpan.style.marginRight = '0.25em';
-
-                        // Pecah kata menjadi huruf (characters)
-                        const chars = word.split('');
-                        chars.forEach(char => {
-                            const charSpan = document.createElement('span');
-                            charSpan.innerText = char;
-                            charSpan.style.display = 'inline-block';
-                            charSpan.style.opacity = '0';
-                            charSpan.style.transform = 'translateY(40px) rotate(10deg)'; // Efek dramatis: dari bawah & miring
-                            charSpan.classList.add('char-anim'); // Class target untuk GSAP
-                            wordSpan.appendChild(charSpan);
-                        });
-                        
-                        element.appendChild(wordSpan);
-                    });
-
-                    // Animasi GSAP (Target ke huruf/char)
-                    gsap.to(element.querySelectorAll('.char-anim'), {
-                        scrollTrigger: {
-                            trigger: element,
-                            start: "top 85%", // Mulai saat elemen masuk 85% viewport
-                            toggleActions: "play none none reverse" // Play saat masuk, reverse saat keluar
-                        },
-                        opacity: 1,
-                        y: 0,
-                        rotation: 0,
-                        duration: 1,
-                        stagger: 0.02, // Jeda sangat cepat antar huruf
-                        ease: "back.out(1.7)" // Efek membal sedikit di akhir
-                    });
-                });
-            });
-
-            // --- SCROLL PROGRESS BAR LOGIC ---
-            window.addEventListener('scroll', () => {
-                const progressBar = document.getElementById('scroll-progress');
-                if (progressBar) {
-                    const scrollTop = window.scrollY || document.documentElement.scrollTop;
-                    const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-                    const scrolled = (scrollTop / docHeight) * 100;
-                    
-                    progressBar.style.width = scrolled + "%";
-                }
-            });
-
-            // --- NAVBAR HIDE/SHOW ON SCROLL ---
-            let lastScrollTop = 0;
-            const navbar = document.querySelector('.navbar-3');
-
-            if (navbar) {
-                window.addEventListener('scroll', () => {
-                    const scrollTop = window.scrollY || document.documentElement.scrollTop;
-                    
-                    // Logic: Hide on scroll down (> 50px), Show on scroll up
-                    if (scrollTop > lastScrollTop && scrollTop > 50) {
-                        navbar.classList.add('navbar-hidden');
-                    } else {
-                        navbar.classList.remove('navbar-hidden');
-                    }
-                    
-                    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // Mencegah angka negatif di mobile
-                });
-            }
-        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Draggable.min.js"></script>
+        <script src="script.js"></script>
+        <script src="custom.js"></script>
     </body>
 </html>
             }

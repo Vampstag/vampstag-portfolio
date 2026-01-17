@@ -1,0 +1,371 @@
+/* =========================================
+   1. GLOBAL & UTILITIES
+   ========================================= */
+/* Hide Webflow Badge */
+.w-webflow-badge {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+/* Navbar Sticky & Hide Animation */
+.navbar-3 {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    transition: transform 0.3s ease-in-out;
+    transform: translateY(0%) !important;
+}
+.navbar-3.navbar-hidden {
+    transform: translateY(-100%) !important;
+}
+
+/* Fix: Prevent Horizontal Scroll */
+html, body {
+    overflow-x: hidden !important;
+    max-width: 100%;
+}
+
+/* Fix: Footer Spacing */
+.footer-main-block, .footer-name-block, .cta-wrapper {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+    overflow: hidden !important;
+    max-width: 100vw !important;
+}
+#footer-container {
+    display: block !important;
+    width: 100%;
+}
+
+/* Fix Overflow Issues */
+.body-wrapper, .home-about-section, .global-wrapper, .global-padding, .about-section-wrapper, .about-text-block {
+    overflow: visible !important; position: relative;
+}
+.home-about-section { z-index: 50 !important; }
+
+/* =========================================
+   2. ANIMATIONS (KEYFRAMES)
+   ========================================= */
+@keyframes slideInFromBottom {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.animate-on-load-hello {
+    animation: slideInFromBottom 0.8s ease-out 0.5s forwards;
+    opacity: 0;
+}
+
+.animate-on-load-card {
+    animation: slideInFromBottom 0.8s ease-out 0.8s forwards;
+    opacity: 0;
+}
+
+/* Emoji Wave Animation */
+.hi-emoji {
+    display: inline-block;
+    transform-origin: 70% 70%;
+    animation: wave-hand 2.5s infinite;
+}
+
+@keyframes wave-hand {
+    0% { transform: rotate(0deg); }
+    10% { transform: rotate(14deg); }
+    20% { transform: rotate(-8deg); }
+    30% { transform: rotate(14deg); }
+    40% { transform: rotate(-4deg); }
+    50% { transform: rotate(10deg); }
+    60% { transform: rotate(0deg); }
+    100% { transform: rotate(0deg); }
+}
+
+/* Sparkles Animation */
+.emoji-container { position: relative; display: inline-block; }
+.sparkle-1, .sparkle-2, .sparkle-3 {
+    position: absolute;
+    color: #FFC107;
+    opacity: 0;
+    pointer-events: none;
+    font-family: sans-serif;
+    line-height: 1;
+}
+.sparkle-1 { top: -15%; right: -15%; font-size: 24px; animation: sparkle-pop 2.5s ease-in-out infinite; }
+.sparkle-2 { top: 30%; right: -30%; font-size: 16px; animation: sparkle-pop 2.5s ease-in-out infinite 0.5s; }
+.sparkle-3 { top: -30%; right: 10%; font-size: 14px; animation: sparkle-pop 2.5s ease-in-out infinite 1s; }
+
+@keyframes sparkle-pop {
+    0% { transform: scale(0) rotate(0deg); opacity: 0; }
+    50% { transform: scale(1) rotate(45deg); opacity: 1; }
+    100% { transform: scale(0) rotate(90deg); opacity: 0; }
+}
+
+/* Mobile Specific Animations */
+@media (max-width: 767px) {
+    @keyframes fallAndBounce {
+        0% { transform: translateY(-200px); opacity: 0; }
+        60% { transform: translateY(10px); opacity: 1; }
+        80% { transform: translateY(-5px); }
+        100% { transform: translateY(0); }
+    }
+    .home-hero-images-wrapper.animate-on-load-card { animation: none; opacity: 1; }
+    .home-hero-image-card-wrapper-02.mobile-fall-animation {
+        animation: fallAndBounce 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s forwards;
+        opacity: 0;
+    }
+    .home-hero-image-card-wrapper-01-2, .home-hero-image-card-wrapper-03-2 {
+         opacity: 0;
+         animation: fadeIn 0.8s ease-out 1s forwards;
+    }
+    @keyframes fadeIn { to { opacity: 1; } }
+}
+
+/* =========================================
+   3. PRELOADER STYLES
+   ========================================= */
+:root {
+    --bg-color: #000000;
+    --text-color: #ffffff;
+    --ease-smooth: cubic-bezier(0.19, 1, 0.22, 1);
+}
+body.preloader-active { overflow: hidden; }
+#preloader {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: var(--bg-color); color: var(--text-color);
+    z-index: 99999;
+    display: flex; justify-content: center; align-items: center; flex-direction: column;
+    transition: transform 1.6s var(--ease-smooth);
+    transform-origin: top;
+    font-family: 'Space Grotesk', sans-serif;
+}
+#preloader.finished { transform: translateY(-100%); }
+.counter-wrapper {
+    position: relative; overflow: visible; text-align: center; padding: 20px;
+    transition: opacity 0.5s ease;
+}
+.counter-wrapper.fade-out { opacity: 0; }
+#counter {
+    font-size: 15vw; font-weight: 700; letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums; display: block;
+}
+.corner-text {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 1.5px; opacity: 0.6;
+}
+.top-corners, .bottom-corners {
+    position: absolute; width: calc(100% - 60px); left: 30px; right: 30px;
+    display: flex; justify-content: space-between;
+}
+.top-corners { top: 30px; }
+.bottom-corners { bottom: 40px; }
+.progress-track {
+    position: absolute; bottom: 0; left: 0; width: 100%; height: 6px;
+    background: #1a1a1a;
+}
+.progress-fill {
+    height: 100%; width: 0%; background: #ffffff;
+    transition: width 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+@media (max-width: 768px) {
+    #counter { font-size: 20vw; }
+    .corner-text { font-size: 9px; }
+    .top-corners, .bottom-corners { width: calc(100% - 40px); left: 20px; right: 20px; }
+    .top-corners { top: 20px; }
+    .bottom-corners { bottom: 25px; }
+}
+
+/* =========================================
+   4. INTERACTIVE ELEMENTS (Hover, Cursor)
+   ========================================= */
+/* Hover Image Effect */
+.hover-trigger {
+    position: relative; display: inline-block; font-weight: 700; cursor: pointer;
+    color: inherit; text-decoration: underline; text-decoration-thickness: 2px;
+    text-decoration-color: #ccc; transition: color 0.2s, text-decoration-color 0.2s;
+}
+.hover-trigger:hover { color: #000; text-decoration-color: #000; }
+.hover-image {
+    position: absolute; bottom: 100%; left: 50%;
+    transform: translate(-50%, 10px) scale(0.8);
+    width: 150px; height: auto; border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2); border: 1px solid rgba(0,0,0,0.1);
+    background: #fff; z-index: 1000; opacity: 0; visibility: hidden; pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.hover-trigger:hover .hover-image {
+    opacity: 1; visibility: visible; transform: translate(-50%, -15px) scale(1);
+}
+.hover-image::after {
+    content: ''; position: absolute; top: 100%; left: 50%; margin-left: -6px;
+    border-width: 6px; border-style: solid; border-color: #fff transparent transparent transparent;
+}
+
+/* Custom Cursor */
+.custom-cursor {
+    position: fixed; top: 0; left: 0; width: 15px; height: 15px;
+    border-radius: 50%; pointer-events: none; z-index: 999999;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease, height 0.3s ease, transform 0.05s linear;
+    background-color: #fff; mix-blend-mode: difference;
+}
+.custom-cursor.hovered { width: 60px; height: 60px; }
+@media (min-width: 992px) {
+    body, a, button, input, textarea, .hover-trigger { cursor: none !important; }
+}
+@media (max-width: 991px) {
+    .custom-cursor { display: none !important; }
+}
+
+/* =========================================
+   5. LAYOUT & SPACING
+   ========================================= */
+/* Section Spacing */
+.home-hero-section, .home-about-section, .latest-work-section, .hardskills-section, .experience-section, .journal-section, .bits-and-pieces-section-desktop, .bits-and-pieces-section-mobile, .faq-section {
+    margin-bottom: 160px !important;
+}
+.section-headline-margin { margin-bottom: 80px !important; }
+@media (max-width: 991px) {
+    .home-hero-section, .home-about-section, .latest-work-section, .hardskills-section, .experience-section, .journal-section, .bits-and-pieces-section-desktop, .bits-and-pieces-section-mobile, .faq-section {
+        margin-bottom: 80px !important;
+    }
+    .section-headline-margin { margin-bottom: 40px !important; }
+    
+    /* FIX: Sembunyikan section desktop di mobile agar margin tidak dobel */
+    .bits-and-pieces-section-desktop {
+        display: none !important;
+    }
+    /* FIX: Jarak Bits and Pieces Mobile max 40px */
+    .bits-and-pieces-section-mobile {
+        display: block !important;
+        margin-bottom: 40px !important;
+        padding-bottom: 0 !important;
+    }
+    /* FIX: Reset margin/padding pada elemen slider di dalamnya */
+    .bits-and-pieces-section-mobile .bits-and-pieces-wrapper,
+    .bits-and-pieces-section-mobile .slider-wrapper,
+    .bits-and-pieces-section-mobile .swiper-container {
+        margin-bottom: 0 !important; 
+        padding-bottom: 50px !important; /* Ruang untuk shadow & dots */
+        overflow: visible !important; /* Agar shadow tidak terpotong */
+    }
+}
+
+/* --- SWIPER PAGINATION DOTS --- */
+.swiper-pagination-bullet {
+    background: #000 !important;
+    opacity: 0.3;
+    transition: all 0.3s ease;
+}
+.swiper-pagination-bullet-active {
+    opacity: 1;
+    width: 20px; /* Efek memanjang */
+    border-radius: 5px;
+}
+
+/* Scroll Progress Bar */
+.navbar-progress-container {
+    position: fixed; top: 0; left: 0; width: 100%; height: 3px;
+    background: transparent; z-index: 2000; pointer-events: none;
+}
+.navbar-progress-bar {
+    height: 100%; width: 0%; background-color: #000000;
+    transition: width 0.1s ease-out;
+}
+
+/* Lenis Scroll */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+.lenis.lenis-scrolling iframe { pointer-events: none; }
+
+/* =========================================
+   6. MUSIC PLAYER WIDGET
+   ========================================= */
+.music-player {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    z-index: 9999;
+    background: #ffffff;
+    border: 2px solid #000000;
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: 5px 5px 0px #000000;
+}
+
+.music-player:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 7px 7px 0px #000000;
+}
+
+.music-player:active, .music-player.playing:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px #000000;
+}
+
+.player-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.player-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.player-text {
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #000000;
+    letter-spacing: 0.5px;
+    user-select: none;
+    min-width: 45px;
+    text-align: center;
+}
+
+.visualizer {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 14px;
+    width: 16px;
+}
+
+.bar {
+    width: 3px;
+    background-color: #000000;
+    height: 2px;
+    transition: height 0.2s ease;
+}
+
+/* Animation State */
+.music-player.playing .bar {
+    animation: equalizer 0.5s infinite ease-in-out alternate;
+}
+
+.music-player.playing .bar:nth-child(1) { animation-duration: 0.4s; }
+.music-player.playing .bar:nth-child(2) { animation-duration: 0.5s; }
+.music-player.playing .bar:nth-child(3) { animation-duration: 0.35s; }
+
+@keyframes equalizer {
+    0% { height: 20%; }
+    100% { height: 100%; }
+}
+
+@media (max-width: 767px) {
+    .music-player {
+        bottom: 20px;
+        right: 20px;
+        padding: 10px 14px;
+    }
+}
