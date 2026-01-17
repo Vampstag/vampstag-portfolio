@@ -17,94 +17,9 @@
         <meta content="Webflow" name="generator"/>
         <link href="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/css/mdkg.webflow.shared.4d3ebba11.css" rel="stylesheet" type="text/css" integrity="sha384-TT67oRMLIgdE62QKbLJVm4qWzvpdYU5Fte9HrMLErE4YLOwPeNlX0FQVkvPHI9IX" crossorigin="anonymous"/>
         <style>
-            .testimonial-slider.swiper-container {
-                overflow: visible;
-            }
-            .swiper-slide {
-                width: 80%;
-                max-width: 500px; /* You can adjust this max-width */
-                aspect-ratio: 4 / 3;
-                transition: transform 0.4s ease-out, filter 0.4s ease-out;
-                filter: blur(3px);
-                transform: scale(0.7);
-                opacity: 0.5;
-            }
-            .swiper-slide-active {
-                transform: scale(1);
-                filter: blur(0);
-                opacity: 1;
-            }
-            .swiper-slide img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                border-radius: 10px; /* Optional: to match original design */
-                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            }
-            .swiper-pagination {
-                position: relative;
-                bottom: auto;
-                margin-top: 25px;
-            }
-            .swiper-pagination-bullet {
-                background-color: #aaa;
-                width: 6px;
-                height: 6px;
-                transition: all 0.2s ease-in-out;
-            }
-            .swiper-pagination-bullet-active {
-                background-color: #000;
-                transform: scale(1.5);
-            }
-
-            /* Added for UI/UX improvements */
-            .lazy-image {
-                filter: blur(20px);
-                transition: filter 0.5s;
-            }
-
-            .lazy-image.is-loaded {
-                filter: blur(0);
-            }
-
-            .fade-in-section {
-                opacity: 0;
-                transform: translateY(20px);
-                transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-            }
-
-            .fade-in-section.is-visible {
-                opacity: 1;
-                transform: translateY(0);
-            }
-
-            .button-normal-black-wrapper-2, .button-normal-white-wrapper-2 {
-                transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-            }
-
-            .button-normal-black-wrapper-2:hover, .button-normal-white-wrapper-2:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            }
-
-            @keyframes wave {
-                0% { transform: rotate( 0.0deg) }
-                10% { transform: rotate(14.0deg) }
-                20% { transform: rotate(-8.0deg) }
-                30% { transform: rotate(14.0deg) }
-                40% { transform: rotate(-4.0deg) }
-                50% { transform: rotate(10.0deg) }
-                60% { transform: rotate( 0.0deg) }
-                100% { transform: rotate( 0.0deg) }
-            }
-
-            .hi-emoji {
-                animation-name: wave;
-                animation-duration: 2.5s;
-                animation-iteration-count: infinite;
-                transform-origin: 70% 70%;
-                display: inline-block;
-            }
+        .navbar-3 {
+            transform: translateY(0%) !important;
+        }
         </style>
         <style>
             /* --- PRELOADER CSS --- */
@@ -116,43 +31,55 @@
 
             body.preloader-active {
                 overflow: hidden;
-            }
+            Н}
 
             #preloader {
-                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-                background-color: var(--bg-color); color: var(--text-color);
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: var(--bg-color);
+                color: var(--text-color);
                 z-index: 99999;
-                display: flex; justify-content: center; align-items: center; flex-direction: column;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
                 transition: transform 1.6s var(--ease-smooth);
                 transform-origin: top;
                 font-family: 'Space Grotesk', sans-serif;
             }
 
-            #preloader.finished { 
-                transform: translateY(-100%); 
+            #preloader.finished {
+                transform: translateY(-100%);
             }
 
-            .counter-wrapper { 
-                position: relative; 
+            .counter-wrapper {
+                position: relative;
                 overflow: visible;
                 text-align: center;
                 padding: 20px;
             }
 
             #counter {
-                font-size: 15vw; 
+                font-size: 15vw;
                 font-weight: 700;
                 letter-spacing: -0.04em;
-                font-variant-numeric: tabular-nums; 
+                font-variant-numeric: tabular-nums;
                 display: block;
             }
 
             .corner-text {
-                font-size: 11px; font-weight: 600;
-                text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.6;
+                font-size: 11px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 1.5px;
+                opacity: 0.6;
             }
 
-            .top-corners, .bottom-corners {
+            .top-corners,
+            .bottom-corners {
                 position: absolute;
                 width: calc(100% - 60px);
                 left: 30px;
@@ -168,19 +95,34 @@
             .bottom-corners {
                 bottom: 40px;
             }
-
+            
             .progress-track {
-                position: absolute; bottom: 0; left: 0; width: 100%; height: 6px; background: #1a1a1a;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 6px;
+                background: #1a1a1a;
             }
+
             .progress-fill {
-                height: 100%; width: 0%; background: #ffffff; transition: width 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+                height: 100%;
+                width: 0%;
+                background: #ffffff;
+                transition: width 0.2s cubic-bezier(0.25, 1, 0.5, 1);
             }
 
             @media (max-width: 768px) {
-                #counter { font-size: 20vw; }
-                .corner-text { font-size: 9px; }
-                
-                .top-corners, .bottom-corners {
+                #counter {
+                    font-size: 20vw;
+                }
+
+                .corner-text {
+                    font-size: 9px;
+                }
+
+                .top-corners,
+                .bottom-corners {
                     width: calc(100% - 40px);
                     left: 20px;
                     right: 20px;
@@ -195,6 +137,72 @@
                 }
             }
         </style>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const counter = document.getElementById('counter');
+                const bar = document.getElementById('bar');
+                const preloader = document.getElementById('preloader');
+                
+                let currentProgress = 0;
+
+                function updateCounter() {
+                    const jump = Math.floor(Math.random() * 23) + 1;
+                    currentProgress += jump;
+                    if (currentProgress > 100) currentProgress = 100;
+
+                    if(counter) counter.innerText = currentProgress.toString().padStart(2, '0');
+                    if(bar) bar.style.width = currentProgress + "%";
+
+                    let delay = Math.floor(Math.random() * 200) + 50;
+
+                    if (currentProgress > 70 && currentProgress < 85 && Math.random() > 0.3) {
+                        delay = 800 + Math.random() * 1000;
+                    } else if (currentProgress > 90 && currentProgress < 98) {
+                        delay = 400 + Math.random() * 400; 
+                    }
+
+                    if (currentProgress < 100) {
+                        setTimeout(updateCounter, delay);
+                    } else {
+                        // Once the counter reaches 100, fetch the footer
+                        Promise.all([
+                            fetch('footer.html').then(response => response.text())
+                        ]).then(([footerData]) => {
+                            // Inject the footer HTML
+                            const footerContainer = document.getElementById('footer-container');
+                            
+                            if (footerContainer) footerContainer.innerHTML = footerData;
+        
+                            // Re-initialize Webflow scripts to apply interactions to the new content
+                            if (window.Webflow) {
+                                Webflow.destroy();
+                                Webflow.ready();
+                                if (Webflow.require('ix2')) {
+                                    Webflow.require('ix2').init();
+                                }
+                            }
+        
+                            // Finish the loading process
+                            setTimeout(finishLoading, 500);
+                        }).catch(error => {
+                            console.error("Error fetching content:", error);
+                            // Even if there's an error, finish loading to not block the site
+                            finishLoading();
+                        });
+                    }
+                }
+
+                function finishLoading() {
+                    if(preloader) {
+                        preloader.classList.add('finished');
+                    }
+                    document.body.style.overflow = "auto";
+                }
+
+                document.body.classList.add('preloader-active');
+                setTimeout(updateCounter, 500);
+            });
+        </script>
         <link href="https://fonts.googleapis.com" rel="preconnect"/>
         <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous"/>
         <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
@@ -228,39 +236,127 @@
             };
         </script>
     </head>
-        <body class="body-2">
-                    <div id="preloader">
-                        <div class="top-corners">
-                            <div class="corner-text">LOADING</div>
-                            <div class="corner-text">PLEASE WAIT</div>
+    <body class="body-2">
+        <div id="preloader">
+            <div class="top-corners">
+                <div class="corner-text">LOADING</div>
+                <div class="corner-text">PLEASE WAIT</div>
+            </div>
+            <div class="counter-wrapper">
+                <span id="counter">00</span>
+            </div>
+            <div class="bottom-corners">
+                <div class="corner-text">SYSTEM CHECK</div>
+                <div class="corner-text">ASSETS v.2.0</div>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" id="bar"></div>
+            </div>
+        </div>
+        <div class="body-wrapper">
+            <div data-w-id="6f1a5f9d-504f-fce2-7e2d-a153e097ea25" data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="navbar-3 w-nav">
+                <div class="global-wrapper w-container">
+                    <div class="global-padding">
+                        <div class="nav-wrapper">
+                            <a href="/" aria-current="page" class="logo w-nav-brand w--current">
+                                <div class="text-block-4">MDKG</div>
+                            </a>
+                            <nav role="navigation" class="desktop w-nav-menu">
+                                <a href="/index.html" aria-current="page" class="navigation-link w-inline-block w--current">
+                                    <div class="button-text-wrapper">
+                                        <div class="button-text">Home</div>
+                                        <div class="button-text">Home</div>
+                                    </div>
+                                    <div class="line-below"></div>
+                                </a>
+                                <a href="/about" class="navigation-link w-inline-block">
+                                    <div class="button-text-wrapper">
+                                        <div class="button-text">About</div>
+                                        <div class="button-text">About</div>
+                                    </div>
+                                    <div class="line-below"></div>
+                                </a>
+                                <a href="/portfolio" class="navigation-link w-inline-block">
+                                    <div class="button-text-wrapper">
+                                        <div class="button-text">Portfolio</div>
+                                        <div class="button-text">Portfolio</div>
+                                    </div>
+                                    <div class="line-below"></div>
+                                </a>
+                                <a href="/journal" class="navigation-link w-inline-block">
+                                    <div class="button-text-wrapper">
+                                        <div class="button-text">Insights</div>
+                                        <div class="button-text">Insights</div>
+                                    </div>
+                                    <div class="line-below"></div>
+                                </a>
+                            </nav>
+                            <nav role="navigation" class="contact w-nav-menu">
+                                <a href="/contact" class="button-normal-black-wrapper-2 w-inline-block">
+                                    <div class="button-normal-black-text-2 text-sm text-weight-medium-2 text-style-no_wrap text-color-white-2">Let &#x27;s Talk</div>
+                                    <div class="button-normal-white-arrow-block-2">
+                                        <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d552f_arrow-black.svg" alt="Arrow Image" class="button-normal-black-arrow-image-black-2"/>
+                                        <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5530_arrow-white.svg" alt="Arrow Image" class="button-normal-black-arrow-image-white-2"/>
+                                    </div>
+                                </a>
+                            </nav>
+                            <div class="menu-burger w-nav-button">
+                                <div class="icon-2 w-icon-nav-menu"></div>
+                            </div>
+                            <nav role="navigation" class="mobile w-nav-menu">
+                                <div class="menu-wrapper">
+                                    <a href="/" aria-current="page" class="nav-footer-link-block-2 w-inline-block w--current">
+                                        <div class="nav-footer-link-wrapper-2">
+                                            <div class="nav-footer-text-block-2 text-sm-3 text-style-no_wrap-2 text-color-black-900-2">Home</div>
+                                            <div class="nav-footer-text-block-2 text-sm-3 text-color-black-900-2">Home</div>
+                                        </div>
+                                    </a>
+                                    <a href="/about" class="nav-footer-link-block-2 w-inline-block">
+                                        <div class="nav-footer-link-wrapper-2">
+                                            <div class="nav-footer-text-block-2 text-sm-3 text-style-no_wrap-2 text-color-black-900-2">About</div>
+                                            <div class="nav-footer-text-block-2 text-sm-3 text-color-black-900-2">About</div>
+                                        </div>
+                                    </a>
+                                    <a href="/portfolio" class="nav-footer-link-block-2 w-inline-block">
+                                        <div class="nav-footer-link-wrapper-2">
+                                            <div class="nav-footer-text-block-2 text-sm-3 text-style-no_wrap-2 text-color-black-900-2">Portfolio</div>
+                                            <div class="nav-footer-text-block-2 text-sm-3 text-color-black-900-2">Portfolio</div>
+                                        </div>
+                                    </a>
+                                    <a href="/journal" class="nav-footer-link-block-2 w-inline-block">
+                                        <div class="nav-footer-link-wrapper-2">
+                                            <div class="nav-footer-text-block-2 text-sm-3 text-style-no_wrap-2 text-color-black-900-2">Insights</div>
+                                            <div class="nav-footer-text-block-2 text-sm-3 text-color-black-900-2">Insights</div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <a href="https://webflow.com/templates/html/kate-m-website-template" target="_blank" class="button-normal-black-wrapper-2 w-inline-block">
+                                    <div class="button-normal-black-text-2 text-sm text-weight-medium-2 text-style-no_wrap text-color-white-2">Let &#x27;s Talk</div>
+                                    <div class="button-normal-white-arrow-block-2">
+                                        <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d552f_arrow-black.svg" alt="Arrow Image" class="button-normal-black-arrow-image-black-2"/>
+                                        <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5530_arrow-white.svg" alt="Arrow Image" class="button-normal-black-arrow-image-white-2"/>
+                                    </div>
+                                </a>
+                            </nav>
                         </div>
-                        <div class="counter-wrapper">
-                            <span id="counter">00</span>
-                        </div>
-                        <div class="bottom-corners">
-                            <div class="corner-text">SYSTEM CHECK</div>
-                            <div class="corner-text">ASSETS v.2.0</div>
-                        </div>
-                        <div class="progress-track">
-                            <div class="progress-fill" id="bar"></div>
-                        </div>
-                    </div>            <div class="body-wrapper">
-            <div id="navbar-container"></div>
+                    </div>
+                </div>
+            </div>
             <section id="top" class="home-hero-section">
                 <div class="w-layout-blockcontainer global-wrapper w-container">
                     <div class="global-padding">
                         <div class="home-hero-wrapper">
-                            <div data-w-id="17981745-b76c-fdb8-d5a0-45626b3a0f94" style="opacity:0" class="home-hero-headline-wrapper">
+                            <div data-w-id="17981745-b76c-fdb8-d5a0-45626b3a0f94" class="home-hero-headline-wrapper">
                                 <div class="home-hero-headline-text-2">Hello there</div>
-                                <img data-w-id="17981745-b76c-fdb8-d5a0-45626b3a0f97" loading="eager" alt="Hi emoji" src="https://cdn.prod.website-files.com/68b88ad5bf41a0f5c752eab7/67631cf992d0c17f2b67e7de_%F0%9F%91%8B.webp" class="hi-emoji"/>
+                                <img data-w-id="17981745-b76c-fdb8-d5a0-45626b3a0f97" loading="lazy" alt="Hi emoji" data-src="https://cdn.prod.website-files.com/68b88ad5bf41a0f5c752eab7/67631cf992d0c17f2b67e7de_%F0%9F%91%8B.webp" class="hi-emoji lazy-image"/>
                             </div>
-                            <div data-w-id="54610587-6550-bd5f-42d1-d80780465257" style="opacity:0" class="home-hero-images-wrapper section-margin">
+                            <div data-w-id="54610587-6550-bd5f-42d1-d80780465257" class="home-hero-images-wrapper section-margin">
                                 <div class="home-hero-image-card-wrapper-01-2">
                                     <div class="home-hero-image-card-headline-block">
                                         <div class="home-hero-image-card-01-headine-text-2">Based in Bandung</div>
                                     </div>
                                     <div class="home-hero-card-image-block-2">
-                                        <img loading="eager" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933e15b9e0519802dd84c93_af2a0d4520a664ec7eda2d68a0f33de6_gedung-sate-public-building-bandung-600nw-2421312955.jpg" alt="" class="home-hero-card-image-2"/>
+                                        <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933e15b9e0519802dd84c93_af2a0d4520a664ec7eda2d68a0f33de6_gedung-sate-public-building-bandung-600nw-2421312955.jpg" alt="" class="home-hero-card-image-2 lazy-image"/>
                                     </div>
                                 </div>
                                 <div class="home-hero-image-card-wrapper-02">
@@ -269,7 +365,7 @@
                                         <div class="home-hero-image-card-02-headine-text-2">Dimas</div>
                                     </div>
                                     <div class="home-hero-card-image-block-2">
-                                        <img sizes="(max-width: 479px) 31vw, (max-width: 767px) 16vw, (max-width: 991px) 75.38310241699219px, (max-width: 1279px) 8vw, (max-width: 1439px) 75.38310241699219px, (max-width: 1919px) 5vw, 4vw" height="70" alt="Hero Image" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047.jpg" loading="eager" srcset="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-800.jpg 800w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-1080.jpg 1080w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-1600.jpg 1600w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-2000.jpg 2000w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047.jpg 2205w" class="home-hero-card-image-2"/>
+                                        <img sizes="(max-width: 479px) 31vw, (max-width: 767px) 16vw, (max-width: 991px) 75.38310241699219px, (max-width: 1279px) 8vw, (max-width: 1439px) 75.38310241699219px, (max-width: 1919px) 5vw, 4vw" height="70" alt="Hero Image" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047.jpg" loading="lazy" data-srcset="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-800.jpg 800w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-1080.jpg 1080w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-1600.jpg 1600w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-2000.jpg 2000w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047.jpg 2205w" class="home-hero-card-image-2 lazy-image"/>
                                     </div>
                                 </div>
                                 <div class="home-hero-image-card-wrapper-03-2">
@@ -278,7 +374,7 @@
                                         <div class="home-hero-image-card-03-headine-text-2">Marketer</div>
                                     </div>
                                     <div class="home-hero-card-image-block-2">
-                                        <img sizes="(max-width: 767px) 100vw, (max-width: 991px) 727.984375px, 939.984375px" srcset="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69351a0d96e0c9d238a0b6a5_WhatsApp%2520Image%25202025-12-06%2520at%252021.26.01_9bdde82a-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69351a0d96e0c9d238a0b6a5_WhatsApp%2520Image%25202025-12-06%2520at%252021.26.01_9bdde82a-p-800.jpg 800w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69351a0d96e0c9d238a0b6a5_WhatsApp%2520Image%25202025-12-06%2520at%252021.26.01_9bdde82a-p-1080.jpg 1080w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69351a0d96e0c9d238a0b6a5_WhatsApp%20Image%202025-12-06%20at%2021.26.01_9bdde82a.jpg 1326w" alt="" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69351a0d96e0c9d238a0b6a5_WhatsApp%20Image%202025-12-06%20at%2021.26.01_9bdde82a.jpg" loading="eager" class="home-hero-card-image-2"/>
+                                        <img sizes="(max-width: 767px) 100vw, (max-width: 991px) 727.984375px, 939.984375px" data-srcset="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69351a0d96e0c9d238a0b6a5_WhatsApp%2520Image%25202025-12-06%2520at%252021.26.01_9bdde82a-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69351a0d96e0c9d238a0b6a5_WhatsApp%2520Image%25202025-12-06%2520at%252021.26.01_9bdde82a-p-800.jpg 800w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69351a0d96e0c9d238a0b6a5_WhatsApp%2520Image%25202025-12-06%2520at%252021.26.01_9bdde82a-p-1080.jpg 1080w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69351a0d96e0c9d238a0b6a5_WhatsApp%20Image%202025-12-06%20at%2021.26.01_9bdde82a.jpg 1326w" alt="" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69351a0d96e0c9d238a0b6a5_WhatsApp%20Image%202025-12-06%20at%2021.26.01_9bdde82a.jpg" loading="lazy" class="home-hero-card-image-2 lazy-image"/>
                                     </div>
                                 </div>
                             </div>
@@ -375,137 +471,7 @@
                                         </div>
                                     </a>
                                 </div>
-                            </div>
-                            <div class="padding-section-large-2">
-                                <div class="service-component">
-                                    <div data-w-id="33a70304-775e-f7e9-4862-b0e9b92c7c0f" class="service-content-wrapper">
-                                        <div class="service-image-absolute right">
-                                            <div class="service-image-wrapper">
-                                                <img loading="lazy" data-src="https://cdn.prod.website-files.com/696a629505423470e61e4e0e/696a629605423470e61e4e8a_Frame%209.jpg" alt="" class="service-image-2 lazy-image"/>
-                                            </div>
-                                        </div>
-                                        <div id="w-node-_33a70304-775e-f7e9-4862-b0e9b92c7c13-6f5c2c14" class="service-content-block">
-                                            <div class="service-top-content">
-                                                <div data-w-id="33a70304-775e-f7e9-4862-b0e9b92c7c15" class="service-title-wrap">
-                                                    <div class="service-title-item">
-                                                        <div data-w-id="33a70304-775e-f7e9-4862-b0e9b92c7c17" class="service-title-2">Social Media Marketing</div>
-                                                        <div class="service-title-2 alternate">Social Media Marketing</div>
-                                                    </div>
-                                                    <div class="service-number-wrap">
-                                                        <div class="service-number-2">01</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div style="height:0px" class="service-description-item">
-                                                <p class="why-choose-me-card-text text-sm text-color-black-700 black">Producing high-quality visuals and videos that tell a story. From concept to execution, I create assets that stop the scroll and engage your target audience instantly.</p>
-                                                <div class="w-layout-grid service-feature-grid">
-                                                    <div id="w-node-_33a70304-775e-f7e9-4862-b0e9b92c7c22-6f5c2c14" class="service-feature-item">
-                                                        <div class="service-feature-text">✲ Logo Design</div>
-                                                        <div class="service-feature-text">✲ Visual Identity</div>
-                                                        <div class="service-feature-text">✲ Brand Strategy</div>
-                                                    </div>
-                                                    <div id="w-node-_33a70304-775e-f7e9-4862-b0e9b92c7c29-6f5c2c14" class="service-feature-item">
-                                                        <div class="service-feature-text">✲ Typography</div>
-                                                        <div class="service-feature-text">✲ Guidelines</div>
-                                                        <div class="service-feature-text">✲ Color Palette</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="service-arrow-wrap">
-                                            <div style="-webkit-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0);-moz-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0);-ms-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0);transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0)" class="service-arrow w-embed">
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                                                    <path d="M13.0001 16.1716L18.3641 10.8076L19.7783 12.2218L12.0001 20L4.22192 12.2218L5.63614 10.8076L11.0001 16.1716V4H13.0001V16.1716Z"></path>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div data-w-id="33a70304-775e-f7e9-4862-b0e9b92c7c32" class="service-content-wrapper">
-                                        <div class="service-image-absolute right">
-                                            <div class="service-image-wrapper">
-                                                <img loading="lazy" data-src="https://cdn.prod.website-files.com/696a629505423470e61e4e0e/696a629605423470e61e4e95_Frame%206.jpg" alt="" class="service-image-2 lazy-image"/>
-                                            </div>
-                                        </div>
-                                        <div id="w-node-_33a70304-775e-f7e9-4862-b0e9b92c7c36-6f5c2c14" class="service-content-block">
-                                            <div class="service-top-content">
-                                                <div data-w-id="33a70304-775e-f7e9-4862-b0e9b92c7c38" class="service-title-wrap">
-                                                    <div class="service-title-item z-index-3">
-                                                        <div data-w-id="33a70304-775e-f7e9-4862-b0e9b92c7c3a" class="service-title-2">Graphic Design</div>
-                                                        <div class="service-title-2 alternate">Graphic Design</div>
-                                                    </div>
-                                                    <div class="service-number-wrap">
-                                                        <div class="service-number-2">02</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div style="height:0px" class="service-description-item">
-                                                <p class="service-description-3">We define a clear roadmap to help your brand grow through data, creativity, and precise positioning.</p>
-                                                <div class="w-layout-grid service-feature-grid">
-                                                    <div id="w-node-_33a70304-775e-f7e9-4862-b0e9b92c7c45-6f5c2c14" class="service-feature-item">
-                                                        <div class="service-feature-text">✲ Market Research</div>
-                                                        <div class="service-feature-text">✲ Target Analysis</div>
-                                                        <div class="service-feature-text">✲ Positioning</div>
-                                                    </div>
-                                                    <div id="w-node-_33a70304-775e-f7e9-4862-b0e9b92c7c4c-6f5c2c14" class="service-feature-item">
-                                                        <div class="service-feature-text">✲ Insights</div>
-                                                        <div class="service-feature-text">✲ KPI Definition</div>
-                                                        <div class="service-feature-text">✲ Growth Planning</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="service-arrow-wrap">
-                                            <div style="-webkit-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0);-moz-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0);-ms-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0);transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0)" class="service-arrow w-embed">
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                                                    <path d="M13.0001 16.1716L18.3641 10.8076L19.7783 12.2218L12.0001 20L4.22192 12.2218L5.63614 10.8076L11.0001 16.1716V4H13.0001V16.1716Z"></path>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div data-w-id="33a70304-775e-f7e9-4862-b0e9b92c7c9b" class="service-content-wrapper">
-                                        <div class="service-image-absolute right">
-                                            <div class="service-image-wrapper">
-                                                <img loading="lazy" data-src="https://cdn.prod.website-files.com/696a629505423470e61e4e0e/696a629605423470e61e4e93_Frame%205.jpg" alt="" class="service-image-2 lazy-image"/>
-                                            </div>
-                                        </div>
-                                        <div id="w-node-_33a70304-775e-f7e9-4862-b0e9b92c7c9f-6f5c2c14" class="service-content-block">
-                                            <div class="service-top-content">
-                                                <div data-w-id="33a70304-775e-f7e9-4862-b0e9b92c7ca1" class="service-title-wrap">
-                                                    <div class="service-title-item z-index-3">
-                                                        <div data-w-id="33a70304-775e-f7e9-4862-b0e9b92c7ca3" class="service-title-2">Content Creation</div>
-                                                        <div class="service-title-2 alternate">Content Creation</div>
-                                                    </div>
-                                                    <div class="service-number-wrap">
-                                                        <div class="service-number-2">03</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div style="height:0px" class="service-description-item">
-                                                <p class="service-description-3">We bring your brand to life through smooth and engaging animations that tell your story visually.</p>
-                                                <div class="w-layout-grid service-feature-grid">
-                                                    <div id="w-node-_33a70304-775e-f7e9-4862-b0e9b92c7cae-6f5c2c14" class="service-feature-item">
-                                                        <div class="service-feature-text">✲ UI Motion</div>
-                                                        <div class="service-feature-text">✲ Logo Animation</div>
-                                                        <div class="service-feature-text">✲ 3D Transitions</div>
-                                                    </div>
-                                                    <div id="w-node-_33a70304-775e-f7e9-4862-b0e9b92c7cb5-6f5c2c14" class="service-feature-item">
-                                                        <div class="service-feature-text">✲ Explainer Videos</div>
-                                                        <div class="service-feature-text">✲ Interactive Effects</div>
-                                                        <div class="service-feature-text">✲ Brand Storytelling</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="service-arrow-wrap">
-                                            <div style="-webkit-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0);-moz-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0);-ms-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0);transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0)" class="service-arrow w-embed">
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                                                    <path d="M13.0001 16.1716L18.3641 10.8076L19.7783 12.2218L12.0001 20L4.22192 12.2218L5.63614 10.8076L11.0001 16.1716V4H13.0001V16.1716Z"></path>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            </div>                          
                             <div data-w-id="17981745-b76c-fdb8-d5a0-45626b3a103f" style="opacity:0" class="why-choose-me-content-wrapper">
                                 <div class="why-choose-me-card">
                                     <a href="#" data-w-id="17981745-b76c-fdb8-d5a0-45626b3a1041" style="background-color:rgb(248,248,248)" class="why-choose-me-card-wrapper background-color-black-50 w-inline-block">
@@ -559,62 +525,6 @@
                         </div>
                     </div>
                 </div>
-                <section data-w-id="3a34aae3-4293-d165-0772-667e8ce65b54" class="service-area">
-                    <div class="service-sticky-main">
-                        <div class="marquee-slider">
-                            <div data-w-id="3a34aae3-4293-d165-0772-667e8ce65b57" class="marquee-inner">
-                                <div class="marquee-title">What I Do</div>
-                                <div class="marquee-title">What I Do</div>
-                                <div class="marquee-title">What I Do</div>
-                                <div class="marquee-title">What I Do</div>
-                                <div class="marquee-title">What I Do</div>
-                                <div class="marquee-title">What I Do</div>
-                                <div class="marquee-title">What I Do</div>
-                                <div class="marquee-title">Artego@ Services </div>
-                            </div>
-                            <div class="marquee-overlay"></div>
-                        </div>
-                        <div class="service-marquee">
-                            <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/696a123011a1a27345b4a02d_service-bg.avif" alt="Image" class="marquee-img lazy-image"/>
-                        </div>
-                    </div>
-                    <div class="w-layout-blockcontainer container-4 w-container">
-                        <div class="service-wrap">
-                            <div class="service-inner">
-                                <div class="service-card _1st">
-                                    <div class="service-icon-wrap">
-                                        <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/696a123011a1a27345b4a02a_service-icon-1.svg" alt="Icon" class="service-icon lazy-image"/>
-                                    </div>
-                                    <h2 class="heading-six pb-20">Discovery andVisioning</h2>
-                                    <p class="section-content-sm-2">As part of our process, we begin by exploring exactly what your goals are, what your preferences are, and what makes your website unique.</p>
-                                </div>
-                                <div class="service-card _2nd">
-                                    <div class="service-icon-wrap">
-                                        <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/696a123011a1a27345b4a029_service-icon-3.svg" alt="Icon" class="service-icon lazy-image"/>
-                                    </div>
-                                    <h2 class="heading-six pb-20">Design Development</h2>
-                                    <p class="section-content-sm-2">Before any design work starts, we dive deep into your brand story, user needs, and business objectives. We believe a successful project is built on clarity</p>
-                                </div>
-                            </div>
-                            <div class="service-inner last">
-                                <div class="service-card _3rd">
-                                    <div class="service-icon-wrap">
-                                        <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/696a123011a1a27345b4a02b_service-icon-4.svg" alt="Icon" class="service-icon lazy-image"/>
-                                    </div>
-                                    <h2 class="heading-six pb-20">Build andExecute</h2>
-                                    <p class="section-content-sm-2">As part of our process, we begin by exploring exactly what your goals are, what your preferences are, and what makes your website unique.</p>
-                                </div>
-                                <div class="service-card _4rd">
-                                    <div class="service-icon-wrap">
-                                        <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/696a123011a1a27345b4a028_service-icon-2.svg" alt="Icon" class="service-icon lazy-image"/>
-                                    </div>
-                                    <h2 class="heading-six pb-20">Urban Planning</h2>
-                                    <p class="section-content-sm-2">As part of our process, we begin by exploring exactly what your goals are, what your preferences are, and what makes your website unique.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
             </section>
             <section id="experience" class="experience-section section-margin fade-in-section">
                 <div class="w-layout-blockcontainer global-wrapper w-container">
@@ -1602,155 +1512,64 @@
                 },
             });
         </script>
-        <script>
-            fetch('navbar.html')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('navbar-container').innerHTML = data;
-                    if (window.Webflow) {
-                        Webflow.destroy();
-                        Webflow.ready();
-                        if (Webflow.require('ix2')) {
-                            Webflow.require('ix2').init();
-                        }
-                    }
-                });
-        </script>
+        
         <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Draggable Card and Hover Effect Logic for "My Name 's Dimas"
-            const heroImagesWrapper = document.querySelector('.home-hero-images-wrapper');
-            const draggableCard = document.querySelector('.home-hero-image-card-wrapper-02');
+            // Lazy load images
+            const lazyImages = [].slice.call(document.querySelectorAll("img.lazy-image"));
 
-            if (heroImagesWrapper && draggableCard) {
-                let isDragging = false;
-                let startX, startY;
-
-                draggableCard.style.cursor = 'grab';
-                draggableCard.style.touchAction = 'none'; // Prevent default touch actions
-
-                // Prevent default browser drag behavior on images
-                draggableCard.querySelectorAll('img').forEach(img => {
-                    img.addEventListener('dragstart', e => e.preventDefault());
+            if ("IntersectionObserver" in window) {
+                let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            let lazyImage = entry.target;
+                            lazyImage.src = lazyImage.dataset.src;
+                            if (lazyImage.dataset.srcset) {
+                                lazyImage.srcset = lazyImage.dataset.srcset;
+                            }
+                            lazyImage.classList.add("is-loaded");
+                            lazyImageObserver.unobserve(lazyImage);
+                        }
+                    });
                 });
 
-                const startDrag = (e) => {
-                    isDragging = true;
-                    draggableCard.classList.add('is-dragging');
-                    draggableCard.style.cursor = 'grabbing';
-                    draggableCard.style.transition = 'none';
-                    
-                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                    
-                    startX = clientX;
-                    startY = clientY;
-                };
-
-                const onDrag = (e) => {
-                    if (!isDragging) return;
-                    if (e.cancelable) e.preventDefault();
-                    
-                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                    
-                    const dx = clientX - startX;
-                    const dy = clientY - startY;
-
-                    // Move the card with a slight rotation during drag
-                    draggableCard.style.transform = `translate3d(${dx}px, ${dy}px, 0) rotate(${dx * 0.02}deg)`;
-                };
-
-                const endDrag = () => {
-                    if (!isDragging) return;
-                    isDragging = false;
-                    draggableCard.classList.remove('is-dragging');
-                    draggableCard.style.cursor = 'grab';
-                    
-                    // Rubber band snap back effect
-                    draggableCard.style.transition = 'transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-                    draggableCard.style.transform = 'translate3d(0, 0, 0) rotate(0deg)';
-                };
-
-                // Mouse hover follow effect (only when not dragging)
-                heroImagesWrapper.addEventListener('mousemove', (e) => {
-                    if (isDragging) return;
-
-                    const rect = heroImagesWrapper.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
-
-                    const deltaX = (x - centerX) * 0.05;
-                    const deltaY = (y - centerY) * 0.05;
-
-                    draggableCard.style.transition = 'transform 0.2s ease-out';
-                    draggableCard.style.transform = `translate3d(${deltaX}px, ${deltaY}px, 0) scale(1.1)`;
+                lazyImages.forEach(function(lazyImage) {
+                    lazyImageObserver.observe(lazyImage);
                 });
-
-                heroImagesWrapper.addEventListener('mouseleave', () => {
-                    if (isDragging) return;
-                    
-                    draggableCard.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-                    draggableCard.style.transform = 'translate3d(0, 0, 0) scale(1)';
+            } else {
+                // Fallback for browsers that don't support IntersectionObserver
+                lazyImages.forEach(function(lazyImage) {
+                    lazyImage.src = lazyImage.dataset.src;
+                    if (lazyImage.dataset.srcset) {
+                        lazyImage.srcset = lazyImage.dataset.srcset;
+                    }
+                    lazyImage.classList.add("is-loaded");
                 });
+            }
 
-                // Drag event listeners
-                draggableCard.addEventListener('mousedown', startDrag);
-                draggableCard.addEventListener('touchstart', startDrag, { passive: true });
+            // Scroll animations for sections
+            const sections = [].slice.call(document.querySelectorAll(".fade-in-section"));
 
-                window.addEventListener('mousemove', onDrag);
-                window.addEventListener('touchmove', onDrag, { passive: false });
+            if ("IntersectionObserver" in window) {
+                let sectionObserver = new IntersectionObserver(function(entries, observer) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add("is-visible");
+                            sectionObserver.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.1 });
 
-                window.addEventListener('mouseup', endDrag);
-                window.addEventListener('touchend', endDrag);
+                sections.forEach(function(section) {
+                    sectionObserver.observe(section);
+                });
+            } else {
+                // Fallback for browsers that don't support IntersectionObserver
+                sections.forEach(function(section) {
+                    section.classList.add("is-visible");
+                });
             }
         });
         </script>
-                <script>
-                    // Preloader Script as provided by user
-                    document.addEventListener("DOMContentLoaded", () => {
-                        document.body.style.overflow = 'hidden'; // Prevent scrolling initially
-        
-                        const counter = document.getElementById('counter');
-                        const bar = document.getElementById('bar');
-                        const preloader = document.getElementById('preloader');
-                        
-                        let currentProgress = 0;
-        
-                        function updateCounter() {
-                            const jump = Math.floor(Math.random() * 23) + 1;
-                            currentProgress += jump;
-                            if (currentProgress > 100) currentProgress = 100;
-        
-                            if (counter) counter.innerText = currentProgress.toString().padStart(2, '0');
-                            if (bar) bar.style.width = currentProgress + "%";
-        
-                            let delay = Math.floor(Math.random() * 200) + 50;
-        
-                            if (currentProgress > 70 && currentProgress < 85 && Math.random() > 0.3) {
-                                delay = 800 + Math.random() * 1000;
-                            } else if (currentProgress > 90 && currentProgress < 98) {
-                                delay = 400 + Math.random() * 400; 
-                            }
-        
-                            if (currentProgress < 100) {
-                                setTimeout(updateCounter, delay);
-                            } else {
-                                setTimeout(finishLoading, 500);
-                            }
-                        }
-        
-                        function finishLoading() {
-                            if (preloader) {
-                                preloader.classList.add('finished');
-                            }
-                            document.body.style.overflow = "auto";
-                        }
-        
-                        setTimeout(updateCounter, 500);
-                    });
-                </script>
-            </body></html>
+    </body>
+</html>
