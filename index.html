@@ -428,9 +428,56 @@
                 .home-hero-section, .home-about-section, .latest-work-section, .hardskills-section, .experience-section, .journal-section, .bits-and-pieces-section-desktop, .bits-and-pieces-section-mobile, .faq-section {
                     margin-bottom: 80px !important;
                 }
+                /* FIX: Sembunyikan section desktop di mobile agar margin tidak dobel */
+                .bits-and-pieces-section-desktop {
+                    display: none !important;
+                }
+                /* FIX: Jarak Bits and Pieces Mobile max 40px */
+                .bits-and-pieces-section-mobile {
+                    display: block !important;
+                    margin-bottom: 40px !important;
+                    padding-bottom: 0 !important;
+                }
+                /* FIX: Reset margin/padding pada elemen slider di dalamnya */
+                .bits-and-pieces-section-mobile .bits-and-pieces-wrapper,
+                .bits-and-pieces-section-mobile .slider-wrapper,
+                .bits-and-pieces-section-mobile .swiper-container {
+                .bits-and-pieces-section-mobile .slider-wrapper {
+                    margin-bottom: 0 !important;
+                    padding-bottom: 0 !important;
+                }
+                .bits-and-pieces-section-mobile .swiper-container {
+                    margin-bottom: 0 !important;
+                    padding-bottom: 50px !important; /* Space for shadow & dots */
+                    padding: 20px 10px 60px 10px !important; /* Padding keliling agar shadow tidak kepotong */
+                }
                 .section-headline-margin {
                     margin-bottom: 40px !important;
                 }
+            }
+
+            /* --- MOBILE CARD SHADOW --- */
+            .bits-and-pieces-section-mobile .slide-content-wrapper img {
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Shadow halus */
+                border-radius: 8px; /* Memperhalus sudut gambar */
+            }
+
+            /* --- SWIPER PAGINATION DOTS --- */
+            .swiper-pagination-bullet {
+                background: #000 !important;
+                opacity: 0.3;
+                transition: all 0.3s ease;
+            }
+            .swiper-pagination-bullet-active {
+                opacity: 1;
+                width: 20px; /* Efek memanjang */
+                border-radius: 5px;
+            }
+
+            /* --- HIDE SLIDER ARROWS (MOBILE) --- */
+            .bits-and-pieces-section-mobile .slider-left-arrow,
+            .bits-and-pieces-section-mobile .slider-right-arrow {
+                display: none !important;
             }
 
             /* --- SCROLL PROGRESS BAR --- */
@@ -1582,6 +1629,16 @@
                 </div>
             </section>
             <div class="bits-and-pieces-section-mobile">
+            <div class="bits-and-pieces-section-mobile fade-in-section">
+                <div class="w-layout-blockcontainer global-wrapper w-container">
+                    <div class="global-padding">
+                        <div class="section-headlne-content-wrapper section-headline-margin">
+                            <div class="section-headline">
+                                <div class="section-headline-text text-3xl text-weight-semibold text-color-black-900 text-reveal">Bits and Pieces</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="bits-and-pieces-wrapper">
                     <div class="slider-wrapper">
                         <div class="swiper-container testimonial-slider">
@@ -1618,6 +1675,7 @@
                             <div class="slider-right-arrow w-slider-arrow-right">
                                 <div class="slider-icon-2 w-icon-slider-right"></div>
                             </div>
+                            <div class="swiper-pagination"></div>
                             <div class="d-none-all w-slider-nav w-round"></div>
                         </div>
                     </div>
@@ -1864,13 +1922,19 @@
                 slidesPerView: 'auto',
                 loop: true,
                 spaceBetween: 20,
+                speed: 1000, /* Perhalus animasi transisi (1 detik) */
                 autoplay: {
                     delay: 3000,
+                    delay: 4000, /* Delay lebih lama agar nyaman dilihat */
                     disableOnInteraction: false,
                 },
                 navigation: {
                     nextEl: '.slider-right-arrow',
                     prevEl: '.slider-left-arrow',
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
                 },
             });
         </script>
@@ -2091,6 +2155,10 @@
                     
                     lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // Mencegah angka negatif di mobile
                 });
+            }
+        </script>
+    </body>
+</html>
             }
         </script>
     </body>
