@@ -367,5 +367,212 @@ html.lenis, html.lenis body { height: auto; }
         bottom: 20px;
         right: 20px;
         padding: 10px 14px;
+        padding: 8px 10px;
+        gap: 8px;
     }
+    .player-text {
+        display: none; /* Hide text on mobile for cleaner look */
+    }
+}
+
+/* =========================================
+   7. EXPERIENCE REVEAL IMAGE
+   ========================================= */
+.experience-reveal-img {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: auto;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    transform-origin: center center;
+}
+
+/* =========================================
+   8. LIVE STATUS WIDGET
+   ========================================= */
+.live-status-widget {
+    position: fixed;
+    bottom: 40px;
+    left: 40px;
+    z-index: 9990;
+    background: #2a2a2a;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: none;
+    padding: 24px;
+    border-radius: 12px;
+    color: #ffffff;
+    font-family: 'Courier New', 'Roboto Mono', monospace;
+    width: 280px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: transform 0.3s ease;
+}
+
+.live-status-widget:hover {
+    transform: translateY(-2px);
+}
+
+.widget-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #888888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.widget-status {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #00ff41; /* Bright Green */
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(0, 255, 65, 0.5);
+    animation: statusPulse 2s infinite;
+}
+
+@keyframes statusPulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1); opacity: 0.5; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.status-text {
+    font-size: 14px;
+    color: #e0e0e0;
+    font-weight: 500;
+    position: relative;
+}
+
+.status-text::after {
+    content: '_';
+    animation: cursorBlink 1s step-end infinite;
+    color: #00ff41;
+    margin-left: 2px;
+    font-weight: 700;
+}
+
+@keyframes cursorBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.widget-book-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: #ffffff;
+    color: #000000;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: 8px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    border: 2px solid #ffffff;
+}
+
+.widget-book-btn:hover {
+    background: #000000;
+    color: #ffffff;
+    border-color: #ffffff;
+    transform: scale(1.02);
+}
+
+@media (max-width: 767px) {
+    .live-status-widget {
+        bottom: 20px;
+        left: 20px;
+        width: auto;
+        min-width: 200px;
+        padding: 14px;
+    }
+    .widget-header {
+        flex-direction: column;
+        gap: 4px;
+    }
+}
+
+/* =========================================
+   9. MOBILE UI REFINEMENTS
+   ========================================= */
+@media (max-width: 767px) {
+    /* Compact Live Status Widget */
+    .live-status-widget {
+        bottom: 20px;
+        left: 20px;
+        right: auto;
+        width: auto;
+        min-width: 0;
+        max-width: calc(100% - 100px); /* Prevent overlap with music player */
+        padding: 8px 12px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: #2a2a2a;
+        border: none;
+    }
+    .widget-header { display: none; } /* Hide clock on mobile */
+    .widget-status { margin-bottom: 0; margin-right: auto; }
+    .status-text { font-size: 11px; }
+    .widget-book-btn {
+        width: 30px; height: 30px; padding: 0; border-radius: 6px; flex-shrink: 0;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 10px;
+    }
+    .widget-book-btn { text-indent: -9999px; position: relative; } /* Hide text, show icon if needed or just box */
+    .widget-book-btn::after {
+        content: '↗';
+        text-indent: 0;
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        color: #000;
+    }
+
+    /* Typography Adjustments */
+    .home-hero-headline-text-2 { font-size: 14vw !important; }
+    .section-headline-text { font-size: 32px !important; }
+}
+
+/* =========================================
+   10. NOISE OVERLAY & EFFECTS
+   ========================================= */
+.noise-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9998; /* Below preloader/widgets, above content */
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    animation: noiseAnimation 0.5s steps(5) infinite;
+}
+
+@keyframes noiseAnimation {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(10px, 10px); }
 }

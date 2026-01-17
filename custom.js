@@ -165,7 +165,133 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 });
             });
         });
+
+        // 5. Experience Image Reveal (Hover Effect)
+        function initExperienceReveal() {
+            // Create the reveal image element dynamically
+            const revealImg = document.createElement('img');
+            revealImg.classList.add('experience-reveal-img');
+            document.body.appendChild(revealImg);
+
+            // Center the image on the cursor initially
+            gsap.set(revealImg, { xPercent: -50, yPercent: -50 });
+
+            const experienceItems = document.querySelectorAll('.experience-section .home-services-card-wrapper');
+            
+            // Use quickTo for high-performance mouse following
+            const xTo = gsap.quickTo(revealImg, "x", {duration: 0.5, ease: "power3.out"});
+            const yTo = gsap.quickTo(revealImg, "y", {duration: 0.5, ease: "power3.out"});
+
+            experienceItems.forEach(item => {
+                item.addEventListener('mouseenter', () => {
+                    const imgUrl = item.getAttribute('data-reveal-img');
+                    if (imgUrl) {
+                        revealImg.src = imgUrl;
+                        gsap.to(revealImg, {
+                            autoAlpha: 1,
+                            scale: 1,
+                            duration: 0.4,
+                            overwrite: 'auto'
+                        });
+                    }
+                });
+
+                item.addEventListener('mousemove', (e) => {
+                    xTo(e.clientX);
+                    yTo(e.clientY);
+                    
+                    // Add slight rotation based on movement velocity for a "floating" feel
+                    const xVel = e.movementX || 0;
+                    gsap.to(revealImg, {
+                        rotation: xVel * 0.5,
+                        duration: 0.5,
+                        overwrite: 'auto'
+                    });
+
+                    // Magnetic Effect on List Item
+                    const rect = item.getBoundingClientRect();
+                    const xDist = (e.clientX - (rect.left + rect.width / 2)) * 0.15;
+                    const yDist = (e.clientY - (rect.top + rect.height / 2)) * 0.15;
+
+                    gsap.to(item, {
+                        x: xDist,
+                        y: yDist,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                });
+
+                item.addEventListener('mouseleave', () => {
+                    gsap.to(revealImg, {
+                        autoAlpha: 0,
+                        scale: 0.8,
+                        duration: 0.3,
+                        overwrite: 'auto'
+                    });
+
+                    // Reset Magnetic Effect
+                    gsap.to(item, {
+                        x: 0,
+                        y: 0,
+                        duration: 1,
+                        ease: "elastic.out(1, 0.3)"
+                    });
+                });
+            });
+        }
+        initExperienceReveal();
+
+        // 6. Live Status Widget Clock
+        function initLiveClock() {
+            const clockElement = document.getElementById('widget-clock');
+            if (clockElement) {
+                const updateTime = () => {
+                    const now = new Date();
+                    const options = { timeZone: 'Asia/Jakarta', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
+                    clockElement.textContent = new Intl.DateTimeFormat('en-GB', options).format(now);
+                };
+                updateTime();
+                setInterval(updateTime, 1000);
+            }
+        }
+        initLiveClock();
     });
+
+    // 7. Typing Effect for Status
+    function initTypingEffect() {
+        const statusText = document.querySelector('.status-text');
+        if (!statusText) return;
+
+        const text = statusText.textContent;
+        let index = 0;
+        let isDeleting = false;
+        
+        function type() {
+            const currentText = text.substring(0, index);
+            statusText.textContent = currentText;
+
+            let speed = 100;
+
+            if (isDeleting) {
+                speed = 50;
+                index--;
+            } else {
+                index++;
+            }
+
+            if (!isDeleting && index === text.length + 1) {
+                isDeleting = true;
+                speed = 3000; // Wait before deleting
+            } else if (isDeleting && index === 0) {
+                isDeleting = false;
+                speed = 500;
+            }
+
+            setTimeout(type, speed);
+        }
+        type();
+    }
+    initTypingEffect();
 
     // --- MOBILE LOGIC (< 992px) ---
     mm.add("(max-width: 991px)", () => {
