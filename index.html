@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-<!-- This site was created in Webflow. https://webflow.com -->
-<!-- Last Published: Sat Jan 17 2026 03:14:35 GMT+0000 (Coordinated Universal Time) -->
 <html data-wf-domain="mdkg.webflow.io" data-wf-page="6933c25b0996b0f96f5c2c14" data-wf-site="6933c25a0996b0f96f5c2bc3" data-wf-status="1" lang="en">
     <head>
         <meta charset="utf-8"/>
-        <title>M. Dimas K. G. | Creative Strategist and Visual Storyteller</title>
+        <title>M. Dimas K. G. | Creative Marketer</title>
         <meta content="Hi, I&#x27;m a Marketing Student from Bandung with a passion for creativity. Dive into this site to see my latest projects, thoughts, and what I’ve been working on." name="description"/>
-        <meta content="M. Dimas K. G. | Creative Strategist and Visual Storyteller" property="og:title"/>
+        <meta content="M. Dimas K. G. | Creative Marketer" property="og:title"/>
         <meta content="Discover the portfolio of Dimas (MDKG) | Marketing Student from Bandung showcasing portfolio, digital marketing projects, and creative storytelling." property="og:description"/>
         <meta content="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/693913757ee65e6f4176fa25_home.jpg" property="og:image"/>
-        <meta content="M. Dimas K. G. | Creative Strategist and Visual Storyteller" property="twitter:title"/>
+        <meta content="M. Dimas K. G. | Creative Marketer" property="twitter:title"/>
         <meta content="Discover the portfolio of Dimas (MDKG) | Marketing Student from Bandung showcasing portfolio, digital marketing projects, and creative storytelling." property="twitter:description"/>
         <meta property="og:type" content="website"/>
         <meta content="summary_large_image" name="twitter:card"/>
@@ -22,6 +20,67 @@
         }
         </style>
         <style>
+@keyframes slideInFromBottom {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.animate-on-load-hello {
+    animation: slideInFromBottom 0.8s ease-out 0.5s forwards;
+    opacity: 0; /* initial state */
+}
+
+.animate-on-load-card {
+    animation: slideInFromBottom 0.8s ease-out 0.8s forwards;
+    opacity: 0; /* initial state */
+}
+</style>
+        <style>
+@media (max-width: 767px) {
+    @keyframes fallAndBounce {
+        0% {
+            transform: translateY(-200px);
+            opacity: 0;
+        }
+        60% {
+            transform: translateY(10px);
+            opacity: 1;
+        }
+        80% {
+            transform: translateY(-5px);
+        }
+        100% {
+            transform: translateY(0);
+        }
+    }
+
+    .home-hero-images-wrapper.animate-on-load-card {
+        animation: none;
+        opacity: 1;
+    }
+
+    .home-hero-image-card-wrapper-02.mobile-fall-animation {
+        animation: fallAndBounce 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s forwards;
+        opacity: 0; /* initial state */
+    }
+
+    .home-hero-image-card-wrapper-01-2, .home-hero-image-card-wrapper-03-2 {
+         opacity: 0;
+         animation: fadeIn 0.8s ease-out 1s forwards;
+    }
+
+    @keyframes fadeIn {
+        to { opacity: 1; }
+    }
+}
+</style>
+        <style>
             /* --- PRELOADER CSS --- */
             :root {
                 --bg-color: #000000;
@@ -30,8 +89,7 @@
             }
 
             body.preloader-active {
-                overflow: hidden;
-            Н}
+                overflow: hidden;            }
 
             #preloader {
                 position: fixed;
@@ -346,11 +404,11 @@
                 <div class="w-layout-blockcontainer global-wrapper w-container">
                     <div class="global-padding">
                         <div class="home-hero-wrapper">
-                            <div data-w-id="17981745-b76c-fdb8-d5a0-45626b3a0f94" class="home-hero-headline-wrapper">
+                            <div class="home-hero-headline-wrapper animate-on-load-hello">
                                 <div class="home-hero-headline-text-2">Hello there</div>
-                                <img data-w-id="17981745-b76c-fdb8-d5a0-45626b3a0f97" loading="lazy" alt="Hi emoji" data-src="https://cdn.prod.website-files.com/68b88ad5bf41a0f5c752eab7/67631cf992d0c17f2b67e7de_%F0%9F%91%8B.webp" class="hi-emoji lazy-image"/>
+                                <img loading="lazy" alt="Hi emoji" data-src="https://cdn.prod.website-files.com/68b88ad5bf41a0f5c752eab7/67631cf992d0c17f2b67e7de_%F0%9F%91%8B.webp" class="hi-emoji lazy-image"/>
                             </div>
-                            <div data-w-id="54610587-6550-bd5f-42d1-d80780465257" class="home-hero-images-wrapper section-margin">
+                            <div class="home-hero-images-wrapper section-margin animate-on-load-card">
                                 <div class="home-hero-image-card-wrapper-01-2">
                                     <div class="home-hero-image-card-headline-block">
                                         <div class="home-hero-image-card-01-headine-text-2">Based in Bandung</div>
