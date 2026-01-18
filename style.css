@@ -44,8 +44,7 @@ body {
     color: var(--text-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    padding-top: 80px; /* Fix Content Overlap: Push content down to match Navbar height */
-}
+    }
 
 ::selection {
     background: var(--text-primary);
@@ -81,7 +80,8 @@ h1, h2, h3, h4, h5, h6,
 }
 
 p, li, span, .paragraph, .about-text {
-    font-weight: 400;
+    font-weight: 600;
+    letter-spacing: -0.02em;
     line-height: 1.6;
     max-width: 60ch;
 }
@@ -98,7 +98,7 @@ p, li, span, .paragraph, .about-text {
 }
 
 /* Navbar Sticky & Hide Animation */
-.navbar-3 {
+.navbar {
     position: fixed;
     top: 0 !important; /* Ensure it sticks to the very top */
     left: 0;
@@ -115,27 +115,27 @@ p, li, span, .paragraph, .about-text {
     align-items: center;
     margin: 0 !important; /* Remove any default margins */
 }
-.navbar-3.scrolled {
+.navbar.scrolled {
     padding: 0.6rem 5%; /* Maintain horizontal spacing on scroll */
     background-color: rgba(255, 255, 255, 0.85); /* More translucent */
     backdrop-filter: blur(16px); /* Stronger blur for better text readability */
     -webkit-backdrop-filter: blur(16px);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
-.navbar-3.navbar-hidden {
+.navbar.navbar-hidden {
     transform: translateY(-100%);
 }
 
 /* Force Full Width for Navbar Container */
-.navbar-3 .global-wrapper,
-.navbar-3 .w-container {
+.navbar .global-wrapper,
+.navbar .w-container {
     max-width: 100% !important;
     width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
 }
 
-.navbar-3 .global-padding {
+.navbar .global-padding {
     padding: 0 !important;
     width: 100%;
 }
@@ -1090,7 +1090,6 @@ html.lenis, html.lenis body { height: auto; }
     background-color: #ffffff;
     padding: 12px; /* The white frame thickness */
     border-radius: 16px;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12); /* Soft diffused shadow */
     overflow: hidden;
 }
 

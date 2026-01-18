@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     // -- Global Selectors --
     const heroCards = document.querySelectorAll('.hero-card');
-    const middleCard = document.querySelector('.home-hero-image-card-wrapper-02');
+    const middleCard = document.querySelector('.hero-card--center');
 
     // Responsive Logic using gsap.matchMedia()
     const mm = gsap.matchMedia();
@@ -167,7 +167,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
             // Center the image on the cursor initially
             gsap.set(revealImg, { xPercent: -50, yPercent: -50 });
 
-            const experienceItems = document.querySelectorAll('.experience-section .home-services-card-wrapper');
+            const experienceItems = document.querySelectorAll('.experience .experience-item');
             
             // Use quickTo for high-performance mouse following
             const xTo = gsap.quickTo(revealImg, "x", {duration: 0.5, ease: "power3.out"});

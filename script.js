@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
  */
 function initNavbar() {
     // -- Selectors --
-    const navbar = document.querySelector('.navbar-3');
+    const navbar = document.querySelector('.navbar');
     const menuBtn = document.querySelector('.mobile-menu-btn');
     const mobileOverlay = document.querySelector('.mobile-menu-overlay');
     const mobileLinks = document.querySelectorAll('.mobile-link');
