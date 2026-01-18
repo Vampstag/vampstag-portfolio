@@ -270,14 +270,16 @@ body.preloader-active { overflow: hidden; }
 /* Custom Cursor */
 .custom-cursor {
     position: fixed; top: 0; left: 0; width: 15px; height: 15px;
-    border-radius: 50%; pointer-events: none; z-index: 999999;
-    transform: translate(-50%, -50%);
-    transition: width 0.3s ease, height 0.3s ease, transform 0.05s linear;
+    border-radius: 50%; pointer-events: none; z-index: 2147483647; /* Max Z-Index */
+    /* Hapus transition transform agar tidak delay saat digerakkan JS */
+    transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
     background-color: #fff; mix-blend-mode: difference;
+    transform: translate(-50%, -50%);
+    display: block; /* Ensure visibility */
 }
 .custom-cursor.hovered { width: 60px; height: 60px; }
 @media (min-width: 992px) {
-    body, a, button, input, textarea, .hover-trigger { cursor: none !important; }
+    body, a, button, input, textarea, .hover-trigger, .w-tab-link { cursor: none !important; }
 
     /* Override custom cursor for email links to show copy icon */
     a[href^="mailto:"]:hover { cursor: copy !important; }
@@ -684,4 +686,210 @@ html.lenis, html.lenis body { height: auto; }
 .footer-2, .faq-section {
     content-visibility: auto;
     contain-intrinsic-size: 1px 1000px; /* Estimate height to prevent scrollbar jumping */
+}
+
+/* =========================================
+   16. PORTFOLIO GRID & SEARCH UI
+   ========================================= */
+
+/* Search Bar Styling */
+.portfolio-search-container {
+    position: relative;
+    width: 54px; /* Initial width (circle) */
+    height: 54px;
+    max-width: 54px;
+    margin: 0 auto 60px; /* Jarak ke tabs */
+    background-color: #f9f9f9;
+    border-radius: 100px;
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1); /* Smooth ease */
+    cursor: pointer;
+    overflow: hidden;
+    border: 1px solid #e5e5e5;
+}
+
+.portfolio-search-container.active {
+    width: 100%;
+    max-width: 400px;
+    background-color: #fff;
+    border-color: #000;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.search-input {
+    width: 100%;
+    height: 100%;
+    padding: 0 24px 0 54px;
+    border: none;
+    background: transparent;
+    font-family: var(--font-primary);
+    font-size: 1rem;
+    color: var(--text-primary);
+    outline: none;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease 0.1s;
+}
+
+.portfolio-search-container.active .search-input {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.search-icon {
+    position: absolute;
+    left: 17px; /* Centered in 54px */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    color: #111;
+    pointer-events: none;
+    z-index: 2;
+    transition: color 0.3s ease;
+}
+
+.clear-icon {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    color: #999;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.portfolio-search-container.has-text .clear-icon {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.clear-icon:hover {
+    color: #000;
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Portfolio Grid Layout */
+#portfolio-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    width: 100%;
+    margin-top: 40px;
+}
+
+@media (min-width: 768px) {
+    #portfolio-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 80px 40px; /* Vertical gap lebih besar */
+    }
+}
+
+/* No Results Message */
+.no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 80px 20px;
+    color: #666;
+    font-size: 1.1rem;
+    width: 100%;
+    border: 1px dashed #ddd;
+    border-radius: 12px;
+}
+
+/* =========================================
+   17. PORTFOLIO HERO SUBTITLE
+   ========================================= */
+.home-hero-headline-wrapper.page-portfolio {
+    flex-direction: column !important;
+    gap: 24px;
+}
+
+.subtitle {
+    font-size: clamp(1.125rem, 2vw, 1.5rem);
+    color: #666;
+    font-weight: 400;
+    max-width: 600px;
+    text-align: center;
+    line-height: 1.5;
+    margin: 0 auto;
+}
+
+/* =========================================
+   18. PORTFOLIO HOVER EFFECTS
+   ========================================= */
+.image-wrap {
+    position: relative;
+    overflow: hidden; /* Ensure overlay stays inside */
+    border-radius: 12px; /* Smooth corners for premium look */
+    transform-style: preserve-3d;
+    will-change: transform;
+}
+
+.portfolio-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 30px;
+    opacity: 0;
+    transition: all 0.4s ease;
+    z-index: 2;
+}
+
+.blog-main-wrapper:hover .portfolio-overlay {
+    opacity: 1;
+}
+
+.portfolio-description {
+    color: #fff;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    transform: translateY(20px);
+    transition: transform 0.4s ease;
+    font-weight: 500;
+}
+
+.blog-main-wrapper:hover .portfolio-description {
+    transform: translateY(0);
+}
+
+.portfolio-cta {
+    color: #fff;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    border: 1px solid rgba(255,255,255,0.8);
+    padding: 10px 20px;
+    border-radius: 20px;
+    transform: translateY(20px);
+    transition: transform 0.4s ease 0.1s, background 0.3s, color 0.3s;
+    background: transparent;
+}
+
+.portfolio-cta:hover {
+    background: #fff;
+    color: #000;
+    border-color: #fff;
+}
+
+.blog-main-wrapper:hover .portfolio-cta {
+    transform: translateY(0);
 }
