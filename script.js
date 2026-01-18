@@ -270,3 +270,114 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+// =========================================
+// 8. CLIPBOARD TOOLTIP INTERACTION
+// =========================================
+document.addEventListener('click', (e) => {
+    // Target any mailto link (usually in footer)
+    const mailLink = e.target.closest('a[href^="mailto:"]');
+    
+    if (mailLink) {
+        e.preventDefault();
+        const email = mailLink.getAttribute('href').replace('mailto:', '');
+        
+        navigator.clipboard.writeText(email).then(() => {
+            showTooltip(mailLink, "Copied to clipboard!");
+        }).catch(err => {
+            console.error('Failed to copy: ', err);
+        });
+    }
+});
+
+// =========================================
+// 9. PREMIUM MOBILE MENU ANIMATION
+// =========================================
+document.addEventListener("DOMContentLoaded", () => {
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const menuOverlay = document.querySelector('.mobile-menu-overlay');
+    const menuLinks = document.querySelectorAll('.mobile-link');
+    const menuCta = document.querySelector('.mobile-cta');
+
+    if (menuBtn && menuOverlay) {
+        // Toggle Function
+        const toggleMenu = () => {
+            const isActive = menuOverlay.classList.contains('is-active');
+            
+            if (!isActive) {
+                // OPEN
+                menuOverlay.classList.add('is-active');
+                menuBtn.classList.add('is-active');
+                document.body.style.overflow = 'hidden';
+
+                // Optional: GSAP Stagger for content entrance
+                if (typeof gsap !== 'undefined') {
+                    gsap.fromTo(menuLinks, 
+                        { y: 40, opacity: 0 },
+                        { y: 0, opacity: 1, stagger: 0.1, duration: 0.5, ease: "power2.out", delay: 0.1 }
+                    );
+                    if (menuCta) {
+                        gsap.fromTo(menuCta, 
+                            { y: 20, opacity: 0 },
+                            { y: 0, opacity: 1, duration: 0.5, delay: 0.3, ease: "power2.out" }
+                        );
+                    }
+                }
+            } else {
+                // CLOSE
+                menuOverlay.classList.remove('is-active');
+                menuBtn.classList.remove('is-active');
+                document.body.style.overflow = '';
+            }
+        };
+
+        menuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMenu();
+        });
+
+        // Close when clicking links
+        const closeMenu = () => {
+            if (menuOverlay.classList.contains('is-active')) {
+                toggleMenu();
+            }
+        };
+
+        menuLinks.forEach(link => link.addEventListener('click', closeMenu));
+        if (menuCta) menuCta.addEventListener('click', closeMenu);
+    }
+});
+
+function showTooltip(element, message) {
+    // Remove existing tooltip if any
+    const existingTooltip = document.querySelector('.clipboard-tooltip');
+    if (existingTooltip) existingTooltip.remove();
+
+    // Create tooltip
+    const tooltip = document.createElement('div');
+    tooltip.className = 'clipboard-tooltip';
+    tooltip.innerText = message;
+    document.body.appendChild(tooltip);
+
+    // Position tooltip
+    const rect = element.getBoundingClientRect();
+    const tooltipRect = tooltip.getBoundingClientRect();
+    
+    // Center above the element
+    const top = rect.top - tooltipRect.height - 12 + window.scrollY;
+    const left = rect.left + (rect.width / 2) - (tooltipRect.width / 2) + window.scrollX;
+
+    tooltip.style.top = `${top}px`;
+    tooltip.style.left = `${left}px`;
+
+    // Animate in
+    requestAnimationFrame(() => {
+        tooltip.classList.add('visible');
+    });
+
+    // Remove after 2 seconds
+    setTimeout(() => {
+        tooltip.classList.remove('visible');
+        setTimeout(() => tooltip.remove(), 400);
+    }, 2000);
+}
