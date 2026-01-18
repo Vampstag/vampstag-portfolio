@@ -989,7 +989,8 @@ html.lenis, html.lenis body { height: auto; }
     align-items: center;
     gap: 15px;
     width: 100%;
-    max-width: 320px;
+    max-width: 400px; /* Increased for better visibility on modern phones */
+    position: relative; /* For CRT overlay positioning */
 }
 
 #game-canvas {
@@ -1001,6 +1002,7 @@ html.lenis, html.lenis body { height: auto; }
     width: 100%; /* Responsive width */
     height: auto;
     aspect-ratio: 1/1;
+    touch-action: none; /* Prevent browser zooming/scrolling while playing */
 }
 
 #start-game-btn {
@@ -1031,6 +1033,26 @@ html.lenis, html.lenis body { height: auto; }
     font-size: 1.2rem;
     display: none;
     color: #111;
+}
+
+/* Retro CRT Scanline Effect */
+.crt-scanlines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0) 50%,
+        rgba(0, 0, 0, 0.05) 50%,
+        rgba(0, 0, 0, 0.05)
+    );
+    background-size: 100% 4px;
+    pointer-events: none; /* Allow clicks to pass through */
+    z-index: 5;
+    border-radius: 12px;
 }
 /* #endregion */
 

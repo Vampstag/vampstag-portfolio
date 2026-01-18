@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html data-wf-domain="mdkg.webflow.io" data-wf-page="6933c25b0996b0f96f5c2c14" data-wf-site="6933c25a0996b0f96f5c2bc3" data-wf-status="1" lang="en">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>404 | Page Not Found</title>
     <link href="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/css/mdkg.webflow.shared.4d3ebba11.css" rel="stylesheet" type="text/css" integrity="sha384-TT67oRMLIgdE62QKbLJVm4qWzvpdYU5Fte9HrMLErE4YLOwPeNlX0FQVkvPHI9IX" crossorigin="anonymous"/>
-    <link rel="stylesheet" href="/style.css">
-    <link rel="stylesheet" href="/widget.css">
+    <link rel="stylesheet" href="/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <script type="text/javascript">
         !function(o, c) {
@@ -16,85 +15,14 @@
             ("ontouchstart"in o || o.DocumentTouch && c instanceof DocumentTouch) && (n.className += t + "touch")
         }(window, document);
     </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const counter = document.getElementById('counter');
-            const bar = document.getElementById('bar');
-            const preloader = document.getElementById('preloader');
-            
-            let currentProgress = 0;
-
-            function updateCounter() {
-                const jump = Math.floor(Math.random() * 43) + 1;
-                currentProgress += jump;
-                if (currentProgress > 100) currentProgress = 100;
-
-                if(counter) counter.innerText = currentProgress.toString().padStart(2, '0') + "%";
-                if(bar) bar.style.width = currentProgress + "%";
-
-                let delay = Math.floor(Math.random() * 200) + 50;
-
-                if (currentProgress < 100) {
-                    setTimeout(updateCounter, delay);
-                } else {
-                    const counterWrapper = document.querySelector('.counter-wrapper');
-                    if (counterWrapper) counterWrapper.classList.add('fade-out');
-
-                    const sfx = document.getElementById('completion-sound');
-                    if (sfx) {
-                        sfx.play().catch(e => console.log("Audio autoplay blocked:", e));
-                    }
-
-                    // Fetch Footer (Absolute path for 404 safety)
-                    fetch('/footer.html')
-                        .then(response => response.text())
-                        .then(data => {
-                            const footerContainer = document.getElementById('footer-container');
-                            if (footerContainer) footerContainer.innerHTML = data;
-                            if (window.Webflow) {
-                                Webflow.destroy();
-                                Webflow.ready();
-                                if (Webflow.require('ix2')) Webflow.require('ix2').init();
-                            }
-                            setTimeout(finishLoading, 500);
-                        })
-                        .catch(() => finishLoading());
-                }
-            }
-
-            function finishLoading() {
-                if(preloader) preloader.classList.add('finished');
-                document.body.style.overflow = "auto";
-                if (window.lenis) window.lenis.start();
-                window.dispatchEvent(new CustomEvent('preloaderDone'));
-            }
-
-            document.body.classList.add('preloader-active');
-            setTimeout(updateCounter, 500);
-        });
-    </script>
 </head>
 <body class="body-2">
-    <div id="preloader">
-        <div class="top-corners">
-            <div class="corner-text">LOADING</div>
-            <div class="corner-text">PLEASE WAIT</div>
-        </div>
-        <div class="counter-wrapper">
-            <span id="counter">0%</span>
-        </div>
-        <div class="bottom-corners">
-            <div class="corner-text">SYSTEM CHECK</div>
-            <div class="corner-text">DOWNLOADING ASSETS</div>
-        </div>
-        <div class="progress-track">
-            <div class="progress-fill" id="bar"></div>
-        </div>
-        <audio id="completion-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3" preload="auto"></audio>
-        <audio id="click-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-modern-technology-select-3124.mp3" preload="auto"></audio>
+    <!-- Audio Assets (Hidden) -->
+    <div style="display:none;">
         <audio id="eat-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3" preload="auto"></audio>
         <audio id="game-over-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-retro-game-over-213.mp3" preload="auto"></audio>
     </div>
+
     <div class="body-wrapper">
             <div class="navbar-progress-container">
                 <div class="navbar-progress-bar" id="scroll-progress"></div>
@@ -184,6 +112,7 @@
                 
                 <!-- Snake Game Container -->
                 <div id="snake-game-container">
+                    <div class="crt-scanlines"></div> <!-- Retro Effect Overlay -->
                     <div class="score-wrapper" style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 10px;">
                         <div id="game-score">Score: 0</div>
                         <div id="high-score" style="font-family: var(--font-primary); font-weight: 700; font-size: 1.2rem; display: none; color: #111;">High Score: 0</div>
@@ -210,13 +139,10 @@
     <script src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/js/webflow.schunk.3646b0bdbfc7a235.js" type="text/javascript" integrity="sha384-gZLOmXIblLyHGDncyBxqMlIEL8LJqhq9+vw5KOasKHD2NajOGW1wkj4KYV+Vfhm5" crossorigin="anonymous"></script>
     <script src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/js/webflow.schunk.d659be6dcd9af708.js" type="text/javascript" integrity="sha384-fkZ6Md26P2haMCtqf4f0HB23dTQgjwR09RGdpu3VVDV0Zif+FEMEoIw0sewn8NM8" crossorigin="anonymous"></script>
     <script src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/js/webflow.68ccafdb.96c19bd230e42fc3.js" type="text/javascript" integrity="sha384-2Gg0jo0+ykKe902FwuSM0IpzRc+bq8KTSOUw36jNNWJxclLGXolsR1N1zHWBg3Yj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Draggable.min.js"></script>
-    <script src="script.js"></script>
+    <script src="/script.js"></script>
     
     <!-- Snake Game Logic -->
     <script>

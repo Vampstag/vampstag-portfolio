@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                     gsap.set(heroCards, { clearProps: "transform" });
                     initDesktopDraggable();
                     initParallaxEffect();
+                    initFooterMagnetic();
                 }
             });
         };
@@ -157,80 +158,35 @@ document.addEventListener("DOMContentLoaded", (event) => {
             });
         });
 
-        // --- 5. Experience Image Reveal (Hover Effect) ---
-        function initExperienceReveal() {
-            // Create the reveal image element dynamically
-            const revealImg = document.createElement('img');
-            revealImg.classList.add('experience-reveal-img');
-            document.body.appendChild(revealImg);
-
-            // Center the image on the cursor initially
-            gsap.set(revealImg, { xPercent: -50, yPercent: -50 });
-
-            const experienceItems = document.querySelectorAll('.experience .experience-item');
+        // --- 6. Footer Magnetic Links ---
+        function initFooterMagnetic() {
+            // Select links within the footer container (loaded dynamically)
+            const footerLinks = document.querySelectorAll('#footer-container a');
             
-            // Use quickTo for high-performance mouse following
-            const xTo = gsap.quickTo(revealImg, "x", {duration: 0.5, ease: "power3.out"});
-            const yTo = gsap.quickTo(revealImg, "y", {duration: 0.5, ease: "power3.out"});
+            footerLinks.forEach((link) => {
+                link.addEventListener('mousemove', (e) => {
+                    const rect = link.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
 
-            experienceItems.forEach(item => {
-                item.addEventListener('mouseenter', () => {
-                    const imgUrl = item.getAttribute('data-reveal-img');
-                    if (imgUrl) {
-                        revealImg.src = imgUrl;
-                        gsap.to(revealImg, {
-                            autoAlpha: 1,
-                            scale: 1,
-                            duration: 0.4,
-                            overwrite: 'auto'
-                        });
-                    }
-                });
-
-                item.addEventListener('mousemove', (e) => {
-                    xTo(e.clientX);
-                    yTo(e.clientY);
-                    
-                    // Add slight rotation based on movement velocity for a "floating" feel
-                    const xVel = e.movementX || 0;
-                    gsap.to(revealImg, {
-                        rotation: xVel * 0.5,
-                        duration: 0.5,
-                        overwrite: 'auto'
-                    });
-
-                    // Magnetic Effect on List Item
-                    const rect = item.getBoundingClientRect();
-                    const xDist = (e.clientX - (rect.left + rect.width / 2)) * 0.15;
-                    const yDist = (e.clientY - (rect.top + rect.height / 2)) * 0.15;
-
-                    gsap.to(item, {
-                        x: xDist,
-                        y: yDist,
+                    gsap.to(link, {
+                        x: x * 0.3, 
+                        y: y * 0.3,
                         duration: 0.3,
                         ease: "power2.out"
                     });
                 });
 
-                item.addEventListener('mouseleave', () => {
-                    gsap.to(revealImg, {
-                        autoAlpha: 0,
-                        scale: 0.8,
-                        duration: 0.3,
-                        overwrite: 'auto'
-                    });
-
-                    // Reset Magnetic Effect
-                    gsap.to(item, {
+                link.addEventListener('mouseleave', () => {
+                    gsap.to(link, {
                         x: 0,
                         y: 0,
-                        duration: 1,
+                        duration: 0.8,
                         ease: "elastic.out(1, 0.3)"
                     });
                 });
             });
         }
-        initExperienceReveal();
     });
     //#endregion
 
@@ -249,4 +205,105 @@ document.addEventListener("DOMContentLoaded", (event) => {
         // DRAGGABLE DISABLED ON MOBILE/TABLET FOR BETTER SCROLL UX
     });
     //#endregion
+
+    // --- 5. Experience Image Reveal (Hover Effect) - GLOBAL ---
+    function initExperienceReveal() {
+        // Create the reveal image element dynamically
+        const revealImg = document.createElement('img');
+        revealImg.classList.add('experience-reveal-img');
+        document.body.appendChild(revealImg);
+
+        // Center the image on the cursor initially
+        gsap.set(revealImg, { 
+            position: "fixed", 
+            top: 0, 
+            left: 0, 
+            pointerEvents: "none", 
+            zIndex: 9999,
+            xPercent: -50, 
+            yPercent: -50,
+            autoAlpha: 0,
+            maxWidth: "300px" // Ensure image isn't too large
+        });
+
+        const experienceItems = document.querySelectorAll('.experience-section .home-services-card-wrapper');
+        
+        // Use quickTo for high-performance mouse following
+        const xTo = gsap.quickTo(revealImg, "x", {duration: 0.5, ease: "power3.out"});
+        const yTo = gsap.quickTo(revealImg, "y", {duration: 0.5, ease: "power3.out"});
+
+        experienceItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                const imgUrl = item.getAttribute('data-reveal-img');
+                if (imgUrl) {
+                    revealImg.src = imgUrl;
+                    gsap.to(revealImg, {
+                        autoAlpha: 1,
+                        scale: 1,
+                        duration: 0.4,
+                        overwrite: 'auto'
+                    });
+                }
+            });
+
+            item.addEventListener('mousemove', (e) => {
+                xTo(e.clientX);
+                yTo(e.clientY);
+                
+                // Calculate velocity and speed
+                const xVel = e.movementX || 0;
+                const yVel = e.movementY || 0;
+                const speed = Math.sqrt(xVel * xVel + yVel * yVel);
+
+                // Clamp rotation to keep it subtle (e.g., max 15 degrees)
+                const rotationVal = gsap.utils.clamp(-15, 15, xVel * 0.8);
+                
+                // Map speed to scale (Base 1, Max 1.15) - grows when moving fast
+                const scaleVal = gsap.utils.clamp(1, 1.15, 1 + speed * 0.005);
+                
+                // Map speed to blur (0 to 5px) - blurs when moving fast
+                const blurVal = gsap.utils.clamp(0, 5, speed * 0.05);
+
+                gsap.to(revealImg, {
+                    rotation: rotationVal,
+                    scale: scaleVal,
+                    filter: `blur(${blurVal}px)`,
+                    duration: 0.5,
+                    ease: "power2.out",
+                    overwrite: 'auto'
+                });
+
+                // Magnetic Effect on List Item
+                const rect = item.getBoundingClientRect();
+                const xDist = (e.clientX - (rect.left + rect.width / 2)) * 0.15;
+                const yDist = (e.clientY - (rect.top + rect.height / 2)) * 0.15;
+
+                gsap.to(item, {
+                    x: xDist,
+                    y: yDist,
+                    duration: 0.3,
+                    ease: "power2.out"
+                });
+            });
+
+            item.addEventListener('mouseleave', () => {
+                gsap.to(revealImg, {
+                    autoAlpha: 0,
+                    scale: 0.8,
+                    filter: 'blur(0px)',
+                    duration: 0.3,
+                    overwrite: 'auto'
+                });
+
+                // Reset Magnetic Effect
+                gsap.to(item, {
+                    x: 0,
+                    y: 0,
+                    duration: 1,
+                    ease: "elastic.out(1, 0.3)"
+                });
+            });
+        });
+    }
+    initExperienceReveal();
 });
