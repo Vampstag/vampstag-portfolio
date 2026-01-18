@@ -861,3 +861,19 @@ html.lenis, html.lenis body { height: auto; }
         display: none !important;
     }
 }
+
+/* =========================================
+   14. CTA VISIBILITY MANAGEMENT
+   ========================================= */
+/* Desktop (Landscape & up) - Show CTA, Hide Burger */
+@media (min-width: 992px) {
+    .desktop-cta { display: block !important; }
+    .mobile-menu-btn { display: none !important; }
+}
+
+/* Tablet & Mobile (Portrait & Landscape) - Hide CTA, Show Burger */
+@media (max-width: 991px) {
+    .desktop-cta,
+    .desktop.w-nav-menu { display: none !important; }
+    .mobile-menu-btn { display: flex !important; }
+}
