@@ -1,3 +1,4 @@
+/* #region 0. TYPOGRAPHY & VARIABLES */
 /* =========================================
    0. TYPOGRAPHY & VARIABLES
    ========================================= */
@@ -77,7 +78,9 @@ p, li, span, .paragraph, .about-text {
     line-height: 1.6;
     max-width: 60ch;
 }
+/* #endregion */
 
+/* #region 1. GLOBAL & UTILITIES */
 /* =========================================
    1. GLOBAL & UTILITIES
    ========================================= */
@@ -89,17 +92,55 @@ p, li, span, .paragraph, .about-text {
 
 /* Navbar Sticky & Hide Animation */
 .navbar-3 {
-    position: fixed !important;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 1000;
-    transition: transform 0.3s ease-in-out;
-    transform: translateY(0%) !important;
-    overflow: visible !important;
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), padding 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), background-color 0.4s ease;
+    transform: translateY(0%);
+    overflow: visible;
+    padding-top: 1rem; /* Reduced to ~16px for a slimmer profile */
+    padding-bottom: 1rem;
+    height: auto;
+}
+.navbar-3.scrolled {
+    padding-top: 0.6rem; /* Ultra-slim scrolled state (~10px) */
+    padding-bottom: 0.6rem;
+    background-color: rgba(255, 255, 255, 0.85); /* More translucent */
+    backdrop-filter: blur(16px); /* Stronger blur for better text readability */
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 .navbar-3.navbar-hidden {
-    transform: translateY(-100%) !important;
+    transform: translateY(-100%);
+}
+
+/* Navbar Alignment & Logo Sizing */
+.nav-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo.w-nav-brand {
+    max-height: 40px; /* Enforce max height */
+    display: flex;
+    align-items: center;
+}
+
+/* Hover Line Animation Polish */
+.navigation-link .line-below {
+    height: 2px;
+    width: 0%;
+    background-color: #000000;
+    transition: width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    margin-top: 4px;
+}
+.navigation-link:hover .line-below,
+.navigation-link.w--current .line-below,
+.navigation-link.active .line-below {
+    width: 100%;
 }
 
 /* Fix: Prevent Horizontal Scroll */
@@ -133,7 +174,9 @@ html, body {
     will-change: transform;
     transform: translateZ(0); /* Force GPU Layer */
 }
+/* #endregion */
 
+/* #region 2. ANIMATIONS */
 /* =========================================
    2. ANIMATIONS (KEYFRAMES)
    ========================================= */
@@ -192,7 +235,9 @@ html, body {
     }
     @keyframes fadeIn { to { opacity: 1; } }
 }
+/* #endregion */
 
+/* #region 3. PRELOADER */
 /* =========================================
    3. PRELOADER STYLES
    ========================================= */
@@ -240,7 +285,9 @@ body.preloader-active { overflow: hidden; }
     .top-corners { top: 20px; }
     .bottom-corners { bottom: 25px; }
 }
+/* #endregion */
 
+/* #region 4. INTERACTIVE ELEMENTS */
 /* =========================================
    4. INTERACTIVE ELEMENTS (Hover, Cursor)
    ========================================= */
@@ -287,7 +334,9 @@ body.preloader-active { overflow: hidden; }
 @media (max-width: 991px) {
     .custom-cursor { display: none !important; }
 }
+/* #endregion */
 
+/* #region 5. LAYOUT & SPACING */
 /* =========================================
    5. LAYOUT & SPACING
    ========================================= */
@@ -296,6 +345,12 @@ body.preloader-active { overflow: hidden; }
     margin-bottom: 160px !important;
 }
 .section-headline-margin { margin-bottom: 80px !important; }
+
+/* Hide Mobile Section on Desktop by default */
+.bits-and-pieces-section-mobile {
+    display: none;
+}
+
 @media (max-width: 991px) {
     .home-hero-section, .home-about-section, .latest-work-section, .hardskills-section, .experience-section, .journal-section, .bits-and-pieces-section-desktop, .bits-and-pieces-section-mobile, .faq-section {
         margin-bottom: 80px !important;
@@ -322,18 +377,6 @@ body.preloader-active { overflow: hidden; }
     }
 }
 
-/* --- SWIPER PAGINATION DOTS --- */
-.swiper-pagination-bullet {
-    background: #000 !important;
-    opacity: 0.6;
-    transition: all 0.3s ease;
-}
-.swiper-pagination-bullet-active {
-    opacity: 1;
-    width: 20px; /* Efek memanjang */
-    border-radius: 5px;
-}
-
 /* Scroll Progress Bar */
 .navbar-progress-container {
     position: fixed; top: 0; left: 0; width: 100%; height: 3px;
@@ -350,7 +393,9 @@ html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
 .lenis.lenis-stopped { overflow: hidden; }
 .lenis.lenis-scrolling iframe { pointer-events: none; }
+/* #endregion */
 
+/* #region 7. EXPERIENCE REVEAL */
 /* =========================================
    7. EXPERIENCE REVEAL IMAGE
    ========================================= */
@@ -370,13 +415,10 @@ html.lenis, html.lenis body { height: auto; }
     box-shadow: 0 20px 50px rgba(0,0,0,0.3);
     transform-origin: center center;
 }
+/* #endregion */
 
-/* =========================================
-   9. MOBILE UI REFINEMENTS
-   ========================================= */
-@media (max-width: 767px) {
-}
 
+/* #region 10. 404 ERROR PAGE */
 /* =========================================
    10. 404 ERROR PAGE
    ========================================= */
@@ -389,9 +431,9 @@ html.lenis, html.lenis body { height: auto; }
     align-items: center;
     text-align: center;
     background-color: #ffffff;
-    padding: 20px;
+    padding: 220px 20px 40px; /* Tambah padding atas agar tidak kepotong navbar */
     position: relative;
-    z-index: 999;
+    z-index: 10; /* Turunkan z-index agar tidak menutupi mobile menu overlay (998) */
 }
 
 .error-content-wrapper {
@@ -451,7 +493,9 @@ html.lenis, html.lenis body { height: auto; }
     font-weight: 600;
     font-size: 1rem;
 }
+/* #endregion */
 
+/* #region 11. CLIPBOARD TOOLTIP */
 /* =========================================
    11. CLIPBOARD TOOLTIP
    ========================================= */
@@ -476,7 +520,9 @@ html.lenis, html.lenis body { height: auto; }
     opacity: 1;
     transform: translateY(0) scale(1);
 }
+/* #endregion */
 
+/* #region 12. GLITCH ANIMATION */
 /* =========================================
    12. GLITCH ANIMATION (404)
    ========================================= */
@@ -538,7 +584,9 @@ html.lenis, html.lenis body { height: auto; }
     90% { clip-path: inset(10% 0 70% 0); }
     100% { clip-path: inset(40% 0 20% 0); }
 }
+/* #endregion */
 
+/* #region 13. MOBILE NAVIGATION */
 /* =========================================
    13. PREMIUM MOBILE NAVIGATION
    ========================================= */
@@ -639,7 +687,9 @@ html.lenis, html.lenis body { height: auto; }
         display: none !important;
     }
 }
+/* #endregion */
 
+/* #region 14. CTA VISIBILITY */
 /* =========================================
    14. CTA VISIBILITY MANAGEMENT
    ========================================= */
@@ -655,7 +705,9 @@ html.lenis, html.lenis body { height: auto; }
     .desktop.w-nav-menu { display: none !important; }
     .mobile-menu-btn { display: flex !important; }
 }
+/* #endregion */
 
+/* #region 15. HERO HEADLINE FIX */
 /* =========================================
    15. HERO HEADLINE SINGLE LINE FIX (DESKTOP)
    ========================================= */
@@ -687,7 +739,9 @@ html.lenis, html.lenis body { height: auto; }
     content-visibility: auto;
     contain-intrinsic-size: 1px 1000px; /* Estimate height to prevent scrollbar jumping */
 }
+/* #endregion */
 
+/* #region 16. PORTFOLIO GRID & SEARCH */
 /* =========================================
    16. PORTFOLIO GRID & SEARCH UI
    ========================================= */
@@ -803,7 +857,9 @@ html.lenis, html.lenis body { height: auto; }
     border: 1px dashed #ddd;
     border-radius: 12px;
 }
+/* #endregion */
 
+/* #region 17. PORTFOLIO HERO */
 /* =========================================
    17. PORTFOLIO HERO SUBTITLE
    ========================================= */
@@ -821,7 +877,9 @@ html.lenis, html.lenis body { height: auto; }
     line-height: 1.5;
     margin: 0 auto;
 }
+/* #endregion */
 
+/* #region 18. PORTFOLIO HOVER */
 /* =========================================
    18. PORTFOLIO HOVER EFFECTS
    ========================================= */
@@ -893,3 +951,131 @@ html.lenis, html.lenis body { height: auto; }
 .blog-main-wrapper:hover .portfolio-cta {
     transform: translateY(0);
 }
+/* #endregion */
+
+/* #region 19. SNAKE GAME */
+/* =========================================
+   19. 404 SNAKE GAME
+   ========================================= */
+#snake-game-container {
+    margin: 20px auto 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    max-width: 320px;
+}
+
+#game-canvas {
+    background-color: #f4f4f4;
+    border: 2px solid #111;
+    border-radius: 12px;
+    display: none; /* Hidden initially */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    width: 100%; /* Responsive width */
+    height: auto;
+    aspect-ratio: 1/1;
+}
+
+#start-game-btn {
+    background: transparent;
+    border: 2px solid #111;
+    color: #111;
+    padding: 12px 24px;
+    font-family: var(--font-primary);
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+#start-game-btn:hover {
+    background: #111;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+#game-score {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: 1.2rem;
+    display: none;
+    color: #111;
+}
+/* #endregion */
+
+/* #region 20. BITS SLIDER (SWIPER) */
+/* =========================================
+   20. BITS & PIECES SLIDER
+   ========================================= */
+.bits-slider {
+    width: 100%;
+    padding: 40px 0 80px; /* Top padding for shadow, bottom for pagination */
+    overflow: hidden;
+}
+
+/* Slide Styling (The "Center Focus" Logic) */
+.bits-slider .swiper-slide {
+    width: 75%; /* Mobile width for 'auto' mode */
+    transform: scale(0.9);
+    opacity: 0.6;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    height: auto;
+}
+
+.bits-slider .swiper-slide-active {
+    transform: scale(1);
+    opacity: 1;
+    z-index: 10;
+}
+
+.bits-slider .swiper-pagination {
+    bottom: 0px !important;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    z-index: 10;
+}
+
+.bits-slider .swiper-pagination-bullet {
+    background: #e0e0e0;
+    opacity: 1;
+    width: 8px;
+    height: 8px;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border-radius: 50%;
+    margin: 0 !important;
+}
+
+.bits-slider .swiper-pagination-bullet-active {
+    background: #000000;
+    width: 24px; /* Efek memanjang (pill shape) untuk indikator aktif */
+    border-radius: 100px;
+}
+
+/* The "Framed Photo" Card */
+.photo-card {
+    background-color: #ffffff;
+    padding: 12px; /* The white frame thickness */
+    border-radius: 16px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12); /* Soft diffused shadow */
+    overflow: hidden;
+}
+
+/* The Image */
+.photo-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 3/4; /* Enforce Portrait */
+    object-fit: cover;
+    border-radius: 12px; /* Slightly smaller radius than frame */
+}
+/* #endregion */

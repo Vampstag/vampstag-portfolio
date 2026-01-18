@@ -1,3 +1,4 @@
+//#region CONFIGURATION
 /**
  * MDKG Widget Configuration
  * KONFIGURASI WIDGET
@@ -17,13 +18,16 @@ const widgetConfig = {
         { src: 'audio/bgmusic3.mp3' }
     ]
 };
+//#endregion
 
+//#region WIDGET CLASS
 /**
  * MDKG Widget System
  * Handles Live Status and Music Player injection and logic.
  */
 class MdkgWidget {
     constructor(options = {}) {
+        // -- Options Setup --
         this.containerId = options.containerId || 'mdkg-widget-container';
         this.locationText = options.locationText || 'BANDUNG, ID';
         this.bookingLink = options.bookingLink || 'https://calendar.app.google/q8vcfvD79osZvTKa8';
@@ -50,6 +54,7 @@ class MdkgWidget {
         }
     }
 
+    // --- Core Initialization ---
     init() {
         const container = document.getElementById(this.containerId);
         if (!container) return; // Container not found, do nothing
@@ -61,6 +66,7 @@ class MdkgWidget {
         this.initScrollBehavior();
     }
 
+    // --- Render HTML ---
     render(container) {
         const currentTrack = this.playlist[this.currentTrackIndex];
         
@@ -127,6 +133,7 @@ class MdkgWidget {
         `;
     }
 
+    // --- Feature: Digital Clock ---
     initClock() {
         const clockElement = document.querySelector('.mdkg-widget-clock');
         if (clockElement) {
@@ -140,6 +147,7 @@ class MdkgWidget {
         }
     }
 
+    // --- Feature: Typing Effect ---
     initTyping() {
         const statusText = document.querySelector('.mdkg-status-text');
         if (!statusText) return;
@@ -174,6 +182,7 @@ class MdkgWidget {
         type();
     }
 
+    // --- Feature: Music Player ---
     initMusicPlayer() {
         const player = document.querySelector('.mdkg-widget-player');
         const audio = player ? player.querySelector('.mdkg-bg-music') : null;
@@ -229,6 +238,7 @@ class MdkgWidget {
         }
     }
 
+    // --- Feature: Scroll Hiding ---
     initScrollBehavior() {
         let lastScrollTop = 0;
         const statusWidget = document.querySelector('.mdkg-widget-status');
@@ -246,6 +256,7 @@ class MdkgWidget {
         }
     }
 }
+//#endregion
 
 // Initialize automatically
 new MdkgWidget(widgetConfig);

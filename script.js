@@ -1,3 +1,7 @@
+//#region GLOBAL INITIALIZATION
+// =========================================
+// 1. CORE SETUP & EVENT LISTENERS
+// =========================================
 document.addEventListener("DOMContentLoaded", () => {
     // 1. Initialize Lenis (Smooth Scroll)
     const lenis = new Lenis({
@@ -10,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
         smoothTouch: false,
         touchMultiplier: 2,
     });
+    window.lenis = lenis;
 
     function raf(time) {
         lenis.raf(time);
@@ -31,33 +36,64 @@ document.addEventListener("DOMContentLoaded", () => {
     initScrollReveal();
     initFooterAnimation();
 
-    // 5. Custom Cursor (Restored)
+    // 5. Custom Cursor
     initCustomCursor();
-});
 
-/* =========================================
-   Navbar Interaction
-   ========================================= */
+    // 6. Bits Slider
+    initBitsSlider();
+});
+//#endregion
+
+//#region NAVBAR LOGIC
+// =========================================
+// 2. NAVBAR & MOBILE MENU
+// =========================================
+/**
+ * Handles sticky navbar state and mobile menu toggling.
+ * Why: To ensure navigation is accessible and provides visual feedback on scroll.
+ */
 function initNavbar() {
+    // -- Selectors --
     const navbar = document.querySelector('.navbar-3');
     const menuBtn = document.querySelector('.mobile-menu-btn');
     const mobileOverlay = document.querySelector('.mobile-menu-overlay');
     const mobileLinks = document.querySelectorAll('.mobile-link');
+    const progressBar = document.getElementById('scroll-progress');
+    let lastScrollTop = 0;
 
-    // Scroll Effect
+    // -- Scroll Effect Logic --
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
+        const currentScroll = window.scrollY;
+
+        // 1. Shrink Effect (Class-based for performance)
+        if (currentScroll > 20) {
             navbar.classList.add('scrolled');
-            navbar.style.backgroundColor = "rgba(255, 255, 255, 0.9)";
-            navbar.style.backdropFilter = "blur(12px)";
         } else {
             navbar.classList.remove('scrolled');
-            navbar.style.backgroundColor = "transparent";
-            navbar.style.backdropFilter = "none";
+        }
+
+        // 2. Smart Hide/Show (UX Optimization)
+        // Hide when scrolling down (> 100px), Show when scrolling up
+        if (currentScroll > lastScrollTop && currentScroll > 100) {
+            navbar.classList.add('navbar-hidden');
+        } else {
+            navbar.classList.remove('navbar-hidden');
+        }
+        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; // Prevent negative scroll
+
+        if (progressBar) {
+            // Calculate scroll percentage for the top progress bar
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            if (scrollHeight > 0) {
+                const scrolled = (currentScroll / scrollHeight) * 100;
+                progressBar.style.width = `${scrolled}%`;
+            } else {
+                progressBar.style.width = '0%';
+            }
         }
     });
 
-    // Mobile Menu Toggle
+    // -- Mobile Menu Toggle Logic --
     if (menuBtn && mobileOverlay) {
         menuBtn.addEventListener('click', () => {
             const isActive = mobileOverlay.classList.toggle('is-active');
@@ -82,17 +118,26 @@ function initNavbar() {
         });
     }
 }
+//#endregion
 
-/* =========================================
-   Render Projects from Data
-   ========================================= */
+//#region PORTFOLIO LOGIC
+// =========================================
+// 3. PROJECT RENDERING
+// =========================================
+/**
+ * Dynamically renders project cards into the grid.
+ * Why: Allows for easy updates to project data without touching HTML structure.
+ */
 function renderProjects() {
     const grid = document.getElementById('portfolio-grid');
+    
+    // Error Prevention: Check if grid or data exists
     if (!grid || typeof projectsData === 'undefined') return;
 
     grid.innerHTML = ''; // Clear existing
 
-    projectsData.forEach(project => {
+    try {
+        projectsData.forEach(project => {
         const card = document.createElement('div');
         card.className = 'project-card fade-in-section';
         card.style.opacity = '0'; // Initial state for animation
@@ -112,12 +157,21 @@ function renderProjects() {
         `;
         grid.appendChild(card);
     });
+    } catch (error) {
+        console.error("Error rendering projects:", error);
+    }
 }
+//#endregion
 
-/* =========================================
-   GSAP Animations
-   ========================================= */
+//#region ANIMATIONS
+// =========================================
+// 4. GSAP ANIMATIONS
+// =========================================
+/**
+ * Animates the hero section elements on load.
+ */
 function initHeroAnimation() {
+    // -- Selectors --
     const headline = document.querySelector('.section-headline-text');
     const filters = document.querySelectorAll('.filter-btn');
 
@@ -134,6 +188,9 @@ function initHeroAnimation() {
     );
 }
 
+/**
+ * Sets up scroll-triggered animations for project cards.
+ */
 function initScrollReveal() {
     // Wait slightly for DOM to settle
     setTimeout(() => {
@@ -151,6 +208,9 @@ function initScrollReveal() {
     }, 100);
 }
 
+/**
+ * Animates the footer when it comes into view.
+ */
 function initFooterAnimation() {
     const footer = document.querySelector('.footer-2');
     if(footer) {
@@ -169,19 +229,25 @@ function initFooterAnimation() {
         );
     }
 }
+//#endregion
 
-/* =========================================
-   Custom Cursor Logic
-   ========================================= */
+//#region CUSTOM CURSOR
+// =========================================
+// 5. CUSTOM CURSOR
+// =========================================
+/**
+ * Creates and manages the custom cursor follower.
+ * Why: Adds a premium feel to the desktop experience.
+ */
 function initCustomCursor() {
     // Disable on touch devices/mobile
     if (window.matchMedia("(max-width: 991px)").matches) return;
 
-    // Remove existing cursor if any to prevent duplicates
+    // Error Prevention: Remove existing cursor if any to prevent duplicates
     const existingCursor = document.querySelector('.custom-cursor');
     if (existingCursor) existingCursor.remove();
 
-    // Create cursor element
+    // -- Setup --
     const cursor = document.createElement('div');
     cursor.classList.add('custom-cursor');
     document.body.appendChild(cursor);
@@ -193,13 +259,13 @@ function initCustomCursor() {
     const xTo = gsap.quickTo(cursor, "x", {duration: 0.1, ease: "power3.out"});
     const yTo = gsap.quickTo(cursor, "y", {duration: 0.1, ease: "power3.out"});
 
-    // Move cursor
+    // -- Movement --
     window.addEventListener('mousemove', (e) => {
         xTo(e.clientX);
         yTo(e.clientY);
     });
 
-    // Hover effects
+    // -- Hover Effects --
     const hoverSelectors = 'a, button, .hover-trigger, input, select, textarea, .w-tab-link, .project-card';
     const hoverables = document.querySelectorAll(hoverSelectors);
 
@@ -213,7 +279,7 @@ function initCustomCursor() {
 
     addHoverListeners(hoverables);
 
-    // Observer for dynamic elements (like portfolio items loaded via JS)
+    // Observer for dynamic elements (e.g., portfolio items loaded via JS)
     const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
             if (mutation.addedNodes.length) {
@@ -225,3 +291,87 @@ function initCustomCursor() {
     
     observer.observe(document.body, { childList: true, subtree: true });
 }
+//#endregion
+
+//#region BITS SLIDER
+// =========================================
+// 6. BITS & PIECES SLIDER
+// =========================================
+/**
+ * Initializes the Swiper slider for the Bits and Pieces section.
+ */
+function initBitsSlider() {
+    const slider = document.querySelector('.bits-slider');
+    if (!slider || typeof Swiper === 'undefined') return;
+
+    const swiper = new Swiper('.bits-slider', {
+        loop: true,
+        slidesPerView: "auto", // Allows CSS width to control how many show
+        centeredSlides: true,
+        spaceBetween: 20,
+        grabCursor: true,
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        breakpoints: {
+            768: {
+                slidesPerView: "auto",
+                spaceBetween: 30
+            }
+        }
+    });
+
+    // --- Tilt Effect Logic ---
+    // Only applies to the active slide for a focused feel
+    slider.addEventListener('mousemove', (e) => {
+        const activeSlide = slider.querySelector('.swiper-slide-active');
+        if (!activeSlide) return;
+
+        const card = activeSlide.querySelector('.photo-card');
+        if (!card) return;
+
+        const rect = card.getBoundingClientRect();
+        
+        // Check if mouse is inside the active card
+        const isOver = (
+            e.clientX >= rect.left &&
+            e.clientX <= rect.right &&
+            e.clientY >= rect.top &&
+            e.clientY <= rect.bottom
+        );
+
+        if (isOver) {
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            // Calculate rotation (Max 10 degrees)
+            const rotateX = ((mouseY - centerY) / centerY) * -10;
+            const rotateY = ((mouseX - centerX) / centerX) * 10;
+
+            gsap.to(card, {
+                rotationX: rotateX,
+                rotationY: rotateY,
+                scale: 1.02, // Subtle scale up
+                transformPerspective: 1000,
+                duration: 0.4,
+                ease: "power2.out"
+            });
+        } else {
+            // Reset if hovering slider but not the card
+            gsap.to(card, { rotationX: 0, rotationY: 0, scale: 1, duration: 0.5, ease: "power2.out" });
+        }
+    });
+
+    // Reset on mouse leave
+    slider.addEventListener('mouseleave', () => {
+        const activeSlide = slider.querySelector('.swiper-slide-active');
+        if (activeSlide) {
+            const card = activeSlide.querySelector('.photo-card');
+            if (card) gsap.to(card, { rotationX: 0, rotationY: 0, scale: 1, duration: 0.5, ease: "power2.out" });
+        }
+    });
+}
+//#endregion

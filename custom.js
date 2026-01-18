@@ -1,17 +1,23 @@
+//#region INITIALIZATION
 document.addEventListener("DOMContentLoaded", (event) => {
     // Register GSAP Plugins
     gsap.registerPlugin(Draggable);
 
+    // -- Global Selectors --
     const heroCards = document.querySelectorAll('.hero-card');
     const middleCard = document.querySelector('.home-hero-image-card-wrapper-02');
 
     // Responsive Logic using gsap.matchMedia()
     const mm = gsap.matchMedia();
+//#endregion
 
-    // --- DESKTOP LOGIC (>= 992px) ---
+    //#region DESKTOP LOGIC (>= 992px)
+    // =========================================
+    // DESKTOP INTERACTIONS
+    // =========================================
     mm.add("(min-width: 992px)", () => {
         
-        // 1. Entrance Animation (Slide In from Bottom)
+        // --- 1. Entrance Animation (Slide In from Bottom) ---
         // Set initial state: Below screen, hidden
         gsap.set(heroCards, {
             y: 100, // Slide up 100px
@@ -44,7 +50,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
             runEntranceAnimation();
         }
 
-        // 2. Draggable Physics (Elastic Toss)
+        // --- 2. Draggable Physics (Elastic Toss) ---
         function initDesktopDraggable() {
             Draggable.create(heroCards, {
                 type: "x,y",
@@ -87,7 +93,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
             });
         }
 
-        // 3. Parallax Effect (Scatter on Mouse Move)
+        // --- 3. Parallax Effect (Scatter on Mouse Move) ---
         function initParallaxEffect() {
             // Listen to mouse movement on the whole window
             window.addEventListener("mousemove", (e) => {
@@ -125,7 +131,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
             });
         }
 
-        // 4. Magnetic Button Effect
+        // --- 4. Magnetic Button Effect ---
         const magneticButtons = document.querySelectorAll('.btn-primary, .button-normal-black-wrapper-2, .button-normal-white-wrapper-2');
         magneticButtons.forEach((btn) => {
             btn.addEventListener('mousemove', (e) => {
@@ -151,7 +157,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
             });
         });
 
-        // 5. Experience Image Reveal (Hover Effect)
+        // --- 5. Experience Image Reveal (Hover Effect) ---
         function initExperienceReveal() {
             // Create the reveal image element dynamically
             const revealImg = document.createElement('img');
@@ -226,8 +232,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
         }
         initExperienceReveal();
     });
+    //#endregion
 
-    // --- MOBILE LOGIC (< 992px) ---
+    //#region MOBILE LOGIC (< 992px)
+    // =========================================
+    // MOBILE INTERACTIONS
+    // =========================================
     mm.add("(max-width: 991px)", () => {
         // Ensure cards are visible and reset if coming from desktop resize
         gsap.set(heroCards, { autoAlpha: 1, y: 0, rotation: 0, clearProps: "transform" });
@@ -238,4 +248,5 @@ document.addEventListener("DOMContentLoaded", (event) => {
         // DISABLED DRAGGABLE ON MOBILE/TABLET
         // DRAGGABLE DISABLED ON MOBILE/TABLET FOR BETTER SCROLL UX
     });
+    //#endregion
 });
