@@ -12,12 +12,28 @@
     --font-primary: 'Inter', sans-serif;
     
     /* Fluid Typography: clamp(min, preferred, max) */
-    --text-display: clamp(3.5rem, 10vw + 1rem, 8.5rem); /* Hero Text */
-    --text-h1: clamp(2.5rem, 5vw + 1rem, 4.5rem);
-    --text-h2: clamp(2rem, 3.5vw + 1rem, 3.5rem);
-    --text-h3: clamp(1.75rem, 2.5vw + 1rem, 2.5rem);
-    --text-h4: clamp(1.5rem, 2vw + 1rem, 2rem);
+    --text-display: clamp(2.5rem, 10vw + 1rem, 8.5rem); /* Hero Text - Optimized min for mobile */
+    --text-h1: clamp(2rem, 5vw + 1rem, 4.5rem);
+    --text-h2: clamp(1.75rem, 3.5vw + 1rem, 3.5rem);
+    --text-h3: clamp(1.5rem, 2.5vw + 1rem, 2.5rem);
+    --text-h4: clamp(1.25rem, 2vw + 1rem, 2rem);
     --text-body: clamp(1rem, 0.5vw + 0.875rem, 1.125rem); /* 16px -> 18px */
+}
+
+/* Global Reset: Remove Mobile Tap Highlight */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Accessibility: Ensure focus indicators remain */
+*:focus-visible {
+    outline: 2px solid var(--text-primary);
+    outline-offset: 2px;
+}
+
+/* UX: Subtle feedback on tap */
+a:active, button:active, .hover-trigger:active {
+    opacity: 0.8;
 }
 
 body {
@@ -27,6 +43,11 @@ body {
     color: var(--text-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+    background: var(--text-primary);
+    color: #ffffff;
 }
 
 h1, h2, h3, h4, h5, h6,
@@ -108,7 +129,7 @@ html, body {
 /* =========================================
    PERFORMANCE OPTIMIZATIONS
    ========================================= */
-.hero-card, .paralax-image, .live-status-widget, .music-player {
+.hero-card, .paralax-image {
     will-change: transform;
     transform: translateZ(0); /* Force GPU Layer */
 }
@@ -227,7 +248,7 @@ body.preloader-active { overflow: hidden; }
 .hover-trigger {
     position: relative; display: inline-block; font-weight: 700; cursor: pointer;
     color: inherit; text-decoration: underline; text-decoration-thickness: 2px;
-    text-decoration-color: #ccc; transition: color 0.2s, text-decoration-color 0.2s;
+    text-decoration-color: #767676; transition: color 0.2s, text-decoration-color 0.2s;
 }
 .hover-trigger:hover { color: #000; text-decoration-color: #000; }
 .hover-image {
@@ -257,6 +278,9 @@ body.preloader-active { overflow: hidden; }
 .custom-cursor.hovered { width: 60px; height: 60px; }
 @media (min-width: 992px) {
     body, a, button, input, textarea, .hover-trigger { cursor: none !important; }
+
+    /* Override custom cursor for email links to show copy icon */
+    a[href^="mailto:"]:hover { cursor: copy !important; }
 }
 @media (max-width: 991px) {
     .custom-cursor { display: none !important; }
@@ -299,7 +323,7 @@ body.preloader-active { overflow: hidden; }
 /* --- SWIPER PAGINATION DOTS --- */
 .swiper-pagination-bullet {
     background: #000 !important;
-    opacity: 0.3;
+    opacity: 0.6;
     transition: all 0.3s ease;
 }
 .swiper-pagination-bullet-active {
@@ -326,106 +350,6 @@ html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-scrolling iframe { pointer-events: none; }
 
 /* =========================================
-   6. MUSIC PLAYER WIDGET
-   ========================================= */
-.music-player {
-    position: fixed;
-    bottom: 40px;
-    right: 40px;
-    z-index: 9999;
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    border-radius: 16px;
-    padding: 10px 18px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
-    color: #111;
-}
-
-.music-player:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: translateY(-3px);
-    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.15);
-}
-
-.music-player:active, .music-player.playing:active {
-    transform: scale(0.98);
-    box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.1);
-}
-
-.player-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.player-content {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.player-text {
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: 800;
-    text-transform: uppercase;
-    color: #000000;
-    letter-spacing: 0.5px;
-    user-select: none;
-    min-width: 45px;
-    text-align: center;
-}
-
-.visualizer {
-    display: flex;
-    align-items: flex-end;
-    gap: 2px;
-    height: 14px;
-    width: 16px;
-}
-
-.bar {
-    width: 3px;
-    background-color: #000000;
-    height: 2px;
-    transition: height 0.2s ease;
-}
-
-/* Animation State */
-.music-player.playing .bar {
-    animation: equalizer 0.5s infinite ease-in-out alternate;
-}
-
-.music-player.playing .bar:nth-child(1) { animation-duration: 0.4s; }
-.music-player.playing .bar:nth-child(2) { animation-duration: 0.5s; }
-.music-player.playing .bar:nth-child(3) { animation-duration: 0.35s; }
-
-@keyframes equalizer {
-    0% { height: 20%; }
-    100% { height: 100%; }
-}
-
-@media (max-width: 767px) {
-    .music-player {
-        bottom: 20px;
-        right: 20px;
-        padding: 10px 14px;
-        padding: 8px 10px;
-        gap: 8px;
-    }
-    .player-text {
-        display: none; /* Hide text on mobile for cleaner look */
-    }
-}
-
-/* =========================================
    7. EXPERIENCE REVEAL IMAGE
    ========================================= */
 .experience-reveal-img {
@@ -446,180 +370,9 @@ html.lenis, html.lenis body { height: auto; }
 }
 
 /* =========================================
-   8. LIVE STATUS WIDGET
-   ========================================= */
-.live-status-widget {
-    position: fixed;
-    bottom: 40px;
-    left: 40px;
-    z-index: 9990;
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(0, 0, 0, 0.12);
-    padding: 24px;
-    border-radius: 16px;
-    color: #222222;
-    font-family: 'Courier New', 'Roboto Mono', monospace;
-    width: 280px;
-    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.15);
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s;
-    text-decoration: none; /* Ensure link doesn't have underline */
-}
-
-.live-status-widget.widget-hidden {
-    transform: translateY(200%) !important;
-    opacity: 0;
-    pointer-events: none;
-}
-
-.live-status-widget:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: translateY(-3px);
-    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.15);
-}
-
-.widget-header {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    color: #444444;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin: 0;
-    padding: 0;
-    border: none;
-}
-
-.widget-status {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin: 0;
-}
-
-.status-dot {
-    width: 8px;
-    height: 8px;
-    background-color: #00ff41; /* Bright Green */
-    border-radius: 50%;
-    box-shadow: 0 0 0 0 rgba(0, 255, 65, 0.7);
-    animation: statusPulse 3s ease-in-out infinite;
-}
-
-@keyframes statusPulse {
-    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 255, 65, 0.7); }
-    50% { transform: scale(1.1); box-shadow: 0 0 10px 2px rgba(0, 255, 65, 0.4); }
-    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 255, 65, 0.7); }
-}
-
-.status-text {
-    font-size: 14px;
-    color: #000000;
-    font-weight: 500;
-    position: relative;
-}
-
-.status-text::after {
-    content: '_';
-    animation: cursorBlink 1s step-end infinite;
-    color: #00ff41;
-    margin-left: 2px;
-    font-weight: 700;
-}
-
-@keyframes cursorBlink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-}
-
-.widget-book-btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    width: 100%;
-    padding: 12px;
-    background: #ffffff;
-    color: #000000;
-    text-align: center;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 700;
-    border-radius: 8px;
-    text-transform: uppercase;
-    transition: all 0.3s ease;
-    border: 2px solid #ffffff;
-}
-
-.widget-book-btn:hover {
-    background: #000000;
-    color: #ffffff;
-    border-color: #ffffff;
-    transform: scale(1.02);
-}
-
-/* Calendar Icon Pulse Animation */
-@keyframes iconPulse {
-    0% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(0,0,0,0)); }
-    50% { transform: scale(1.2); filter: drop-shadow(0 0 4px rgba(0,0,0,0.2)); }
-    100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(0,0,0,0)); }
-}
-
-.widget-book-btn > svg:first-child {
-    animation: iconPulse 2s infinite ease-in-out;
-}
-
-@media (max-width: 767px) {
-    .live-status-widget {
-        bottom: 20px;
-        left: 20px;
-        width: auto;
-        min-width: 200px;
-        padding: 14px;
-    }
-    .widget-header {
-        flex-direction: column;
-        gap: 4px;
-    }
-}
-
-/* =========================================
    9. MOBILE UI REFINEMENTS
    ========================================= */
 @media (max-width: 767px) {
-    /* Compact Live Status Widget */
-    .live-status-widget {
-        position: fixed;
-        bottom: 20px;
-        left: 20px;
-        transform: none;
-        z-index: 990;
-        width: auto;
-        min-width: 0;
-        max-width: calc(100% - 100px); /* Prevent overlap with music player */
-        padding: 8px 12px;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 10px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.15); /* Ensure pop-out shadow */
-    }
-    .widget-header { display: none; } /* Hide clock on mobile */
-    .widget-status { margin-bottom: 0; margin-right: auto; }
-    .status-text { font-size: 11px; }
-    .widget-book-btn {
-        width: 30px; height: 30px; padding: 0; border-radius: 6px; flex-shrink: 0;
-        display: flex; align-items: center; justify-content: center;
-        font-size: 10px;
-    }
-    .widget-book-btn > * { display: none; } /* Hide text and arrow */
-    .widget-book-btn > svg:first-child { display: block; } /* Show Calendar Icon */
-    .widget-book-btn { text-indent: 0; position: relative; } 
-    .widget-book-btn::after { content: none; } /* Remove the arrow pseudo-element */
 }
 
 /* =========================================
@@ -859,7 +612,7 @@ html.lenis, html.lenis body { height: auto; }
 
 .mobile-link {
     font-family: var(--font-primary);
-    font-size: clamp(2.5rem, 8vw, 4rem);
+    font-size: clamp(2rem, 8vw, 4rem);
     font-weight: 700;
     color: #000000;
     text-decoration: none;

@@ -212,9 +212,7 @@ document.addEventListener('click', (e) => {
         e.preventDefault();
         const email = mailLink.getAttribute('href').replace('mailto:', '');
         
-        navigator.clipboard.writeText(email).then(() => {
-            showTooltip(mailLink, "Copied to clipboard!");
-        }).catch(err => {
+        navigator.clipboard.writeText(email).catch(err => {
             console.error('Failed to copy: ', err);
         });
     }
@@ -239,6 +237,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 menuOverlay.classList.add('is-active');
                 menuBtn.classList.add('is-active');
                 document.body.style.overflow = 'hidden';
+                
+                // Accessibility Updates
+                menuBtn.setAttribute('aria-expanded', 'true');
+                menuBtn.setAttribute('aria-label', 'Close menu');
+                menuOverlay.setAttribute('aria-hidden', 'false');
 
                 // Optional: GSAP Stagger for content entrance
                 if (typeof gsap !== 'undefined') {
@@ -258,12 +261,33 @@ document.addEventListener("DOMContentLoaded", () => {
                 menuOverlay.classList.remove('is-active');
                 menuBtn.classList.remove('is-active');
                 document.body.style.overflow = '';
+                
+                // Accessibility Updates
+                menuBtn.setAttribute('aria-expanded', 'false');
+                menuBtn.setAttribute('aria-label', 'Open menu');
+                menuOverlay.setAttribute('aria-hidden', 'true');
             }
         };
 
         menuBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             toggleMenu();
+        });
+
+        // Keyboard Support (Enter/Space to toggle)
+        menuBtn.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggleMenu();
+            }
+        });
+
+        // Close on Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && menuOverlay.classList.contains('is-active')) {
+                toggleMenu();
+                menuBtn.focus(); // Return focus to button
+            }
         });
 
         // Close when clicking links
@@ -275,209 +299,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
         menuLinks.forEach(link => link.addEventListener('click', closeMenu));
         if (menuCta) menuCta.addEventListener('click', closeMenu);
-    }
-});
-
-function showTooltip(element, message) {
-    // Remove existing tooltip if any
-    const existingTooltip = document.querySelector('.clipboard-tooltip');
-    if (existingTooltip) existingTooltip.remove();
-
-    // Create tooltip
-    const tooltip = document.createElement('div');
-    tooltip.className = 'clipboard-tooltip';
-    tooltip.innerText = message;
-    document.body.appendChild(tooltip);
-
-    // Position tooltip
-    const rect = element.getBoundingClientRect();
-    const tooltipRect = tooltip.getBoundingClientRect();
-    
-    // Center above the element
-    const top = rect.top - tooltipRect.height - 12 + window.scrollY;
-    const left = rect.left + (rect.width / 2) - (tooltipRect.width / 2) + window.scrollX;
-
-    tooltip.style.top = `${top}px`;
-    tooltip.style.left = `${left}px`;
-
-    // Animate in
-    requestAnimationFrame(() => {
-        tooltip.classList.add('visible');
-    });
-
-    // Remove after 2 seconds
-    setTimeout(() => {
-        tooltip.classList.remove('visible');
-        setTimeout(() => tooltip.remove(), 400);
-    }, 2000);
-}
-
-// =========================================
-// 10. DYNAMIC PROJECT LOADER (HOME)
-// =========================================
-document.addEventListener("DOMContentLoaded", () => {
-    // Pastikan data projectsData ada (dari projects.js)
-    if (typeof projectsData !== 'undefined') {
-        
-        // Cari proyek yang ditandai sebagai 'featured'
-        const featuredProject = projectsData.find(p => p.featured === true);
-
-        if (featuredProject) {
-            // 1. Update Gambar
-            const imgEl = document.getElementById('featured-project-img');
-            if (imgEl) {
-                imgEl.src = featuredProject.image;
-                imgEl.srcset = ''; // Reset srcset agar browser memakai src baru
-            }
-
-            // 2. Update Judul
-            const titleEl = document.getElementById('featured-project-title');
-            if (titleEl) titleEl.innerText = featuredProject.title;
-
-            // 3. Update Link
-            const linkEl = document.getElementById('featured-project-link');
-            if (linkEl) linkEl.href = featuredProject.link;
-
-            // 4. Update Stats (Looping)
-            const statsContainer = document.getElementById('featured-project-stats');
-            if (statsContainer && featuredProject.stats) {
-                statsContainer.innerHTML = ''; // Bersihkan isi lama
-                featuredProject.stats.forEach(stat => {
-                    const statHTML = `
-                        <div class="tag-work">
-                            <div class="text-small">${stat}</div>
-                        </div>
-                    `;
-                    statsContainer.insertAdjacentHTML('beforeend', statHTML);
-                });
-            }
-        }
-    }
-});
-
-// =========================================
-// 11. PORTFOLIO GRID RENDER & FILTER
-// =========================================
-document.addEventListener("DOMContentLoaded", () => {
-    const grid = document.getElementById('portfolio-grid');
-    const filterBtns = document.querySelectorAll('.filter-btn');
-
-    // Hanya jalankan jika elemen grid ada (artinya sedang di halaman Portfolio)
-    if (grid && typeof projectsData !== 'undefined') {
-        
-        function renderProjects(category) {
-            // 1. Bersihkan grid
-            grid.innerHTML = ''; 
-            
-            // 2. Filter data
-            const filtered = category === 'All' 
-                ? projectsData 
-                : projectsData.filter(p => p.category === category);
-
-            // 3. Generate HTML untuk setiap proyek
-            filtered.forEach(project => {
-                const card = document.createElement('div');
-                card.className = 'portfolio-item';
-                card.innerHTML = `
-                    <a href="${project.link}" class="portfolio-link w-inline-block">
-                        <div class="portfolio-image-wrapper">
-                            <img src="${project.image}" alt="${project.title}" class="portfolio-image" loading="lazy">
-                        </div>
-                        <div class="portfolio-content">
-                            <h3 class="portfolio-title">${project.title}</h3>
-                            <div class="portfolio-role">${project.role}</div>
-                        </div>
-                    </a>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        // Render awal (Tampilkan Semua)
-        renderProjects('All');
-
-        // Event Listener untuk Tombol Filter
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                // Hapus kelas active dari semua tombol
-                filterBtns.forEach(b => b.classList.remove('active'));
-                // Tambah kelas active ke tombol yang diklik
-                btn.classList.add('active');
-                
-                // Ambil kategori dan render ulang
-                const cat = btn.getAttribute('data-category');
-                renderProjects(cat);
-            });
-        });
-    }
-});
-
-// =========================================
-// 12. DYNAMIC PROJECT DETAIL PAGE
-// =========================================
-document.addEventListener("DOMContentLoaded", () => {
-    const detailContainer = document.getElementById('project-detail-container');
-    
-    // Hanya jalankan jika elemen detail container ada (artinya di halaman project-detail.html)
-    if (detailContainer && typeof projectsData !== 'undefined') {
-        
-        // 1. Ambil ID dari URL (contoh: ?id=latest-work)
-        const params = new URLSearchParams(window.location.search);
-        const projectId = params.get('id');
-
-        // 2. Cari data proyek yang cocok
-        const project = projectsData.find(p => p.id === projectId);
-
-        if (project) {
-            // 3. Isi Konten HTML
-            document.title = `${project.title} | Portfolio`;
-            document.getElementById('detail-title').innerText = project.title;
-            document.getElementById('detail-category').innerText = project.category;
-            document.getElementById('detail-role').innerText = project.role;
-            document.getElementById('detail-image').src = project.image;
-            
-            // Isi Text (Gunakan default text jika data kosong)
-            document.getElementById('detail-description').innerText = project.description || "No description available.";
-            document.getElementById('detail-challenge').innerText = project.challenge || "No challenge details provided.";
-            document.getElementById('detail-solution').innerText = project.solution || "No solution details provided.";
-
-            // 4. Render Stats
-            const statsContainer = document.getElementById('detail-stats-container');
-            if (project.stats && project.stats.length > 0) {
-                statsContainer.innerHTML = '<h3 style="font-size:1.1rem; margin-bottom:15px;">Key Results</h3>';
-                project.stats.forEach(stat => {
-                    statsContainer.innerHTML += `
-                        <div class="stat-item">
-                            <span class="stat-value">${stat}</span>
-                        </div>
-                    `;
-                });
-            } else {
-                statsContainer.style.display = 'none'; // Sembunyikan jika tidak ada stats
-            }
-
-            // 5. Render Gallery (Jika ada)
-            const galleryContainer = document.getElementById('detail-gallery');
-            if (project.gallery && project.gallery.length > 0) {
-                project.gallery.forEach(imgSrc => {
-                    const img = document.createElement('img');
-                    img.src = imgSrc;
-                    img.className = 'gallery-item';
-                    img.loading = 'lazy';
-                    galleryContainer.appendChild(img);
-                });
-            }
-        } else {
-            // Jika ID tidak ditemukan
-            detailContainer.innerHTML = `
-                <div style="text-align:center; padding:100px 0;">
-                    <h1>Project Not Found</h1>
-                    <p>The project you are looking for does not exist.</p>
-                    <a href="portfolio.html" class="button-normal-black-wrapper-2 w-inline-block" style="margin-top:20px; display:inline-flex;">
-                        <div class="button-normal-black-text-2">Back to Portfolio</div>
-                    </a>
-                </div>
-            `;
-        }
     }
 });

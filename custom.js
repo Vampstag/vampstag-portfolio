@@ -225,58 +225,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
             });
         }
         initExperienceReveal();
-
-        // 6. Live Status Widget Clock
-        function initLiveClock() {
-            const clockElement = document.getElementById('widget-clock');
-            if (clockElement) {
-                const updateTime = () => {
-                    const now = new Date();
-                    const options = { timeZone: 'Asia/Jakarta', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
-                    clockElement.textContent = new Intl.DateTimeFormat('en-GB', options).format(now);
-                };
-                updateTime();
-                setInterval(updateTime, 1000);
-            }
-        }
-        initLiveClock();
     });
-
-    // 7. Typing Effect for Status
-    function initTypingEffect() {
-        const statusText = document.querySelector('.status-text');
-        if (!statusText) return;
-
-        const text = statusText.textContent;
-        let index = 0;
-        let isDeleting = false;
-        
-        function type() {
-            const currentText = text.substring(0, index);
-            statusText.textContent = currentText;
-
-            let speed = 100;
-
-            if (isDeleting) {
-                speed = 50;
-                index--;
-            } else {
-                index++;
-            }
-
-            if (!isDeleting && index === text.length + 1) {
-                isDeleting = true;
-                speed = 3000; // Wait before deleting
-            } else if (isDeleting && index === 0) {
-                isDeleting = false;
-                speed = 500;
-            }
-
-            setTimeout(type, speed);
-        }
-        type();
-    }
-    initTypingEffect();
 
     // --- MOBILE LOGIC (< 992px) ---
     mm.add("(max-width: 991px)", () => {

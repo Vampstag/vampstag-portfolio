@@ -155,7 +155,7 @@
                             <a href="/" class="logo w-nav-brand">
                                 <div class="text-block-4">MDKG</div>
                             </a>
-                            <nav role="navigation" class="desktop w-nav-menu">
+                            <nav role="navigation" class="desktop w-nav-menu" aria-label="Main">
                                 <a href="/index.html" class="navigation-link w-inline-block">
                                     <div class="button-text-wrapper">
                                         <div class="button-text">Home</div>
@@ -195,14 +195,14 @@
                                 </a>
                             </nav>
                             <!-- Custom Hamburger Button -->
-                            <div class="menu-burger w-nav-button mobile-menu-btn">
+                            <div class="menu-burger w-nav-button mobile-menu-btn" role="button" tabindex="0" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
                                 <span class="hamburger-line line-1"></span>
                                 <span class="hamburger-line line-2"></span>
                                 <span class="hamburger-line line-3"></span>
                             </div>
                             
                             <!-- Full Screen Mobile Overlay -->
-                            <nav role="navigation" class="mobile-menu-overlay">
+                            <nav role="navigation" class="mobile-menu-overlay" id="mobile-menu" aria-label="Mobile" aria-hidden="true">
                                 <div class="mobile-menu-wrapper">
                                     <a href="/" class="mobile-link">Home</a>
                                     <a href="/about" class="mobile-link">About</a>

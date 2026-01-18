@@ -1,0 +1,281 @@
+/* =========================================
+   MDKG WIDGET SYSTEM (Scoped)
+   ========================================= */
+
+/* --- MUSIC PLAYER --- */
+.mdkg-widget-player {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    z-index: 9999;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+    color: #111;
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+.mdkg-widget-player:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.15);
+}
+
+.mdkg-widget-player:active, .mdkg-widget-player.playing:active {
+    transform: scale(0.98);
+    box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.mdkg-player-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mdkg-player-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.mdkg-player-text {
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #000000;
+    letter-spacing: 0.5px;
+    user-select: none;
+    min-width: 45px;
+    text-align: center;
+}
+
+.mdkg-visualizer {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 14px;
+    width: 16px;
+}
+
+.mdkg-bar {
+    width: 3px;
+    background-color: #000000;
+    height: 2px;
+    transition: height 0.2s ease;
+}
+
+/* Animation State */
+.mdkg-widget-player.playing .mdkg-bar {
+    animation: mdkgEqualizer 0.5s infinite ease-in-out alternate;
+}
+
+.mdkg-widget-player.playing .mdkg-bar:nth-child(1) { animation-duration: 0.4s; }
+.mdkg-widget-player.playing .mdkg-bar:nth-child(2) { animation-duration: 0.5s; }
+.mdkg-widget-player.playing .mdkg-bar:nth-child(3) { animation-duration: 0.35s; }
+
+@keyframes mdkgEqualizer {
+    0% { height: 20%; }
+    100% { height: 100%; }
+}
+
+/* Next Button */
+.mdkg-next-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    margin-left: 4px;
+    opacity: 0.7;
+}
+.mdkg-next-btn:hover {
+    background: rgba(0,0,0,0.08);
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+/* --- LIVE STATUS WIDGET --- */
+.mdkg-widget-status {
+    position: fixed;
+    bottom: 40px;
+    left: 40px;
+    z-index: 9990;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    padding: 24px;
+    border-radius: 16px;
+    color: #222222;
+    font-family: 'Courier New', 'Roboto Mono', monospace;
+    width: 280px;
+    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s;
+    text-decoration: none;
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+.mdkg-widget-status.widget-hidden {
+    transform: translateY(200%) !important;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.mdkg-widget-status:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.15);
+}
+
+.mdkg-widget-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #444444;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.mdkg-widget-status-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+}
+
+.mdkg-status-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #00ff41; /* Bright Green */
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 rgba(0, 255, 65, 0.7);
+    animation: mdkgStatusPulse 3s ease-in-out infinite;
+}
+
+@keyframes mdkgStatusPulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 255, 65, 0.7); }
+    50% { transform: scale(1.1); box-shadow: 0 0 10px 2px rgba(0, 255, 65, 0.4); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 255, 65, 0.7); }
+}
+
+.mdkg-status-text {
+    font-size: 14px;
+    color: #000000;
+    font-weight: 500;
+    position: relative;
+}
+
+.mdkg-status-text::after {
+    content: '_';
+    animation: mdkgCursorBlink 1s step-end infinite;
+    color: #00ff41;
+    margin-left: 2px;
+    font-weight: 700;
+}
+
+@keyframes mdkgCursorBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.mdkg-book-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px;
+    background: #ffffff;
+    color: #000000;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: 8px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    border: 2px solid #ffffff;
+}
+
+.mdkg-book-btn:hover {
+    background: #000000;
+    color: #ffffff;
+    border-color: #ffffff;
+    transform: scale(1.02);
+}
+
+/* Calendar Icon Pulse Animation */
+@keyframes mdkgIconPulse {
+    0% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(0,0,0,0)); }
+    50% { transform: scale(1.2); filter: drop-shadow(0 0 4px rgba(0,0,0,0.2)); }
+    100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(0,0,0,0)); }
+}
+
+.mdkg-book-btn > svg:first-child {
+    animation: mdkgIconPulse 2s infinite ease-in-out;
+}
+
+/* --- MOBILE RESPONSIVE --- */
+@media (max-width: 767px) {
+    .mdkg-widget-player {
+        bottom: 20px;
+        right: 20px;
+        padding: 10px 14px;
+        padding: 8px 10px;
+        gap: 8px;
+    }
+    .mdkg-player-text {
+        display: none; /* Hide text on mobile */
+    }
+
+    /* Compact Live Status Widget */
+    .mdkg-widget-status {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        transform: none;
+        z-index: 990;
+        width: auto;
+        min-width: 0;
+        max-width: calc(100% - 100px); /* Prevent overlap with music player */
+        padding: 8px 12px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+    .mdkg-widget-header { display: none; } /* Hide clock on mobile */
+    .mdkg-widget-status-row { margin-bottom: 0; margin-right: auto; }
+    .mdkg-status-text { font-size: 11px; }
+    
+    .mdkg-book-btn {
+        width: 30px; height: 30px; padding: 0; border-radius: 6px; flex-shrink: 0;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 10px;
+    }
+    .mdkg-book-btn > * { display: none; } /* Hide text and arrow */
+    .mdkg-book-btn > svg:first-child { display: block; } /* Show Calendar Icon */
+    .mdkg-book-btn { text-indent: 0; position: relative; } 
+    .mdkg-book-btn::after { content: none; }
+}
