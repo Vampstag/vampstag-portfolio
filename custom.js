@@ -11,36 +11,21 @@ document.addEventListener("DOMContentLoaded", (event) => {
     // --- DESKTOP LOGIC (>= 992px) ---
     mm.add("(min-width: 992px)", () => {
         
-        // 1. Entrance Animation (Gravity Drop)
-        // Set initial state: Above screen, slight random rotation, visible
-        // 1. Setup Initial State (Hidden Above)
+        // 1. Entrance Animation (Slide In from Bottom)
+        // Set initial state: Below screen, hidden
         gsap.set(heroCards, {
-            y: "-150vh",
-            rotation: () => gsap.utils.random(-10, 10),
-            autoAlpha: 1
+            y: 100, // Slide up 100px
+            autoAlpha: 0
         });
 
-        // Animate Drop
-        gsap.to(heroCards, {
-            y: 0,
-            duration: 2,
-            ease: "bounce.out", // Heavy object hit effect
-            stagger: 0.2,
-            onComplete: () => {
-                // Clear transform to ensure Draggable starts from a clean state (0,0)
-                gsap.set(heroCards, { clearProps: "transform" });
-                initDesktopDraggable();
-                initParallaxEffect();
-            }
-        });
-        // Define the Drop Animation
+        // Define the Slide Animation
         const runEntranceAnimation = () => {
             gsap.to(heroCards, {
                 y: 0,
-                rotation: 0, // Ensure cards land straight to prevent snapping when clearProps runs
-                duration: 2,
-                ease: "bounce.out", // Heavy object hit effect
-                stagger: 0.2,
+                autoAlpha: 1,
+                duration: 1.2,
+                ease: "power3.out", // Smooth slide
+                stagger: 0.1,
                 onComplete: () => {
                     // Clear transform to ensure Draggable starts from a clean state (0,0)
                     gsap.set(heroCards, { clearProps: "transform" });

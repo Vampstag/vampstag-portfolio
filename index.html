@@ -124,6 +124,9 @@
                     // Mulai Lenis scroll setelah loading selesai
                     if (window.lenis) window.lenis.start();
 
+                    // Dispatch event agar custom.js tahu preloader sudah selesai
+                    window.dispatchEvent(new CustomEvent('preloaderDone'));
+
                     // Attempt to play background music (Autoplay)
                     const bgMusic = document.getElementById('bg-music');
                     const player = document.getElementById('music-player');
@@ -282,7 +285,7 @@
                             <div class="home-hero-headline-wrapper animate-on-load-hello">
                                 <div class="home-hero-headline-text-2">Hello there</div>
                                 <div class="emoji-container">
-                                    <img loading="lazy" alt="Hi emoji" data-src="https://cdn.prod.website-files.com/68b88ad5bf41a0f5c752eab7/67631cf992d0c17f2b67e7de_%F0%9F%91%8B.webp" class="hi-emoji lazy-image"/>
+                                    <img loading="eager" width="60" height="60" alt="Hi emoji" src="https://cdn.prod.website-files.com/68b88ad5bf41a0f5c752eab7/67631cf992d0c17f2b67e7de_%F0%9F%91%8B.webp" class="hi-emoji"/>
                                     <div class="sparkle-1">✦</div>
                                     <div class="sparkle-2">✦</div>
                                     <div class="sparkle-3">✦</div>
@@ -294,7 +297,7 @@
                                         <div class="home-hero-image-card-01-headine-text-2">Based in Bandung</div>
                                     </div>
                                     <div class="home-hero-card-image-block-2">
-                                        <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933e15b9e0519802dd84c93_af2a0d4520a664ec7eda2d68a0f33de6_gedung-sate-public-building-bandung-600nw-2421312955.jpg" alt="" class="home-hero-card-image-2 lazy-image"/>
+                                        <img loading="eager" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933e15b9e0519802dd84c93_af2a0d4520a664ec7eda2d68a0f33de6_gedung-sate-public-building-bandung-600nw-2421312955.jpg" alt="Gedung Sate" class="home-hero-card-image-2"/>
                                     </div>
                                 </div>
                                 <div class="home-hero-image-card-wrapper-02 hero-card">
@@ -303,7 +306,7 @@
                                         <div class="home-hero-image-card-02-headine-text-2">Dimas</div>
                                     </div>
                                     <div class="home-hero-card-image-block-2">
-                                        <img sizes="(max-width: 479px) 31vw, (max-width: 767px) 16vw, (max-width: 991px) 75.38310241699219px, (max-width: 1279px) 8vw, (max-width: 1439px) 75.38310241699219px, (max-width: 1919px) 5vw, 4vw" height="70" alt="Hero Image" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047.jpg" loading="lazy" data-srcset="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-800.jpg 800w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-1080.jpg 1080w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-1600.jpg 1600w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-2000.jpg 2000w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047.jpg 2205w" class="home-hero-card-image-2 lazy-image"/>
+                                        <img sizes="(max-width: 479px) 31vw, (max-width: 767px) 16vw, (max-width: 991px) 75.38310241699219px, (max-width: 1279px) 8vw, (max-width: 1439px) 75.38310241699219px, (max-width: 1919px) 5vw, 4vw" height="70" alt="Hero Image" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047.jpg" loading="eager" srcset="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-800.jpg 800w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-1080.jpg 1080w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-1600.jpg 1600w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047-p-2000.jpg 2000w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5535_564e85e4f4146da02ec410379a6b4b84_Rectangle%2047.jpg 2205w" class="home-hero-card-image-2"/>
                                     </div>
                                 </div>
                                 <div class="home-hero-image-card-wrapper-03-2 hero-card">
@@ -312,7 +315,7 @@
                                         <div class="home-hero-image-card-03-headine-text-2">Marketer</div>
                                     </div>
                                     <div class="home-hero-card-image-block-2">
-                                        <img sizes="(max-width: 767px) 100vw, (max-width: 991px) 727.984375px, 939.984375px" data-srcset="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69351a0d96e0c9d238a0b6a5_WhatsApp%2520Image%25202025-12-06%2520at%252021.26.01_9bdde82a-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69351a0d96e0c9d238a0b6a5_WhatsApp%2520Image%25202025-12-06%2520at%252021.26.01_9bdde82a-p-800.jpg 800w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69351a0d96e0c9d238a0b6a5_WhatsApp%2520Image%25202025-12-06%2520at%252021.26.01_9bdde82a-p-1080.jpg 1080w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69351a0d96e0c9d238a0b6a5_WhatsApp%20Image%202025-12-06%20at%2021.26.01_9bdde82a.jpg 1326w" alt="" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69351a0d96e0c9d238a0b6a5_WhatsApp%20Image%202025-12-06%20at%2021.26.01_9bdde82a.jpg" loading="lazy" class="home-hero-card-image-2 lazy-image"/>
+                                        <img sizes="(max-width: 767px) 100vw, (max-width: 991px) 727.984375px, 939.984375px" srcset="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69351a0d96e0c9d238a0b6a5_WhatsApp%2520Image%25202025-12-06%2520at%252021.26.01_9bdde82a-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69351a0d96e0c9d238a0b6a5_WhatsApp%2520Image%25202025-12-06%2520at%252021.26.01_9bdde82a-p-800.jpg 800w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69351a0d96e0c9d238a0b6a5_WhatsApp%2520Image%25202025-12-06%2520at%252021.26.01_9bdde82a-p-1080.jpg 1080w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69351a0d96e0c9d238a0b6a5_WhatsApp%20Image%202025-12-06%20at%2021.26.01_9bdde82a.jpg 1326w" alt="" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69351a0d96e0c9d238a0b6a5_WhatsApp%20Image%202025-12-06%20at%2021.26.01_9bdde82a.jpg" loading="eager" class="home-hero-card-image-2"/>
                                     </div>
                                 </div>
                             </div>
@@ -358,16 +361,15 @@
                                     <a href="https://webflow.com/templates/designers/quix-studio" target="_blank" class="button-normal-white-wrapper-2 w-inline-block">
                                         <div class="button-normal-white-text-2 text-sm text-weight-medium text-style-no_wrap text-color-black-900">Explore More</div>
                                         <div class="button-normal-white-arrow-block-2">
-                                            <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d552f_arrow-black.svg" alt="Arrow Image" class="button-white-arrow-image-black-2 lazy-image"/>
-                                            <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5530_arrow-white.svg" alt="Arrow Image" class="button-white-arrow-image-white-2 lazy-image"/>
+                                            <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d552f_arrow-black.svg" alt="Arrow Image" class="button-white-arrow-image-black-2"/>
+                                            <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5530_arrow-white.svg" alt="Arrow Image" class="button-white-arrow-image-white-2"/>
                                         </div>
                                     </a>
                                 </div>
                             </div>
                             <div data-w-id="93649417-2561-b8e6-7ec9-a21bd39598eb" class="hero-image-wrapper">
                                 <div data-w-id="93649417-2561-b8e6-7ec9-a21bd39598ec" class="image-wrap">
-                                    <img sizes="(max-width: 767px) 100vw, (max-width: 991px) 728px, 940px" data-srcset="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image-p-800.jpg 800w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image-p-1080.jpg 1080w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image.jpg 1200w" alt="Hero image
-" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image.jpg" loading="lazy" class="image-cover-2 overlay lazy-image"/>
+                                    <img sizes="(max-width: 767px) 100vw, (max-width: 991px) 728px, 940px" srcset="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image-p-800.jpg 800w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image-p-1080.jpg 1080w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image.jpg 1200w" alt="Hero image" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image.jpg" loading="lazy" class="image-cover-2 overlay"/>
                                     <div></div>
                                 </div>
                                 <div class="title-wrapper">
@@ -413,8 +415,8 @@
                                     <a href="https://webflow.com/templates/designers/quix-studio" target="_blank" class="button-normal-white-wrapper-2 w-inline-block">
                                         <div class="button-normal-white-text-2 text-sm text-weight-medium text-style-no_wrap text-color-black-900">Get to Know Me</div>
                                         <div class="button-normal-white-arrow-block-2">
-                                            <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d552f_arrow-black.svg" alt="Arrow Image" class="button-white-arrow-image-black-2 lazy-image"/>
-                                            <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5530_arrow-white.svg" alt="Arrow Image" class="button-white-arrow-image-white-2 lazy-image"/>
+                                            <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d552f_arrow-black.svg" alt="Arrow Image" class="button-white-arrow-image-black-2"/>
+                                            <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5530_arrow-white.svg" alt="Arrow Image" class="button-white-arrow-image-white-2"/>
                                         </div>
                                     </a>
                                 </div>
@@ -485,8 +487,8 @@
                                     <a href="https://webflow.com/templates/designers/quix-studio" target="_blank" class="button-normal-white-wrapper-2 w-inline-block">
                                         <div class="button-normal-white-text-2 text-sm text-weight-medium text-style-no_wrap text-color-black-900">Contact Now</div>
                                         <div class="button-normal-white-arrow-block-2">
-                                            <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d552f_arrow-black.svg" alt="Arrow Image" class="button-white-arrow-image-black-2 lazy-image"/>
-                                            <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5530_arrow-white.svg" alt="Arrow Image" class="button-white-arrow-image-white-2 lazy-image"/>
+                                            <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d552f_arrow-black.svg" alt="Arrow Image" class="button-white-arrow-image-black-2"/>
+                                            <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5530_arrow-white.svg" alt="Arrow Image" class="button-white-arrow-image-white-2"/>
                                         </div>
                                     </a>
                                 </div>
@@ -599,8 +601,8 @@
                                     <a href="/journal" target="_blank" class="button-normal-white-wrapper-2 w-inline-block">
                                         <div class="button-normal-white-text-2 text-sm text-weight-medium text-style-no_wrap text-color-black-900">Explore More</div>
                                         <div class="button-normal-white-arrow-block-2">
-                                            <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d552f_arrow-black.svg" alt="Arrow Image" class="button-white-arrow-image-black-2 lazy-image"/>
-                                            <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5530_arrow-white.svg" alt="Arrow Image" class="button-white-arrow-image-white-2 lazy-image"/>
+                                            <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d552f_arrow-black.svg" alt="Arrow Image" class="button-white-arrow-image-black-2"/>
+                                            <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5530_arrow-white.svg" alt="Arrow Image" class="button-white-arrow-image-white-2"/>
                                         </div>
                                     </a>
                                 </div>
@@ -623,19 +625,19 @@
                                                     </div>
                                                 </div>
                                                 <div data-w-id="566b70c1-bcff-6434-151c-4be76f85e58f" class="image-wrap auto">
-                                                    <img sizes="100vw" data-srcset="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2de7_work-10.avif 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2de7_work-10.avif 800w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2de7_work-10.avif 1080w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2de7_work-10.avif 1600w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2de7_work-10.avif 3000w" alt="" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2de7_work-10.avif" loading="lazy" class="paralax-image lazy-image"/>
+                                                    <img sizes="100vw" srcset="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2de7_work-10.avif 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2de7_work-10.avif 800w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2de7_work-10.avif 1080w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2de7_work-10.avif 1600w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2de7_work-10.avif 3000w" alt="" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2de7_work-10.avif" loading="lazy" class="paralax-image"/>
                                                 </div>
                                                 <div class="margin-30px">
                                                     <div class="data-flex">
                                                         <div class="blog-read-time-block">
                                                             <div class="data-image invert">
-                                                                <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2c20_data-light.svg" alt="" class="image lazy-image"/>
+                                                                <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2c20_data-light.svg" alt="" class="image"/>
                                                             </div>
                                                             <p class="data-text">20 Desember 2025</p>
                                                         </div>
                                                         <div class="blog-read-time-block">
                                                             <div class="data-image invert">
-                                                                <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2c1d_time-light.svg" alt="" class="lazy-image"/>
+                                                                <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2c1d_time-light.svg" alt=""/>
                                                             </div>
                                                             <p class="data-text">5</p>
                                                             <p class="data-text">Menit</p>
@@ -660,19 +662,19 @@
                                                     </div>
                                                 </div>
                                                 <div data-w-id="566b70c1-bcff-6434-151c-4be76f85e5a6" class="image-wrap auto">
-                                                    <img sizes="100vw" data-srcset="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2de8_work-7.avif 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2de8_work-7.avif 800w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2de8_work-7.avif 1080w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2de8_work-7.avif 1600w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2de8_work-7.avif 3110w" alt="" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2de8_work-7.avif" loading="lazy" class="paralax-image lazy-image"/>
+                                                    <img sizes="100vw" srcset="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2de8_work-7.avif 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2de8_work-7.avif 800w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2de8_work-7.avif 1080w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2de8_work-7.avif 1600w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2de8_work-7.avif 3110w" alt="" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2de8_work-7.avif" loading="lazy" class="paralax-image"/>
                                                 </div>
                                                 <div class="margin-30px">
                                                     <div class="data-flex">
                                                         <div class="blog-read-time-block">
                                                             <div class="data-image invert">
-                                                                <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2c20_data-light.svg" alt="" class="image lazy-image"/>
+                                                                <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2c20_data-light.svg" alt="" class="image"/>
                                                             </div>
                                                             <p class="data-text">tanggal</p>
                                                         </div>
                                                         <div class="blog-read-time-block">
                                                             <div class="data-image invert">
-                                                                <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2c1d_time-light.svg" alt="" class="lazy-image"/>
+                                                                <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c25b0996b0f96f5c2c1d_time-light.svg" alt=""/>
                                                             </div>
                                                             <p class="data-text">2</p>
                                                             <p class="data-text">min read</p>
@@ -701,19 +703,19 @@
                                                     </div>
                                                 </div>
                                                 <div class="image-wrap auto full-ratio">
-                                                    <img sizes="(max-width: 767px) 100vw, (max-width: 991px) 727.984375px, 939.984375px" data-srcset="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69356a795f41fed1adbf4fc2_Lego%20Hello%20World-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69356a795f41fed1adbf4fc2_Lego%20Hello%20World-p-800.jpg 800w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69356a795f41fed1adbf4fc2_Lego%20Hello%20World-p-1080.jpg 1080w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69356a795f41fed1adbf4fc2_Lego%20Hello%20World-p-1600.jpg 1600w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69356a795f41fed1adbf4fc2_Lego%20Hello%20World-p-2000.jpg 2000w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69356a795f41fed1adbf4fc2_Lego%20Hello%20World.jpg 2304w" alt="" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69356a795f41fed1adbf4fc2_Lego%20Hello%20World.jpg" loading="lazy" class="paralax-image main lazy-image"/>
+                                                    <img sizes="(max-width: 767px) 100vw, (max-width: 991px) 727.984375px, 939.984375px" srcset="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69356a795f41fed1adbf4fc2_Lego%20Hello%20World-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69356a795f41fed1adbf4fc2_Lego%20Hello%20World-p-800.jpg 800w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69356a795f41fed1adbf4fc2_Lego%20Hello%20World-p-1080.jpg 1080w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69356a795f41fed1adbf4fc2_Lego%20Hello%20World-p-1600.jpg 1600w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69356a795f41fed1adbf4fc2_Lego%20Hello%20World-p-2000.jpg 2000w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69356a795f41fed1adbf4fc2_Lego%20Hello%20World.jpg 2304w" alt="" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69356a795f41fed1adbf4fc2_Lego%20Hello%20World.jpg" loading="lazy" class="paralax-image main"/>
                                                 </div>
                                                 <div class="margin-30px">
                                                     <div class="data-flex">
                                                         <div class="blog-read-time-block">
                                                             <div class="data-image invert">
-                                                                <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69367b018745c88b3de15e1b_4.svg" alt="" class="icon grey lazy-image"/>
+                                                                <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69367b018745c88b3de15e1b_4.svg" alt="" class="icon grey"/>
                                                             </div>
                                                             <p class="data-text">December 15, 2025</p>
                                                         </div>
                                                         <div class="blog-read-time-block">
                                                             <div class="data-image invert">
-                                                                <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69367b019f3f5c4b62b3fe20_3.svg" alt="" class="icon grey lazy-image"/>
+                                                                <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69367b019f3f5c4b62b3fe20_3.svg" alt="" class="icon grey"/>
                                                             </div>
                                                             <p class="data-text">3 min read</p>
                                                         </div>
@@ -738,19 +740,19 @@
                                                     </div>
                                                 </div>
                                                 <div class="image-wrap auto full-ratio">
-                                                    <img width="Auto" height="Auto" alt="" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/693567b02d3f9984e2feb847_1.jpg" loading="lazy" data-srcset="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/693567b02d3f9984e2feb847_1-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/693567b02d3f9984e2feb847_1.jpg 701w" sizes="(max-width: 701px) 100vw, 701px" class="paralax-image main lazy-image"/>
+                                                    <img width="Auto" height="Auto" alt="" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/693567b02d3f9984e2feb847_1.jpg" loading="lazy" srcset="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/693567b02d3f9984e2feb847_1-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/693567b02d3f9984e2feb847_1.jpg 701w" sizes="(max-width: 701px) 100vw, 701px" class="paralax-image main"/>
                                                 </div>
                                                 <div class="margin-30px">
                                                     <div class="data-flex">
                                                         <div class="blog-read-time-block">
                                                             <div class="data-image invert">
-                                                                <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69367b018745c88b3de15e1b_4.svg" alt="" class="icon grey lazy-image"/>
+                                                                <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69367b018745c88b3de15e1b_4.svg" alt="" class="icon grey"/>
                                                             </div>
                                                             <p class="data-text">December 8, 2025</p>
                                                         </div>
                                                         <div class="blog-read-time-block">
                                                             <div class="data-image invert">
-                                                                <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69367b019f3f5c4b62b3fe20_3.svg" alt="" class="icon grey lazy-image"/>
+                                                                <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69367b019f3f5c4b62b3fe20_3.svg" alt="" class="icon grey"/>
                                                             </div>
                                                             <p class="data-text">5 min read</p>
                                                         </div>
@@ -778,8 +780,8 @@
                                                 <a href="/journal" target="_blank" class="button-normal-white-wrapper-2 w-inline-block">
                                                     <div class="button-normal-white-text-2 text-sm text-weight-medium text-style-no_wrap text-color-black-900">Explore More</div>
                                                     <div class="button-normal-white-arrow-block-2">
-                                                        <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d552f_arrow-black.svg" alt="Arrow Image" class="button-white-arrow-image-black-2 lazy-image"/>
-                                                        <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5530_arrow-white.svg" alt="Arrow Image" class="button-white-arrow-image-white-2 lazy-image"/>
+                                                    <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d552f_arrow-black.svg" alt="Arrow Image" class="button-white-arrow-image-black-2"/>
+                                                    <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5530_arrow-white.svg" alt="Arrow Image" class="button-white-arrow-image-white-2"/>
                                                     </div>
                                                 </a>
                                             </div>
@@ -802,19 +804,19 @@
                                                                 </div>
                                                             </div>
                                                             <div class="image-wrap auto full-ratio">
-                                                                <img width="Auto" height="Auto" alt="" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/693567b02d3f9984e2feb847_1.jpg" loading="lazy" data-srcset="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/693567b02d3f9984e2feb847_1-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/693567b02d3f9984e2feb847_1.jpg 701w" sizes="(max-width: 701px) 100vw, 701px" class="paralax-image main lazy-image"/>
+                                                                <img width="Auto" height="Auto" alt="" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/693567b02d3f9984e2feb847_1.jpg" loading="lazy" srcset="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/693567b02d3f9984e2feb847_1-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/693567b02d3f9984e2feb847_1.jpg 701w" sizes="(max-width: 701px) 100vw, 701px" class="paralax-image main"/>
                                                             </div>
                                                             <div class="margin-30px">
                                                                 <div class="data-flex">
                                                                     <div class="blog-read-time-block">
                                                                         <div class="data-image invert">
-                                                                            <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69367b018745c88b3de15e1b_4.svg" alt="" class="icon grey lazy-image"/>
+                                                                            <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69367b018745c88b3de15e1b_4.svg" alt="" class="icon grey"/>
                                                                         </div>
                                                                         <p class="data-text">December 15, 2025</p>
                                                                     </div>
                                                                     <div class="blog-read-time-block">
                                                                         <div class="data-image invert">
-                                                                            <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69367b019f3f5c4b62b3fe20_3.svg" alt="" class="icon grey lazy-image"/>
+                                                                            <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69367b019f3f5c4b62b3fe20_3.svg" alt="" class="icon grey"/>
                                                                         </div>
                                                                         <p class="data-text">4 min read</p>
                                                                     </div>
@@ -841,19 +843,19 @@
                                                                 </div>
                                                             </div>
                                                             <div class="image-wrap auto full-ratio">
-                                                                <img sizes="(max-width: 767px) 100vw, (max-width: 991px) 727.984375px, 939.984375px" data-srcset="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69356a795f41fed1adbf4fc2_Lego%20Hello%20World-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69356a795f41fed1adbf4fc2_Lego%20Hello%20World-p-800.jpg 800w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69356a795f41fed1adbf4fc2_Lego%20Hello%20World-p-1080.jpg 1080w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69356a795f41fed1adbf4fc2_Lego%20Hello%20World-p-1600.jpg 1600w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69356a795f41fed1adbf4fc2_Lego%20Hello%20World-p-2000.jpg 2000w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69356a795f41fed1adbf4fc2_Lego%20Hello%20World.jpg 2304w" alt="" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69356a795f41fed1adbf4fc2_Lego%20Hello%20World.jpg" loading="lazy" class="paralax-image main lazy-image"/>
+                                                                <img sizes="(max-width: 767px) 100vw, (max-width: 991px) 727.984375px, 939.984375px" srcset="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69356a795f41fed1adbf4fc2_Lego%20Hello%20World-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69356a795f41fed1adbf4fc2_Lego%20Hello%20World-p-800.jpg 800w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69356a795f41fed1adbf4fc2_Lego%20Hello%20World-p-1080.jpg 1080w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69356a795f41fed1adbf4fc2_Lego%20Hello%20World-p-1600.jpg 1600w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69356a795f41fed1adbf4fc2_Lego%20Hello%20World-p-2000.jpg 2000w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69356a795f41fed1adbf4fc2_Lego%20Hello%20World.jpg 2304w" alt="" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69356a795f41fed1adbf4fc2_Lego%20Hello%20World.jpg" loading="lazy" class="paralax-image main"/>
                                                             </div>
                                                             <div class="margin-30px">
                                                                 <div class="data-flex">
                                                                     <div class="blog-read-time-block">
                                                                         <div class="data-image invert">
-                                                                            <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69367b018745c88b3de15e1b_4.svg" alt="" class="icon grey lazy-image"/>
+                                                                            <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69367b018745c88b3de15e1b_4.svg" alt="" class="icon grey"/>
                                                                         </div>
                                                                         <p class="data-text">December 15, 2025</p>
                                                                     </div>
                                                                     <div class="blog-read-time-block">
                                                                         <div class="data-image invert">
-                                                                            <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69367b019f3f5c4b62b3fe20_3.svg" alt="" class="icon grey lazy-image"/>
+                                                                            <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69367b019f3f5c4b62b3fe20_3.svg" alt="" class="icon grey"/>
                                                                         </div>
                                                                         <p class="data-text">3 min read</p>
                                                                     </div>
@@ -968,19 +970,19 @@
                                                     </div>
                                                 </div>
                                                 <div class="image-wrap auto full-ratio">
-                                                    <img sizes="100vw" data-srcset="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/693567b037d5beac704ab0c2_2-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/693567b037d5beac704ab0c2_2.jpg 701w" alt="" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/693567b037d5beac704ab0c2_2.jpg" loading="lazy" class="paralax-image main lazy-image"/>
+                                                                <img sizes="100vw" srcset="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/693567b037d5beac704ab0c2_2-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/693567b037d5beac704ab0c2_2.jpg 701w" alt="" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/693567b037d5beac704ab0c2_2.jpg" loading="lazy" class="paralax-image main"/>
                                                 </div>
                                                 <div class="margin-30px">
                                                     <div class="data-flex">
                                                         <div class="blog-read-time-block">
                                                             <div class="data-image invert">
-                                                                <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69367b018745c88b3de15e1b_4.svg" alt="" class="icon grey lazy-image"/>
+                                                                            <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69367b018745c88b3de15e1b_4.svg" alt="" class="icon grey"/>
                                                             </div>
                                                             <p class="data-text">December 26. 2025</p>
                                                         </div>
                                                         <div class="blog-read-time-block">
                                                             <div class="data-image invert">
-                                                                <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69367b019f3f5c4b62b3fe20_3.svg" alt="" class="icon grey lazy-image"/>
+                                                                            <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69367b019f3f5c4b62b3fe20_3.svg" alt="" class="icon grey"/>
                                                             </div>
                                                             <p class="data-text">6</p>
                                                             <p class="data-text">min read</p>
@@ -1021,7 +1023,7 @@
                                                 </div>
                                                 <div class="team-image-location">
                                                     <div id="w-node-b8407f2b-d155-852d-e67e-a5907e551d46-6f5c2c14" class="team-location-icon">
-                                                        <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6935321018e0727241ab83ce_View.svg" alt="" class="lazy-image"/>
+                                                        <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6935321018e0727241ab83ce_View.svg" alt=""/>
                                                     </div>
                                                     <div class="click-to-view">View image</div>
                                                 </div>
@@ -1050,7 +1052,7 @@
                                                 </div>
                                                 <div class="team-image-location">
                                                     <div id="w-node-b8407f2b-d155-852d-e67e-a5907e551d4f-6f5c2c14" class="team-location-icon">
-                                                        <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6935321018e0727241ab83ce_View.svg" alt="" class="lazy-image"/>
+                                                        <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6935321018e0727241ab83ce_View.svg" alt=""/>
                                                     </div>
                                                     <div class="click-to-view">View image</div>
                                                 </div>
@@ -1079,7 +1081,7 @@
                                                 </div>
                                                 <div class="team-image-location">
                                                     <div id="w-node-b8407f2b-d155-852d-e67e-a5907e551d58-6f5c2c14" class="team-location-icon">
-                                                        <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6935321018e0727241ab83ce_View.svg" alt="" class="lazy-image"/>
+                                                        <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6935321018e0727241ab83ce_View.svg" alt=""/>
                                                     </div>
                                                     <div class="click-to-view">View image</div>
                                                 </div>
@@ -1108,7 +1110,7 @@
                                                 </div>
                                                 <div class="team-image-location">
                                                     <div id="w-node-b8407f2b-d155-852d-e67e-a5907e551d6a-6f5c2c14" class="team-location-icon">
-                                                        <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6935321018e0727241ab83ce_View.svg" alt="" class="lazy-image"/>
+                                                        <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6935321018e0727241ab83ce_View.svg" alt=""/>
                                                     </div>
                                                     <div class="click-to-view">View image</div>
                                                 </div>
@@ -1137,7 +1139,7 @@
                                                 </div>
                                                 <div class="team-image-location">
                                                     <div id="w-node-b8407f2b-d155-852d-e67e-a5907e551d73-6f5c2c14" class="team-location-icon">
-                                                        <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6935321018e0727241ab83ce_View.svg" alt="" class="lazy-image"/>
+                                                        <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6935321018e0727241ab83ce_View.svg" alt=""/>
                                                     </div>
                                                     <div class="click-to-view">View image</div>
                                                 </div>
@@ -1223,8 +1225,8 @@
                                     <a href="https://webflow.com/templates/designers/quix-studio" target="_blank" class="button-normal-white-wrapper-2 w-inline-block">
                                         <div class="button-normal-white-text-2 text-sm text-weight-medium text-style-no_wrap text-color-black-900">Get to Know Me</div>
                                         <div class="button-normal-white-arrow-block-2">
-                                            <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d552f_arrow-black.svg" alt="Arrow Image" class="button-white-arrow-image-black-2 lazy-image"/>
-                                            <img loading="lazy" data-src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5530_arrow-white.svg" alt="Arrow Image" class="button-white-arrow-image-white-2 lazy-image"/>
+                                            <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d552f_arrow-black.svg" alt="Arrow Image" class="button-white-arrow-image-black-2"/>
+                                            <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5530_arrow-white.svg" alt="Arrow Image" class="button-white-arrow-image-white-2"/>
                                         </div>
                                     </a>
                                 </div>
@@ -1324,101 +1326,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div data-w-id="b0e7e248-78e1-9f9f-6c77-896280ee474c" data-current="" data-easing="ease" data-duration-in="300" data-duration-out="100" class="tabs-faq w-tabs">
-                            <div class="tab-menu-faq w-tab-menu">
-                                <a data-w-tab="Tab 1" class="tab-link-faq w-inline-block w-tab-link">
-                                    <div class="expandable-single">
-                                        <div class="expandable-top">
-                                            <div class="faq-animated-box">
-                                                <div class="faq-line"></div>
-                                                <div class="faq-line faq-vertical"></div>
-                                                <div class="faq-icon-bg"></div>
-                                            </div>
-                                            <div class="text-body-bold">What is Aluro?</div>
-                                        </div>
-                                        <div class="expandable-bottom">
-                                            <p class="faq-paragraph">Aluro is a free, single-page Webflow portfolio template built for creative people who want a clean, minimal, and impactful online presence. It’s designed to feel premium, with smooth interactions, dark aesthetics, and a layout that highlights your work beautifully.</p>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a data-w-tab="Tab 2" class="tab-link-faq w-inline-block w-tab-link">
-                                    <div class="expandable-single">
-                                        <div class="expandable-top">
-                                            <div class="faq-animated-box">
-                                                <div class="faq-line"></div>
-                                                <div class="faq-line faq-vertical"></div>
-                                                <div class="faq-icon-bg"></div>
-                                            </div>
-                                            <div class="text-body-bold">Who is this template for?</div>
-                                        </div>
-                                        <div class="expandable-bottom">
-                                            <p class="faq-paragraph">
-                                                Aluro is ideal for UI/UX designers, freelancers, and creatives who want to quickly launch a stylish personal portfolio, without starting from scratch.<br/>
-                                                ‍<br/>It’s perfect if you want a sleek one-page layout that focuses on visuals, storytelling, and personality.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a data-w-tab="Tab 3" class="tab-link-faq w-inline-block w-tab-link">
-                                    <div class="expandable-single">
-                                        <div class="expandable-top">
-                                            <div class="faq-animated-box">
-                                                <div class="faq-line"></div>
-                                                <div class="faq-line faq-vertical"></div>
-                                                <div class="faq-icon-bg"></div>
-                                            </div>
-                                            <div class="text-body-bold">Can I replace the images and animations with my own?</div>
-                                        </div>
-                                        <div class="expandable-bottom">
-                                            <p class="faq-paragraph">Absolutely. Aluro is built to be fully customizable, you can swap every image, update animations, and adjust layout styles directly in Webflow without touching code.</p>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a data-w-tab="Tab 4" class="tab-link-faq w-inline-block w-tab-link">
-                                    <div class="expandable-single">
-                                        <div class="expandable-top">
-                                            <div class="faq-animated-box">
-                                                <div class="faq-line"></div>
-                                                <div class="faq-line faq-vertical"></div>
-                                                <div class="faq-icon-bg"></div>
-                                            </div>
-                                            <div class="text-body-bold">Can you help me customize this template?</div>
-                                        </div>
-                                        <div class="expandable-bottom">
-                                            <p class="faq-paragraph">
-                                                Of course. <br/>
-                                                <br/>If you’d like to take Aluro further , redesign sections, add CMS features, or create custom animations, send us an email at office@eclipso.studio.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a data-w-tab="Tab 5" class="tab-link-faq w-inline-block w-tab-link">
-                                    <div class="expandable-single">
-                                        <div class="expandable-top">
-                                            <div class="faq-animated-box">
-                                                <div class="faq-line"></div>
-                                                <div class="faq-line faq-vertical"></div>
-                                                <div class="faq-icon-bg"></div>
-                                            </div>
-                                            <div class="text-body-bold">Is it optimized for performance and responsiveness?</div>
-                                        </div>
-                                        <div class="expandable-bottom">
-                                            <p class="faq-paragraph">
-                                                Yes. Every section in Aluro is optimized for performance, accessibility, and smooth responsiveness across all devices.<br/>
-                                                <br/>It’s also built using Webflow best practices, so it’s clean, fast, and easy to maintain.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="tabs-content-faq w-tab-content">
-                                <div data-w-tab="Tab 1" class="w-tab-pane"></div>
-                                <div data-w-tab="Tab 2" class="w-tab-pane"></div>
-                                <div data-w-tab="Tab 3" class="w-tab-pane"></div>
-                                <div data-w-tab="Tab 4" class="w-tab-pane"></div>
-                                <div data-w-tab="Tab 5" class="w-tab-pane"></div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </section>
@@ -1439,7 +1346,7 @@
         </script>
         </div>
         <!-- Live Status & Booking Widget -->
-        <div class="live-status-widget">
+        <a href="https://calendar.app.google/q8vcfvD79osZvTKa8" target="_blank" class="live-status-widget hover-trigger">
             <div class="widget-header">
                 <span class="widget-location">BANDUNG, ID</span>
                 <span id="widget-clock" class="widget-clock">00:00:00</span>
@@ -1448,7 +1355,7 @@
                 <span class="status-dot"></span>
                 <span class="status-text">Available for Projects</span>
             </div>
-            <a href="https://calendar.app.google/q8vcfvD79osZvTKa8" target="_blank" class="widget-book-btn hover-trigger">
+            <div class="widget-book-btn">
                 <!-- Google Calendar Icon -->
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
@@ -1458,8 +1365,8 @@
                 </svg>
                 <span>Book a Call</span>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
-            </a>
-        </div>
+            </div>
+        </a>
         <!-- Music Player Widget -->
         <div id="music-player" class="music-player hover-trigger">
             <audio id="bg-music" loop>
@@ -1495,13 +1402,13 @@
         <script src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/js/webflow.schunk.3646b0bdbfc7a235.js" type="text/javascript" integrity="sha384-gZLOmXIblLyHGDncyBxqMlIEL8LJqhq9+vw5KOasKHD2NajOGW1wkj4KYV+Vfhm5" crossorigin="anonymous"></script>
         <script src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/js/webflow.schunk.d659be6dcd9af708.js" type="text/javascript" integrity="sha384-fkZ6Md26P2haMCtqf4f0HB23dTQgjwR09RGdpu3VVDV0Zif+FEMEoIw0sewn8NM8" crossorigin="anonymous"></script>
         <script src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/js/webflow.68ccafdb.96c19bd230e42fc3.js" type="text/javascript" integrity="sha384-2Gg0jo0+ykKe902FwuSM0IpzRc+bq8KTSOUw36jNNWJxclLGXolsR1N1zHWBg3Yj" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-        <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+        <script defer src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
         <!-- GSAP & SCROLLTRIGGER (Untuk Text Reveal) -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Draggable.min.js"></script>
-        <script src="script.js"></script>
-        <script src="custom.js"></script>
+        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Draggable.min.js"></script>
+        <script defer src="script.js"></script>
+        <script defer src="custom.js"></script>
     </body>
 </html>

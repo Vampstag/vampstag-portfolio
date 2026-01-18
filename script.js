@@ -36,38 +36,6 @@ if (window.innerWidth < 992) {
 // 2. LAZY LOAD & SCROLL ANIMATIONS
 // =========================================
 document.addEventListener("DOMContentLoaded", function() {
-    // Lazy load images
-    const lazyImages = [].slice.call(document.querySelectorAll("img.lazy-image"));
-
-    if ("IntersectionObserver" in window) {
-        let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
-            entries.forEach(function(entry) {
-                if (entry.isIntersecting) {
-                    let lazyImage = entry.target;
-                    lazyImage.src = lazyImage.dataset.src;
-                    if (lazyImage.dataset.srcset) {
-                        lazyImage.srcset = lazyImage.dataset.srcset;
-                    }
-                    lazyImage.classList.add("is-loaded");
-                    lazyImageObserver.unobserve(lazyImage);
-                }
-            });
-        });
-
-        lazyImages.forEach(function(lazyImage) {
-            lazyImageObserver.observe(lazyImage);
-        });
-    } else {
-        // Fallback
-        lazyImages.forEach(function(lazyImage) {
-            lazyImage.src = lazyImage.dataset.src;
-            if (lazyImage.dataset.srcset) {
-                lazyImage.srcset = lazyImage.dataset.srcset;
-            }
-            lazyImage.classList.add("is-loaded");
-        });
-    }
-
     // Scroll animations for sections
     const sections = [].slice.call(document.querySelectorAll(".fade-in-section"));
 
@@ -103,11 +71,11 @@ window.lenis = new Lenis({
 // Stop scroll saat awal (karena ada preloader)
 window.lenis.stop();
 
-function raf(time) {
-    window.lenis.raf(time);
-    requestAnimationFrame(raf);
-}
-requestAnimationFrame(raf);
+// Optimized Loop: Sync Lenis with GSAP Ticker
+gsap.ticker.add((time) => {
+    window.lenis.raf(time * 1000);
+});
+gsap.ticker.lagSmoothing(0);
 
 // =========================================
 // 4. CUSTOM CURSOR & INTERACTION
@@ -218,15 +186,18 @@ window.addEventListener('scroll', () => {
 // =========================================
 let lastScrollTop = 0;
 const navbar = document.querySelector('.navbar-3');
+const statusWidget = document.querySelector('.live-status-widget');
 
-if (navbar) {
+if (navbar || statusWidget) {
     window.addEventListener('scroll', () => {
         const scrollTop = window.scrollY || document.documentElement.scrollTop;
         
         if (scrollTop > lastScrollTop && scrollTop > 50) {
-            navbar.classList.add('navbar-hidden');
+            if (navbar) navbar.classList.add('navbar-hidden');
+            if (statusWidget) statusWidget.classList.add('widget-hidden');
         } else {
-            navbar.classList.remove('navbar-hidden');
+            if (navbar) navbar.classList.remove('navbar-hidden');
+            if (statusWidget) statusWidget.classList.remove('widget-hidden');
         }
         
         lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;

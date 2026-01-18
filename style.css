@@ -106,6 +106,14 @@ html, body {
 .home-about-section { z-index: 50 !important; }
 
 /* =========================================
+   PERFORMANCE OPTIMIZATIONS
+   ========================================= */
+.hero-card, .paralax-image, .live-status-widget, .music-player {
+    will-change: transform;
+    transform: translateZ(0); /* Force GPU Layer */
+}
+
+/* =========================================
    2. ANIMATIONS (KEYFRAMES)
    ========================================= */
 @keyframes slideInFromBottom {
@@ -458,7 +466,14 @@ html.lenis, html.lenis body { height: auto; }
     display: flex;
     flex-direction: column;
     gap: 16px;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s;
+    text-decoration: none; /* Ensure link doesn't have underline */
+}
+
+.live-status-widget.widget-hidden {
+    transform: translateY(200%) !important;
+    opacity: 0;
+    pointer-events: none;
 }
 
 .live-status-widget:hover {
@@ -547,6 +562,17 @@ html.lenis, html.lenis body { height: auto; }
     transform: scale(1.02);
 }
 
+/* Calendar Icon Pulse Animation */
+@keyframes iconPulse {
+    0% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(0,0,0,0)); }
+    50% { transform: scale(1.2); filter: drop-shadow(0 0 4px rgba(0,0,0,0.2)); }
+    100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(0,0,0,0)); }
+}
+
+.widget-book-btn > svg:first-child {
+    animation: iconPulse 2s infinite ease-in-out;
+}
+
 @media (max-width: 767px) {
     .live-status-widget {
         bottom: 20px;
@@ -567,9 +593,11 @@ html.lenis, html.lenis body { height: auto; }
 @media (max-width: 767px) {
     /* Compact Live Status Widget */
     .live-status-widget {
+        position: fixed;
         bottom: 20px;
         left: 20px;
-        right: auto;
+        transform: none;
+        z-index: 990;
         width: auto;
         min-width: 0;
         max-width: calc(100% - 100px); /* Prevent overlap with music player */
@@ -578,6 +606,7 @@ html.lenis, html.lenis body { height: auto; }
         flex-direction: row;
         align-items: center;
         gap: 10px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15); /* Ensure pop-out shadow */
     }
     .widget-header { display: none; } /* Hide clock on mobile */
     .widget-status { margin-bottom: 0; margin-right: auto; }
@@ -587,16 +616,10 @@ html.lenis, html.lenis body { height: auto; }
         display: flex; align-items: center; justify-content: center;
         font-size: 10px;
     }
-    .widget-book-btn > * { display: none; } /* Hide text and icons on mobile */
-    .widget-book-btn { text-indent: -9999px; position: relative; } /* Hide text, show icon if needed or just box */
-    .widget-book-btn::after {
-        content: '↗';
-        text-indent: 0;
-        position: absolute;
-        top: 50%; left: 50%;
-        transform: translate(-50%, -50%);
-        color: #383838;
-    }
+    .widget-book-btn > * { display: none; } /* Hide text and arrow */
+    .widget-book-btn > svg:first-child { display: block; } /* Show Calendar Icon */
+    .widget-book-btn { text-indent: 0; position: relative; } 
+    .widget-book-btn::after { content: none; } /* Remove the arrow pseudo-element */
 }
 
 /* =========================================
@@ -876,4 +899,36 @@ html.lenis, html.lenis body { height: auto; }
     .desktop-cta,
     .desktop.w-nav-menu { display: none !important; }
     .mobile-menu-btn { display: flex !important; }
+}
+
+/* =========================================
+   15. HERO HEADLINE SINGLE LINE FIX (DESKTOP)
+   ========================================= */
+@media (min-width: 992px) {
+    .home-hero-headline-wrapper {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex-wrap: nowrap !important;
+        width: 100% !important;
+    }
+
+    .home-hero-headline-text-2 {
+        white-space: nowrap !important;
+        display: inline-block !important;
+        /* Adjusted clamp to ensure text fits on one line without overflow */
+        font-size: clamp(3.5rem, 9vw, 7.5rem) !important;
+    }
+
+    /* Remove any manual line breaks on desktop */
+    .home-hero-headline-text-2 br {
+        display: none !important;
+    }
+}
+
+/* Content Visibility for Heavy Sections */
+.footer-2, .faq-section {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 1000px; /* Estimate height to prevent scrollbar jumping */
 }
