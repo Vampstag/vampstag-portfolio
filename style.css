@@ -44,6 +44,7 @@ body {
     color: var(--text-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    padding-top: 80px; /* Fix Content Overlap: Push content down to match Navbar height */
 }
 
 ::selection {
@@ -62,7 +63,13 @@ h1, h2, h3, h4, h5, h6,
 }
 
 .home-hero-headline-text-2 { font-size: var(--text-display) !important; }
-.section-headline-text { font-size: var(--text-h2) !important; }
+.section-headline-text { 
+    font-size: var(--text-h2) !important;
+    font-weight: 700; /* Bold agar terlihat solid dan tidak tipis */
+    letter-spacing: -0.02em; /* Sedikit direnggangkan agar tidak terlalu rapat */
+    line-height: 1.2;
+    color: #000000; /* Pure Black untuk kontras maksimal */
+}
 
 .home-hero-headline-wrapper {
     display: flex;
@@ -93,20 +100,23 @@ p, li, span, .paragraph, .about-text {
 /* Navbar Sticky & Hide Animation */
 .navbar-3 {
     position: fixed;
-    top: 0;
+    top: 0 !important; /* Ensure it sticks to the very top */
     left: 0;
     width: 100%;
-    z-index: 1000;
+    z-index: 1100; /* Increased to avoid conflict with .hover-image (1000) */
     transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), padding 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), background-color 0.4s ease;
     transform: translateY(0%);
     overflow: visible;
-    padding-top: 1rem; /* Reduced to ~16px for a slimmer profile */
-    padding-bottom: 1rem;
+    padding: 1rem 5% !important; /* Edge-to-Edge Spacing */
+    box-sizing: border-box;
     height: auto;
+    display: flex;
+    justify-content: space-between; /* Align content to far left/right */
+    align-items: center;
+    margin: 0 !important; /* Remove any default margins */
 }
 .navbar-3.scrolled {
-    padding-top: 0.6rem; /* Ultra-slim scrolled state (~10px) */
-    padding-bottom: 0.6rem;
+    padding: 0.6rem 5%; /* Maintain horizontal spacing on scroll */
     background-color: rgba(255, 255, 255, 0.85); /* More translucent */
     backdrop-filter: blur(16px); /* Stronger blur for better text readability */
     -webkit-backdrop-filter: blur(16px);
@@ -116,11 +126,26 @@ p, li, span, .paragraph, .about-text {
     transform: translateY(-100%);
 }
 
+/* Force Full Width for Navbar Container */
+.navbar-3 .global-wrapper,
+.navbar-3 .w-container {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.navbar-3 .global-padding {
+    padding: 0 !important;
+    width: 100%;
+}
+
 /* Navbar Alignment & Logo Sizing */
 .nav-wrapper {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    width: 100%;
 }
 
 .logo.w-nav-brand {
@@ -735,7 +760,7 @@ html.lenis, html.lenis body { height: auto; }
 }
 
 /* Content Visibility for Heavy Sections */
-.footer-2, .faq-section {
+.footer-2 {
     content-visibility: auto;
     contain-intrinsic-size: 1px 1000px; /* Estimate height to prevent scrollbar jumping */
 }
@@ -1015,7 +1040,7 @@ html.lenis, html.lenis body { height: auto; }
    ========================================= */
 .bits-slider {
     width: 100%;
-    padding: 40px 0 80px; /* Top padding for shadow, bottom for pagination */
+    padding: 60px 0 100px; /* Increased padding for breathing room & shadows */
     overflow: hidden;
 }
 
@@ -1035,7 +1060,7 @@ html.lenis, html.lenis body { height: auto; }
 }
 
 .bits-slider .swiper-pagination {
-    bottom: 0px !important;
+    bottom: 30px !important; /* Adjusted to sit nicely within the bottom padding */
     width: 100%;
     display: flex;
     justify-content: center;
@@ -1077,5 +1102,152 @@ html.lenis, html.lenis body { height: auto; }
     aspect-ratio: 3/4; /* Enforce Portrait */
     object-fit: cover;
     border-radius: 12px; /* Slightly smaller radius than frame */
+}
+/* #endregion */
+
+/* #region 21. LIGHTBOX */
+/* =========================================
+   21. CUSTOM LIGHTBOX
+   ========================================= */
+.lightbox-modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    justify-content: center;
+    align-items: center;
+}
+
+.lightbox-modal.active {
+    display: flex;
+    opacity: 1;
+}
+
+.lightbox-content {
+    max-width: 90%;
+    max-height: 90vh;
+    object-fit: contain;
+    border-radius: 4px;
+    box-shadow: 0 0 50px rgba(0,0,0,0.5);
+    transform: scale(0.95);
+    transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.lightbox-modal.active .lightbox-content {
+    transform: scale(1);
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    color: #ffffff;
+    font-size: 40px;
+    font-weight: 300;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    z-index: 10001;
+    line-height: 1;
+}
+
+.lightbox-close:hover {
+    transform: scale(1.1) rotate(90deg);
+    color: #ff4d4d;
+}
+/* #endregion */
+
+/* #region 22. PREMIUM FAQ (SWISS STYLE) */
+/* =========================================
+   22. PREMIUM FAQ
+   ========================================= */
+.faq__list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-top: 1px solid rgba(0, 0, 0, 0.1); /* Top border for first item */
+}
+
+.faq__item {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Separators */
+    overflow: hidden;
+}
+
+.faq__trigger {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 32px 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: opacity 0.3s ease;
+}
+
+.faq__trigger:hover {
+    opacity: 0.7;
+}
+
+.faq__question {
+    font-family: var(--font-primary);
+    font-size: clamp(1.125rem, 2vw, 1.5rem); /* Responsive font size */
+    font-weight: 500;
+    color: #111;
+    padding-right: 20px;
+}
+
+.faq__icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #111;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    flex-shrink: 0;
+}
+
+/* Rotate icon when active */
+.faq__trigger[aria-expanded="true"] .faq__icon {
+    transform: rotate(45deg);
+}
+
+.faq__content {
+    height: 0;
+    overflow: hidden;
+    transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: height;
+}
+
+.faq__answer {
+    padding-bottom: 32px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    transition-delay: 0.1s; /* Wait for height to start opening */
+}
+
+.faq__trigger[aria-expanded="true"] + .faq__content .faq__answer {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.faq__answer p {
+    font-family: var(--font-primary);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #555;
+    max-width: 60ch;
+    margin: 0;
 }
 /* #endregion */

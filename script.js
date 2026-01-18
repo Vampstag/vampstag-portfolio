@@ -41,6 +41,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 6. Bits Slider
     initBitsSlider();
+
+    // 7. Lightbox
+    initLightbox();
+
+    // 8. FAQ Accordion
+    initFAQ();
+
+    // 9. Text Reveal Animation
+    initTextReveal();
+
+    // 10. Refresh ScrollTrigger when preloader is done to ensure correct positions
+    window.addEventListener('preloaderDone', () => {
+        ScrollTrigger.refresh();
+    });
 });
 //#endregion
 
@@ -59,10 +73,10 @@ function initNavbar() {
     const mobileOverlay = document.querySelector('.mobile-menu-overlay');
     const mobileLinks = document.querySelectorAll('.mobile-link');
     const progressBar = document.getElementById('scroll-progress');
-    let lastScrollTop = 0;
+    let lastScrollTop = Math.max(0, window.scrollY);
 
     // -- Scroll Effect Logic --
-    window.addEventListener('scroll', () => {
+    const handleScroll = () => {
         const currentScroll = window.scrollY;
 
         // 1. Shrink Effect (Class-based for performance)
@@ -74,7 +88,10 @@ function initNavbar() {
 
         // 2. Smart Hide/Show (UX Optimization)
         // Hide when scrolling down (> 100px), Show when scrolling up
-        if (currentScroll > lastScrollTop && currentScroll > 100) {
+        // FIX: Don't hide navbar if mobile menu is currently open
+        if (mobileOverlay && mobileOverlay.classList.contains('is-active')) {
+            navbar.classList.remove('navbar-hidden');
+        } else if (currentScroll > lastScrollTop && currentScroll > 100) {
             navbar.classList.add('navbar-hidden');
         } else {
             navbar.classList.remove('navbar-hidden');
@@ -91,13 +108,19 @@ function initNavbar() {
                 progressBar.style.width = '0%';
             }
         }
-    });
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Run immediately to set initial state
 
     // -- Mobile Menu Toggle Logic --
     if (menuBtn && mobileOverlay) {
         menuBtn.addEventListener('click', () => {
             const isActive = mobileOverlay.classList.toggle('is-active');
             menuBtn.classList.toggle('is-active');
+            
+            // Lock body scroll when menu is open
+            document.body.style.overflow = isActive ? 'hidden' : 'auto';
             
             if (isActive) {
                 gsap.to(mobileLinks, {
@@ -172,20 +195,51 @@ function renderProjects() {
  */
 function initHeroAnimation() {
     // -- Selectors --
-    const headline = document.querySelector('.section-headline-text');
+    const headline = document.querySelector('.home-hero-headline-text-2');
     const filters = document.querySelectorAll('.filter-btn');
+    const portfolioHero = document.querySelector('.home-hero-headline-wrapper.page-portfolio');
+    const portfolioTabs = document.querySelector('.portfolio-menu');
 
-    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+    const runAnimation = () => {
+        const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-    tl.fromTo(headline, 
-        { y: 50, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1, delay: 0.5 }
-    )
-    .fromTo(filters, 
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, stagger: 0.1 }, 
-        "-=0.5"
-    );
+        // 1. Portfolio Page Hero
+        if (portfolioHero) {
+            tl.fromTo(portfolioHero, 
+                { y: 50, autoAlpha: 0 },
+                { y: 0, autoAlpha: 1, duration: 1 }
+            );
+            if (portfolioTabs) {
+                tl.fromTo(portfolioTabs, 
+                    { y: 30, autoAlpha: 0 },
+                    { y: 0, autoAlpha: 1, duration: 0.8 },
+                    "-=0.6"
+                );
+            }
+        } 
+        // 2. Generic/Home Hero
+        else if (headline) {
+            tl.fromTo(headline, 
+                { y: 50, opacity: 0 },
+                { y: 0, opacity: 1, duration: 1, delay: 0.5 }
+            );
+        }
+
+        if (filters.length > 0) {
+            tl.fromTo(filters, 
+                { y: 20, opacity: 0 },
+                { y: 0, opacity: 1, duration: 0.8, stagger: 0.1 }, 
+                "-=0.5"
+            );
+        }
+    };
+
+    // Check for Preloader to sync animation
+    if (document.body.classList.contains('preloader-active')) {
+        window.addEventListener('preloaderDone', runAnimation, { once: true });
+    } else {
+        runAnimation();
+    }
 }
 
 /**
@@ -372,6 +426,135 @@ function initBitsSlider() {
             const card = activeSlide.querySelector('.photo-card');
             if (card) gsap.to(card, { rotationX: 0, rotationY: 0, scale: 1, duration: 0.5, ease: "power2.out" });
         }
+    });
+}
+//#endregion
+
+//#region TEXT REVEAL
+// =========================================
+// 9. TEXT REVEAL ANIMATION
+// =========================================
+function initTextReveal() {
+    const textReveals = document.querySelectorAll('.text-reveal');
+    
+    textReveals.forEach(el => {
+        // Ensure container is visible
+        el.style.opacity = '1';
+        
+        const text = el.innerText;
+        const words = text.split(' ').filter(word => word.trim() !== '');
+        el.innerHTML = '';
+
+        words.forEach((word, index) => {
+            const span = document.createElement('span');
+            span.textContent = word;
+            span.style.display = 'inline-block';
+            if (index < words.length - 1) {
+                span.style.marginRight = '0.25em';
+            }
+            span.style.opacity = '0';
+            span.style.transform = 'translateY(30px)';
+            el.appendChild(span);
+        });
+
+        gsap.to(el.children, {
+            scrollTrigger: {
+                trigger: el,
+                start: "top 85%",
+                toggleActions: "play none none reverse"
+            },
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            stagger: 0.05,
+            ease: "power3.out"
+        });
+    });
+}
+//#endregion
+
+//#region LIGHTBOX
+// =========================================
+// 7. LIGHTBOX LOGIC
+// =========================================
+/**
+ * Initializes the custom lightbox for the Bits Slider.
+ * Why: Allows users to view slider images in full screen.
+ */
+function initLightbox() {
+    const modal = document.getElementById("lightbox-modal");
+    const modalImg = document.getElementById("lightbox-img");
+    const closeBtn = document.querySelector(".lightbox-close");
+    const slider = document.querySelector('.bits-slider');
+
+    if (!slider || !modal) return;
+
+    // Add cursor pointer to images to indicate clickability
+    const addCursor = () => {
+        const images = slider.querySelectorAll('.photo-img');
+        images.forEach(img => img.style.cursor = 'zoom-in');
+    };
+    addCursor();
+
+    // Event Delegation: Handle clicks on images inside the slider
+    slider.addEventListener('click', (e) => {
+        const img = e.target.closest('.photo-img');
+        if (img) {
+            e.preventDefault();
+            modal.classList.add('active');
+            // Use currentSrc to get the highest quality loaded by the browser
+            modalImg.src = img.currentSrc || img.src;
+            document.body.style.overflow = 'hidden'; // Disable scroll
+        }
+    });
+
+    // Close Logic
+    const closeModal = () => {
+        modal.classList.remove('active');
+        document.body.style.overflow = ''; // Re-enable scroll
+        setTimeout(() => { modalImg.src = ''; }, 300); // Clear src after fade out
+    };
+
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    
+    // Close on background click or Escape key
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === "Escape" && modal.classList.contains('active')) closeModal(); });
+}
+//#endregion
+
+//#region FAQ
+// =========================================
+// 8. FAQ ACCORDION
+// =========================================
+function initFAQ() {
+    const triggers = document.querySelectorAll('.faq__trigger');
+
+    triggers.forEach(trigger => {
+        trigger.addEventListener('click', () => {
+            const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
+            const content = trigger.nextElementSibling;
+
+            // Close others
+            triggers.forEach(other => {
+                if (other !== trigger && other.getAttribute('aria-expanded') === 'true') {
+                    other.setAttribute('aria-expanded', 'false');
+                    other.nextElementSibling.style.height = '0px';
+                    other.nextElementSibling.setAttribute('aria-hidden', 'true');
+                }
+            });
+
+            // Toggle current
+            if (!isExpanded) {
+                trigger.setAttribute('aria-expanded', 'true');
+                content.setAttribute('aria-hidden', 'false');
+                content.style.height = content.scrollHeight + 'px';
+            } else {
+                trigger.setAttribute('aria-expanded', 'false');
+                content.setAttribute('aria-hidden', 'true');
+                content.style.height = '0px';
+            }
+        });
     });
 }
 //#endregion
