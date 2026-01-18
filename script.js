@@ -186,18 +186,15 @@ window.addEventListener('scroll', () => {
 // =========================================
 let lastScrollTop = 0;
 const navbar = document.querySelector('.navbar-3');
-const statusWidget = document.querySelector('.live-status-widget');
 
-if (navbar || statusWidget) {
+if (navbar) {
     window.addEventListener('scroll', () => {
         const scrollTop = window.scrollY || document.documentElement.scrollTop;
         
         if (scrollTop > lastScrollTop && scrollTop > 50) {
             if (navbar) navbar.classList.add('navbar-hidden');
-            if (statusWidget) statusWidget.classList.add('widget-hidden');
         } else {
             if (navbar) navbar.classList.remove('navbar-hidden');
-            if (statusWidget) statusWidget.classList.remove('widget-hidden');
         }
         
         lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
@@ -205,45 +202,7 @@ if (navbar || statusWidget) {
 }
 
 // =========================================
-// 7. MUSIC PLAYER WIDGET
-// =========================================
-document.addEventListener("DOMContentLoaded", () => {
-    const player = document.getElementById('music-player');
-    const audio = document.getElementById('bg-music');
-    const text = player.querySelector('.player-text');
-    const iconMuted = player.querySelector('.icon-muted');
-    const iconPlaying = player.querySelector('.icon-playing');
-
-    if (player && audio) {
-        // Set volume to a comfortable level
-        audio.volume = 0.4;
-
-        player.addEventListener('click', () => {
-            if (audio.paused) {
-                const playPromise = audio.play();
-                if (playPromise !== undefined) {
-                    playPromise.then(() => {
-                        player.classList.add('playing');
-                        if (text) text.innerText = "PAUSE";
-                        if (iconMuted) iconMuted.style.display = 'none';
-                        if (iconPlaying) iconPlaying.style.display = 'block';
-                    }).catch(e => {
-                        console.error("Audio playback failed:", e);
-                    });
-                }
-            } else {
-                audio.pause();
-                player.classList.remove('playing');
-                if (text) text.innerText = "PLAY";
-                if (iconMuted) iconMuted.style.display = 'block';
-                if (iconPlaying) iconPlaying.style.display = 'none';
-            }
-        });
-    }
-});
-
-// =========================================
-// 8. CLIPBOARD TOOLTIP INTERACTION
+// 7. CLIPBOARD TOOLTIP INTERACTION
 // =========================================
 document.addEventListener('click', (e) => {
     // Target any mailto link (usually in footer)
@@ -352,3 +311,173 @@ function showTooltip(element, message) {
         setTimeout(() => tooltip.remove(), 400);
     }, 2000);
 }
+
+// =========================================
+// 10. DYNAMIC PROJECT LOADER (HOME)
+// =========================================
+document.addEventListener("DOMContentLoaded", () => {
+    // Pastikan data projectsData ada (dari projects.js)
+    if (typeof projectsData !== 'undefined') {
+        
+        // Cari proyek yang ditandai sebagai 'featured'
+        const featuredProject = projectsData.find(p => p.featured === true);
+
+        if (featuredProject) {
+            // 1. Update Gambar
+            const imgEl = document.getElementById('featured-project-img');
+            if (imgEl) {
+                imgEl.src = featuredProject.image;
+                imgEl.srcset = ''; // Reset srcset agar browser memakai src baru
+            }
+
+            // 2. Update Judul
+            const titleEl = document.getElementById('featured-project-title');
+            if (titleEl) titleEl.innerText = featuredProject.title;
+
+            // 3. Update Link
+            const linkEl = document.getElementById('featured-project-link');
+            if (linkEl) linkEl.href = featuredProject.link;
+
+            // 4. Update Stats (Looping)
+            const statsContainer = document.getElementById('featured-project-stats');
+            if (statsContainer && featuredProject.stats) {
+                statsContainer.innerHTML = ''; // Bersihkan isi lama
+                featuredProject.stats.forEach(stat => {
+                    const statHTML = `
+                        <div class="tag-work">
+                            <div class="text-small">${stat}</div>
+                        </div>
+                    `;
+                    statsContainer.insertAdjacentHTML('beforeend', statHTML);
+                });
+            }
+        }
+    }
+});
+
+// =========================================
+// 11. PORTFOLIO GRID RENDER & FILTER
+// =========================================
+document.addEventListener("DOMContentLoaded", () => {
+    const grid = document.getElementById('portfolio-grid');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+
+    // Hanya jalankan jika elemen grid ada (artinya sedang di halaman Portfolio)
+    if (grid && typeof projectsData !== 'undefined') {
+        
+        function renderProjects(category) {
+            // 1. Bersihkan grid
+            grid.innerHTML = ''; 
+            
+            // 2. Filter data
+            const filtered = category === 'All' 
+                ? projectsData 
+                : projectsData.filter(p => p.category === category);
+
+            // 3. Generate HTML untuk setiap proyek
+            filtered.forEach(project => {
+                const card = document.createElement('div');
+                card.className = 'portfolio-item';
+                card.innerHTML = `
+                    <a href="${project.link}" class="portfolio-link w-inline-block">
+                        <div class="portfolio-image-wrapper">
+                            <img src="${project.image}" alt="${project.title}" class="portfolio-image" loading="lazy">
+                        </div>
+                        <div class="portfolio-content">
+                            <h3 class="portfolio-title">${project.title}</h3>
+                            <div class="portfolio-role">${project.role}</div>
+                        </div>
+                    </a>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Render awal (Tampilkan Semua)
+        renderProjects('All');
+
+        // Event Listener untuk Tombol Filter
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Hapus kelas active dari semua tombol
+                filterBtns.forEach(b => b.classList.remove('active'));
+                // Tambah kelas active ke tombol yang diklik
+                btn.classList.add('active');
+                
+                // Ambil kategori dan render ulang
+                const cat = btn.getAttribute('data-category');
+                renderProjects(cat);
+            });
+        });
+    }
+});
+
+// =========================================
+// 12. DYNAMIC PROJECT DETAIL PAGE
+// =========================================
+document.addEventListener("DOMContentLoaded", () => {
+    const detailContainer = document.getElementById('project-detail-container');
+    
+    // Hanya jalankan jika elemen detail container ada (artinya di halaman project-detail.html)
+    if (detailContainer && typeof projectsData !== 'undefined') {
+        
+        // 1. Ambil ID dari URL (contoh: ?id=latest-work)
+        const params = new URLSearchParams(window.location.search);
+        const projectId = params.get('id');
+
+        // 2. Cari data proyek yang cocok
+        const project = projectsData.find(p => p.id === projectId);
+
+        if (project) {
+            // 3. Isi Konten HTML
+            document.title = `${project.title} | Portfolio`;
+            document.getElementById('detail-title').innerText = project.title;
+            document.getElementById('detail-category').innerText = project.category;
+            document.getElementById('detail-role').innerText = project.role;
+            document.getElementById('detail-image').src = project.image;
+            
+            // Isi Text (Gunakan default text jika data kosong)
+            document.getElementById('detail-description').innerText = project.description || "No description available.";
+            document.getElementById('detail-challenge').innerText = project.challenge || "No challenge details provided.";
+            document.getElementById('detail-solution').innerText = project.solution || "No solution details provided.";
+
+            // 4. Render Stats
+            const statsContainer = document.getElementById('detail-stats-container');
+            if (project.stats && project.stats.length > 0) {
+                statsContainer.innerHTML = '<h3 style="font-size:1.1rem; margin-bottom:15px;">Key Results</h3>';
+                project.stats.forEach(stat => {
+                    statsContainer.innerHTML += `
+                        <div class="stat-item">
+                            <span class="stat-value">${stat}</span>
+                        </div>
+                    `;
+                });
+            } else {
+                statsContainer.style.display = 'none'; // Sembunyikan jika tidak ada stats
+            }
+
+            // 5. Render Gallery (Jika ada)
+            const galleryContainer = document.getElementById('detail-gallery');
+            if (project.gallery && project.gallery.length > 0) {
+                project.gallery.forEach(imgSrc => {
+                    const img = document.createElement('img');
+                    img.src = imgSrc;
+                    img.className = 'gallery-item';
+                    img.loading = 'lazy';
+                    galleryContainer.appendChild(img);
+                });
+            }
+        } else {
+            // Jika ID tidak ditemukan
+            detailContainer.innerHTML = `
+                <div style="text-align:center; padding:100px 0;">
+                    <h1>Project Not Found</h1>
+                    <p>The project you are looking for does not exist.</p>
+                    <a href="portfolio.html" class="button-normal-black-wrapper-2 w-inline-block" style="margin-top:20px; display:inline-flex;">
+                        <div class="button-normal-black-text-2">Back to Portfolio</div>
+                    </a>
+                </div>
+            `;
+        }
+    }
+});
