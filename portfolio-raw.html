@@ -553,23 +553,37 @@
                     gsap.registerPlugin(ScrollTrigger);
 
                     // 1. Hero & UI Entry Animations
-                    // Fade in the headline
-                    gsap.to('[data-w-id="b6a74ce0-53b7-4af7-a5ab-4044ee371a0f"]', {
-                        opacity: 1,
-                        y: 0,
-                        duration: 1.2,
-                        ease: "power3.out",
-                        delay: 0.2
-                    });
+                    const playHeroAnimations = () => {
+                        // Fade in the headline
+                        gsap.fromTo('[data-w-id="b6a74ce0-53b7-4af7-a5ab-4044ee371a0f"]', 
+                            { y: 30, opacity: 0 },
+                            {
+                                opacity: 1,
+                                y: 0,
+                                duration: 1.2,
+                                ease: "power3.out"
+                            }
+                        );
 
-                    // Fade in the portfolio tab menu
-                    gsap.to('[data-w-id="b6a74ce0-53b7-4af7-a5ab-4044ee371ba0"]', {
-                        opacity: 1,
-                        y: 0,
-                        duration: 1,
-                        ease: "power3.out",
-                        delay: 0.5
-                    });
+                        // Fade in the portfolio tab menu
+                        gsap.fromTo('[data-w-id="b6a74ce0-53b7-4af7-a5ab-4044ee371ba0"]', 
+                            { y: 30, opacity: 0 },
+                            {
+                                opacity: 1,
+                                y: 0,
+                                duration: 1,
+                                ease: "power3.out",
+                                delay: 0.3
+                            }
+                        );
+                    };
+
+                    // Check preloader state
+                    if (document.body.classList.contains('preloader-active')) {
+                        window.addEventListener('preloaderDone', playHeroAnimations);
+                    } else {
+                        playHeroAnimations();
+                    }
 
                     // 2. Portfolio Filter System (Dynamic & Optimized)
                     const projectsData = [
