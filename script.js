@@ -17,6 +17,21 @@ var swiper = new Swiper('.swiper-container', {
     },
 });
 
+// Initialize Bits and Pieces Swiper ONLY on Mobile
+if (window.innerWidth < 992) {
+    var bitsSwiper = new Swiper('.bits-swiper', {
+        grabCursor: true,
+        centeredSlides: true,
+        slidesPerView: 'auto',
+        loop: true,
+        spaceBetween: 20,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+    });
+}
+
 // =========================================
 // 2. LAZY LOAD & SCROLL ANIMATIONS
 // =========================================
