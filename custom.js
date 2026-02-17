@@ -1,11 +1,8 @@
 //#region INITIALIZATION
 document.addEventListener("DOMContentLoaded", (event) => {
     // Register GSAP Plugins
-    gsap.registerPlugin(Draggable);
 
     // -- Global Selectors --
-    const heroCards = document.querySelectorAll('.hero-card');
-    const middleCard = document.querySelector('.hero-card--center');
 
     // Responsive Logic using gsap.matchMedia()
     const mm = gsap.matchMedia();
@@ -17,119 +14,19 @@ document.addEventListener("DOMContentLoaded", (event) => {
     // =========================================
     mm.add("(min-width: 992px)", () => {
         
-        // --- 1. Entrance Animation (Slide In from Bottom) ---
-        // Set initial state: Below screen, hidden
-        gsap.set(heroCards, {
-            y: 100, // Slide up 100px
-            autoAlpha: 0
-        });
-
-        // Define the Slide Animation
-        const runEntranceAnimation = () => {
-            gsap.to(heroCards, {
-                y: 0,
-                autoAlpha: 1,
-                duration: 1.2,
-                ease: "power3.out", // Smooth slide
-                stagger: 0.1,
-                onComplete: () => {
-                    // Clear transform to ensure Draggable starts from a clean state (0,0)
-                    gsap.set(heroCards, { clearProps: "transform" });
-                    initDesktopDraggable();
-                    initParallaxEffect();
-                    initFooterMagnetic();
-                }
-            });
+        // Optimized Initialization: Wait for Window Load + Preloader to prevent layout shifts
+        const startSequence = () => {
+            if (document.readyState === 'complete') {
+                initFooterMagnetic();
+            } else {
+                window.addEventListener('load', initFooterMagnetic);
+            }
         };
 
-        // Check if Preloader is active
         if (document.body.classList.contains('preloader-active')) {
-            // Wait for preloader to finish
-            window.addEventListener('preloaderDone', runEntranceAnimation, { once: true });
+            window.addEventListener('preloaderDone', startSequence, { once: true });
         } else {
-            // Run immediately if no preloader
-            runEntranceAnimation();
-        }
-
-        // --- 2. Draggable Physics (Elastic Toss) ---
-        function initDesktopDraggable() {
-            Draggable.create(heroCards, {
-                type: "x,y",
-                edgeResistance: 0.65,
-                bounds: window,
-                
-                onPress: function() {
-                    // Scale up and bring to front
-                    gsap.to(this.target, { 
-                        scale: 1.05, 
-                        rotationX: 0, // Flatten 3D effect when held
-                        rotationY: 0,
-                        duration: 0.2, 
-                        zIndex: 100 
-                    });
-                },
-                
-                onDrag: function() {
-                    // Dynamic rotation based on drag movement (Paper physics)
-                    gsap.to(this.target, {
-                        rotation: this.x * 0.05,
-                        duration: 0.1,
-                        overwrite: "auto"
-                    });
-                },
-
-                onRelease: function() {
-                    // Snap back to origin with strong spring effect
-                    gsap.to(this.target, {
-                        x: 0,
-                        y: 0,
-                        rotation: 0,
-                        scale: 1,
-                        zIndex: 1, // Reset z-index
-                        duration: 1.2,
-                        ease: "elastic.out(1, 0.4)",
-                        overwrite: "auto"
-                    });
-                }
-            });
-        }
-
-        // --- 3. Parallax Effect (Scatter on Mouse Move) ---
-        function initParallaxEffect() {
-            // Listen to mouse movement on the whole window
-            window.addEventListener("mousemove", (e) => {
-                // Calculate normalized mouse position (-1 to 1)
-                const xRatio = (e.clientX / window.innerWidth - 0.5) * 2;
-                const yRatio = (e.clientY / window.innerHeight - 0.5) * 2;
-
-                // Helper to apply parallax if not dragging
-                const applyParallax = (card, xFactor, yFactor) => {
-                    if (card && !Draggable.get(card)?.isDragging) {
-                        gsap.to(card, {
-                            xPercent: xRatio * xFactor,
-                            yPercent: yRatio * yFactor,
-                            rotationY: xRatio * 8, // 3D Tilt Y
-                            rotationX: -yRatio * 8, // 3D Tilt X
-                            transformPerspective: 500, // Add depth perspective
-                            duration: 1,
-                            ease: "power2.out",
-                            overwrite: "auto"
-                        });
-                    }
-                };
-
-                // Apply different factors to create a "scatter" feel
-                
-                // Card 1 (Left): Moves slightly opposite to mouse
-                applyParallax(heroCards[0], -3, -3);
-
-                // Card 2 (Center): Moves with mouse
-                applyParallax(heroCards[1], 5, 5);
-                // applyParallax(heroCards[1], 5, 5);
-
-                // Card 3 (Right): Moves more aggressively opposite
-                applyParallax(heroCards[2], -8, -8);
-            });
+            startSequence();
         }
 
         // --- 4. Magnetic Button Effect ---
@@ -195,10 +92,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     // MOBILE INTERACTIONS
     // =========================================
     mm.add("(max-width: 991px)", () => {
-        // Ensure cards are visible and reset if coming from desktop resize
-        gsap.set(heroCards, { autoAlpha: 1, y: 0, rotation: 0, clearProps: "transform" });
-        // Also clear transforms to fix any potential layout glitches
-        gsap.set(heroCards, { autoAlpha: 1, y: 0, rotation: 0, clearProps: "all" });
 
         
         // DISABLED DRAGGABLE ON MOBILE/TABLET
@@ -232,78 +125,96 @@ document.addEventListener("DOMContentLoaded", (event) => {
         const xTo = gsap.quickTo(revealImg, "x", {duration: 0.5, ease: "power3.out"});
         const yTo = gsap.quickTo(revealImg, "y", {duration: 0.5, ease: "power3.out"});
 
-        experienceItems.forEach(item => {
-            item.addEventListener('mouseenter', () => {
-                const imgUrl = item.getAttribute('data-reveal-img');
-                if (imgUrl) {
-                    revealImg.src = imgUrl;
-                    gsap.to(revealImg, {
-                        autoAlpha: 1,
-                        scale: 1,
-                        duration: 0.4,
-                        overwrite: 'auto'
-                    });
-                }
-            });
-
-            item.addEventListener('mousemove', (e) => {
-                xTo(e.clientX);
-                yTo(e.clientY);
-                
-                // Calculate velocity and speed
-                const xVel = e.movementX || 0;
-                const yVel = e.movementY || 0;
-                const speed = Math.sqrt(xVel * xVel + yVel * yVel);
-
-                // Clamp rotation to keep it subtle (e.g., max 15 degrees)
-                const rotationVal = gsap.utils.clamp(-15, 15, xVel * 0.8);
-                
-                // Map speed to scale (Base 1, Max 1.15) - grows when moving fast
-                const scaleVal = gsap.utils.clamp(1, 1.15, 1 + speed * 0.005);
-                
-                // Map speed to blur (0 to 5px) - blurs when moving fast
-                const blurVal = gsap.utils.clamp(0, 5, speed * 0.05);
-
+        // --- Event Handlers ---
+        const onMouseEnter = (e) => {
+            const item = e.currentTarget;
+            const imgUrl = item.getAttribute('data-reveal-img');
+            if (imgUrl) {
+                revealImg.src = imgUrl;
                 gsap.to(revealImg, {
-                    rotation: rotationVal,
-                    scale: scaleVal,
-                    filter: `blur(${blurVal}px)`,
-                    duration: 0.5,
-                    ease: "power2.out",
+                    autoAlpha: 1,
+                    scale: 1,
+                    duration: 0.4,
                     overwrite: 'auto'
                 });
+            }
+        };
 
-                // Magnetic Effect on List Item
-                const rect = item.getBoundingClientRect();
-                const xDist = (e.clientX - (rect.left + rect.width / 2)) * 0.15;
-                const yDist = (e.clientY - (rect.top + rect.height / 2)) * 0.15;
+        const onMouseMove = (e) => {
+            const item = e.currentTarget;
+            xTo(e.clientX);
+            yTo(e.clientY);
+            
+            // Calculate velocity and speed
+            const xVel = e.movementX || 0;
+            const yVel = e.movementY || 0;
+            const speed = Math.sqrt(xVel * xVel + yVel * yVel);
 
-                gsap.to(item, {
-                    x: xDist,
-                    y: yDist,
-                    duration: 0.3,
-                    ease: "power2.out"
-                });
+            // Clamp rotation to keep it subtle (e.g., max 15 degrees)
+            const rotationVal = gsap.utils.clamp(-15, 15, xVel * 0.8);
+            
+            // Map speed to scale (Base 1, Max 1.15) - grows when moving fast
+            const scaleVal = gsap.utils.clamp(1, 1.15, 1 + speed * 0.005);
+
+            gsap.to(revealImg, {
+                rotation: rotationVal,
+                scale: scaleVal,
+                duration: 0.5,
+                ease: "power2.out",
+                overwrite: 'auto',
+                force3D: true
             });
 
-            item.addEventListener('mouseleave', () => {
-                gsap.to(revealImg, {
-                    autoAlpha: 0,
-                    scale: 0.8,
-                    filter: 'blur(0px)',
-                    duration: 0.3,
-                    overwrite: 'auto'
-                });
+            // Magnetic Effect on List Item
+            const rect = item.getBoundingClientRect();
+            const xDist = (e.clientX - (rect.left + rect.width / 2)) * 0.15;
+            const yDist = (e.clientY - (rect.top + rect.height / 2)) * 0.15;
 
-                // Reset Magnetic Effect
-                gsap.to(item, {
-                    x: 0,
-                    y: 0,
-                    duration: 1,
-                    ease: "elastic.out(1, 0.3)"
-                });
+            gsap.to(item, {
+                x: xDist,
+                y: yDist,
+                duration: 0.3,
+                ease: "power2.out"
             });
+        };
+
+        const onMouseLeave = (e) => {
+            const item = e.currentTarget;
+            gsap.to(revealImg, {
+                autoAlpha: 0,
+                scale: 0.8,
+                filter: 'blur(0px)',
+                duration: 0.3,
+                overwrite: 'auto'
+            });
+
+            // Reset Magnetic Effect
+            gsap.to(item, {
+                x: 0,
+                y: 0,
+                duration: 1,
+                ease: "elastic.out(1, 0.3)"
+            });
+        };
+
+        // --- Apply Logic via MatchMedia ---
+        
+        // Desktop: Hover & Trail
+        mm.add("(min-width: 992px)", () => {
+            experienceItems.forEach(item => {
+                item.addEventListener('mouseenter', onMouseEnter);
+                item.addEventListener('mousemove', onMouseMove);
+                item.addEventListener('mouseleave', onMouseLeave);
+            });
+            return () => {
+                experienceItems.forEach(item => {
+                    item.removeEventListener('mouseenter', onMouseEnter);
+                    item.removeEventListener('mousemove', onMouseMove);
+                    item.removeEventListener('mouseleave', onMouseLeave);
+                });
+            };
         });
+
     }
     initExperienceReveal();
 });

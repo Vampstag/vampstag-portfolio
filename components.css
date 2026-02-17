@@ -292,6 +292,83 @@
 
 /* Desktop Adjustments */
 @media (min-width: 992px) {
+    /* --- HERO CARDS UI PERFECTION --- */
+    .home-hero-images-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 32px; /* Jarak antar kartu yang proporsional */
+        min-height: 650px; /* Memberikan ruang vertikal yang cukup */
+        padding: 40px 0;
+        position: relative;
+    }
+
+    .hero-card {
+        /* Size & Proportions */
+        width: 26vw; /* Lebar responsif namun tetap besar */
+        max-width: 420px; /* Batas maksimal agar tidak terlalu raksasa di layar lebar */
+        min-width: 300px;
+        aspect-ratio: 4/5; /* Rasio potret modern (seperti poster/frame foto) */
+        border-radius: 24px; /* Sudut yang lebih halus */
+        
+        /* Visual Styles */
+        background-color: #ffffff;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.12); /* Shadow lembut & dalam */
+        border: 1px solid rgba(0, 0, 0, 0.04); /* Border tipis untuk definisi */
+        
+        /* Layout */
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        position: relative;
+        transition: box-shadow 0.4s ease;
+    }
+
+    /* Image Styling */
+    .home-hero-card-image-block-2 {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        z-index: 0;
+    }
+
+    .home-hero-card-image-2 {
+        width: 100%; height: 100%;
+        object-fit: cover;
+        transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    .hero-card:hover .home-hero-card-image-2 {
+        transform: scale(1.08); /* Zoom in halus saat hover */
+    }
+
+    /* Floating Label Style for Text inside Card */
+    .home-hero-image-card-headline-block {
+        position: absolute;
+        top: 24px; left: 24px;
+        z-index: 2;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        padding: 10px 20px;
+        border-radius: 100px; /* Pill shape */
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        border: 1px solid rgba(255,255,255,0.5);
+        pointer-events: none;
+    }
+
+    .home-hero-image-card-01-headine-text-2,
+    .home-hero-image-card-02-headine-text-2,
+    .home-hero-image-card-03-headine-text-2 {
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #111;
+        margin: 0;
+        line-height: 1;
+    }
+
     /* Home Hero: Row layout for "Hello" + Emoji */
     .hero--home .hero__header {
         flex-direction: row;
@@ -413,7 +490,7 @@ body.preloader-active { overflow: hidden; }
 }
 
 /* Performance Optimizations for Cards */
-.hero-card, .paralax-image {
+.paralax-image {
     will-change: transform;
     transform: translateZ(0);
 }
@@ -530,6 +607,30 @@ body.preloader-active { overflow: hidden; }
     width: 100%;
     border: 1px dashed #ddd;
     border-radius: 12px;
+}
+
+/* Skeleton Loader & Image State */
+.skeleton-loader {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: #f0f0f0;
+    background-image: linear-gradient(90deg, #f0f0f0 25%, #fafafa 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+    z-index: 1;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+@keyframes skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+.img-loading {
+    opacity: 0;
+    transition: opacity 0.6s ease-out;
+}
+.img-loaded {
+    opacity: 1;
 }
 
 .filters {

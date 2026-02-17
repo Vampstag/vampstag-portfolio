@@ -113,15 +113,17 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                         <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
                                     </div>
                                 </div>
-                                <div class="image-wrap auto full-ratio">
+                                <div class="image-wrap auto full-ratio" style="aspect-ratio: 4/3; background-color: #f5f5f7;">
+                                    <div class="skeleton-loader"></div>
                                     <img src="${project.image}" 
                                          srcset="${project.srcset}" 
                                          sizes="(max-width: 767px) 100vw, (max-width: 991px) 95vw, 940px" 
                                          alt="${project.title}" 
                                          loading="lazy" 
                                          decoding="async" 
-                                         class="paralax-image main"
-                                         style="width: 100%; height: auto; object-fit: cover;">
+                                         class="paralax-image main img-loading"
+                                         style="width: 100%; height: 100%; object-fit: cover;"
+                                         onload="this.classList.remove('img-loading'); this.classList.add('img-loaded'); this.previousElementSibling.style.opacity='0';">
                                     <div class="portfolio-overlay">
                                         <p class="portfolio-description">${project.description}</p>
                                         <div class="portfolio-cta">View Case Study</div>
@@ -280,7 +282,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
                             start: "top bottom",
                             end: "bottom top",
                             scrub: true // Instant sync with Lenis for smoother feel
-                        }
+                        },
+                        force3D: true
                     }
                 );
             });
@@ -309,7 +312,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
                         transformPerspective: 1000,
                         duration: 0.5,
                         ease: "power2.out",
-                        overwrite: "auto"
+                        overwrite: "auto",
+                        force3D: true
                     });
                 });
                 

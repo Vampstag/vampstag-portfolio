@@ -115,7 +115,7 @@
                 function updateCounter() {
                     // UBAH DI SINI: Angka lompatan (jump).
                     // Ganti 23 menjadi angka lebih besar (misal 40) agar lebih cepat selesai.
-                    const jump = Math.floor(Math.random() * 43) + 1;
+                    const jump = Math.floor(Math.random() * 40) + 20;
                     currentProgress += jump;
                     if (currentProgress > 100) currentProgress = 100;
 
@@ -124,16 +124,7 @@
 
                     // UBAH DI SINI: Delay dasar (dalam milidetik).
                     // Semakin kecil angkanya, semakin cepat angkanya berganti.
-                    let delay = Math.floor(Math.random() * 200) + 50;
-
-                    // LOGIKA JEDA BUATAN (Simulasi loading macet di angka tertentu)
-                    if (currentProgress > 70 && currentProgress < 85 && Math.random() > 0.3) {
-                        // Ini membuat loading terasa "berat" di 70-85%. Kurangi angka 800/1000 jika ingin lebih cepat.
-                        delay = 800 + Math.random() * 1000; 
-                    } else if (currentProgress > 90 && currentProgress < 98) {
-                        // Ini membuat loading melambat di akhir (90-98%).
-                        delay = 400 + Math.random() * 400; 
-                    }
+                    let delay = Math.floor(Math.random() * 50) + 10;
 
                     if (currentProgress < 100) {
                         setTimeout(updateCounter, delay);
@@ -364,11 +355,11 @@
                                 </div>
                                 <div class="home-hero-image-card-wrapper-02 hero-card">
                                     <div class="home-hero-image-card-headline-block">
-                                        <div class="home-hero-image-card-02-headine-text-2">My Name &#x27;s</div>
+                                        <div class="home-hero-image-card-02-headine-text-2">My Name&#x27;s</div>
                                         <div class="home-hero-image-card-02-headine-text-2">Dimas</div>
                                     </div>
                                     <div class="home-hero-card-image-block-2">
-                                        <img height="70" alt="Hero Image" src="assets/images/home/dimas6.webp" loading="eager" class="home-hero-card-image-2"/>
+                                        <img height="70" alt="Hero Image" src="assets/images/home/dimas4.webp" loading="eager" class="home-hero-card-image-2"/>
                                     </div>
                                 </div>
                                 <div class="home-hero-image-card-wrapper-03-2 hero-card">
@@ -431,7 +422,7 @@
                             </div>
                             <div data-w-id="93649417-2561-b8e6-7ec9-a21bd39598eb" class="hero-image-wrapper">
                                 <div data-w-id="93649417-2561-b8e6-7ec9-a21bd39598ec" class="image-wrap">
-                                    <img alt="Hero image" src="assets/images/home/dimas7.webp" loading="lazy" class="image-cover-2 overlay"/>
+                                    <img alt="Hero image" src="assets/images/project/tsukamie/tsukamie1.webp" loading="lazy" class="image-cover-2 overlay"/>
                                     <div></div>
                                 </div>
                                 <div class="title-wrapper">
@@ -1407,7 +1398,6 @@
         <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Draggable.min.js"></script>
         <script defer src="script.js"></script>
         <script defer src="custom.js"></script>
-        <link rel="stylesheet" href="widget.css">
         <script defer src="widget.js"></script>
     </body>
 </html>

@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const bar = document.getElementById('bar');
     
     let count = 0;
-    const duration = 1500; // 1.5 seconds total load time
+    const duration = 800; // Optimized load time
     const intervalTime = 15;
     const steps = duration / intervalTime;
     const increment = 100 / steps;

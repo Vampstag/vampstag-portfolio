@@ -57,7 +57,7 @@ h1, h2, h3, h4, h5, h6,
     font-family: var(--font-primary);
     font-weight: 700;
     line-height: 1.15;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em; /* Lebih rapat untuk kesan modern/Swiss style */
     color: #000;
 }
 
@@ -65,7 +65,7 @@ h1, h2, h3, h4, h5, h6,
 .section-headline-text { 
     font-size: var(--text-h2) !important;
     font-weight: 700; /* Bold agar terlihat solid dan tidak tipis */
-    letter-spacing: -0.02em; /* Sedikit direnggangkan agar tidak terlalu rapat */
+    letter-spacing: -0.03em; /* Konsisten dengan headline lain */
     line-height: 1.2;
     color: #000000; /* Pure Black untuk kontras maksimal */
 }
@@ -366,7 +366,7 @@ body.preloader-active { overflow: hidden; }
    5. LAYOUT & SPACING
    ========================================= */
 /* Section Spacing */
-.home-hero-section, .home-about-section, .latest-work-section, .hardskills-section, .experience-section, .journal-section, .bits-and-pieces-section-desktop, .bits-and-pieces-section-mobile, .faq-section {
+.home-hero-section, .home-about-section, .latest-work-section, .hardskills-section, .experience-section, .bits-and-pieces-section-desktop, .bits-and-pieces-section-mobile, .faq-section {
     margin-bottom: 160px !important;
 }
 .section-headline-margin { margin-bottom: 80px !important; }
@@ -377,7 +377,7 @@ body.preloader-active { overflow: hidden; }
 }
 
 @media (max-width: 991px) {
-    .home-hero-section, .home-about-section, .latest-work-section, .hardskills-section, .experience-section, .journal-section, .bits-and-pieces-section-desktop, .bits-and-pieces-section-mobile, .faq-section {
+    .home-hero-section, .home-about-section, .latest-work-section, .hardskills-section, .experience-section, .bits-and-pieces-section-desktop, .bits-and-pieces-section-mobile, .faq-section {
         margin-bottom: 80px !important;
     }
     .section-headline-margin { margin-bottom: 40px !important; }
@@ -1270,5 +1270,15 @@ html.lenis, html.lenis body { height: auto; }
     color: #555;
     max-width: 60ch;
     margin: 0;
+}
+/* #endregion */
+
+/* #region 23. LATEST WORK */
+/* =========================================
+   23. LATEST WORK TYPOGRAPHY
+   ========================================= */
+.work-title {
+    line-height: 1.1;
+    margin-bottom: 20px;
 }
 /* #endregion */

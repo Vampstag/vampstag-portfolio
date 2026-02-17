@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Connect Lenis to ScrollTrigger
     gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.config({ ignoreMobileResize: true });
     
     // 2. Navbar Logic (Scroll & Mobile)
     initNavbar();
@@ -53,7 +54,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 10. Refresh ScrollTrigger when preloader is done to ensure correct positions
     window.addEventListener('preloaderDone', () => {
-        ScrollTrigger.refresh();
+        if (document.readyState === 'complete') {
+            ScrollTrigger.refresh();
+        } else {
+            window.addEventListener('load', () => ScrollTrigger.refresh());
+        }
     });
 });
 //#endregion
