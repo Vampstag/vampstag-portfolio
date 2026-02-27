@@ -52,6 +52,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // 9. Text Reveal Animation
     initTextReveal();
 
+    // 10. Video Card Controls
+    initVideoCards();
+
     // 10. Refresh ScrollTrigger when preloader is done to ensure correct positions
     window.addEventListener('preloaderDone', () => {
         if (document.readyState === 'complete') {
@@ -429,6 +432,72 @@ function initBitsSlider() {
             if (card) gsap.to(card, { rotationX: 0, rotationY: 0, scale: 1, duration: 0.5, ease: "power2.out" });
         }
     });
+}
+//#endregion
+
+//#region VIDEO CARD CONTROLS
+// =========================================
+// 10. VIDEO CARD CONTROLS
+// =========================================
+/**
+ * Initializes mute/unmute controls for video cards.
+ */
+function initVideoCards() {
+     const videoCards = document.querySelectorAll('.work-card');
+ 
+     // 1. Intersection Observer for Play/Pause on Scroll
+     const observer = new IntersectionObserver((entries) => {
+         entries.forEach(entry => {
+             const video = entry.target.querySelector('.work-card__video');
+             const muteBtn = entry.target.querySelector('.work-card__mute-btn');
+
+             if (video) { 
+                 if (entry.isIntersecting) {
+                    // User Request: Always start muted when entering viewport
+                    video.muted = true;
+
+                    // Update icon to show mute state
+                    if (muteBtn) {
+                        muteBtn.classList.add('is-muted');
+                    }
+
+                     // Play the video
+                     video.play().catch(error => {
+                         console.log("Video autoplay was prevented by browser policy:", error);
+                     });
+                 } else {
+                     // Pause the video when it leaves the viewport
+                     video.pause();
+                 }
+             }
+         });
+     }, {
+         root: null, // Observe intersections relative to the viewport
+         threshold: 0.2 // Trigger when 20% of the element is visible
+     });
+ 
+     // 2. Initialize Each Card
+     videoCards.forEach(card => {
+         const video = card.querySelector('.work-card__video');
+         const muteBtn = card.querySelector('.work-card__mute-btn');
+ 
+         if (video) {
+             // Observe the card for play/pause functionality
+             observer.observe(card);
+ 
+             // Add mute/unmute functionality if the button exists
+             if (muteBtn) {
+                 muteBtn.addEventListener('click', (e) => {
+                     e.preventDefault(); // Prevent link navigation
+                     e.stopPropagation(); // Stop event from bubbling to the card
+ 
+                     video.muted = !video.muted;
+                     // Toggle the class based on the video's muted state
+                     muteBtn.classList.toggle('is-muted', video.muted);
+                 });
+             }
+         }
+     });
 }
 //#endregion
 

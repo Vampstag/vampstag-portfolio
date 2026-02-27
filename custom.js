@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         }
 
         // --- 4. Magnetic Button Effect ---
-        const magneticButtons = document.querySelectorAll('.btn-primary, .button-normal-black-wrapper-2, .button-normal-white-wrapper-2');
+        const magneticButtons = document.querySelectorAll('.btn-primary, .button-normal-black-wrapper-2, .button-normal-white-wrapper-2, .work-card__cta');
         magneticButtons.forEach((btn) => {
             btn.addEventListener('mousemove', (e) => {
                 const rect = btn.getBoundingClientRect();
@@ -118,8 +118,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
             autoAlpha: 0,
             maxWidth: "300px" // Ensure image isn't too large
         });
-
-        const experienceItems = document.querySelectorAll('.experience-section .home-services-card-wrapper');
+        
+        const experienceItems = document.querySelectorAll('.experience-section .experience-item');
         
         // Use quickTo for high-performance mouse following
         const xTo = gsap.quickTo(revealImg, "x", {duration: 0.5, ease: "power3.out"});
