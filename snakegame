@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro Snake: Fixed Speed</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #1a1a1a;
+            --screen-bg: #0d1117;
+            --snake-color: #00ff88; /* Hijau Neon */
+            --food-color: #ff3333; /* Merah Apel */
+            --border-color: #333;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'VT323', monospace;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        #game-container {
+            position: relative;
+            padding: 20px;
+            background: #222;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border: 1px solid #444;
+        }
+
+        /* Layar Game */
+        canvas {
+            background-color: var(--screen-bg);
+            border: 2px solid var(--border-color);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+            display: block;
+            border-radius: 4px;
+        }
+
+        /* Overlay UI (Score & Start) */
+        .ui-overlay {
+            position: absolute;
+            top: 20px; left: 20px; right: 20px;
+            display: flex; justify-content: space-between;
+            pointer-events: none;
+            padding: 10px 20px;
+        }
+
+        .score-board {
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 0 #000;
+        }
+
+        .game-msg {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 30px 50px;
+            border-radius: 12px;
+            border: 1px solid #444;
+            display: none; /* Hidden by default */
+        }
+        
+        .game-msg.visible { display: block; }
+
+        h1 { margin: 0 0 10px 0; font-size: 48px; color: var(--snake-color); }
+        p { margin: 0 0 20px 0; color: #888; font-size: 20px; }
+        
+        .btn {
+            background: var(--snake-color);
+            color: #000;
+            border: none;
+            padding: 10px 30px;
+            font-family: 'VT323', monospace;
+            font-size: 24px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+            border-radius: 4px;
+            transition: transform 0.1s;
+        }
+        .btn:hover { transform: scale(1.05); box-shadow: 0 0 15px var(--snake-color); }
+
+        /* Efek CRT Scanline Halus */
+        .scanlines {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            border-radius: 20px;
+            z-index: 10;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <div class="scanlines"></div>
+
+        <div class="ui-overlay">
+            <div class="score-board">Score: <span id="score">0</span></div>
+            <div class="score-board">Best: <span id="high-score">0</span></div>
+        </div>
+
+        <div id="msg-screen" class="game-msg visible">
+            <h1 id="title-text">SNAKE.EXE</h1>
+            <p id="sub-text">USE ARROW KEYS</p>
+            <button class="btn" onclick="startGame()">START GAME</button>
+        </div>
+
+        <canvas id="gameCanvas" width="600" height="400"></canvas>
+    </div>
+
+    <script>
+        // --- KONFIGURASI ---
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        const GRID_SIZE = 20; // Ukuran kotak (aset)
+        const TILE_COUNT_X = canvas.width / GRID_SIZE;
+        const TILE_COUNT_Y = canvas.height / GRID_SIZE;
+        
+        // SPEED SETTING (TIDAK BERUBAH)
+        // Semakin kecil angka, semakin cepat. 100ms = Standard.
+        const GAME_SPEED = 100; 
+
+        let score = 0;
+        let highScore = localStorage.getItem('snake_highscore') || 0;
+        document.getElementById('high-score').innerText = highScore;
+
+        let gameInterval;
+        let isGameRunning = false;
+
+        // Player State
+        let snake = [];
+        let velocity = { x: 0, y: 0 };
+        let nextVelocity = { x: 0, y: 0 }; // Buffer input biar ga nabrak diri sendiri
+        
+        // Food State
+        let food = { x: 10, y: 10 };
+
+        // Input
+        document.addEventListener('keydown', keyDownEvent);
+
+        function startGame() {
+            // Reset Game
+            snake = [{x: 10, y: 10}, {x: 9, y: 10}, {x: 8, y: 10}]; // Mulai dengan panjang 3
+            velocity = { x: 1, y: 0 }; // Gerak ke kanan
+            nextVelocity = { x: 1, y: 0 };
+            score = 0;
+            document.getElementById('score').innerText = score;
+            
+            // UI
+            document.getElementById('msg-screen').classList.remove('visible');
+            canvas.focus();
+
+            if (gameInterval) clearInterval(gameInterval);
+            isGameRunning = true;
+            
+            // Loop Game dengan Kecepatan TETAP
+            gameInterval = setInterval(update, GAME_SPEED);
+        }
+
+        function update() {
+            // 1. Move Snake
+            velocity = { ...nextVelocity }; // Terapkan input buffer
+            
+            const head = { 
+                x: snake[0].x + velocity.x, 
+                y: snake[0].y + velocity.y 
+            };
+
+            // 2. Cek Tabrakan Tembok (Game Over)
+            if (head.x < 0 || head.x >= TILE_COUNT_X || head.y < 0 || head.y >= TILE_COUNT_Y) {
+                gameOver();
+                return;
+            }
+
+            // 3. Cek Tabrakan Badan Sendiri
+            for (let i = 0; i < snake.length; i++) {
+                if (head.x === snake[i].x && head.y === snake[i].y) {
+                    gameOver();
+                    return;
+                }
+            }
+
+            // Masukkan kepala baru
+            snake.unshift(head);
+
+            // 4. Cek Makan Apel
+            if (head.x === food.x && head.y === food.y) {
+                score++;
+                document.getElementById('score').innerText = score;
+                placeFood();
+            } else {
+                // Hapus ekor (kalau ga makan)
+                snake.pop();
+            }
+
+            draw();
+        }
+
+        function draw() {
+            // Clear Screen
+            ctx.fillStyle = '#0d1117';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Grid (Tipis banget biar estetik)
+            ctx.strokeStyle = '#1c2128';
+            ctx.lineWidth = 1;
+            for(let i=0; i<TILE_COUNT_X; i++) {
+                ctx.beginPath(); ctx.moveTo(i*GRID_SIZE, 0); ctx.lineTo(i*GRID_SIZE, canvas.height); ctx.stroke();
+            }
+            for(let i=0; i<TILE_COUNT_Y; i++) {
+                ctx.beginPath(); ctx.moveTo(0, i*GRID_SIZE); ctx.lineTo(canvas.width, i*GRID_SIZE); ctx.stroke();
+            }
+
+            // --- DRAW FOOD (ASSET: APPLE GLOW) ---
+            const fx = food.x * GRID_SIZE + GRID_SIZE/2;
+            const fy = food.y * GRID_SIZE + GRID_SIZE/2;
+            
+            // Glow Effect
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = "#ff3333";
+            
+            // Apel (Lingkaran Merah)
+            ctx.fillStyle = "#ff3333";
+            ctx.beginPath();
+            ctx.arc(fx, fy, GRID_SIZE/2 - 2, 0, Math.PI*2);
+            ctx.fill();
+
+            // Daun (Kecil Hijau)
+            ctx.shadowBlur = 0; // Reset shadow buat daun
+            ctx.fillStyle = "#00ff88";
+            ctx.fillRect(fx - 2, fy - GRID_SIZE/2, 4, 4);
+
+
+            // --- DRAW SNAKE (ASSET: PROCEDURAL) ---
+            ctx.shadowBlur = 0; // Reset shadow biar ular clean
+
+            snake.forEach((part, index) => {
+                const px = part.x * GRID_SIZE;
+                const py = part.y * GRID_SIZE;
+
+                // Warna: Kepala lebih terang
+                ctx.fillStyle = index === 0 ? "#00ff88" : "#00cc6a";
+                
+                // Gambar Kotak Rounded
+                // Agar terlihat menyatu, kita gambar kotak sedikit lebih besar dari grid
+                // kecuali kepalanya.
+                if (index === 0) {
+                    // KEPALA (Gambar Mata)
+                    roundRect(ctx, px + 1, py + 1, GRID_SIZE - 2, GRID_SIZE - 2, 6, true);
+                    drawEyes(px, py, velocity); // Fungsi khusus gambar mata
+                } else {
+                    // BADAN
+                    roundRect(ctx, px + 1, py + 1, GRID_SIZE - 2, GRID_SIZE - 2, 4, true);
+                }
+            });
+        }
+
+        // Fungsi Helper: Gambar Mata Ular (Biar seperti aset karakter)
+        function drawEyes(x, y, vel) {
+            ctx.fillStyle = "#000"; // Warna Mata
+            
+            let eyeX1, eyeY1, eyeX2, eyeY2;
+            const offset = 5; // Jarak mata
+            const size = 3;   // Ukuran mata
+
+            // Logika posisi mata berdasarkan arah gerak
+            // Default (Kanan)
+            eyeX1 = x + 14; eyeY1 = y + 5;
+            eyeX2 = x + 14; eyeY2 = y + 15;
+
+            if (vel.x === -1) { // Kiri
+                eyeX1 = x + 6; eyeY1 = y + 5;
+                eyeX2 = x + 6; eyeY2 = y + 15;
+            } else if (vel.y === -1) { // Atas
+                eyeX1 = x + 5; eyeY1 = y + 6;
+                eyeX2 = x + 15; eyeY2 = y + 6;
+            } else if (vel.y === 1) { // Bawah
+                eyeX1 = x + 5; eyeY1 = y + 14;
+                eyeX2 = x + 15; eyeY2 = y + 14;
+            }
+
+            ctx.fillRect(eyeX1, eyeY1, size, size);
+            ctx.fillRect(eyeX2, eyeY2, size, size);
+        }
+
+        function placeFood() {
+            food = {
+                x: Math.floor(Math.random() * TILE_COUNT_X),
+                y: Math.floor(Math.random() * TILE_COUNT_Y)
+            };
+            // Pastikan makanan tidak muncul di badan ular
+            snake.forEach(part => {
+                if (part.x === food.x && part.y === food.y) placeFood();
+            });
+        }
+
+        function gameOver() {
+            isGameRunning = false;
+            clearInterval(gameInterval);
+            
+            // Cek High Score
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('snake_highscore', highScore);
+                document.getElementById('high-score').innerText = highScore;
+            }
+
+            document.getElementById('title-text').innerText = "GAME OVER";
+            document.getElementById('sub-text').innerText = `SCORE: ${score}`;
+            document.getElementById('msg-screen').classList.add('visible');
+        }
+
+        function keyDownEvent(e) {
+            if (!isGameRunning) {
+                if(e.code === 'Space' || e.code === 'Enter') startGame();
+                return;
+            }
+
+            // Cegah scroll halaman saat main
+            if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
+                e.preventDefault();
+            }
+
+            // Input Logic (Prevent Reverse)
+            switch (e.keyCode) {
+                case 37: // Left
+                    if (velocity.x !== 1) nextVelocity = { x: -1, y: 0 };
+                    break;
+                case 38: // Up
+                    if (velocity.y !== 1) nextVelocity = { x: 0, y: -1 };
+                    break;
+                case 39: // Right
+                    if (velocity.x !== -1) nextVelocity = { x: 1, y: 0 };
+                    break;
+                case 40: // Down
+                    if (velocity.y !== -1) nextVelocity = { x: 0, y: 1 };
+                    break;
+            }
+        }
+
+        // Helper Function: Rounded Rectangle
+        function roundRect(ctx, x, y, width, height, radius, fill) {
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+            if (fill) ctx.fill();
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draggable Node Graph</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        @import url('Untitled-2.css');
+    </style>
+</head>
+<body>
+
+    <div id="canvas">
+        <svg id="connections-layer"></svg>
+
+        <div class="node light" id="node-discovery" style="top: 250px; left: 50px;">
+            <div class="header">DISCOVERY</div>
+            <ul>
+                <li>Creative Brief</li>
+                <li>Brand Research</li>
+                <li>Mood Boards</li>
+            </ul>
+            <div class="anchor right"></div>
+        </div>
+
+        <div class="node dark" id="node-concept" style="top: 50px; left: 400px;">
+            <div class="header">CONCEPT</div>
+            <ul>
+                <li>Visual Direction</li>
+                <li>Art Direction</li>
+                <li>Storyboarding</li>
+            </ul>
+            <div class="anchor left"></div>
+            <div class="anchor right"></div>
+        </div>
+
+        <div class="node light" id="node-design" style="top: 250px; left: 400px;">
+            <div class="header">DESIGN</div>
+            <ul>
+                <li>UI/UX Craft</li>
+                <li>Motion Design</li>
+                <li>Interaction Design</li>
+            </ul>
+            <div class="anchor left"></div>
+            <div class="anchor right"></div>
+        </div>
+
+        <div class="node dark" id="node-develop" style="top: 450px; left: 400px;">
+            <div class="header">DEVELOP</div>
+            <ul>
+                <li>Creative Coding</li>
+                <li>WebGL & 3D</li>
+                <li>Animations</li>
+            </ul>
+            <div class="anchor left"></div>
+            <div class="anchor right"></div>
+        </div>
+
+        <div class="node light" id="node-polish" style="top: 250px; left: 750px;">
+            <div class="header">POLISH</div>
+            <ul>
+                <li>Micro-interactions</li>
+                <li>Performance</li>
+                <li>Pixel Perfect</li>
+            </ul>
+            <div class="anchor left"></div>
+            <div class="anchor right"></div>
+        </div>
+
+        <div class="node dark" id="node-launch" style="top: 250px; left: 1050px;">
+            <div class="header">LAUNCH</div>
+            <ul>
+                <li>Go Live</li>
+                <li>Case Study</li>
+                <li>Awards Submit</li>
+            </ul>
+            <div class="anchor left"></div>
+        </div>
+    </div>
+
+    <script src="Untitled-3.js"></script>
+</body>
+</html>

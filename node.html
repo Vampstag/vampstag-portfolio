@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Workflow</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #fafafa;
+            --dot-color: #e5e5e5;
+            --connector-color: #bbbbbb;
+            --text-primary: #111111;
+            --text-secondary: #666666;
+            --text-muted: #999999;
+            --border-color: #e5e5e5;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            overflow: hidden; /* Wajib hidden biar ga scroll saat drag mentok */
+            height: 100vh;
+            width: 100vw;
+        }
+
+        #canvas {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(var(--dot-color) 1.5px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        svg#connections-layer {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        path.connector {
+            fill: none;
+            stroke: var(--connector-color);
+            stroke-width: 1.5px;
+        }
+
+        /* --- NODE CARD STYLE --- */
+        .node {
+            position: absolute;
+            width: 300px;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            cursor: grab;
+            user-select: none;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            /* Transisi default hanya untuk shadow & transform, JANGAN left/top disini agar drag responsif */
+            transition: box-shadow 0.2s, transform 0.1s;
+            z-index: 1;
+        }
+
+        /* Kelas khusus saat Reset (Animasi Smooth) */
+        .node.is-animating {
+            /* Transisi Left & Top aktif hanya saat reset */
+            transition: left 0.8s cubic-bezier(0.25, 1, 0.5, 1), top 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .node:active {
+            cursor: grabbing;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transform: scale(1.01);
+            z-index: 10;
+        }
+
+        /* --- FITUR: MONO DRAG TEXT SAAT HOVER --- */
+        .node:hover::after {
+            content: "DRAG";
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-family: 'Fira Code', monospace; /* Font Mono */
+            font-weight: 600;
+            font-size: 10px;
+            letter-spacing: 1px;
+            background: #f0f0f0;
+            color: #666;
+            padding: 4px 8px;
+            border-radius: 4px;
+            pointer-events: none; /* Agar tidak mengganggu klik */
+            opacity: 1;
+        }
+
+        .node .number {
+            display: block; font-size: 12px; font-weight: 500;
+            color: var(--text-muted); margin-bottom: 12px;
+        }
+
+        .node .title {
+            font-size: 20px; font-weight: 700; color: var(--text-primary);
+            margin-bottom: 12px; letter-spacing: -0.03em; line-height: 1.2;
+        }
+
+        .node ul {
+            list-style: none; margin-top: 16px; padding-top: 16px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .node ul li {
+            font-size: 13px; color: var(--text-secondary); line-height: 1.6;
+            margin-bottom: 6px; position: relative; padding-left: 12px;
+        }
+
+        .node ul li::before {
+            content: ""; position: absolute; left: 0; top: 8px;
+            width: 4px; height: 4px; background-color: var(--connector-color);
+            border-radius: 50%;
+        }
+
+        .anchor {
+            position: absolute; width: 8px; height: 8px; border-radius: 50%;
+            top: 50%; transform: translateY(-50%);
+            background: #fff; border: 1.5px solid var(--connector-color); z-index: 2;
+        }
+        .anchor.left { left: -5px; } .anchor.right { right: -5px; }
+
+        #reset-btn {
+            position: fixed; bottom: 30px; right: 30px;
+            background: #111; color: #fff; border: none; padding: 12px 24px;
+            font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600;
+            border-radius: 50px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 100; transition: transform 0.2s;
+        }
+        #reset-btn:hover { transform: scale(1.05); }
+    </style>
+</head>
+<body>
+
+    <div id="canvas">
+        <svg id="connections-layer"></svg>
+
+        <div class="node" id="node-1" data-x="50" data-y="250">
+            <span class="number">[01]</span>
+            <div class="title">Brand Alignment</div>
+            <ul><li>Validate core values</li><li>Check tone of voice</li><li>Ensure consistency</li></ul>
+            <div class="anchor right"></div>
+        </div>
+
+        <div class="node" id="node-2" data-x="420" data-y="80">
+            <span class="number">[02]</span>
+            <div class="title">Audience Research</div>
+            <ul><li>Demographics analysis</li><li>Identify pain points</li><li>Monitor market trends</li></ul>
+            <div class="anchor left"></div><div class="anchor right"></div>
+        </div>
+
+        <div class="node" id="node-3" data-x="420" data-y="420">
+            <span class="number">[03]</span>
+            <div class="title">Ideate Concepts</div>
+            <ul><li>Brainstorming session</li><li>Drafting storyboards</li><li>Developing key hooks</li></ul>
+            <div class="anchor left"></div><div class="anchor right"></div>
+        </div>
+
+        <div class="node" id="node-4" data-x="800" data-y="250">
+            <span class="number">[04]</span>
+            <div class="title">Visual Execution</div>
+            <ul><li>High-fidelity design</li><li>Video & Motion production</li><li>Asset finalization</li></ul>
+            <div class="anchor left"></div><div class="anchor right"></div>
+        </div>
+
+        <div class="node" id="node-5" data-x="1150" data-y="250">
+            <span class="number">[05]</span>
+            <div class="title">Review & Iterate</div>
+            <ul><li>Analyze performance data</li><li>Gather feedback</li><li>Optimize for next cycle</li></ul>
+            <div class="anchor left"></div>
+        </div>
+    </div>
+
+    <button id="reset-btn">Rearrange Layout</button>
+
+    <script>
+        const connections = [
+            { from: 'node-1', to: 'node-2' }, { from: 'node-1', to: 'node-3' },
+            { from: 'node-2', to: 'node-4' }, { from: 'node-3', to: 'node-4' },
+            { from: 'node-4', to: 'node-5' }
+        ];
+
+        const svgLayer = document.getElementById('connections-layer');
+        const nodes = document.querySelectorAll('.node');
+
+        function drawConnections() {
+            svgLayer.innerHTML = '';
+            connections.forEach(conn => {
+                const fromNode = document.getElementById(conn.from);
+                const toNode = document.getElementById(conn.to);
+                if (!fromNode || !toNode) return;
+
+                const fromRect = fromNode.getBoundingClientRect();
+                const toRect = toNode.getBoundingClientRect();
+
+                const x1 = fromRect.right;
+                const y1 = fromRect.top + (fromRect.height / 2);
+                const x2 = toRect.left;
+                const y2 = toRect.top + (toRect.height / 2);
+
+                const curvature = Math.abs(x2 - x1) * 0.5; 
+                const pathData = `M ${x1} ${y1} C ${x1 + curvature} ${y1}, ${x2 - curvature} ${y2}, ${x2} ${y2}`;
+
+                const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                path.setAttribute("d", pathData);
+                path.setAttribute("class", "connector");
+                svgLayer.appendChild(path);
+            });
+        }
+
+        // --- FUNGSI RESET DENGAN MOTION SMOOTH ---
+        function resetLayout() {
+            // 1. Tambahkan class animasi ke semua node
+            nodes.forEach(node => {
+                node.classList.add('is-animating');
+                const x = node.getAttribute('data-x');
+                const y = node.getAttribute('data-y');
+                // Set posisi tujuan (browser akan meng-animate ini karena ada CSS transition)
+                node.style.left = `${x}px`;
+                node.style.top = `${y}px`;
+            });
+
+            // 2. Trik: Kabel/Garis SVG tidak bisa di-animate pake CSS biasa.
+            // Kita harus paksa redraw berulang-ulang selama animasi berjalan.
+            const duration = 800; // 800ms (sama dengan durasi CSS transition)
+            const startTime = performance.now();
+
+            function animateLines(currentTime) {
+                const elapsed = currentTime - startTime;
+                drawConnections(); // Gambar ulang garis di frame ini
+
+                if (elapsed < duration) {
+                    // Jika waktu belum habis, minta frame selanjutnya
+                    requestAnimationFrame(animateLines);
+                } else {
+                    // 3. Jika animasi selesai, hapus class animasi
+                    // Supaya kalau di-drag manual lagi rasanya instan (snappy)
+                    nodes.forEach(node => node.classList.remove('is-animating'));
+                    drawConnections(); // Gambar sekali lagi untuk memastikan presisi
+                }
+            }
+            
+            // Mulai loop animasi garis
+            requestAnimationFrame(animateLines);
+        }
+
+        function makeDraggable(element) {
+            let isDragging = false;
+            let startX, startY, initialLeft, initialTop;
+
+            element.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                // Matikan transisi saat drag biar responsif (ga delay)
+                element.classList.remove('is-animating'); 
+                
+                startX = e.clientX;
+                startY = e.clientY;
+                initialLeft = element.offsetLeft;
+                initialTop = element.offsetTop;
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                e.preventDefault();
+                
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+                let newLeft = initialLeft + dx;
+                let newTop = initialTop + dy;
+
+                // --- FITUR: BOUNDARY CHECK (AGAR TIDAK TEMBUS LAYAR) ---
+                const canvasWidth = window.innerWidth;
+                const canvasHeight = window.innerHeight;
+                const elRect = element.getBoundingClientRect();
+
+                // Batas Kiri
+                if (newLeft < 0) newLeft = 0;
+                // Batas Atas
+                if (newTop < 0) newTop = 0;
+                // Batas Kanan (Lebar Layar - Lebar Elemen)
+                if (newLeft + elRect.width > canvasWidth) newLeft = canvasWidth - elRect.width;
+                // Batas Bawah (Tinggi Layar - Tinggi Elemen)
+                if (newTop + elRect.height > canvasHeight) newTop = canvasHeight - elRect.height;
+
+                element.style.left = `${newLeft}px`;
+                element.style.top = `${newTop}px`;
+
+                drawConnections();
+            });
+
+            window.addEventListener('mouseup', () => { isDragging = false; });
+        }
+
+        // Init
+        // Set posisi awal tanpa animasi saat loading
+        nodes.forEach(node => {
+            node.style.left = `${node.getAttribute('data-x')}px`;
+            node.style.top = `${node.getAttribute('data-y')}px`;
+            makeDraggable(node);
+        });
+        
+        window.addEventListener('load', drawConnections);
+        window.addEventListener('resize', drawConnections);
+        document.getElementById('reset-btn').addEventListener('click', resetLayout);
+    </script>
+</body>
+</html>

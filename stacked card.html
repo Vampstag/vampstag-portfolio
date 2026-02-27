@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vampstag Infinite Stack</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Draggable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <style>
+        body {
+            margin: 0;
+            background-color: #f0f0f0; 
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Space buat scroll biar kelihatan animasinya */
+        .spacer { height: 100vh; display: flex; justify-content: center; align-items: center; color: #aaa; }
+
+        /* Container Utama */
+        .section-container {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1500px; /* Perspektif 3D lebih dalam */
+            overflow: hidden;
+        }
+
+        /* Wrapper Kartu yang akan Miring/Tilt */
+        .tilt-wrapper {
+            position: relative;
+            width: 320px;
+            height: 480px;
+            transform-style: preserve-3d; /* Wajib buat 3D */
+            /* Awalnya opacity 0 & turun dikit buat animasi scroll */
+            opacity: 0; 
+            transform: translateY(100px);
+        }
+
+        .card {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border-radius: 20px;
+            
+            /* --- DROP SHADOW YANG LEBIH BAGUS --- */
+            /* Shadow berlapis biar kerasa tebal dan misah */
+            box-shadow: 
+                0 5px 10px rgba(0,0,0,0.05),
+                0 15px 40px rgba(0,0,0,0.2);
+            
+            cursor: grab;
+            background-color: #fff;
+            
+            /* Border tipis biar makin tegas misahnya (Optional) */
+            border: 1px solid rgba(0,0,0,0.05);
+            overflow: hidden;
+
+            will-change: transform, opacity, filter; 
+            transform-origin: center center;
+            backface-visibility: hidden;
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+        }
+
+        /* Use an <img> inside the card for smoother loading and fade-in */
+        .card img.card-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: inherit;
+            display: block;
+            opacity: 0;
+            transition: opacity 360ms ease;
+            -webkit-transform: translateZ(0);
+        }
+
+        /* Loading shimmer for placeholder while image is being fetched */
+        .card.loading {
+            background: linear-gradient(90deg, #f4f4f4 0%, #ededed 50%, #f4f4f4 100%);
+        }
+        .card.loading::after {
+            content: '';
+            position: absolute; inset: 0; border-radius: inherit;
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0) 100%);
+            transform: translateX(-100%);
+            animation: shimmer 1s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes shimmer { to { transform: translateX(100%); } }
+
+        .card:active { cursor: grabbing; }
+
+        /* Label nomor (Opsional, buat debug urutan) */
+        .debug-num {
+            position: absolute; top: 10px; left: 10px;
+            background: rgba(0,0,0,0.5); color: #fff;
+            padding: 5px 10px; border-radius: 5px; font-size: 12px;
+            pointer-events: none; display: none; /* Ubah ke block kalau mau liat nomor */
+        }
+        .drop-zone {
+            position: absolute;
+            left: 50%; transform: translateX(-50%);
+            bottom: 14px;
+            width: 70%;
+            height: 56px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.85);
+            border: 1px dashed rgba(0,0,0,0.08);
+            color: #666;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; letter-spacing: 1px; pointer-events: none;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+            transform-origin: center bottom;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="spacer">SCROLL DOWN ↓</div>
+
+    <div class="section-container">
+        <div class="tilt-wrapper" id="stack-wrapper">
+            <!-- cards will be appended here -->
+            <div class="drop-zone" id="drop-zone">DROP HERE</div>
+        </div>
+    </div>
+
+    <!-- Quick discard button so user can drop the top card with a click -->
+    <div style="display:flex; justify-content:center; margin-top: 12px;">
+        <button id="discard-btn" style="padding:10px 16px; border-radius:999px; border:1px solid rgba(0,0,0,0.08); background:#fff; cursor:pointer;">Discard Top Card</button>
+    </div>
+
+    <div class="spacer">SCROLL UP ↑</div>
+
+    <script>
+        gsap.registerPlugin(Draggable, ScrollTrigger);
+
+        // Image cache + preloader
+        const imageCache = new Map();
+        const DEFAULT_BUFFER = 2; // preload this many images ahead in background
+
+        // Preload a single image and return a promise that resolves when loaded
+        function loadImage(url) {
+            if (imageCache.has(url)) {
+                return Promise.resolve(imageCache.get(url));
+            }
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+                img.onload = () => {
+                    imageCache.set(url, img);
+                    resolve(img);
+                };
+                img.onerror = (e) => reject(e);
+                img.src = url;
+            });
+        }
+
+        // Preload a buffer of images starting from a given index (non-blocking)
+        function preloadBuffer(startIndex, count = DEFAULT_BUFFER) {
+            const total = IMAGE_URLS.length;
+            const promises = [];
+            for (let i = 0; i < count; i++) {
+                const idx = (startIndex + i) % total;
+                const url = IMAGE_URLS[idx];
+                // Only start loading if not already in cache
+                if (!imageCache.has(url)) {
+                    const p = loadImage(url).then(() => {
+                        // console.log('Buffered image loaded:', url);
+                    }).catch((e) => {
+                        console.warn('Buffer preload failed for', url, e);
+                    });
+                    promises.push(p);
+                }
+            }
+            // Return a promise that resolves when buffer completes, but caller may ignore it
+            return Promise.all(promises);
+        }
+
+        // Utility: simple rectangle overlap check
+        function isOverlapping(el1, el2) {
+            if (!el1 || !el2) return false;
+            const r1 = el1.getBoundingClientRect();
+            const r2 = el2.getBoundingClientRect();
+            return !(r1.right < r2.left || r1.left > r2.right || r1.bottom < r2.top || r1.top > r2.bottom);
+        }
+
+        // --- 1. CONFIGURATION ---
+        // Masukkan 10 Gambar kamu di sini
+        const IMAGE_URLS = [
+            'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000&auto=format&fit=crop', // 1 (Sepatu Merah)
+            'https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?q=80&w=1000&auto=format&fit=crop', // 2 (Sepatu Orange)
+            'https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1000&auto=format&fit=crop', // 3 (Sepatu Boots)
+            'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=1000&auto=format&fit=crop', // 4
+            'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?q=80&w=1000&auto=format&fit=crop', // 5
+            'https://images.unsplash.com/photo-1608231387042-66d1773070a5?q=80&w=1000&auto=format&fit=crop', // 6
+            'https://images.unsplash.com/photo-1560769629-975e13f0c470?q=80&w=1000&auto=format&fit=crop', // 7
+            'https://images.unsplash.com/photo-1512374382149-233c42b6a83b?q=80&w=1000&auto=format&fit=crop', // 8
+            'https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/69392166df131d7c32695d7b_dimas%201%20ags0023.jpg'  // 9
+        ];
+
+        const VISIBLE_CARDS = 6; // Berapa kartu yang kelihatan numpuk
+        const CONTAINER = document.getElementById('stack-wrapper');
+        
+        // State Global
+        let cardElements = []; 
+        let currentImgIndex = 0; // Pointer untuk urutan gambar (0 - 9)
+
+        // --- 2. INIT FUNCTION ---
+        async function init() {
+            // A. Preload initial visible images to avoid flicker, then create cards
+            const preloadCount = Math.min(VISIBLE_CARDS, IMAGE_URLS.length);
+            const preloadList = [];
+            for (let i = 0; i < preloadCount; i++) {
+                const url = IMAGE_URLS[i % IMAGE_URLS.length];
+                preloadList.push(loadImage(url));
+            }
+            try {
+                await Promise.all(preloadList);
+            } catch (e) {
+                // If preload fails, we silently continue and create cards anyway
+                console.warn('Some images failed to preload', e);
+            }
+
+            // Create visible cards after preload
+            for (let i = 0; i < VISIBLE_CARDS; i++) {
+                let img = IMAGE_URLS[i % IMAGE_URLS.length];
+                createCard(img, true);
+                currentImgIndex++;
+            }
+
+            // B. Atur Posisi Visual Stack
+            // Refresh visuals then enable dragging for the top card
+            updateStackVisuals(0, () => {
+                refreshDraggable();
+                // Start background buffering of next images so restock is instant
+                preloadBuffer(currentImgIndex, DEFAULT_BUFFER);
+            }); // 0 duration = instant
+
+            // C. Setup Mouse Follow (Tilt Effect)
+            setupMouseTilt();
+
+            // D. Setup Scroll Entrance
+            setupScrollEntrance();
+        }
+
+        // --- 3. CREATE CARD LOGIC ---
+        // createCard(imgUrl, isInit=false, placeAtBack=false)
+        // placeAtBack=true will insert the new card at the bottom/back of the stack
+        function createCard(imgUrl, isInit = false, placeAtBack = false) {
+            const card = document.createElement('div');
+            card.classList.add('card');
+
+            // Create an <img> element inside the card for smoother loading & fade
+            const imgEl = document.createElement('img');
+            imgEl.className = 'card-img';
+            imgEl.alt = '';
+
+            // When image is ready, fade it in and remove loading placeholder
+            const revealImage = () => {
+                // remove loading shimmer/background
+                card.classList.remove('loading');
+                // Use GSAP for consistent timing
+                gsap.to(imgEl, { opacity: 1, duration: 0.36, ease: 'power1.out' });
+            };
+
+            // If image already cached via preload, use it
+            if (imageCache.has(imgUrl)) {
+                const cached = imageCache.get(imgUrl);
+                imgEl.src = cached.src;
+                // If image is already complete, reveal immediately next frame
+                if (cached.complete) requestAnimationFrame(revealImage);
+                else imgEl.onload = revealImage;
+            } else {
+                // Fallback: set onload then assign src
+                imgEl.onload = revealImage;
+                imgEl.src = imgUrl;
+            }
+
+            // start with loading placeholder
+            card.classList.add('loading');
+
+            // Debug Number (Optional)
+            // card.innerHTML = `<span class="debug-num">${currentImgIndex}</span>`;
+
+            // Append image then card to DOM
+            card.appendChild(imgEl);
+            if (placeAtBack) {
+                // Insert at the beginning so it sits behind existing cards
+                CONTAINER.insertBefore(card, CONTAINER.firstChild);
+                cardElements.unshift(card);
+            } else {
+                CONTAINER.appendChild(card);
+                // Masukkan ke Array state (Index 0 = Paling Belakang, Index Terakhir = Paling Depan)
+                cardElements.push(card);
+            }
+
+            // Jika bukan init (artinya restack), set kondisi awal biar smooth animasi masuknya
+            if (!isInit) {
+                gsap.set(card, { 
+                    opacity: 0, 
+                    scale: 0.8, 
+                    y: -50 // Muncul dari atas sedikit
+                });
+            }
+
+            // NOTE: we intentionally DON'T call refreshDraggable() here.
+            // The caller (init or throwCard) should call refreshDraggable after
+            // the visual stacking animation completes to avoid flicker/overlap.
+        }
+
+        // --- 4. REFRESH DRAGGABLE ---
+        // Fungsi ini memastikan hanya kartu paling atas yang bisa didrag
+        function refreshDraggable() {
+                // Matikan / kill semua drag dulu (tangani baik instance maupun array)
+                    cardElements.forEach(el => {
+                        if (el._gsapDrag) {
+                            if (Array.isArray(el._gsapDrag)) {
+                                el._gsapDrag.forEach(inst => inst && inst.kill && inst.kill());
+                            } else if (el._gsapDrag.kill) {
+                                el._gsapDrag.kill();
+                            }
+                            el._gsapDrag = null;
+                        }
+                    });
+
+                // Ambil kartu paling atas (index terakhir di array)
+                const topCard = cardElements[cardElements.length - 1];
+                if (!topCard) return; // safety
+
+                // Reset transforms on the top card to avoid leftover x/y/rotation from previous drags
+                gsap.set(topCard, { x: 0, y: 0, rotation: 0 });
+
+                // Bikin Draggable baru buat si topCard (simpan array yang dikembalikan)
+                const dragInstances = Draggable.create(topCard, {
+                type: "x,y",
+                edgeResistance: 0.65,
+                bounds: CONTAINER, // restrict drag inside the cards container instead of full window
+                inertia: true,
+                allowContextMenu: true,
+                liveSnap: false,
+                onDrag: function() {
+                    // Miring dikit pas didrag
+                    gsap.to(this.target, { rotation: this.x * 0.05, duration: 0.1 });
+                },
+                onRelease: function() {
+                    // If released over the drop zone, treat as a drop and throw
+                    const dropZone = document.getElementById('drop-zone');
+                    if (isOverlapping(this.target, dropZone)) {
+                        // give a downward velocity for a nice drop feel
+                        throwCard(this.target, this.x, 400);
+                        // small visual cue on drop zone
+                        gsap.fromTo(dropZone, { scale: 1 }, { scale: 1.06, duration: 0.12, yoyo: true, repeat: 1, ease: 'power1.out' });
+                        return;
+                    }
+
+                    const threshold = 100;
+                    if (Math.abs(this.x) > threshold || Math.abs(this.y) > threshold) {
+                        throwCard(this.target, this.x, this.y);
+                    } else {
+                        // Snap Back
+                        gsap.to(this.target, {
+                            x: 0, y: 0, rotation: 0,
+                            duration: 0.5, ease: "elastic.out(1, 0.5)"
+                        });
+                    }
+                }
+            });
+                // Simpan referensi drag di elemennya biar bisa didisable nanti
+                topCard._gsapDrag = dragInstances;
+        // Animate the top card with a small "page in" effect so it feels like a new page
+        animateTopCardIn(topCard);
+        }
+
+    // Small entrance animation for the active/top card (page in)
+    function animateTopCardIn(card) {
+        const top = card || cardElements[cardElements.length - 1];
+        if (!top) return;
+        // Quick pop + slight Y rotation to give a page-like entrance
+        gsap.fromTo(top, { scale: 0.96, rotationY: 10, opacity: 1 }, { scale: 1, rotationY: 0, duration: 0.45, ease: 'back.out(1.2)' });
+    }
+
+        // --- 5. VISUAL STACK LOGIC (YANG BIKIN EFEK TUMPUK) ---
+        // Update visuals using a GSAP timeline so callers can wait for completion
+        // onComplete optional callback runs after the animation finishes.
+        function updateStackVisuals(duration = 0.5, onComplete = null) {
+            const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+            cardElements.forEach((card, i) => {
+                const reverseIndex = (cardElements.length - 1) - i;
+                // Ensure card is visible and has correct z-index immediately
+                card.style.zIndex = i;
+
+                tl.to(card, {
+                    scale: 1 - (reverseIndex * 0.05),
+                    y: reverseIndex * 15,
+                    opacity: 1,
+                    duration: duration,
+                    boxShadow: "0 5px 10px rgba(0,0,0,0.05), 0 15px 40px rgba(0,0,0,0.2)"
+                }, 0); // start all tweens at time 0 (parallel)
+            });
+
+            if (typeof onComplete === 'function') {
+                tl.add(() => onComplete());
+            }
+            return tl;
+        }
+
+        // --- 6. THROW & LOOP LOGIC ---
+        function throwCard(card, velX, velY) {
+            // Kill drag immediately to fully remove event listeners
+            if (card._gsapDrag) {
+                if (Array.isArray(card._gsapDrag)) {
+                    card._gsapDrag.forEach(inst => inst && inst.kill && inst.kill());
+                } else if (card._gsapDrag.kill) {
+                    card._gsapDrag.kill();
+                }
+                card._gsapDrag = null;
+            }
+
+            // Animasi Lempar
+            gsap.to(card, {
+                x: velX * 5,
+                y: velY * 5 + 500, // Gravity effect
+                rotation: velX * 0.2,
+                scale: 0.9,
+                opacity: 0,
+                duration: 0.5,
+                ease: "power1.in",
+                onComplete: () => {
+                    // 1. Hapus kartu lama dari DOM & Array
+                    card.remove();
+                    cardElements = cardElements.filter(el => el !== card);
+
+                    // 2. Immediately make the current second card draggable (so user can drag it right away)
+                    refreshDraggable();
+
+                    // 3. Tentukan gambar berikutnya (Looping) and append it at the BACK so it doesn't cover the new top
+                    const nextImg = IMAGE_URLS[currentImgIndex % IMAGE_URLS.length];
+                    currentImgIndex++; // advance pointer
+
+                    // 4. Preload the next image then insert at back (non-blocking for UI)
+                    loadImage(nextImg).then(() => {
+                        createCard(nextImg, false, true); // placeAtBack = true
+                        // Update visual stack to account for the newly appended back card
+                        updateStackVisuals(0.6);
+                        // Continue background buffering
+                        preloadBuffer(currentImgIndex, DEFAULT_BUFFER);
+                    }).catch((e) => {
+                        console.warn('Failed to preload next image', e);
+                        createCard(nextImg, false, true);
+                        updateStackVisuals(0.6);
+                        preloadBuffer(currentImgIndex, DEFAULT_BUFFER);
+                    });
+                }
+            });
+        }
+
+        // --- 7. MOUSE FOLLOW / TILT EFFECT ---
+        function setupMouseTilt() {
+            window.addEventListener('mousemove', (e) => {
+                // Hitung posisi mouse relatif ke tengah layar (-1 sampai 1)
+                const xPct = (e.clientX / window.innerWidth) - 0.5;
+                const yPct = (e.clientY / window.innerHeight) - 0.5;
+
+                // Gerakkan Container Wrapper
+                gsap.to('.tilt-wrapper', {
+                    rotationY: xPct * 20, // Max miring 20 derajat horizontal
+                    rotationX: -yPct * 20, // Max miring 20 derajat vertikal (minus biar natural)
+                    duration: 1, // Durasi agak lama biar efeknya 'floating' dan smooth
+                    ease: "power2.out"
+                });
+            });
+        }
+
+        // --- 8. SCROLL ENTRANCE ANIMATION ---
+        function setupScrollEntrance() {
+            gsap.to('.tilt-wrapper', {
+                scrollTrigger: {
+                    trigger: ".section-container",
+                    start: "top 70%", // Mulai animasi pas elemen masuk 70% viewport
+                    toggleActions: "play none none reverse" // Play pas masuk, Reverse pas keluar
+                },
+                opacity: 1,
+                y: 0, // Naik ke posisi normal (dari translateY 100px di CSS)
+                duration: 1.2,
+                ease: "expo.out" // Easing sangat smooth (Cepat di awal, lambat di akhir)
+            });
+        }
+
+        // JALANKAN
+        // Wire discard button (explicit drop) and start
+        document.getElementById('discard-btn').addEventListener('click', () => {
+            const top = cardElements[cardElements.length - 1];
+            if (top) throwCard(top, 0, 400);
+        });
+
+        init();
+
+    </script>
+</body>
+</html>

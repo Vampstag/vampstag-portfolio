@@ -1,0 +1,203 @@
+<style>
+    .pm-slider-section {
+        padding: 60px 0;
+        max-width: 600px;
+        margin: 0 auto;
+        font-family: 'Inter', sans-serif; /* Sesuaikan font kamu */
+    }
+
+    .pm-title {
+        font-size: 24px; font-weight: 800; text-transform: uppercase;
+        margin-bottom: 40px; text-align: center; letter-spacing: -1px;
+    }
+
+    /* Wrapper per Slider */
+    .slider-group {
+        margin-bottom: 25px;
+    }
+
+    .slider-header {
+        display: flex; justify-content: space-between; margin-bottom: 10px;
+        font-size: 14px; font-weight: 600; text-transform: uppercase;
+    }
+
+    /* --- CUSTOM SLIDER STYLE (MONOCHROME) --- */
+    input[type=range] {
+        -webkit-appearance: none; /* Hapus default style */
+        width: 100%;
+        background: transparent;
+    }
+
+    input[type=range]:focus { outline: none; }
+
+    /* Track (Garis) */
+    input[type=range]::-webkit-slider-runnable-track {
+        width: 100%; height: 4px;
+        cursor: pointer;
+        background: #e5e5e5;
+        border-radius: 2px;
+    }
+
+    /* Thumb (Bulatan) */
+    input[type=range]::-webkit-slider-thumb {
+        height: 20px; width: 20px;
+        border-radius: 50%;
+        background: #000000;
+        cursor: pointer;
+        -webkit-appearance: none;
+        margin-top: -8px; /* Biar tengah */
+        border: 2px solid #fff; /* Aksen putih di tengah */
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        transition: transform 0.1s;
+    }
+
+    input[type=range]:active::-webkit-slider-thumb {
+        transform: scale(1.2);
+        background: #000;
+    }
+
+    /* --- FEEDBACK BOX --- */
+    .pm-feedback {
+        margin-top: 40px;
+        padding: 20px;
+        border: 1px solid #e5e5e5;
+        background: #fafafa;
+        text-align: center;
+        border-radius: 8px;
+    }
+    
+    .feedback-title {
+        font-size: 12px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 1px;
+        margin-bottom: 8px; display: block;
+    }
+    
+    .feedback-text {
+        font-size: 18px; font-weight: 700; color: #000;
+        min-height: 24px; /* Biar ga loncat pas ganti text */
+    }
+</style>
+
+<div class="pm-slider-section">
+    <h2 class="pm-title">The Reality Sliders</h2>
+
+    <div class="slider-group">
+        <div class="slider-header">
+            <span>Good (Quality)</span>
+            <span id="val-good">0%</span>
+        </div>
+        <input type="range" id="input-good" min="0" max="100" value="0">
+    </div>
+
+    <div class="slider-group">
+        <div class="slider-header">
+            <span>Fast (Speed)</span>
+            <span id="val-fast">0%</span>
+        </div>
+        <input type="range" id="input-fast" min="0" max="100" value="0">
+    </div>
+
+    <div class="slider-group">
+        <div class="slider-header">
+            <span>Cheap (Budget)</span>
+            <span id="val-cheap">0%</span>
+        </div>
+        <input type="range" id="input-cheap" min="0" max="100" value="0">
+    </div>
+
+    <div class="pm-feedback">
+        <span class="feedback-title">Current Scenario</span>
+        <div class="feedback-text" id="pm-result">Adjust sliders to start...</div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const sGood = document.getElementById('input-good');
+        const sFast = document.getElementById('input-fast');
+        const sCheap = document.getElementById('input-cheap');
+        
+        const vGood = document.getElementById('val-good');
+        const vFast = document.getElementById('val-fast');
+        const vCheap = document.getElementById('val-cheap');
+        const resultText = document.getElementById('pm-result');
+
+        // Total poin yang tersedia (Maksimal 200 biar ga bisa 300)
+        const MAX_TOTAL = 200;
+
+        function updateSliders(source) {
+            let valG = parseInt(sGood.value);
+            let valF = parseInt(sFast.value);
+            let valC = parseInt(sCheap.value);
+
+            // Hitung total saat ini
+            let currentTotal = valG + valF + valC;
+
+            // Jika total melebihi batas (200)
+            if (currentTotal > MAX_TOTAL) {
+                let overflow = currentTotal - MAX_TOTAL;
+
+                // Kurangi slider LAINNYA (selain yang sedang digerakkan user)
+                if (source === 'good') {
+                    // Kurangi Fast & Cheap secara proporsional
+                    // Sederhananya: kurangi setengah overflow dari masing-masing, atau kurangi yang paling besar
+                    const remain = valF + valC;
+                    if (remain > 0) {
+                        sFast.value = valF - (overflow * (valF / remain));
+                        sCheap.value = valC - (overflow * (valC / remain));
+                    }
+                } 
+                else if (source === 'fast') {
+                    const remain = valG + valC;
+                    if (remain > 0) {
+                        sGood.value = valG - (overflow * (valG / remain));
+                        sCheap.value = valC - (overflow * (valC / remain));
+                    }
+                } 
+                else if (source === 'cheap') {
+                    const remain = valG + valF;
+                    if (remain > 0) {
+                        sGood.value = valG - (overflow * (valG / remain));
+                        sFast.value = valF - (overflow * (valF / remain));
+                    }
+                }
+            }
+
+            // Update UI Angka
+            vGood.innerText = Math.round(sGood.value) + "%";
+            vFast.innerText = Math.round(sFast.value) + "%";
+            vCheap.innerText = Math.round(sCheap.value) + "%";
+
+            generateFeedback();
+        }
+
+        function generateFeedback() {
+            let g = parseInt(sGood.value);
+            let f = parseInt(sFast.value);
+            let c = parseInt(sCheap.value);
+
+            let msg = "";
+
+            // Logika Pesan Feedback
+            if (g > 80 && f > 80) {
+                msg = "EXPENSIVE. (High Quality + Fast = High Cost)";
+            } else if (g > 80 && c > 80) {
+                msg = "SLOW. (High Quality + Cheap = Takes Time)";
+            } else if (f > 80 && c > 80) {
+                msg = "LOW QUALITY. (Fast + Cheap = Risky/Ugly)";
+            } else if (g < 30 && f < 30 && c < 30) {
+                msg = "PROJECT NOT STARTED.";
+            } else if (g > 60 && f > 60 && c > 60) {
+                msg = "IMPOSSIBLE UTOPIA. (It doesn't exist)";
+            } else {
+                msg = "BALANCING TRADE-OFFS...";
+            }
+
+            resultText.innerText = msg;
+        }
+
+        // Event Listeners
+        sGood.addEventListener('input', () => updateSliders('good'));
+        sFast.addEventListener('input', () => updateSliders('fast'));
+        sCheap.addEventListener('input', () => updateSliders('cheap'));
+    });
+</script>

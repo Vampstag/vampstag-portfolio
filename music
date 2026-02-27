@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skill Equalizer + Visualizer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+            --accent-1: #4f46e5; /* Biru/Indigo */
+            --accent-2: #ec4899; /* Pink/Magenta */
+        }
+
+        body { font-family: 'Inter', sans-serif; background: #f4f4f4; padding: 50px; }
+
+        .equalizer-section {
+            max-width: 900px; margin: 0 auto; 
+            background: var(--bg-color); color: var(--text-color);
+            padding: 40px; border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+        }
+
+        .eq-header {
+            display: flex; justify-content: space-between; align-items: flex-end;
+            margin-bottom: 40px; padding-bottom: 20px; border-bottom: 2px solid #000;
+        }
+        h2 { text-transform: uppercase; font-weight: 800; font-size: 24px; letter-spacing: -1px; margin: 0; }
+        .reset-btn {
+            background: #000; color: #fff; border: none; padding: 12px 24px;
+            font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+            cursor: pointer; border-radius: 50px; transition: transform 0.1s, background 0.3s;
+        }
+        .reset-btn:hover { background: #333; }
+        .reset-btn:active { transform: scale(0.95); }
+
+        /* --- LAYOUT GRID BARU --- */
+        .eq-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr; /* Kiri Faders, Kanan Visual */
+            gap: 60px;
+            align-items: center;
+        }
+
+        /* --- FADERS (KIRI) --- */
+        .faders-wrapper { display: flex; justify-content: space-between; gap: 15px; height: 280px; }
+        .fader-group { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; flex: 1; }
+        .range-wrapper { height: 180px; width: 40px; position: relative; display: flex; justify-content: center; }
+        
+        /* Vertical Slider Styling */
+        input[type=range][orient=vertical] {
+            writing-mode: bt-lr; -webkit-appearance: none; width: 6px; height: 100%;
+            background: #e5e5e5; border-radius: 10px; outline: none; cursor: pointer;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none; width: 36px; height: 18px;
+            background: #000; border: 2px solid #fff; border-radius: 4px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); cursor: grab; margin-left: -15px;
+        }
+        input[type=range] { appearance: slider-vertical; width: 6px; }
+
+        .label-box { text-align: center; margin-top: 20px; }
+        .skill-name { font-weight: 700; font-size: 11px; text-transform: uppercase; display: block; margin-bottom: 5px; letter-spacing: 0.5px;}
+        .skill-val { font-family: 'Fira Code', monospace; font-size: 11px; color: #666; font-weight: 700;}
+
+
+        /* --- VISUALIZER (KANAN) - THE MAGIC --- */
+        .visualizer-container {
+            width: 100%;
+            aspect-ratio: 1/1; /* Kotak sempurna */
+            background: #f8f8f8;
+            border-radius: 24px;
+            display: flex; justify-content: center; align-items: center;
+            position: relative; overflow: hidden;
+            border: 1px solid #eee;
+        }
+        
+        /* The Blob */
+        #output-blob {
+            width: 200px; height: 200px;
+            /* Gradient awal (akan diubah JS) */
+            background: linear-gradient(45deg, var(--accent-1), var(--accent-2));
+            /* Bentuk awal (akan diubah JS) */
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            /* Filter biar kerasa 'energi' */
+            filter: blur(10px) contrast(1.2);
+            mix-blend-mode: multiply;
+            /* Animasi rotasi default */
+            animation: rotateBlob 10s linear infinite;
+            transition: all 0.3s ease; /* Smooth transition saat slider digeser */
+        }
+
+        @keyframes rotateBlob {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Teks Label di Visualizer */
+        .vis-label {
+            position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+            font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #999; font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .eq-grid { grid-template-columns: 1fr; gap: 40px; }
+            .visualizer-container { height: 300px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="equalizer-section">
+    <div class="eq-header">
+        <div>
+            <h2>The Skill Mix Output</h2>
+            <span style="font-size: 12px; color: #666;">MIX THE INPUTS → WATCH THE OUTPUT</span>
+        </div>
+        <button class="reset-btn" onclick="setMyPreset()">Load My Preset</button>
+    </div>
+
+    <div class="eq-grid">
+        <div class="faders-wrapper">
+            <div class="fader-group">
+                <div class="range-wrapper">
+                    <input type="range" class="fader" id="f1" min="0" max="100" value="50" oninput="handleInput('v1', this.value)">
+                </div>
+                <div class="label-box"><span class="skill-name">Strategy</span><span class="skill-val" id="v1">50%</span></div>
+            </div>
+            <div class="fader-group">
+                <div class="range-wrapper">
+                    <input type="range" class="fader" id="f2" min="0" max="100" value="50" oninput="handleInput('v2', this.value)">
+                </div>
+                <div class="label-box"><span class="skill-name">Creative</span><span class="skill-val" id="v2">50%</span></div>
+            </div>
+            <div class="fader-group">
+                <div class="range-wrapper">
+                    <input type="range" class="fader" id="f3" min="0" max="100" value="50" oninput="handleInput('v3', this.value)">
+                </div>
+                <div class="label-box"><span class="skill-name">Data</span><span class="skill-val" id="v3">50%</span></div>
+            </div>
+            <div class="fader-group">
+                <div class="range-wrapper">
+                    <input type="range" class="fader" id="f4" min="0" max="100" value="50" oninput="handleInput('v4', this.value)">
+                </div>
+                <div class="label-box"><span class="skill-name">Copy</span><span class="skill-val" id="v4">50%</span></div>
+            </div>
+        </div>
+
+        <div class="visualizer-container">
+            <div id="output-blob"></div>
+            <span class="vis-label">Output Signal</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Konfigurasi Preset Kamu
+    const myPreset = { f1: 90, f2: 75, f3: 85, f4: 60 };
+    const blob = document.getElementById('output-blob');
+    const inputs = ['f1', 'f2', 'f3', 'f4'];
+
+    // Fungsi dipanggil saat slider digeser manual
+    function handleInput(textId, val) {
+        document.getElementById(textId).innerText = val + "%";
+        updateVisualizer(); // Update visual secara real-time
+    }
+
+    // --- INTI LOGIKA VISUALIZER ---
+    function updateVisualizer() {
+        // Ambil nilai semua slider (0 - 100)
+        const v1 = parseInt(document.getElementById('f1').value); // Strategy (Scale)
+        const v2 = parseInt(document.getElementById('f2').value); // Creative (Chaos)
+        const v3 = parseInt(document.getElementById('f3').value); // Data (Speed)
+        const v4 = parseInt(document.getElementById('f4').value); // Copy (Color)
+
+        // 1. EFEK SCALE (Strategy)
+        // Minimal 0.5x, Maksimal 1.5x ukuran
+        const scale = 0.5 + (v1 / 100); 
+        
+        // 2. EFEK CHAOS / BENTUK (Creative)
+        // Semakin tinggi, semakin acak % border-radius nya
+        // Kita pakai range 30% - 70% agar bentuknya tetap "blob" dan tidak terlalu kotak/pecah
+        const chaosBase = 50; // Titik tengah
+        const chaosRange = (v2 / 100) * 30; // Maksimal melenceng 30% dari tengah
+        
+        const r1 = chaosBase + Math.random() * chaosRange * (Math.random() > 0.5 ? 1 : -1);
+        const r2 = chaosBase + Math.random() * chaosRange * (Math.random() > 0.5 ? 1 : -1);
+        const r3 = chaosBase + Math.random() * chaosRange * (Math.random() > 0.5 ? 1 : -1);
+        const r4 = chaosBase + Math.random() * chaosRange * (Math.random() > 0.5 ? 1 : -1);
+        
+        const borderRadius = `${r1}% ${100-r1}% ${r3}% ${100-r3}% / ${r2}% ${r4}% ${100-r4}% ${100-r2}%`;
+
+        // 3. EFEK KECEPATAN ROTASI (Data)
+        // Paling lambat 20s satu putaran, paling cepat 1s
+        // Rumus terbalik: makin besar nilai, makin kecil durasi
+        const speed = 21 - (v3 / 5); 
+        const animDuration = `${Math.max(1, speed)}s`; // Minimal 1 detik
+
+        // 4. EFEK WARNA (Copywriting)
+        // Menggeser Hue dari biru (sekitar 220deg) ke pink/merah (sekitar 340deg)
+        const hueShift = (v4 / 100) * 120; 
+        const color1 = `hsl(${220 + hueShift}, 80%, 60%)`; // Warna utama
+        const color2 = `hsl(${260 + hueShift}, 80%, 50%)`; // Warna sekunder gradient
+
+        // --- TERAPKAN KE CSS ---
+        blob.style.transform = `scale(${scale})`;
+        blob.style.borderRadius = borderRadius;
+        blob.style.animationDuration = animDuration;
+        blob.style.background = `linear-gradient(45deg, ${color1}, ${color2})`;
+    }
+
+
+    // Fungsi Load Preset dengan Animasi Smooth
+    function setMyPreset() {
+        let isAnimating = true;
+        
+        inputs.forEach(id => {
+            const el = document.getElementById(id);
+            const target = myPreset[id];
+            
+            let timer = setInterval(() => {
+                const current = parseInt(el.value);
+                let step = current < target ? 1 : -1;
+
+                if (current === target) {
+                    clearInterval(timer);
+                } else {
+                    el.value = current + step;
+                    // Update Text
+                    document.getElementById(id.replace('f', 'v')).innerText = el.value + "%";
+                    // PENTING: Update Visualizer di setiap frame animasi preset
+                    updateVisualizer();
+                }
+            }, 10); // Kecepatan animasi preset
+        });
+    }
+
+    // Init: Jalankan sekali di awal & Jalankan preset otomatis
+    updateVisualizer();
+    setTimeout(setMyPreset, 800);
+
+</script>
+
+</body>
+</html>

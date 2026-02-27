@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimalist Gamification Suite</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-primary: #111111;
+            --text-secondary: #666666;
+            --accent-color: #000000; /* Warna aktif hitam pekat */
+            --border-color: #e5e5e5;
+            --section-spacing: 120px;
+        }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    /* Allow full page scrolling (horizontal if canvas is wide) so wide canvases or nodes won't be clipped */
+    body { font-family: 'Inter', sans-serif; background: var(--bg-color); color: var(--text-primary); overflow: auto; }
+
+        /* Container Umum */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: var(--section-spacing) 24px;
+        }
+
+        h2.section-title {
+            font-size: 24px; font-weight: 700; letter-spacing: -0.02em;
+            margin-bottom: 40px; text-align: center;
+        }
+
+        /* =========================================
+           SECTION 1 CSS: THE PM TRIANGLE
+        ========================================= */
+        .pm-triangle-wrapper {
+            display: flex; flex-direction: column; align-items: center; gap: 30px;
+        }
+        .toggles-container {
+            display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;
+        }
+        /* Hide default checkbox */
+        .toggle-input { display: none; }
+
+        /* Custom Toggle Button Style */
+        .toggle-label {
+            padding: 16px 32px;
+            border: 2px solid var(--border-color);
+            border-radius: 50px;
+            font-weight: 600; font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            user-select: none;
+        }
+        
+        /* State saat Checked */
+        .toggle-input:checked + .toggle-label {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Message Output Area */
+        #pm-message {
+            min-height: 60px;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Fira Code', monospace; font-size: 14px; color: var(--text-secondary);
+            text-align: center; border-top: 1px solid var(--border-color);
+            padding-top: 20px; width: 100%; max-width: 400px;
+        }
+
+        /* =========================================
+           SECTION 2 CSS: THE CREATIVE DESK
+        ========================================= */
+        /* Make the desk canvas wide and scrollable so absolutely positioned items won't be clipped
+           We also allow a minimum width larger than the centered .container so design elements can
+           be placed far apart (e.g. nodes at x > 1000px). */
+        #desk-canvas-container {
+            width: 1200px; /* reasonable default wide canvas */
+            max-width: none;
+            height: 500px;
+            background-color: #f9f9f9; /* Meja sedikit lebih gelap */
+            border-radius: 24px;
+            position: relative;
+            overflow: auto; /* allow internal scrolling if viewport is narrower */
+            border: 1px solid var(--border-color);
+            margin: 0 auto 24px; /* center the wide canvas */
+            /* Pola dot halus untuk meja */
+            background-image: radial-gradient(#e0e0e0 1.5px, transparent 1px);
+            background-size: 20px 20px;
+            box-sizing: border-box;
+        }
+
+        .desk-item {
+            position: absolute; cursor: grab; user-select: none;
+            transition: transform 0.1s, box-shadow 0.2s;
+            /* Filter drop-shadow agar bentuk SVG juga punya bayangan */
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.05));
+        }
+        .desk-item:active { cursor: grabbing; transform: scale(1.05); filter: drop-shadow(0 12px 20px rgba(0,0,0,0.15)); z-index: 100 !important;}
+
+        /* CSS Art Sederhana untuk Item (Bisa diganti SVG beneran nanti) */
+        #laptop { width: 180px; height: 120px; background: #d0d0d0; border-radius: 8px; top: 100px; left: 100px; display: flex; justify-content:center; align-items:center;}
+        #laptop::after { content:''; width: 20px; height: 20px; background: #fff; border-radius: 50%; opacity: 0.5;} /* Logo Apple KW */
+        
+        #coffee { width: 70px; height: 70px; background: #333; border-radius: 50%; top: 250px; left: 400px; border: 4px solid #fff; }
+        #coffee::after { content:''; position: absolute; right: -15px; top: 15px; width: 20px; height: 30px; border: 4px solid #fff; border-left: none; border-radius: 0 15px 15px 0; } /* Gagang cangkir */
+        
+        #notebook { width: 100px; height: 140px; background: #f0f0f0; border: 2px solid #333; top: 50px; left: 500px; }
+        #notebook::before { content:''; position: absolute; left: 10px; top:0; height: 100%; width: 2px; background: #ccc; box-shadow: 5px 0 0 #ccc;} /* Garis buku */
+
+        /* Glitch Effect Class */
+        .glitch {
+            animation: glitch-anim 0.2s infinite;
+            background: #ff0000 !important; /* Layar jadi merah */
+        }
+        @keyframes glitch-anim {
+            0% { transform: translate(0) }
+            20% { transform: translate(-5px, 5px) }
+            40% { transform: translate(-5px, -5px) }
+            60% { transform: translate(5px, 5px) }
+            80% { transform: translate(5px, -5px) }
+            100% { transform: translate(0) }
+        }
+
+        /* =========================================
+           SECTION 3 CSS: SCROLL VIDEO
+        ========================================= */
+        /* Container tinggi untuk area scroll */
+        .scroll-video-section {
+            height: 300vh; /* 3x tinggi layar agar scrollnya panjang */
+            position: relative;
+        }
+
+        /* Container sticky untuk videonya */
+        .video-sticky-wrapper {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background: #000; /* Background hitam biar cinematic */
+        }
+
+        video#scroll-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Agar video memenuhi layar */
+        }
+
+        .video-overlay-text {
+            position: absolute;
+            color: #fff;
+            text-align: center;
+            z-index: 10;
+            mix-blend-mode: difference; /* Agar teks terbaca di background terang/gelap */
+        }
+        .video-overlay-text h3 { font-size: 40px; font-weight: 700; margin-bottom: 10px; }
+        .video-overlay-text p { font-family: 'Fira Code', monospace; }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2 class="section-title">The Project Reality Triangle</h2>
+        <div class="pm-triangle-wrapper">
+            <div class="toggles-container">
+                <input type="checkbox" id="good" class="toggle-input">
+                <label for="good" class="toggle-label">Good</label>
+
+                <input type="checkbox" id="cheap" class="toggle-input">
+                <label for="cheap" class="toggle-label">Cheap</label>
+
+                <input type="checkbox" id="fast" class="toggle-input">
+                <label for="fast" class="toggle-label">Fast</label>
+            </div>
+            <div id="pm-message">Select two options to see the reality.</div>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <h2 class="section-title">My Virtual Desk (Organize Me)</h2>
+        <p style="text-align: center; margin-bottom: 20px; color: var(--text-secondary);">Drag items around. Warning: Don't spill coffee on the laptop.</p>
+    </div>
+
+    <!-- Wide canvas sits outside the centered .container so it can be larger than the page column -->
+    <div id="desk-canvas-container">
+        <div id="laptop" class="desk-item"></div>
+        <div id="coffee" class="desk-item"></div>
+        <div id="notebook" class="desk-item"></div>
+    </div>
+
+
+    <div class="scroll-video-section">
+        <div class="video-sticky-wrapper">
+             <div class="video-overlay-text">
+                <h3>Control Time With Scroll</h3>
+                <p>Scroll down to play the process.</p>
+            </div>
+            
+            <video id="scroll-video" muted playsinline preload="metadata">
+                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                Your browser does not support HTML5 video.
+            </video>
+        </div>
+    </div>
+
+    <div class="container" style="height: 500px;">
+        <h2 class="section-title">End of Experience.</h2>
+    </div>
+
+
+    <script>
+        /* =========================================
+           JS 1: PM TRIANGLE LOGIC
+        ========================================= */
+        const toggles = document.querySelectorAll('.toggle-input');
+        const messageArea = document.getElementById('pm-message');
+        let checkedOrder = []; // Array untuk melacak urutan klik
+
+        toggles.forEach(toggle => {
+            toggle.addEventListener('change', (e) => {
+                const id = e.target.id;
+
+                if (e.target.checked) {
+                    // Jika dicentang, tambahkan ke antrian
+                    checkedOrder.push(id);
+                    // Jika sudah lebih dari 2, hapus yang paling lama (index 0)
+                    if (checkedOrder.length > 2) {
+                        const toUncheck = checkedOrder.shift(); // Ambil yang terlama
+                        document.getElementById(toUncheck).checked = false;
+                    }
+                } else {
+                    // Jika dihapus centangnya, hapus dari antrian
+                    checkedOrder = checkedOrder.filter(item => item !== id);
+                }
+                updateMessage();
+            });
+        });
+
+        function updateMessage() {
+            const active = checkedOrder;
+            let msg = "Select two options.";
+
+            if (active.includes('good') && active.includes('fast')) {
+                msg = "Expensive. Siapin budget ya bos. Quality takes time & money.";
+            } else if (active.includes('good') && active.includes('cheap')) {
+                 msg = "Sabar. Art butuh waktu. It will be ready when it's ready.";
+            } else if (active.includes('fast') && active.includes('cheap')) {
+                msg = "⚠️ Warning: Hasil mungkin jelek. Jangan komplain nanti.";
+            } else if (active.length === 1) {
+                msg = "Select one more...";
+            }
+            
+            messageArea.textContent = msg;
+        }
+
+
+        /* =========================================
+           JS 2: CREATIVE DESK (DRAG & COLLISION)
+        ========================================= */
+        const laptop = document.getElementById('laptop');
+        const coffee = document.getElementById('coffee');
+
+        // Fungsi Cek Tabrakan (Collision Detection) Sederhana
+        function isColliding(el1, el2) {
+            const rect1 = el1.getBoundingClientRect();
+            const rect2 = el2.getBoundingClientRect();
+            return !(rect1.right < rect2.left || 
+                     rect1.left > rect2.right || 
+                     rect1.bottom < rect2.top || 
+                     rect1.top > rect2.bottom);
+        }
+
+        function makeDraggable(element) {
+            let isDragging = false;
+            let startX, startY, initialLeft, initialTop;
+            const container = document.getElementById('desk-canvas-container');
+
+            element.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                startX = e.clientX; startY = e.clientY;
+                initialLeft = element.offsetLeft; initialTop = element.offsetTop;
+                element.style.zIndex = 10; // Bawa ke depan saat di-drag
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                e.preventDefault();
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+                
+                // Boundary Check sederhana agar tidak keluar meja
+                let newLeft = initialLeft + dx;
+                let newTop = initialTop + dy;
+                const contRect = container.getBoundingClientRect();
+                const elRect = element.getBoundingClientRect();
+                
+                if (newLeft < 0) newLeft = 0;
+                if (newTop < 0) newTop = 0;
+                if (newLeft + elRect.width > contRect.width) newLeft = contRect.width - elRect.width;
+                if (newTop + elRect.height > contRect.height) newTop = contRect.height - elRect.height;
+
+                element.style.left = `${newLeft}px`;
+                element.style.top = `${newTop}px`;
+
+                // --- EASTER EGG CHECK ---
+                if (isColliding(laptop, coffee)) {
+                    laptop.classList.add('glitch');
+                } else {
+                    laptop.classList.remove('glitch');
+                }
+            });
+
+            window.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    element.style.zIndex = 1; // Kembalikan z-index
+                }
+            });
+        }
+
+        document.querySelectorAll('.desk-item').forEach(item => makeDraggable(item));
+
+
+        /* =========================================
+           JS 3: SCROLL-CONTROLLED VIDEO
+        ========================================= */
+        const videoSection = document.querySelector('.scroll-video-section');
+        const video = document.getElementById('scroll-video');
+        
+        // Pastikan metadata video termuat dulu untuk tahu durasinya
+        video.addEventListener('loadedmetadata', function() {
+            const videoDuration = video.duration;
+
+            window.addEventListener('scroll', () => {
+                const sectionRect = videoSection.getBoundingClientRect();
+                const sectionTop = sectionRect.top;
+                const sectionHeight = sectionRect.height;
+                const windowHeight = window.innerHeight;
+
+                // Hitung seberapa jauh kita sudah scroll MELEWATI bagian atas section ini
+                // Nilai negatif berarti kita sudah scroll melewatinya
+                let scrollDistanceFromTop = -sectionTop;
+
+                // Total jarak scroll yang tersedia di section ini (tinggi section - tinggi layar)
+                const scrollableDistance = sectionHeight - windowHeight;
+
+                // Hitung persentase (0.0 sampai 1.0)
+                let scrollProgress = scrollDistanceFromTop / scrollableDistance;
+
+                // Clamp nilainya agar tetap di antara 0 dan 1
+                scrollProgress = Math.max(0, Math.min(1, scrollProgress));
+
+                // Set waktu video berdasarkan persentase scroll
+                // Gunakan requestAnimationFrame agar lebih smooth di beberapa browser
+                requestAnimationFrame(() => {
+                     video.currentTime = videoDuration * scrollProgress;
+                });
+            });
+        });
+
+    </script>
+
+    <div class="container">
+        <h2 class="section-title">Test Your Marketing Instinct</h2>
+        <p style="text-align: center; margin-bottom: 30px; color: var(--text-secondary);">Which ad creative had a higher Click-Through Rate (CTR)?</p>
+        
+        <div class="ab-test-wrapper">
+            <div class="ab-card" onclick="checkAB('A')">
+                <div class="ab-visual visual-a">
+                    <span class="ab-label">A</span>
+                    <div class="mini-content">
+                        <div class="line long"></div>
+                        <div class="line long"></div>
+                        <div class="line long"></div>
+                        <div class="btn-mock">Learn More</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ab-card" onclick="checkAB('B')">
+                <div class="ab-visual visual-b">
+                    <span class="ab-label">B</span>
+                    <div class="circle-big"></div>
+                    <div class="line short"></div>
+                    <div class="btn-mock highlight">Get Offer</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="ab-result" class="fade-in">Select one to see data.</div>
+    </div>
+
+
+    <div class="container">
+        <h2 class="section-title">Color Logic (Click to Visualize)</h2>
+        
+        <div class="color-picker-wrapper">
+            <div class="color-btn" style="background: #FF4D4D;" onclick="setColor('#FF4D4D', 'Red', 'Urgency & Appetite. Used for clearance sales and food brands.')"></div>
+            <div class="color-btn" style="background: #3B82F6;" onclick="setColor('#3B82F6', 'Blue', 'Trust & Security. Used for banks, tech, and corporate brands.')"></div>
+            <div class="color-btn" style="background: #10B981;" onclick="setColor('#10B981', 'Green', 'Growth & Health. Used for finance, eco-products, and wellness.')"></div>
+            <div class="color-btn" style="background: #111111;" onclick="setColor('#ffffff', 'Black', 'Luxury & Exclusivity. Used for high-end fashion and automotive.')"></div>
+        </div>
+
+        <div class="color-info">
+            <h3 id="color-name">Neutral</h3>
+            <p id="color-desc">Pick a color above to see its strategic role.</p>
+        </div>
+    </div>
+
+    <script>
+        /* =========================================
+           JS 4: A/B TEST LOGIC
+        ========================================= */
+        function checkAB(choice) {
+            const cards = document.querySelectorAll('.ab-card');
+            const resultText = document.getElementById('ab-result');
+            
+            // Reset style dulu
+            cards.forEach(c => c.classList.remove('winner', 'loser'));
+
+            if (choice === 'B') {
+                // JAWABAN BENAR (B)
+                cards[1].classList.add('winner'); // Card B jadi hijau
+                cards[0].classList.add('loser');  // Card A jadi transparan
+                resultText.textContent = "✅ Correct! Less text + Bold CTA = +45% Conversions.";
+                resultText.style.color = "#10B981";
+            } else {
+                // JAWABAN SALAH (A)
+                cards[0].classList.add('winner'); // Merah (Salah visual cue) -> Sebenarnya ini logic salah, tapi visual feedbacknya merah
+                cards[0].style.borderColor = "#EF4444"; 
+                resultText.textContent = "❌ Not quite. Too much text kills attention span.";
+                resultText.style.color = "#EF4444";
+            }
+        }
+
+        /* =========================================
+           JS 5: COLOR PSYCHOLOGY LOGIC
+        ========================================= */
+        function setColor(hex, name, desc) {
+            // Ubah teks
+            document.getElementById('color-name').textContent = name;
+            document.getElementById('color-desc').textContent = desc;
+            
+            // Ubah warna teks judul agar sesuai
+            const title = document.getElementById('color-name');
+            
+            if(name === 'Black') {
+                title.style.color = '#000';
+                document.body.style.backgroundColor = '#fafafa'; // Reset bg
+            } else {
+                title.style.color = hex;
+                // Opsional: Ubah background body jadi tint sangat muda dari warna itu
+                // Biar immersive
+                document.body.style.backgroundColor = hex + '11'; // Hex + Opacity 11 (transparan banget)
+            }
+        }
+    </script>
+
+    <div class="container">
+        <h2 class="section-title">Campaign Simulator (Strategy Mode)</h2>
+        <p style="text-align: center; margin-bottom: 30px; color: var(--text-secondary);">
+            You have <strong>$10,000</strong>. Balance the budget to maximize ROI.<br>
+            <span style="font-size: 12px; opacity: 0.7;">(Hint: Great content without distribution fails. Bad content with distribution burns money.)</span>
+        </p>
+
+        <div class="sim-dashboard">
+            <div class="sim-controls">
+                
+                <div class="control-group">
+                    <div class="label-row">
+                        <span>Production Quality</span>
+                        <span id="prod-val">50%</span>
+                    </div>
+                    <input type="range" id="budget-slider" min="10" max="90" value="50" class="slider">
+                    <div class="label-row" style="margin-top: 5px;">
+                        <span style="font-size: 10px; color: #999;">Better Visuals</span>
+                        <span style="font-size: 10px; color: #999;">More Reach</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="label-row"><span>Strategy Profile</span></div>
+                    <div class="strategy-options">
+                        <button class="strat-btn active" onclick="setStrategy('safe', this)">Safe (Corporate)</button>
+                        <button class="strat-btn" onclick="setStrategy('viral', this)">Viral (Edgy)</button>
+                    </div>
+                </div>
+
+                <button id="launch-btn" onclick="runSimulation()">LAUNCH CAMPAIGN ($10k)</button>
+            </div>
+
+            <div id="sim-result" class="sim-result">
+                <div class="result-header">CAMPAIGN REPORT</div>
+                
+                <div class="metric-grid">
+                    <div class="metric-box">
+                        <span class="m-label">Views</span>
+                        <span class="m-value" id="res-views">0</span>
+                    </div>
+                    <div class="metric-box">
+                        <span class="m-label">Conversion</span>
+                        <span class="m-value" id="res-conv">0%</span>
+                    </div>
+                    <div class="metric-box full">
+                        <span class="m-label">Total Revenue</span>
+                        <span class="m-value large" id="res-revenue">$0</span>
+                    </div>
+                </div>
+
+                <div class="roi-badge" id="roi-badge">ROI: 0%</div>
+                <p id="manager-feedback" class="feedback-text">Waiting for launch...</p>
+            </div>
+        </div>
+    </div>
+    <style>
+    /* =========================================
+           CSS 4: A/B TEST
+        ========================================= */
+        .ab-test-wrapper {
+            display: flex; gap: 20px; justify-content: center; margin-bottom: 20px;
+        }
+        .ab-card {
+            width: 200px; height: 250px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px; cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+            position: relative; overflow: hidden;
+        }
+        .ab-card:hover { transform: translateY(-5px); border-color: var(--text-primary); }
+        
+        .ab-visual {
+            width: 100%; height: 100%; background: #f4f4f4;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 20px;
+        }
+        .ab-label {
+            position: absolute; top: 10px; left: 10px; font-weight: 700; color: #999;
+        }
+
+        /* Mockup Visuals */
+        .line { height: 8px; background: #ddd; margin-bottom: 8px; border-radius: 4px; }
+        .line.long { width: 100%; } .line.short { width: 60%; }
+        .btn-mock { width: 80%; height: 30px; background: #333; margin-top: auto; border-radius: 4px; color: #fff; font-size: 10px; display: grid; place-items: center;}
+        .circle-big { width: 80px; height: 80px; background: #ddd; border-radius: 50%; margin-bottom: 15px; }
+        .btn-mock.highlight { background: #000; font-weight: 700; }
+
+        #ab-result {
+            text-align: center; font-family: 'Fira Code', monospace;
+            font-size: 14px; min-height: 40px; margin-top: 20px;
+        }
+        
+        /* State Menang/Kalah */
+        .winner { border-color: #10B981 !important; background: rgba(16, 185, 129, 0.05); }
+        .loser { border-color: #EF4444 !important; opacity: 0.5; }
+
+
+        /* =========================================
+           CSS 5: COLOR PSYCHOLOGY
+        ========================================= */
+        .color-picker-wrapper {
+            display: flex; gap: 15px; justify-content: center; margin-bottom: 30px;
+        }
+        .color-btn {
+            width: 50px; height: 50px; border-radius: 50%; cursor: pointer;
+            border: 2px solid rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .color-btn:hover { transform: scale(1.1); }
+        
+        .color-info { text-align: center; transition: color 0.3s; }
+        #color-name { font-size: 32px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.02em; }
+        #color-desc { color: var(--text-secondary); max-width: 400px; margin: 0 auto; line-height: 1.5; }
+
+        /* =========================================
+           CSS 6: ROI SIMULATOR (DASHBOARD STYLE)
+        ========================================= */
+        .sim-dashboard {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+            background: #fff; border: 1px solid var(--border-color);
+            border-radius: 20px; padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        }
+        
+        @media (max-width: 768px) { .sim-dashboard { grid-template-columns: 1fr; } }
+
+        /* Controls Left */
+        .control-group { margin-bottom: 30px; }
+        .label-row { display: flex; justify-content: space-between; font-weight: 600; font-size: 14px; margin-bottom: 10px; }
+        
+        /* Custom Slider */
+        .slider {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            width: 100%; height: 6px; background: #e5e5e5; border-radius: 5px; outline: none;
+        }
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #000; cursor: pointer; border: 2px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* Strategy Buttons */
+        .strategy-options { display: flex; gap: 10px; }
+        .strat-btn {
+            flex: 1; padding: 12px; border: 1px solid var(--border-color); background: #fff;
+            border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 500;
+            transition: all 0.2s;
+        }
+        .strat-btn.active { background: #000; color: #fff; border-color: #000; }
+
+        #launch-btn {
+            width: 100%; padding: 16px; background: #000; color: #fff; border: none;
+            border-radius: 8px; font-weight: 700; cursor: pointer; letter-spacing: 1px;
+            transition: transform 0.1s; margin-top: 10px;
+        }
+        #launch-btn:active { transform: scale(0.98); }
+
+        /* Results Right (Receipt Style) */
+        .sim-result {
+            background: #f9f9f9; border: 1px solid var(--border-color); border-radius: 12px;
+            padding: 24px; position: relative; opacity: 0.5; pointer-events: none; transition: opacity 0.3s;
+        }
+        .sim-result.active { opacity: 1; pointer-events: auto; background: #fff; border-color: #000; }
+
+        .result-header {
+            font-family: 'Fira Code', monospace; font-size: 12px; color: #999; 
+            border-bottom: 1px dashed #ccc; padding-bottom: 10px; margin-bottom: 20px; letter-spacing: 1px;
+        }
+
+        .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .metric-box { background: #f4f4f4; padding: 15px; border-radius: 8px; }
+        .metric-box.full { grid-column: span 2; background: #111; color: #fff; }
+        
+        .m-label { display: block; font-size: 11px; text-transform: uppercase; opacity: 0.7; margin-bottom: 5px; }
+        .m-value { font-size: 18px; font-weight: 700; font-family: 'Fira Code', monospace; }
+        .m-value.large { font-size: 24px; }
+
+        .roi-badge {
+            display: inline-block; padding: 6px 12px; background: #e5e5e5; border-radius: 50px;
+            font-size: 12px; font-weight: 700; margin-bottom: 15px;
+        }
+        .roi-badge.positive { background: #d1fae5; color: #065f46; } /* Hijau */
+        .roi-badge.negative { background: #fee2e2; color: #991b1b; } /* Merah */
+
+        .feedback-text { font-size: 13px; line-height: 1.5; font-style: italic; color: var(--text-secondary); }
+    </style>
+    <script>
+        let currentStrategy = 'safe';
+
+        // Update Slider Text
+        const slider = document.getElementById('budget-slider');
+        const prodVal = document.getElementById('prod-val');
+        
+        slider.addEventListener('input', (e) => {
+            prodVal.textContent = e.target.value + "%";
+        });
+
+        function setStrategy(strat, btn) {
+            currentStrategy = strat;
+            // Visual toggle
+            document.querySelectorAll('.strat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        function runSimulation() {
+            const resultCard = document.getElementById('sim-result');
+            const launchBtn = document.getElementById('launch-btn');
+            
+            // Efek Loading
+            launchBtn.textContent = "CALCULATING...";
+            resultCard.style.opacity = '0.5';
+            
+            setTimeout(() => {
+                // 1. Ambil Data Input
+                const productionPct = parseInt(slider.value) / 100; // 0.1 - 0.9
+                const distributionPct = 1 - productionPct;          // Sisa budget
+                const totalBudget = 10000;
+
+                // 2. Algoritma Perhitungan
+                let qualityScore = productionPct * 10; // 1-9
+                let reachScore = distributionPct * 100000; // Potential view base
+
+                // Faktor Hukuman (Penalties)
+                // Kalau produksi terlalu murah (<30%), kualitas anjlok parah
+                if (productionPct < 0.3) qualityScore = qualityScore * 0.5;
+                
+                // Kalau distribusi pelit (<20%), algoritma sosmed mati
+                if (distributionPct < 0.2) reachScore = reachScore * 0.2;
+
+                // 3. Faktor Strategi
+                let viralityFactor = 1;
+                let conversionRate = 0.02; // Standar 2%
+
+                if (currentStrategy === 'safe') {
+                    // Safe: Hasil stabil, variasi kecil
+                    viralityFactor = 1.0 + (Math.random() * 0.2); // 1.0 - 1.2
+                    conversionRate = 0.02 + (qualityScore * 0.001); // Kualitas nambah konversi dikit
+                } else {
+                    // Viral: High Risk High Return
+                    const chance = Math.random();
+                    if (chance > 0.7) {
+                        viralityFactor = 3.0 + (Math.random() * 2); // MELEDAK (3x - 5x)
+                        conversionRate = 0.03; // Hype buying
+                    } else {
+                        viralityFactor = 0.4; // FLOP (Konten aneh, orang ga suka)
+                        conversionRate = 0.01;
+                    }
+                }
+
+                // 4. Hitung Hasil Akhir
+                const finalViews = Math.floor(reachScore * viralityFactor * (qualityScore/5)); 
+                const salesCount = Math.floor(finalViews * conversionRate);
+                const revenuePerSale = 50; // Anggap jual produk harga $50
+                const totalRevenue = salesCount * revenuePerSale;
+                
+                const profit = totalRevenue - totalBudget;
+                const roi = ((profit / totalBudget) * 100).toFixed(1);
+                // Safeguard numerical results and expose a small summary for UI/analytics
+                const safeSalesCount = Math.max(0, salesCount);
+                const safeTotalRevenue = Number.isFinite(totalRevenue) ? totalRevenue : 0;
+                const safeProfit = Number.isFinite(profit) ? profit : (safeTotalRevenue - totalBudget);
+                let roiNumber = parseFloat(roi);
+                if (!isFinite(roiNumber)) roiNumber = 0;
+
+                // Avoid divide-by-zero when calculating CPA
+                const costPerAcquisition = safeSalesCount > 0 ? +(totalBudget / safeSalesCount).toFixed(2) : null;
+
+                // Keep a handy object for debugging or further UI uses
+                window.lastCampaignSim = {
+                    views: finalViews,
+                    sales: safeSalesCount,
+                    revenue: safeTotalRevenue,
+                    profit: safeProfit,
+                    roi: roiNumber,
+                    cpa: costPerAcquisition
+                };
+                // 5. Update UI
+                document.getElementById('res-views').textContent = finalViews.toLocaleString();
+                document.getElementById('res-conv').textContent = (conversionRate * 100).toFixed(1) + "%";
+                document.getElementById('res-revenue').textContent = "$" + totalRevenue.toLocaleString();
+                
+                const roiBadge = document.getElementById('roi-badge');
+                roiBadge.textContent = `ROI: ${roi}%`;
+                
+                // Warna Badge & Feedback Text
+                const feedback = document.getElementById('manager-feedback');
+                
+                if (profit > 0) {
+                    roiBadge.className = "roi-badge positive";
+                    if (roi > 100) {
+                        feedback.textContent = "🚀 OUTSTANDING! The creative hit the sweet spot and distribution was perfect. Bonus incoming?";
+                    } else {
+                        feedback.textContent = "✅ Good job. We made a profit. The client is happy.";
+                    }
+                } else {
+                    roiBadge.className = "roi-badge negative";
+                    if (productionPct > 0.8) {
+                        feedback.textContent = "📉 Visuals were stunning (" + (productionPct*100) + "% budget), but nobody saw them. Don't forget distribution.";
+                    } else if (distributionPct > 0.8) {
+                        feedback.textContent = "📉 Lots of ads, but the content quality was too low (" + (productionPct*100) + "% budget). People scrolled past.";
+                    } else {
+                        feedback.textContent = "❌ Campaign flopped. Try adjusting the budget split or strategy.";
+                    }
+                }
+
+                // Show Result
+                resultCard.classList.add('active');
+                launchBtn.textContent = "RUN AGAIN";
+                
+            }, 800); // Delay 800ms biar kerasa "mikir"
+        }
+    </script>
+
+</body>
+</html>
