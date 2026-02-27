@@ -742,23 +742,6 @@ body.preloader-active { overflow: hidden; }
 /* =========================================
    7. EXPERIENCE REVEAL IMAGE
    ========================================= */
-.experience-reveal-img {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 280px;
-    height: auto;
-    aspect-ratio: 16/9;
-    object-fit: cover;
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0;
-    visibility: hidden;
-    border-radius: 12px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-    transform-origin: center center;
-}
-/* #endregion */
 
 /* #region 8. BITS SLIDER & LIGHTBOX */
 /* =========================================

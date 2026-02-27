@@ -30,12 +30,10 @@ document.addEventListener("DOMContentLoaded", () => {
     initNavbar();
 
     // 3. Render Projects
-    renderProjects();
+    // renderProjects(); // This function is for portfolio.html, not index.html
 
     // 4. Animations
     initInteractiveHero(); // Changed from initHeroAnimation
-    initScrollReveal();
-    initFooterAnimation();
 
     // 5. Custom Cursor
     initCustomCursor();
@@ -48,9 +46,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 8. FAQ Accordion
     initFAQ();
-
-    // 9. Text Reveal Animation
-    initTextReveal();
 
     // 10. Video Card Controls
     initVideoCards();
@@ -198,6 +193,105 @@ function renderProjects() {
 // =========================================
 // 4. GSAP ANIMATIONS
 // =========================================
+
+/**
+ * Uses a single IntersectionObserver to handle all scroll-triggered animations
+ * for better performance than multiple ScrollTriggers.
+ */
+function initObserverAnimations() {
+    // Select all elements intended for scroll-based animations
+    const animatedElements = document.querySelectorAll('.fade-in-section, .text-reveal');
+
+    if (!animatedElements.length) return;
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Handle complex text reveal animation
+                if (entry.target.classList.contains('text-reveal')) {
+                    animateTextReveal(entry.target);
+                } 
+                // Handle specific Experience item animation
+                else if (entry.target.classList.contains('experience-item')) {
+                    animateExperienceItem(entry.target);
+                }
+                // Handle simple fade-in animations
+                else {
+                    entry.target.classList.add('is-visible');
+                }
+                // Stop observing the element after it has animated once
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.15, // Trigger when 15% of the element is visible
+        rootMargin: "0px 0px -50px 0px" // Trigger a bit earlier
+    });
+
+    animatedElements.forEach(el => {
+        observer.observe(el);
+    });
+}
+
+/**
+ * Animates an experience item with a staggered effect.
+ * This is more performant than the old hover-reveal and more interesting
+ * than a simple fade-in.
+ * @param {HTMLElement} item The .experience-item element to animate.
+ */
+function animateExperienceItem(item) {
+    const title = item.querySelector('.experience-item__title');
+    const company = item.querySelector('.experience-item__company');
+    const meta = item.querySelector('.experience-item__meta');
+
+    // Use a GSAP timeline for a controlled, staggered sequence
+    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+    
+    tl.to(item, {
+        opacity: 1,
+        x: 0,
+        duration: 0.8
+    })
+    .fromTo([title, company, meta], 
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, stagger: 0.1 },
+        "-=0.6" // Overlap animations for a smoother effect
+    );
+}
+
+/**
+ * Helper function to run the GSAP text animation for headlines.
+ * This is called by the IntersectionObserver.
+ * @param {HTMLElement} element The .text-reveal element to animate.
+ */
+function animateTextReveal(element) {
+    element.style.opacity = '1'; // Make container visible
+    
+    const text = element.innerText;
+    const words = text.split(' ').filter(word => word.trim() !== '');
+    element.innerHTML = '';
+
+    words.forEach((word, index) => {
+        const span = document.createElement('span');
+        span.textContent = word;
+        span.style.display = 'inline-block';
+        span.style.opacity = '0';
+        span.style.transform = 'translateY(30px)';
+        if (index < words.length - 1) {
+            span.style.marginRight = '0.25em';
+        }
+        element.appendChild(span);
+    });
+
+    gsap.to(element.children, {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        stagger: 0.05,
+        ease: "power3.out"
+    });
+}
+
 /**
  * Animates the NEW Interactive Hero section.
  */
@@ -214,10 +308,10 @@ function initInteractiveHero() {
             bounds: ".hero-playground-section",
             inertia: true,
             onPress: function() {
-                gsap.to(this.target, { scale: 1.05, boxShadow: "0 30px 60px rgba(0,0,0,0.15)", duration: 0.2 });
+                gsap.to(this.target, { scale: 1.05, zIndex: 100, boxShadow: "0 30px 60px rgba(0,0,0,0.15)", duration: 0.2 });
             },
             onRelease: function() {
-                gsap.to(this.target, { scale: 1, boxShadow: "0 20px 40px rgba(0,0,0,0.1)", duration: 0.2 });
+                gsap.to(this.target, { scale: 1, zIndex: 'auto', boxShadow: "0 20px 40px rgba(0,0,0,0.1)", duration: 0.2 });
             }
         });
     }
@@ -245,48 +339,8 @@ function initInteractiveHero() {
             "-=0.4"
         );
     }
-}
-
-/**
- * Sets up scroll-triggered animations for project cards.
- */
-function initScrollReveal() {
-    // Wait slightly for DOM to settle
-    setTimeout(() => {
-        const cards = document.querySelectorAll('.project-card');
-        ScrollTrigger.batch(cards, {
-            start: "top 85%",
-            onEnter: batch => gsap.to(batch, {
-                opacity: 1, 
-                y: 0, 
-                stagger: 0.15, 
-                duration: 0.8, 
-                ease: "power3.out" 
-            })
-        });
-    }, 100);
-}
-
-/**
- * Animates the footer when it comes into view.
- */
-function initFooterAnimation() {
-    const footer = document.querySelector('.footer-2');
-    if(footer) {
-        gsap.fromTo(footer,
-            { opacity: 0, y: 50 },
-            {
-                scrollTrigger: {
-                    trigger: footer,
-                    start: "top 90%"
-                },
-                opacity: 1,
-                y: 0,
-                duration: 1,
-                ease: "power2.out"
-            }
-        );
-    }
+    // Call the observer-based animations after the main hero is set up
+    initObserverAnimations();
 }
 //#endregion
 
@@ -498,49 +552,6 @@ function initVideoCards() {
              }
          }
      });
-}
-//#endregion
-
-//#region TEXT REVEAL
-// =========================================
-// 9. TEXT REVEAL ANIMATION
-// =========================================
-function initTextReveal() {
-    const textReveals = document.querySelectorAll('.text-reveal');
-    
-    textReveals.forEach(el => {
-        // Ensure container is visible
-        el.style.opacity = '1';
-        
-        const text = el.innerText;
-        const words = text.split(' ').filter(word => word.trim() !== '');
-        el.innerHTML = '';
-
-        words.forEach((word, index) => {
-            const span = document.createElement('span');
-            span.textContent = word;
-            span.style.display = 'inline-block';
-            if (index < words.length - 1) {
-                span.style.marginRight = '0.25em';
-            }
-            span.style.opacity = '0';
-            span.style.transform = 'translateY(30px)';
-            el.appendChild(span);
-        });
-
-        gsap.to(el.children, {
-            scrollTrigger: {
-                trigger: el,
-                start: "top 85%",
-                toggleActions: "play none none reverse"
-            },
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            stagger: 0.05,
-            ease: "power3.out"
-        });
-    });
 }
 //#endregion
 
