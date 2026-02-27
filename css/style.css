@@ -117,9 +117,8 @@ p, li, span, .paragraph, .about-text {
 }
 .navbar.scrolled {
     padding: 0.6rem 5%; /* Maintain horizontal spacing on scroll */
-    background-color: rgba(255, 255, 255, 0.85); /* More translucent */
-    backdrop-filter: blur(16px); /* Stronger blur for better text readability */
-    -webkit-backdrop-filter: blur(16px);
+    /* backdrop-filter is removed for performance. Using a more opaque background instead. */
+    background-color: rgba(255, 255, 255, 0.952);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 .navbar.navbar-hidden {
@@ -263,12 +262,27 @@ html, body {
 /* #endregion */
 
 /* Floating animation for mobile hero items */
-@keyframes float-animation {
+@keyframes float-left-animation {
     0%, 100% {
-        transform: translateY(0px);
+        transform: rotate(-5deg) translateY(0px);
     }
     50% {
-        transform: translateY(-10px);
+        transform: rotate(-5deg) translateY(-10px);
+    }
+}
+
+@keyframes float-right-animation {
+    0%, 100% {
+        transform: rotate(5deg) translateY(0px);
+    }
+    50% {
+        transform: rotate(5deg) translateY(-10px);
+    }
+}
+
+@keyframes text-gradient-animation {
+    to {
+        background-position: -200% center;
     }
 }
 
@@ -1574,6 +1588,17 @@ html.lenis, html.lenis body { height: auto; }
         margin-left: auto;
         margin-right: auto;
     }
+
+    /* Mobile-specific adjustments for metric tags */
+    .metric-tag {
+        font-size: 0.7rem; /* Smaller font */
+        padding: 6px 12px; /* Tighter padding */
+    }
+
+    /* Make mute button always visible on mobile for better UX */
+    .work-card__mute-btn {
+        opacity: 1;
+    }
 }
 
 /* #region 25b. VIDEO CARD CONTROLS */
@@ -1682,8 +1707,14 @@ html.lenis, html.lenis body { height: auto; }
     line-height: 0.9;
     letter-spacing: -0.04em;
     font-weight: 800;
-    color: #111;
     margin-bottom: 24px;
+    /* Animated Gradient Effect */
+    background: linear-gradient(90deg, #000, #636363, #000);
+    background-size: 200% auto;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: text-gradient-animation 5s linear infinite;
 }
 
 .hero-subtitle {
@@ -1829,7 +1860,7 @@ html.lenis, html.lenis body { height: auto; }
         bottom: 5%; right: 2%; transform: rotate(3deg);
     }
     .hero-drag-layer .drag-item:nth-of-type(3) { /* Sticker Pill */
-        top: 5%; right: 5%; transform: rotate(5deg);
+        top: 86%; right: 38%; transform: rotate(5deg);
     }
     .hero-drag-layer .drag-item:nth-of-type(4) { /* Sticker Circle */
         bottom: 8%; left: 5%; transform: rotate(-10deg);
@@ -1923,17 +1954,17 @@ html.lenis, html.lenis body { height: auto; }
 
     .drag-item {
         position: static !important; /* Override absolute positioning from tablet */
-        transform: none; /* Reset transform from desktop/tablet */
+        /* transform: none; <-- This is removed to allow animations to apply their own transform. */
     }
 
     /* Apply floating animation to the visible cards on mobile */
-    .hero-drag-layer .card-item {
-        animation: float-animation 6s ease-in-out infinite;
+    .hero-drag-layer .card-item:nth-of-type(1) {
+        animation: float-left-animation 6s ease-in-out infinite;
     }
 
     /* Stagger the animation for a more natural effect */
     .hero-drag-layer .card-item:nth-of-type(2) {
-        animation-delay: -3s; /* Start second card halfway through the animation */
+        animation: float-right-animation 6s ease-in-out infinite -3s; /* Staggered start */
     }
 
     .hero-huge-title { 

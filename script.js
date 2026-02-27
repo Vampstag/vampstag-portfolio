@@ -522,11 +522,21 @@ function initBitsSlider() {
  */
 function initTabTitleSwitch() {
     const originalTitle = document.title;
+    const favicon = document.getElementById('favicon');
+
+    if (!favicon) return; // Exit if favicon element is not found
+
+    const originalFavicon = favicon.href;
+    // NOTE: You need to create this 'away' favicon image and place it in the correct path.
+    const awayFavicon = 'assets/images/favicon-away.png'; 
+
     document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
             document.title = 'Hey, come back! 👋';
+            favicon.href = awayFavicon;
         } else {
             document.title = originalTitle;
+            favicon.href = originalFavicon;
         }
     });
 }

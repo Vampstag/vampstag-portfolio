@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         const startSequence = () => {
             if (document.readyState === 'complete') {
                 initFooterMagnetic();
-                initExperienceTilt(); // Initialize the new tilt effect
+                // initExperienceTilt(); // DISABLED FOR PERFORMANCE
             } else {
                 window.addEventListener('load', initFooterMagnetic);
             }
@@ -86,45 +86,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
             });
         }
 
-        // --- 7. Experience Item 3D Tilt Effect ---
-        function initExperienceTilt() {
-            const experienceItems = document.querySelectorAll('.experience-item');
-
-            experienceItems.forEach(item => {
-                item.addEventListener('mousemove', (e) => {
-                    const rect = item.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
-
-                    // Calculate rotation based on mouse position relative to center
-                    // Max rotation is set to 8 degrees for a subtle effect
-                    const rotateX = ((y - centerY) / centerY) * -8;
-                    const rotateY = ((x - centerX) / centerX) * 8;
-
-                    gsap.to(item, {
-                        rotationX: rotateX,
-                        rotationY: rotateY,
-                        scale: 1.03,
-                        transformPerspective: 1000,
-                        duration: 0.5,
-                        ease: "power2.out"
-                    });
-                });
-
-                item.addEventListener('mouseleave', () => {
-                    gsap.to(item, {
-                        rotationX: 0,
-                        rotationY: 0,
-                        scale: 1,
-                        duration: 1,
-                        ease: "elastic.out(1, 0.3)"
-                    });
-                });
-            });
-        }
     });
     //#endregion
 
