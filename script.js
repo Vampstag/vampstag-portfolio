@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderProjects();
 
     // 4. Animations
-    initHeroAnimation();
+    initInteractiveHero(); // Changed from initHeroAnimation
     initScrollReveal();
     initFooterAnimation();
 
@@ -196,54 +196,51 @@ function renderProjects() {
 // 4. GSAP ANIMATIONS
 // =========================================
 /**
- * Animates the hero section elements on load.
+ * Animates the NEW Interactive Hero section.
  */
-function initHeroAnimation() {
-    // -- Selectors --
-    const headline = document.querySelector('.home-hero-headline-text-2');
-    const filters = document.querySelectorAll('.filter-btn');
-    const portfolioHero = document.querySelector('.home-hero-headline-wrapper.page-portfolio');
-    const portfolioTabs = document.querySelector('.portfolio-menu');
+function initInteractiveHero() {
+    // 1. Register Draggable
+    gsap.registerPlugin(Draggable);
 
-    const runAnimation = () => {
-        const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-
-        // 1. Portfolio Page Hero
-        if (portfolioHero) {
-            tl.fromTo(portfolioHero, 
-                { y: 50, autoAlpha: 0 },
-                { y: 0, autoAlpha: 1, duration: 1 }
-            );
-            if (portfolioTabs) {
-                tl.fromTo(portfolioTabs, 
-                    { y: 30, autoAlpha: 0 },
-                    { y: 0, autoAlpha: 1, duration: 0.8 },
-                    "-=0.6"
-                );
+    // Only enable Draggable on non-mobile screens (desktop) for better scroll experience
+    if (window.matchMedia("(min-width: 992px)").matches) {
+        // 2. Initialize Draggable on items
+        Draggable.create(".drag-item", {
+            type: "x,y",
+            edgeResistance: 1,
+            bounds: ".hero-playground-section",
+            inertia: true,
+            onPress: function() {
+                gsap.to(this.target, { scale: 1.05, boxShadow: "0 30px 60px rgba(0,0,0,0.15)", duration: 0.2 });
+            },
+            onRelease: function() {
+                gsap.to(this.target, { scale: 1, boxShadow: "0 20px 40px rgba(0,0,0,0.1)", duration: 0.2 });
             }
-        } 
-        // 2. Generic/Home Hero
-        else if (headline) {
-            tl.fromTo(headline, 
-                { y: 50, opacity: 0 },
-                { y: 0, opacity: 1, duration: 1, delay: 0.5 }
-            );
-        }
+        });
+    }
 
-        if (filters.length > 0) {
-            tl.fromTo(filters, 
-                { y: 20, opacity: 0 },
-                { y: 0, opacity: 1, duration: 0.8, stagger: 0.1 }, 
-                "-=0.5"
-            );
-        }
-    };
+    // 3. Entrance Animation (Pop in elements)
+    const tl = gsap.timeline({ defaults: { ease: "back.out(1.7)" } });
+    
+    // Animate Text First
+    tl.fromTo(".hero-huge-title", 
+        { y: 50, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, ease: "power3.out" }
+    )
+    .fromTo(".hero-subtitle, .hero-badge", 
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" },
+        "-=0.6"
+    );
 
-    // Check for Preloader to sync animation
-    if (document.body.classList.contains('preloader-active')) {
-        window.addEventListener('preloaderDone', runAnimation, { once: true });
-    } else {
-        runAnimation();
+    // Animate Draggable Items (Staggered Pop)
+    const items = document.querySelectorAll('.drag-item');
+    if (items.length > 0) {
+        tl.fromTo(items, 
+            { scale: 0, opacity: 0 },
+            { scale: 1, opacity: 1, duration: 0.6, stagger: 0.1 },
+            "-=0.4"
+        );
     }
 }
 

@@ -286,7 +286,7 @@
                                     </div>
                                     <div class="line-below"></div>
                                 </a>
-                                <a href="journal.html" class="navigation-link w-inline-block">
+                                <a href="journal.html" class="navigation-link w-inline-block" style="display: none;">
                                     <div class="button-text-wrapper">
                                         <div class="button-text">Insights</div>
                                         <div class="button-text">Insights</div>
@@ -316,7 +316,7 @@
                                     <a href="index.html" class="mobile-link">Home</a>
                                     <a href="about.html" class="mobile-link">About</a>
                                     <a href="portfolio.html" class="mobile-link">Portfolio</a>
-                                    <a href="journal.html" class="mobile-link">Insights</a>
+                                    <a href="journal.html" class="mobile-link" style="display: none;">Insights</a>
                                 </div>
                                 
                                 <a href="https://webflow.com/templates/html/kate-m-website-template" target="_blank" class="button-normal-black-wrapper-2 w-inline-block mobile-cta">
@@ -331,47 +331,53 @@
                     </div>
                 </div>
             </div>
-            <section id="top" class="home-hero-section">
+            <section id="top" class="hero-playground-section">
                 <div class="w-layout-blockcontainer global-wrapper w-container">
-                    <div class="global-padding">
-                        <div class="home-hero-wrapper">
-                            <div class="home-hero-headline-wrapper animate-on-load-hello">
-                                <div class="home-hero-headline-text-2">Hello there</div>
-                                <div class="emoji-container">
-                                    <img loading="eager" width="60" height="60" alt="Hi emoji" src="https://cdn.prod.website-files.com/68b88ad5bf41a0f5c752eab7/67631cf992d0c17f2b67e7de_%F0%9F%91%8B.webp" class="hi-emoji"/>
-                                    <div class="sparkle-1">✦</div>
-                                    <div class="sparkle-2">✦</div>
-                                    <div class="sparkle-3">✦</div>
-                                </div>
+                    <div class="hero-playground-container">
+                        
+                        <!-- LAYER 1: Static Text (Background) -->
+                        <div class="hero-static-layer">
+                            <div class="hero-badge">
+                                <span class="status-dot"></span> Available for work
                             </div>
-                            <div class="home-hero-images-wrapper section-margin">
-                                <div class="home-hero-image-card-wrapper-01-2 hero-card">
-                                    <div class="home-hero-image-card-headline-block">
-                                        <div class="home-hero-image-card-01-headine-text-2">Based in Bandung</div>
-                                    </div>
-                                    <div class="home-hero-card-image-block-2">
-                                        <img loading="eager" src="assets/images/home/gedung-sate.webp" alt="Gedung Sate" class="home-hero-card-image-2"/>
-                                    </div>
-                                </div>
-                                <div class="home-hero-image-card-wrapper-02 hero-card">
-                                    <div class="home-hero-image-card-headline-block">
-                                        <div class="home-hero-image-card-02-headine-text-2">My Name&#x27;s</div>
-                                        <div class="home-hero-image-card-02-headine-text-2">Dimas</div>
-                                    </div>
-                                    <div class="home-hero-card-image-block-2">
-                                        <img height="70" alt="Hero Image" src="assets/images/home/dimas4.webp" loading="eager" class="home-hero-card-image-2"/>
-                                    </div>
-                                </div>
-                                <div class="home-hero-image-card-wrapper-03-2 hero-card">
-                                    <div class="home-hero-image-card-headline-block">
-                                        <div class="home-hero-image-card-03-headine-text-2">Creative</div>
-                                        <div class="home-hero-image-card-03-headine-text-2">Marketer</div>
-                                    </div>
-                                    <div class="home-hero-card-image-block-2">
-                                        <img alt="" src="assets/images/project/tsukamie/tsukamie2.webp" loading="eager" class="home-hero-card-image-2"/>
-                                    </div>
-                                </div>
+                            <h1 class="hero-huge-title">
+                                Creative<br>Marketer
+                            </h1>
+                            <p class="hero-subtitle">
+                                Designing experiences that matter. <br>Based in Bandung, Indonesia.
+                            </p>
+                        </div>
+
+                        <!-- LAYER 2: Draggable Elements (Foreground) -->
+                        <div class="hero-drag-layer">
+                            
+                            <!-- Item 1: Photo Card -->
+                            <div class="drag-item card-item" style="top: 10%; left: 5%; transform: rotate(-5deg);">
+                                <img src="assets/images/home/dimas4.webp" alt="Dimas Portrait" draggable="false">
+                                <div class="card-caption">Hi, I'm Dimas!👋</div>
                             </div>
+
+                            <!-- Item 2: Project Preview -->
+                            <div class="drag-item card-item" style="bottom: 15%; right: 5%; transform: rotate(3deg);">
+                                <img src="assets/images/project/tsukamie/tsukamie2.webp" alt="Latest Project" draggable="false">
+                                <div class="card-caption">Latest Work</div>
+                            </div>
+
+                            <!-- Item 3: Sticker Pill -->
+                            <div class="drag-item sticker-pill" style="top: 20%; right: 15%; transform: rotate(5deg);">
+                                <span>📍 Bandung</span>
+                            </div>
+
+                            <!-- Item 4: Sticker Circle -->
+                            <div class="drag-item sticker-circle" style="bottom: 25%; left: 10%;">
+                                <span>Scroll<br>Down</span>
+                            </div>
+
+                            <!-- Item 5: Abstract/Icon -->
+                            <div class="drag-item sticker-icon" style="top: 55%; right: 25%; transform: rotate(15deg);">
+                                ✦
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -380,23 +386,50 @@
                 <div class="w-layout-blockcontainer global-wrapper w-container">
                     <div class="global-padding">
                         <section id="about-section" class="about-section-wrapper">
-                            <div class="about-headline-block">
-                                <div class="section-headline-text text-3xl text-weight-semibold text-color-black-900 text-reveal">About me</div>
-                            </div>
-                            <div data-w-id="17981745-b76c-fdb8-d5a0-45626b3a0fb4" style="opacity:0" class="about-text-block">
-                                <p class="about-text text-xl text-weight-medium text-color-black-900 big-black leading-edit">
-                                    I’m a Marketing student based in Bandung, Indonesia. On 
-                                    <a href="about.html" class="hover-trigger">
-                                        About
-                                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop" class="hover-image" alt="My Portrait"/>
-                                    </a>, 
-                                    you'll find how I combine design and marketing strategy to create work that’s visually engaging and data driven. My 
-                                    <a href="portfolio.html" class="hover-trigger">
-                                        Portfolio
-                                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=200&auto=format&fit=crop" class="hover-image" alt="My Work"/>
-                                    </a> 
-                                    highlights projects focused on content creation and brand storytelling.
-                                </p>
+                            <div class="about-layout-grid">
+                                <div class="about-sidebar">
+                                    <div class="section-headline-text text-3xl text-weight-semibold text-color-black-900 text-reveal">About me</div>
+                                </div>
+                                <div class="about-main-content">
+                                    <div data-w-id="17981745-b76c-fdb8-d5a0-45626b3a0fb4" class="about-text-block">
+                                        <h3 class="about-lead-text">
+                                            I’m a Marketing student based in Bandung, Indonesia.
+                                        </h3>
+                                        <p class="about-paragraph">
+                                            I combine <span class="text-highlight">design</span> and <span class="text-highlight">marketing strategy</span> to create work that’s visually engaging and data driven.
+                                        </p>
+                                        <p class="about-paragraph">
+                                            Check out my 
+                                            <a href="about.html" class="hover-trigger">
+                                                About page
+                                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop" class="hover-image" alt="My Portrait"/>
+                                            </a> 
+                                            for the full story, or explore my 
+                                            <a href="portfolio.html" class="hover-trigger">
+                                                Portfolio
+                                                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=200&auto=format&fit=crop" class="hover-image" alt="My Work"/>
+                                            </a> 
+                                            to see my latest projects.
+                                        </p>
+                                        
+                                        <div class="about-divider"></div>
+                                        
+                                        <div class="about-meta-grid">
+                                            <div class="meta-item">
+                                                <span class="meta-label">Location</span>
+                                                <span class="meta-value">Bandung, West Java</span>
+                                            </div>
+                                            <div class="meta-item">
+                                                <span class="meta-label">Focus</span>
+                                                <span class="meta-value">Content & Strategy</span>
+                                            </div>
+                                            <div class="meta-item">
+                                                <span class="meta-label">Status</span>
+                                                <span class="meta-value">Open for Collabs</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </section>
                     </div>
@@ -642,7 +675,7 @@
                     </div>
                 </div>
             </section>
-            <section id="latest-insights" class="journal-section fade-in-section">
+            <section id="latest-insights" class="journal-section fade-in-section" style="display: none;">
                 <div class="w-layout-blockcontainer global-wrapper w-container">
                     <div class="global-padding">
                         <div class="blogs-section-wrappar">
