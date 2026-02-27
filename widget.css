@@ -214,7 +214,6 @@
     border-radius: 8px;
     text-transform: uppercase;
     transition: all 0.3s ease;
-    border: 2px solid #ffffff;
 }
 
 .mdkg-book-btn:hover {
