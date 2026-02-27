@@ -229,6 +229,9 @@
                 "hideDecimalForWholeNumbers": false
             };
         </script>
+    <!-- 1. Performance: Preload LCP Image -->
+    <link rel="preload" as="image" href="assets/images/home/dimas4.webp" fetchpriority="high">
+
     </head>
     <body class="body-2">
         <div id="preloader">
@@ -331,20 +334,20 @@
                     </div>
                 </div>
             </div>
-            <section id="top" class="hero-playground-section">
+            <section id="top" class="hero-playground-section section-margin">
                 <div class="w-layout-blockcontainer global-wrapper w-container">
                     <div class="hero-playground-container">
                         
                         <!-- LAYER 1: Static Text (Background) -->
                         <div class="hero-static-layer">
                             <div class="hero-badge">
-                                <span class="status-dot"></span> Available for work
+                                <span class="status-dot"></span> Open to Collaborate
                             </div>
                             <h1 class="hero-huge-title">
                                 Creative<br>Marketer
                             </h1>
                             <p class="hero-subtitle">
-                                Designing experiences that matter. <br>Based in Bandung, Indonesia.
+                                Helping brands grow through strategy and storytelling.
                             </p>
                         </div>
 
@@ -352,29 +355,29 @@
                         <div class="hero-drag-layer">
                             
                             <!-- Item 1: Photo Card -->
-                            <div class="drag-item card-item" style="top: 10%; left: 5%; transform: rotate(-5deg);">
-                                <img src="assets/images/home/dimas4.webp" alt="Dimas Portrait" draggable="false">
-                                <div class="card-caption">Hi, I'm Dimas!👋</div>
+                            <div class="drag-item card-item" style="top: 5%; left: 2%; transform: rotate(-5deg);">
+                                <img src="assets/images/home/dimas4.webp" alt="Dimas Portrait" draggable="false" fetchpriority="high">
+                                <div class="card-caption">Hi, I'm Dimas!</div>
                             </div>
 
                             <!-- Item 2: Project Preview -->
-                            <div class="drag-item card-item" style="bottom: 15%; right: 5%; transform: rotate(3deg);">
-                                <img src="assets/images/project/tsukamie/tsukamie2.webp" alt="Latest Project" draggable="false">
+                            <div class="drag-item card-item" style="bottom: 5%; right: 2%; transform: rotate(3deg);">
+                                <img src="assets/images/project/tsukamie/tsukamie2.webp" alt="Latest Project" draggable="false" loading="lazy" decoding="async">
                                 <div class="card-caption">Latest Work</div>
                             </div>
 
                             <!-- Item 3: Sticker Pill -->
-                            <div class="drag-item sticker-pill" style="top: 20%; right: 15%; transform: rotate(5deg);">
+                            <div class="drag-item sticker-pill" style="top: 8%; right: 5%; transform: rotate(5deg);">
                                 <span>📍 Bandung</span>
                             </div>
 
                             <!-- Item 4: Sticker Circle -->
-                            <div class="drag-item sticker-circle" style="bottom: 25%; left: 10%;">
+                            <div class="drag-item sticker-circle" style="bottom: 8%; left: 5%;">
                                 <span>Scroll<br>Down</span>
                             </div>
 
                             <!-- Item 5: Abstract/Icon -->
-                            <div class="drag-item sticker-icon" style="top: 55%; right: 25%; transform: rotate(15deg);">
+                            <div class="drag-item sticker-icon" style="top: 12%; left: 48%; transform: rotate(15deg);">
                                 ✦
                             </div>
 
@@ -386,15 +389,12 @@
                 <div class="w-layout-blockcontainer global-wrapper w-container">
                     <div class="global-padding">
                         <section id="about-section" class="about-section-wrapper">
-                            <div class="about-layout-grid">
+                            <div class="about-layout-grid"> 
                                 <div class="about-sidebar">
                                     <div class="section-headline-text text-3xl text-weight-semibold text-color-black-900 text-reveal">About me</div>
                                 </div>
                                 <div class="about-main-content">
                                     <div data-w-id="17981745-b76c-fdb8-d5a0-45626b3a0fb4" class="about-text-block">
-                                        <h3 class="about-lead-text">
-                                            I’m a Marketing student based in Bandung, Indonesia.
-                                        </h3>
                                         <p class="about-paragraph">
                                             I combine <span class="text-highlight">design</span> and <span class="text-highlight">marketing strategy</span> to create work that’s visually engaging and data driven.
                                         </p>
@@ -402,12 +402,12 @@
                                             Check out my 
                                             <a href="about.html" class="hover-trigger">
                                                 About page
-                                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop" class="hover-image" alt="My Portrait"/>
+                                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop" class="hover-image" alt="My Portrait" loading="lazy" decoding="async"/>
                                             </a> 
                                             for the full story, or explore my 
                                             <a href="portfolio.html" class="hover-trigger">
                                                 Portfolio
-                                                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=200&auto=format&fit=crop" class="hover-image" alt="My Work"/>
+                                                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=200&auto=format&fit=crop" class="hover-image" alt="My Work" loading="lazy" decoding="async"/>
                                             </a> 
                                             to see my latest projects.
                                         </p>
@@ -453,43 +453,43 @@
                                     </a>
                                 </div>
                             </div>
-                            <div data-w-id="93649417-2561-b8e6-7ec9-a21bd39598eb" class="hero-image-wrapper">
-                                <div data-w-id="93649417-2561-b8e6-7ec9-a21bd39598ec" class="image-wrap">
-                                    <img alt="Hero image" src="assets/images/project/tsukamie/tsukamie1.webp" loading="lazy" class="image-cover-2 overlay"/>
-                                    <div></div>
-                                </div>
-                                <div class="title-wrapper">
-                                    <h2 class="work-title">Tsukamie Noodle Bar</h2>
-                                    <div class="button-flex _20px">
-                                        <a data-w-id="93649417-2561-b8e6-7ec9-a21bd39598f2" href="/studi" class="button-3d w-inline-block">
-                                            <div class="button-inner">
-                                                <div class="button-face static">
-                                                    <div class="text-block-11">See Case Study</div>
-                                                </div>
-                                                <div class="button-face hover">
-                                                    <div class="text-block-12">See Case Study</div>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="text-image-overlay"></div>
-                                <div class="top-part">
-                                    <div class="core-results">
-                                        <div class="tag-work">
-                                            <div class="text-small">+148K New Audience </div>
-                                        </div>
-                                        <div class="tag-work">
-                                            <div class="text-small">+237K Impressions</div>
+                            <!-- 2. Refactored Latest Work Section -->
+                            <a href="project-detail.html?id=tsukamie" class="work-card">
+                                <div class="work-card__image-wrapper">
+                                    <!-- Video Element -->
+                                    <video class="work-card__video" autoplay loop muted playsinline preload="metadata">
+                                        <source src="assets/videos/Portrait_Top_Ads 2_NO LICENSE.mp4" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                    <!-- Mute/Unmute Button -->
+                                    <button class="work-card__mute-btn" aria-label="Toggle Sound">
+                                        <svg class="icon-sound-on" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                                        <svg class="icon-sound-off" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+                                    </button>
+                                    <!-- Existing Overlay -->
+                                    <div class="work-card__overlay"> 
+                                        <div class="work-card__metrics">
+                                            <div class="metric-tag">+148K New Audience</div>
+                                            <div class="metric-tag">+237K Impressions</div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                                <div class="work-card__info">
+                                    <h3 class="work-card__title">Tsukamie Noodle Bar</h3>
+                                    <div class="work-card__cta">
+                                        <span>View Case Study</span>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </a>
+
                         </div>
                     </div>
                 </div>
             </section>
-            <section id="hardskills" class="hardskills-section fade-in-section">
+            <section id="hardskills" class="hardskills-section section-margin fade-in-section">
                 <div class="w-layout-blockcontainer global-wrapper w-container">
                     <div class="global-padding">
                         <div class="whjy-choose-me-section-wrapper">
@@ -507,51 +507,51 @@
                                     </a>
                                 </div>
                             </div>                          
-                            <div data-w-id="17981745-b76c-fdb8-d5a0-45626b3a103f" style="opacity:0" class="why-choose-me-content-wrapper">
-                                <div class="why-choose-me-card">
-                                    <a href="#" data-w-id="17981745-b76c-fdb8-d5a0-45626b3a1041" style="background-color:rgb(248,248,248)" class="why-choose-me-card-wrapper background-color-black-50 w-inline-block">
-                                        <div class="why-choose-me-card-number-block">
-                                            <div style="color:rgb(76,76,76)" class="why-choose-me-card-number-text text-sm text-color-black-700">[01]</div>
+                            <div class="skills-grid fade-in-section">
+                                <div class="skill-card">
+                                    <a href="#" class="skill-card__wrapper w-inline-block">
+                                        <div class="skill-card__header">
+                                            <div class="skill-card__number">[01]</div>
                                         </div>
-                                        <div style="background-color:rgb(229,229,229)" class="why-choose-me-horizonta-line"></div>
-                                        <div class="why-choose-me-card-text-content-block">
-                                            <div class="why-choose-me-card-headline-wrapper">
-                                                <div style="color:rgb(12,4,7)" class="why-choose-me-card-headline-text text-xl-2 text-weight-semibold text-color-black-900">Content Creation</div>
+                                        <div class="skill-card__divider"></div>
+                                        <div class="skill-card__body">
+                                            <div class="skill-card__title-wrapper">
+                                                <div class="skill-card__title">Content Creation</div>
                                             </div>
-                                            <div class="why-choose-me-card-text-block">
-                                                <p class="why-choose-me-card-text text-sm text-color-black-700 black">Producing high-quality visuals and videos that tell a story. From concept to execution, I create assets that stop the scroll and engage your target audience instantly.</p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="why-choose-me-card">
-                                    <a href="#" data-w-id="17981745-b76c-fdb8-d5a0-45626b3a104e" style="background-color:rgb(248,248,248)" class="why-choose-me-card-wrapper background-color-black-50 w-inline-block">
-                                        <div class="why-choose-me-card-number-block">
-                                            <div style="color:rgb(76,76,76)" class="why-choose-me-card-number-text text-sm text-color-black-700">[02]</div>
-                                        </div>
-                                        <div style="background-color:rgb(229,229,229)" class="why-choose-me-horizonta-line"></div>
-                                        <div class="why-choose-me-card-text-content-block">
-                                            <div class="why-choose-me-card-headline-wrapper">
-                                                <div style="color:rgb(12,4,7)" class="why-choose-me-card-headline-text text-xl-2 text-weight-semibold text-color-black-900">Graphic Design</div>
-                                            </div>
-                                            <div class="why-choose-me-card-text-block">
-                                                <p class="why-choose-me-card-text text-sm text-color-black-700 black">Crafting strong visual identities and cinematic cuts. Whether it’s a social media feed or a promotional video, I ensure every pixel and frame aligns perfectly with your brand voice.</p>
+                                            <div class="skill-card__text-block">
+                                                <p class="skill-card__paragraph">Producing high-quality visuals and videos that tell a story. From concept to execution, I create assets that stop the scroll and engage your target audience instantly.</p>
                                             </div>
                                         </div>
                                     </a>
                                 </div>
-                                <div class="why-choose-me-card">
-                                    <a href="#" data-w-id="17981745-b76c-fdb8-d5a0-45626b3a105b" style="background-color:rgb(248,248,248)" class="why-choose-me-card-wrapper background-color-black-50 w-inline-block">
-                                        <div class="why-choose-me-card-number-block">
-                                            <div style="color:rgb(76,76,76)" class="why-choose-me-card-number-text text-sm text-color-black-700">[03]</div>
+                                <div class="skill-card">
+                                    <a href="#" class="skill-card__wrapper w-inline-block">
+                                        <div class="skill-card__header">
+                                            <div class="skill-card__number">[02]</div>
                                         </div>
-                                        <div style="background-color:rgb(229,229,229)" class="why-choose-me-horizonta-line"></div>
-                                        <div class="why-choose-me-card-text-content-block">
-                                            <div class="why-choose-me-card-headline-wrapper">
-                                                <div style="color:rgb(12,4,7)" class="why-choose-me-card-headline-text text-xl-2 text-weight-semibold text-color-black-900">Social Media Marketing</div>
+                                        <div class="skill-card__divider"></div>
+                                        <div class="skill-card__body">
+                                            <div class="skill-card__title-wrapper">
+                                                <div class="skill-card__title">Graphic Design</div>
                                             </div>
-                                            <div class="why-choose-me-card-text-block">
-                                                <p class="why-choose-me-card-text text-sm text-color-black-700 black">More than just posting. I handle the entire ecosystem from content planning, copywriting and KOL outreach to performance analysis. Let &#x27;s grow your digital presence organically and sustainably.</p>
+                                            <div class="skill-card__text-block">
+                                                <p class="skill-card__paragraph">Crafting strong visual identities and cinematic cuts. Whether it’s a social media feed or a promotional video, I ensure every pixel and frame aligns perfectly with your brand voice.</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="skill-card">
+                                    <a href="#" class="skill-card__wrapper w-inline-block">
+                                        <div class="skill-card__header">
+                                            <div class="skill-card__number">[03]</div>
+                                        </div>
+                                        <div class="skill-card__divider"></div>
+                                        <div class="skill-card__body">
+                                            <div class="skill-card__title-wrapper">
+                                                <div class="skill-card__title">Social Media Marketing</div>
+                                            </div>
+                                            <div class="skill-card__text-block">
+                                                <p class="skill-card__paragraph">More than just posting. I handle the entire ecosystem from content planning, copywriting and KOL outreach to performance analysis. Let's grow your digital presence organically and sustainably.</p>
                                             </div>
                                         </div>
                                     </a>
@@ -579,103 +579,67 @@
                                     </a>
                                 </div>
                             </div>
-                            <div class="table-card-content-wrapper">
-                                <div class="table-card-01">
-                                    <a href="#" data-reveal-img="assets/images/home/dimas1.webp" data-w-id="17981745-b76c-fdb8-d5a0-45626b3a1087" style="opacity:0" class="home-services-card-wrapper w-inline-block">
-                                        <div class="experience-card-content-wrapper">
-                                            <div class="experience-card-number-block">
-                                                <div class="experience-card-number-text text-sm text-color-black-700">[01]</div>
-                                                <div class="experience-card-headline-text text-lg text-weight-semibold text-color-black-900">Brand Creative Intern</div>
-                                            </div>
-                                            <div class="experience-card-text-block">
-                                                <div class="experience-card-company-name-text text-lg">Torch</div>
-                                                <div class="experience-card-year-text text-sm text-color-black-700">January 2026 - Now</div>
-                                            </div>
-                                        </div>
-                                        <div style="-webkit-transform:translate3d(-104%, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(-104%, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(-104%, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(-104%, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="black-border"></div>
-                                    </a>
-                                </div>
-                                <div class="table-card-02">
-                                    <a href="#" data-reveal-img="assets/images/home/dimas2.webp" data-w-id="17981745-b76c-fdb8-d5a0-45626b3a1095" style="opacity:0" class="home-services-card-wrapper w-inline-block">
-                                        <div class="experience-card-content-wrapper">
-                                            <div class="experience-card-number-block">
-                                                <div class="experience-card-number-text text-sm text-color-black-700">[02]</div>
-                                                <div class="experience-card-headline-text text-lg text-weight-semibold text-color-black-900">Graphic Designer Intern (Remote)</div>
-                                            </div>
-                                            <div class="experience-card-text-block">
-                                                <div class="experience-card-company-name-text text-lg">DIPDOP Creative Agency </div>
-                                                <div class="experience-card-year-text text-sm text-color-black-700">January 2026 - Now</div>
-                                            </div>
-                                        </div>
-                                        <div style="-webkit-transform:translate3d(-104%, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(-104%, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(-104%, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(-104%, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="black-border"></div>
-                                    </a>
-                                </div>
-                                <div class="table-card-03">
-                                    <a href="#" data-reveal-img="assets/images/home/dimas3.webp" data-w-id="17981745-b76c-fdb8-d5a0-45626b3a10a3" style="opacity:0" class="home-services-card-wrapper w-inline-block">
-                                        <div class="experience-card-content-wrapper">
-                                            <div class="experience-card-number-block">
-                                                <div class="experience-card-number-text text-sm text-color-black-700">[03]</div>
-                                                <div class="experience-card-headline-text text-lg text-weight-semibold text-color-black-900">Digital Marketing Intern</div>
-                                            </div>
-                                            <div class="experience-card-text-block">
-                                                <div class="experience-card-company-name-text text-lg">Tsukamie Noodle Bar</div>
-                                                <div class="experience-card-year-text text-sm text-color-black-700">August 2025 - October 2025</div>
-                                            </div>
-                                        </div>
-                                        <div style="-webkit-transform:translate3d(-104%, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(-104%, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(-104%, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(-104%, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="black-border"></div>
-                                    </a>
-                                </div>
-                                <div class="table-card-04">
-                                    <a href="#" data-reveal-img="assets/images/home/dimas4.webp" data-w-id="17981745-b76c-fdb8-d5a0-45626b3a10b1" style="opacity:0" class="home-services-card-wrapper w-inline-block">
-                                        <div class="experience-card-content-wrapper">
-                                            <div class="experience-card-number-block">
-                                                <div class="experience-card-number-text text-sm text-color-black-700">[04]</div>
-                                                <div class="experience-card-headline-text text-lg text-weight-semibold text-color-black-900">Content Creator</div>
-                                            </div>
-                                            <div class="experience-card-text-block">
-                                                <div class="experience-card-company-name-text text-lg">Wondebliss Beauty (Event) </div>
-                                                <div class="experience-card-year-text text-sm text-color-black-700">August 2024 - November 2024</div>
-                                            </div>
-                                        </div>
-                                        <div style="-webkit-transform:translate3d(-104%, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(-104%, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(-104%, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(-104%, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="black-border"></div>
-                                    </a>
-                                </div>
-                                <div class="table-card-05">
-                                    <a href="#" data-reveal-img="assets/images/home/dimas5.webp" data-w-id="17981745-b76c-fdb8-d5a0-45626b3a10bf" style="opacity:0" class="home-services-card-wrapper w-inline-block">
-                                        <div class="experience-card-content-wrapper">
-                                            <div class="experience-card-number-block">
-                                                <div class="experience-card-number-text text-sm text-color-black-700">[05]</div>
-                                                <div class="experience-card-headline-text text-lg text-weight-semibold text-color-black-900">Video Editor andPhotographer</div>
-                                            </div>
-                                            <div class="experience-card-text-block">
-                                                <div class="experience-card-company-name-text text-lg">Polban Mengajar</div>
-                                                <div class="experience-card-year-text text-sm text-color-black-700">August 2024 - August 2025</div>
-                                            </div>
-                                        </div>
-                                        <div style="-webkit-transform:translate3d(-104%, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(-104%, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(-104%, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(-104%, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="black-border"></div>
-                                    </a>
-                                </div>
-                                <div class="table-card-06">
-                                    <a href="#" data-reveal-img="assets/images/home/dimas6.webp" data-w-id="bfbf62e8-9fcb-13d7-9e62-b973ca75a86b" style="opacity:0" class="home-services-card-wrapper w-inline-block">
-                                        <div class="experience-card-content-wrapper">
-                                            <div class="experience-card-number-block">
-                                                <div class="experience-card-number-text text-sm text-color-black-700">[06]</div>
-                                                <div class="experience-card-headline-text text-lg text-weight-semibold text-color-black-900">Graphic Designer andPhotographer</div>
-                                            </div>
-                                            <div class="experience-card-text-block">
-                                                <div class="experience-card-company-name-text text-lg">PKKMB Polban 2024</div>
-                                                <div class="experience-card-year-text text-sm text-color-black-700">June 2024 - August 2024</div>
-                                            </div>
-                                        </div>
-                                        <div style="-webkit-transform:translate3d(-104%, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(-104%, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(-104%, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(-104%, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="black-border"></div>
-                                    </a>
-                                </div>
+                            <div class="experience-list">
+                                <a href="#" data-reveal-img="assets/images/home/dimas1.webp" class="experience-item fade-in-section">
+                                    <div class="experience-item__info">
+                                        <h3 class="experience-item__title">Brand Creative Intern</h3>
+                                        <div class="experience-item__company">Torch</div>
+                                    </div>
+                                    <div class="experience-item__meta">
+                                        <div class="experience-item__year">Jan 2026 - Present</div>
+                                    </div>
+                                </a>
+                                <a href="#" data-reveal-img="assets/images/home/dimas2.webp" class="experience-item fade-in-section">
+                                    <div class="experience-item__info">
+                                        <h3 class="experience-item__title">Graphic Designer Intern (Remote)</h3>
+                                        <div class="experience-item__company">DIPDOP Creative Agency</div>
+                                    </div>
+                                    <div class="experience-item__meta">
+                                        <div class="experience-item__year">Jan 2026 - Present</div>
+                                    </div>
+                                </a>
+                                <a href="#" data-reveal-img="assets/images/home/dimas3.webp" class="experience-item fade-in-section">
+                                    <div class="experience-item__info">
+                                        <h3 class="experience-item__title">Digital Marketing Intern</h3>
+                                        <div class="experience-item__company">Tsukamie Noodle Bar</div>
+                                    </div>
+                                    <div class="experience-item__meta">
+                                        <div class="experience-item__year">Aug - Oct 2025</div>
+                                    </div>
+                                </a>
+                                <a href="#" data-reveal-img="assets/images/home/dimas4.webp" class="experience-item fade-in-section">
+                                    <div class="experience-item__info">
+                                        <h3 class="experience-item__title">Content Creator</h3>
+                                        <div class="experience-item__company">Wondebliss Beauty (Event)</div>
+                                    </div>
+                                    <div class="experience-item__meta">
+                                        <div class="experience-item__year">Aug - Nov 2024</div>
+                                    </div>
+                                </a>
+                                <a href="#" data-reveal-img="assets/images/home/dimas5.webp" class="experience-item fade-in-section">
+                                    <div class="experience-item__info">
+                                        <h3 class="experience-item__title">Video Editor & Photographer</h3>
+                                        <div class="experience-item__company">Polban Mengajar</div>
+                                    </div>
+                                    <div class="experience-item__meta">
+                                        <div class="experience-item__year">Aug 2024 - Aug 2025</div>
+                                    </div>
+                                </a>
+                                <a href="#" data-reveal-img="assets/images/home/dimas6.webp" class="experience-item fade-in-section">
+                                    <div class="experience-item__info">
+                                        <h3 class="experience-item__title">Graphic Designer & Photographer</h3>
+                                        <div class="experience-item__company">PKKMB Polban 2024</div>
+                                    </div>
+                                    <div class="experience-item__meta">
+                                        <div class="experience-item__year">Jun - Aug 2024</div>
+                                    </div>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-            <section id="latest-insights" class="journal-section fade-in-section" style="display: none;">
+            <section id="latest-insights" class="journal-section section-margin fade-in-section" style="display: none;">
                 <div class="w-layout-blockcontainer global-wrapper w-container">
                     <div class="global-padding">
                         <div class="blogs-section-wrappar">
@@ -711,7 +675,7 @@
                                                     </div>
                                                 </div>
                                                 <div data-w-id="566b70c1-bcff-6434-151c-4be76f85e58f" class="image-wrap auto">
-                                                    <img alt="" src="assets/images/home/dimas1.webp" loading="lazy" class="paralax-image"/>
+                                                    <img alt="" src="assets/images/home/dimas1.webp" loading="lazy" decoding="async" class="paralax-image"/>
                                                 </div>
                                                 <div class="margin-30px">
                                                     <div class="data-flex">
@@ -748,7 +712,7 @@
                                                     </div>
                                                 </div>
                                                 <div data-w-id="566b70c1-bcff-6434-151c-4be76f85e5a6" class="image-wrap auto">
-                                                    <img alt="" src="assets/images/home/dimas2.webp" loading="lazy" class="paralax-image"/>
+                                                    <img alt="" src="assets/images/home/dimas2.webp" loading="lazy" decoding="async" class="paralax-image"/>
                                                 </div>
                                                 <div class="margin-30px">
                                                     <div class="data-flex">
@@ -789,7 +753,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="image-wrap auto full-ratio">
-                                                    <img alt="" src="assets/images/home/dimas3.webp" loading="lazy" class="paralax-image main"/>
+                                                    <img alt="" src="assets/images/home/dimas3.webp" loading="lazy" decoding="async" class="paralax-image main"/>
                                                 </div>
                                                 <div class="margin-30px">
                                                     <div class="data-flex">
@@ -826,7 +790,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="image-wrap auto full-ratio">
-                                                    <img width="Auto" height="Auto" alt="" src="assets/images/home/dimas4.webp" loading="lazy" class="paralax-image main"/>
+                                                    <img width="Auto" height="Auto" alt="" src="assets/images/home/dimas4.webp" loading="lazy" decoding="async" class="paralax-image main"/>
                                                 </div>
                                                 <div class="margin-30px">
                                                     <div class="data-flex">
@@ -890,7 +854,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="image-wrap auto full-ratio">
-                                                                <img width="Auto" height="Auto" alt="" src="assets/images/home/dimas5.webp" loading="lazy" class="paralax-image main"/>
+                                                                <img width="Auto" height="Auto" alt="" src="assets/images/home/dimas5.webp" loading="lazy" decoding="async" class="paralax-image main"/>
                                                             </div>
                                                             <div class="margin-30px">
                                                                 <div class="data-flex">
@@ -929,7 +893,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="image-wrap auto full-ratio">
-                                                                <img alt="" src="assets/images/home/dimas6.webp" loading="lazy" class="paralax-image main"/>
+                                                                <img alt="" src="assets/images/home/dimas6.webp" loading="lazy" decoding="async" class="paralax-image main"/>
                                                             </div>
                                                             <div class="margin-30px">
                                                                 <div class="data-flex">
@@ -980,7 +944,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="image-wrap auto full-ratio">
-                                                    <img alt="" src="assets/images/home/dimas1.webp" loading="lazy" class="paralax-image main"/>
+                                                    <img alt="" src="assets/images/home/dimas1.webp" loading="lazy" decoding="async" class="paralax-image main"/>
                                                 </div>
                                                 <div class="margin-30px">
                                                     <div class="data-flex">
@@ -1018,7 +982,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="image-wrap auto full-ratio">
-                                                    <img width="Auto" height="Auto" alt="" src="assets/images/home/dimas2.webp" loading="lazy" class="paralax-image main"/>
+                                                    <img width="Auto" height="Auto" alt="" src="assets/images/home/dimas2.webp" loading="lazy" decoding="async" class="paralax-image main"/>
                                                 </div>
                                                 <div class="margin-30px">
                                                     <div class="data-flex">
@@ -1056,7 +1020,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="image-wrap auto full-ratio">
-                                                                <img alt="" src="assets/images/home/dimas3.webp" loading="lazy" class="paralax-image main"/>
+                                                                <img alt="" src="assets/images/home/dimas3.webp" loading="lazy" decoding="async" class="paralax-image main"/>
                                                 </div>
                                                 <div class="margin-30px">
                                                     <div class="data-flex">
@@ -1110,7 +1074,7 @@
                                                 <div class="team-image-location">
                                                     <div id="w-node-b8407f2b-d155-852d-e67e-a5907e551d46-6f5c2c14" class="team-location-icon">
                                                         <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6935321018e0727241ab83ce_View.svg" alt=""/>
-                                                    </div>
+                                                    </div> 
                                                     <div class="click-to-view">View image</div>
                                                 </div>
                                             </div>
@@ -1139,7 +1103,7 @@
                                                 <div class="team-image-location">
                                                     <div id="w-node-b8407f2b-d155-852d-e67e-a5907e551d4f-6f5c2c14" class="team-location-icon">
                                                         <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6935321018e0727241ab83ce_View.svg" alt=""/>
-                                                    </div>
+                                                    </div> 
                                                     <div class="click-to-view">View image</div>
                                                 </div>
                                             </div>
@@ -1168,7 +1132,7 @@
                                                 <div class="team-image-location">
                                                     <div id="w-node-b8407f2b-d155-852d-e67e-a5907e551d58-6f5c2c14" class="team-location-icon">
                                                         <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6935321018e0727241ab83ce_View.svg" alt=""/>
-                                                    </div>
+                                                    </div> 
                                                     <div class="click-to-view">View image</div>
                                                 </div>
                                             </div>
@@ -1197,7 +1161,7 @@
                                                 <div class="team-image-location">
                                                     <div id="w-node-b8407f2b-d155-852d-e67e-a5907e551d6a-6f5c2c14" class="team-location-icon">
                                                         <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6935321018e0727241ab83ce_View.svg" alt=""/>
-                                                    </div>
+                                                    </div> 
                                                     <div class="click-to-view">View image</div>
                                                 </div>
                                             </div>
@@ -1226,7 +1190,7 @@
                                                 <div class="team-image-location">
                                                     <div id="w-node-b8407f2b-d155-852d-e67e-a5907e551d73-6f5c2c14" class="team-location-icon">
                                                         <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6935321018e0727241ab83ce_View.svg" alt=""/>
-                                                    </div>
+                                                    </div> 
                                                     <div class="click-to-view">View image</div>
                                                 </div>
                                             </div>
@@ -1270,38 +1234,38 @@
                             <div class="swiper-wrapper">
                                 <div class="swiper-slide">
                                     <div class="photo-card">
-                                        <img src="assets/images/home/dimas1.webp" alt="" loading="lazy" class="photo-img"/>
+                                        <img src="assets/images/home/dimas1.webp" alt="Slice of life image 1" loading="lazy" decoding="async" class="photo-img"/>
                                     </div>
                                 </div>
                                 <div class="swiper-slide">
                                     <div class="photo-card">
-                                        <img src="assets/images/home/dimas2.webp" alt="" loading="lazy" class="photo-img"/>
+                                        <img src="assets/images/home/dimas2.webp" alt="Slice of life image 2" loading="lazy" decoding="async" class="photo-img"/>
                                     </div>
                                 </div>
                                 <div class="swiper-slide">
                                     <div class="photo-card">
-                                        <img src="assets/images/home/dimas3.webp" alt="" loading="lazy" class="photo-img"/>
+                                        <img src="assets/images/home/dimas3.webp" alt="Slice of life image 3" loading="lazy" decoding="async" class="photo-img"/>
                                     </div>
                                 </div>
                                 <div class="swiper-slide">
                                     <div class="photo-card">
-                                        <img src="assets/images/home/dimas4.webp" alt="" loading="lazy" class="photo-img"/>
+                                        <img src="assets/images/home/dimas4.webp" alt="Slice of life image 4" loading="lazy" decoding="async" class="photo-img"/>
                                     </div>
                                 </div>
                                 <div class="swiper-slide">
                                     <div class="photo-card">
-                                        <img src="assets/images/home/dimas5.webp" alt="" loading="lazy" class="photo-img"/>
+                                        <img src="assets/images/home/dimas5.webp" alt="Slice of life image 5" loading="lazy" decoding="async" class="photo-img"/>
                                     </div>
                                 </div>
                                 <div class="swiper-slide">
                                     <div class="photo-card">
-                                        <img src="assets/images/home/dimas6.webp" alt="" loading="lazy" class="photo-img"/>
+                                        <img src="assets/images/home/dimas6.webp" alt="Slice of life image 6" loading="lazy" decoding="async" class="photo-img"/>
                                     </div>
                                 </div>
                                 <div class="swiper-slide">
-                                    <div class="photo-card">
-                                        <img src="assets/images/home/dimas7.webp" alt="" loading="lazy" class="photo-img"/>
-                                    </div>
+                                    <div class="photo-card"> 
+                                        <img src="assets/images/home/dimas7.webp" alt="Slice of life image 7" loading="lazy" decoding="async" class="photo-img"/>
+                                    </div> 
                                 </div>
                             </div>
                             <div class="swiper-pagination"></div>

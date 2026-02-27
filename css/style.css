@@ -366,18 +366,17 @@ body.preloader-active { overflow: hidden; }
    5. LAYOUT & SPACING
    ========================================= */
 /* Section Spacing */
-.home-hero-section, .home-about-section, .latest-work-section, .hardskills-section, .experience-section, .bits-and-pieces-section-desktop, .bits-and-pieces-section-mobile, .faq-section {
+.section-margin {
     margin-bottom: 160px !important;
 }
 .section-headline-margin { margin-bottom: 80px !important; }
-
 /* Hide Mobile Section on Desktop by default */
 .bits-and-pieces-section-mobile {
     display: none;
 }
 
 @media (max-width: 991px) {
-    .home-hero-section, .home-about-section, .latest-work-section, .hardskills-section, .experience-section, .bits-and-pieces-section-desktop, .bits-and-pieces-section-mobile, .faq-section {
+    .section-margin {
         margin-bottom: 80px !important;
     }
     .section-headline-margin { margin-bottom: 40px !important; }
@@ -389,7 +388,7 @@ body.preloader-active { overflow: hidden; }
     /* FIX: Jarak Bits and Pieces Mobile max 40px */
     .bits-and-pieces-section-mobile {
         display: block !important;
-        margin-bottom: 40px !important;
+        margin-bottom: 80px !important;
         padding-bottom: 0 !important;
     }
     /* FIX: Reset margin/padding pada elemen slider di dalamnya */
@@ -1364,6 +1363,257 @@ html.lenis, html.lenis body { height: auto; }
 }
 /* #endregion */
 
+/* #region 25. REFACTORED SKILL CARDS */
+/* =========================================
+   25. REFACTORED SKILL CARDS (What I Do)
+   ========================================= */
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 32px;
+}
+
+.skill-card__wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 32px;
+    background-color: #fcfcfc;
+    border: 1px solid #f0f0f0;
+    border-radius: 20px;
+    height: 100%;
+    text-decoration: none;
+    transition: background-color 0.4s ease, border-color 0.4s ease;
+}
+
+.skill-card__wrapper:hover {
+    background-color: #111;
+    border-color: #111;
+}
+
+.skill-card__wrapper:hover .skill-card__number,
+.skill-card__wrapper:hover .skill-card__title,
+.skill-card__wrapper:hover .skill-card__paragraph {
+    color: #fff;
+}
+
+
+.skill-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.skill-card__number {
+    font-family: var(--font-primary);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #888;
+    transition: color 0.4s ease;
+}
+
+.skill-card__divider {
+    width: 100%;
+    height: 1px;
+    background-color: #eee;
+    transition: background-color 0.4s ease;
+}
+
+.skill-card__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #111;
+    margin-bottom: 12px;
+    transition: color 0.4s ease;
+}
+
+.skill-card__paragraph {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #555;
+    transition: color 0.4s ease;
+}
+
+.skill-card__wrapper:hover .skill-card__divider {
+    background-color: #444;
+}
+/* #endregion */
+
+/* #region 25. REFACTORED WORK CARD */
+/* =========================================
+   25. LATEST WORK CARD (PREMIUM)
+   ========================================= */
+/* ... existing work-card styles ... */
+
+.work-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Default to single column on mobile */
+    gap: 40px; /* Generous spacing */
+}
+
+@media (min-width: 768px) {
+    .work-cards-grid {
+        grid-template-columns: repeat(2, 1fr); /* Two columns on tablet and desktop */
+        gap: 60px 40px; /* More vertical gap */
+    }
+}
+/* #region 25. REFACTORED WORK CARD */
+/* =========================================
+   25. LATEST WORK CARD (PREMIUM)
+   ========================================= */
+.work-card {
+    display: block;
+    text-decoration: none;
+    color: var(--text-primary);
+    border-radius: 20px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: box-shadow 0.4s ease, transform 0.4s ease;
+}
+
+.work-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
+}
+
+.work-card__image-wrapper {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16/10;
+    background-color: #f5f5f7;
+}
+
+.work-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s var(--ease-smooth);
+}
+
+.work-card__video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s var(--ease-smooth);
+    position: absolute; /* Ensure it's within the wrapper bounds */
+    top: 0; left: 0;
+}
+.work-card:hover .work-card__image,
+.work-card:hover .work-card__video {
+    transform: scale(1.05);
+}
+
+.work-card__overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 40px 24px 24px;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.4s ease;
+}
+
+.work-card:hover .work-card__overlay {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.work-card__metrics {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.metric-tag {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(8px);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.work-card__info {
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+}
+
+.work-card__title { font-size: 1.25rem; font-weight: 700; margin: 0; }
+.work-card__cta { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 600; color: #555; }
+/* #endregion */
+
+/* #region 25b. VIDEO CARD CONTROLS */
+/* =========================================
+   25b. VIDEO CARD CONTROLS
+   ========================================= */
+.work-card__mute-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 3; /* Above video and overlay gradient */
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.3s ease;
+}
+
+.work-card:hover .work-card__mute-btn {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.work-card__mute-btn:hover {
+    background: rgba(0, 0, 0, 0.7);
+    transform: scale(1.1);
+}
+
+.work-card__mute-btn svg {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Default state: sound-on is visible, sound-off is hidden */
+.work-card__mute-btn .icon-sound-off {
+    opacity: 0;
+}
+
+.work-card__mute-btn .icon-sound-on {
+    opacity: 1;
+}
+
+/* Muted state: sound-off is visible, sound-on is hidden */
+.work-card__mute-btn.is-muted .icon-sound-off {
+    opacity: 1;
+}
+.work-card__mute-btn.is-muted .icon-sound-on {
+    opacity: 0;
+}
+/* #endregion */
+
 /* #region 26. NEW HERO PLAYGROUND */
 /* =========================================
    26. HERO PLAYGROUND (APPLE STYLE)
@@ -1378,7 +1628,6 @@ html.lenis, html.lenis body { height: auto; }
     align-items: center;
     justify-content: center;
     background: #fff; /* Clean background */
-    margin-bottom: 80px !important;
 }
 
 .hero-playground-container {
@@ -1502,6 +1751,7 @@ html.lenis, html.lenis body { height: auto; }
     height: 100px;
     background: #111;
     color: #fff;
+    padding: 10px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -1521,11 +1771,57 @@ html.lenis, html.lenis body { height: auto; }
 }
 
 /* Tablet Adjustments (iPad/Portrait Tablets) */
+/* Refactored for Mobile-First: Applies to Tablet and Mobile */
 @media (max-width: 991px) {
     .hero-playground-section {
         height: auto;
+        min-height: 90dvh; /* Use dynamic viewport height for better fit */
+    }
+
+    .hero-huge-title {
+        font-size: clamp(3.5rem, 14vw, 5.5rem); /* Adjust for tablet */
+    }
+
+    .card-item {
+        width: 180px; /* Slightly smaller cards */
+    }
+    .drag-item { cursor: default !important; } /* Disable grab cursor on touch devices */
+
+    /* --- REPOSITION ITEMS TO EDGES for Tablet (Clear Center Text) --- */
+    .hero-drag-layer .drag-item:nth-of-type(1) {
+        top: 10% !important; left: 6% !important;
+        transform: rotate(-5deg) scale(0.9) !important;
+    }
+
+    .hero-drag-layer .drag-item:nth-of-type(2) {
+        bottom: 10% !important; right: 6% !important;
+        transform: rotate(3deg) scale(0.9) !important;
+    }
+
+    .hero-drag-layer .drag-item:nth-of-type(3) {
+        top: 18% !important; right: 10% !important;
+        transform: rotate(5deg) scale(0.9) !important;
+    }
+
+    .hero-drag-layer .drag-item:nth-of-type(4) {
+        bottom: 18% !important; left: 10% !important;
+        transform: rotate(-10deg) scale(0.9) !important;
+    }
+
+    .hero-drag-layer .drag-item:nth-of-type(5) {
+        top: 60% !important; right: 18% !important;
+        transform: rotate(15deg) scale(0.9) !important;
+    }
+}
+
+/* Mobile-Only Adjustments (Phones) */
+@media (max-width: 767px) {
+    /* Revert to vertical stack layout for mobile */
+    .hero-playground-section {
+        height: auto;
         min-height: auto;
-        padding: 120px 20px 80px; /* Add padding for spacing */
+        padding-top: 120px;
+        padding-bottom: 80px;
     }
 
     .hero-playground-container {
@@ -1541,12 +1837,7 @@ html.lenis, html.lenis body { height: auto; }
     .hero-static-layer {
         position: static;
         transform: none;
-        pointer-events: auto;
-        width: 100%;
-    }
-
-    .hero-huge-title {
-        font-size: clamp(3.5rem, 14vw, 5.5rem); /* Adjust for tablet */
+        z-index: auto;
     }
 
     .hero-drag-layer {
@@ -1554,31 +1845,13 @@ html.lenis, html.lenis body { height: auto; }
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        align-items: center; /* Fix vertical stretching */
+        align-items: center;
         gap: 16px;
-        width: 100%;
-        height: auto;
     }
 
     .drag-item {
-        position: static !important; /* Override inline styles */
-        transform: none !important; /* Reset transforms */
-        flex: 0 0 auto; /* Prevent flex-grow/shrink */
-        margin: 0; /* Reset any margins */
-        cursor: default !important; /* Disable grab cursor on touch devices */
-    }
-
-    .drag-item.card-item {
-        width: calc(50% - 10px); /* Two cards side-by-side */
-        max-width: 170px;
-    }
-}
-
-/* Mobile Adjustments (Phones) */
-@media (max-width: 767px) {
-    .hero-playground-section {
-        padding-top: 120px;
-        padding-bottom: 80px;
+        position: static !important; /* Override absolute positioning from tablet */
+        transform: none !important;
     }
 
     .hero-huge-title { 
@@ -1591,11 +1864,74 @@ html.lenis, html.lenis body { height: auto; }
         line-height: 1.5;
     }
 
-    /* Hide smaller decorative items for a cleaner look */
+    /* Hide smaller decorative items for a cleaner look on mobile */
     .sticker-pill,
     .sticker-circle,
     .sticker-icon {
         display: none !important;
     }
 }
+
+/* #region 27. REFACTORED EXPERIENCE SECTION */
+/* =========================================
+   27. EXPERIENCE SECTION (PREMIUM LIST)
+   ========================================= */
+.experience-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-top: 1px solid #e5e5e5; /* Top border for the list */
+}
+
+.experience-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Align to top for multi-line titles */
+    gap: 24px;
+    padding: 32px 16px;
+    border-bottom: 1px solid #e5e5e5;
+    text-decoration: none;
+    color: var(--text-primary);
+    position: relative;
+    overflow: hidden;
+    transition: background-color 0.4s ease;
+}
+
+.experience-item:hover {
+    background-color: #f9f9f9;
+}
+
+.experience-item__info {
+    flex-grow: 1;
+}
+
+.experience-item__title {
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    font-weight: 600;
+    line-height: 1.3;
+    margin: 0 0 8px 0;
+    color: #111;
+}
+
+.experience-item__company {
+    font-size: 1rem;
+    color: #555;
+    font-weight: 500;
+}
+
+.experience-item__meta {
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.experience-item__year {
+    font-size: 1rem;
+    color: #555;
+    font-weight: 500;
+}
+
+.experience-item:hover {
+    background-color: #fcfcfc;
+}
+/* #endregion */
 /* #endregion */
