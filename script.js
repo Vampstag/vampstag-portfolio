@@ -50,6 +50,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // 10. Video Card Controls
     initVideoCards();
 
+    // 11. Tab Title Switch
+    initTabTitleSwitch();
+
     // 10. Refresh ScrollTrigger when preloader is done to ensure correct positions
     window.addEventListener('preloaderDone', () => {
         if (document.readyState === 'complete') {
@@ -308,10 +311,30 @@ function initInteractiveHero() {
             bounds: ".hero-playground-section",
             inertia: true,
             onPress: function() {
-                gsap.to(this.target, { scale: 1.05, zIndex: 100, boxShadow: "0 30px 60px rgba(0,0,0,0.15)", duration: 0.2 });
+                const target = this.target;
+                // Check if the item is the sticker to apply drop-shadow instead of box-shadow
+                if (target.classList.contains('sticker-item')) {
+                    const img = target.querySelector('img');
+                    gsap.to(target, { scale: 1.05, zIndex: 100, duration: 0.2 });
+                    gsap.to(img, { filter: "drop-shadow(0 25px 25px rgba(0,0,0,0.2))", duration: 0.2 });
+                } else if (target.classList.contains('sticker-icon')) {
+                    gsap.to(target, { scale: 1.05, zIndex: 100, duration: 0.2, filter: "drop-shadow(0 25px 25px rgba(0,0,0,0.15))" });
+                } else {
+                    gsap.to(target, { scale: 1.05, zIndex: 100, boxShadow: "0 30px 60px rgba(0,0,0,0.15)", duration: 0.2 });
+                }
             },
             onRelease: function() {
-                gsap.to(this.target, { scale: 1, zIndex: 'auto', boxShadow: "0 20px 40px rgba(0,0,0,0.1)", duration: 0.2 });
+                const target = this.target;
+                // Revert to the appropriate shadow type
+                if (target.classList.contains('sticker-item')) {
+                    const img = target.querySelector('img');
+                    gsap.to(target, { scale: 1, zIndex: 'auto', duration: 0.2 });
+                    gsap.to(img, { filter: "drop-shadow(0 12px 15px rgba(0,0,0,0.1))", duration: 0.2 });
+                } else if (target.classList.contains('sticker-icon')) {
+                    gsap.to(target, { scale: 1, zIndex: 'auto', duration: 0.2, filter: "drop-shadow(0 4px 10px rgba(0,0,0,0.1))" });
+                } else {
+                    gsap.to(target, { scale: 1, zIndex: 'auto', boxShadow: "0 20px 40px rgba(0,0,0,0.1)", duration: 0.2 });
+                }
             }
         });
     }
@@ -484,6 +507,26 @@ function initBitsSlider() {
         if (activeSlide) {
             const card = activeSlide.querySelector('.photo-card');
             if (card) gsap.to(card, { rotationX: 0, rotationY: 0, scale: 1, duration: 0.5, ease: "power2.out" });
+        }
+    });
+}
+//#endregion
+
+//#region TAB TITLE SWITCH
+// =========================================
+// 11. TAB TITLE SWITCH
+// =========================================
+/**
+ * Changes the document title when the user switches to another tab
+ * and restores it when they return.
+ */
+function initTabTitleSwitch() {
+    const originalTitle = document.title;
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            document.title = 'Hey, come back! 👋';
+        } else {
+            document.title = originalTitle;
         }
     });
 }

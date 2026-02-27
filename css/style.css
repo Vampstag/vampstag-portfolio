@@ -262,6 +262,16 @@ html, body {
 }
 /* #endregion */
 
+/* Floating animation for mobile hero items */
+@keyframes float-animation {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
 /* #region 3. PRELOADER */
 /* =========================================
    3. PRELOADER STYLES
@@ -321,8 +331,11 @@ body.preloader-active { overflow: hidden; }
     position: relative; display: inline-block; font-weight: 700; cursor: pointer;
     color: inherit; text-decoration: underline; text-decoration-thickness: 2px;
     text-decoration-color: #767676; transition: color 0.2s, text-decoration-color 0.2s;
+    color: inherit; text-decoration: none;
+    transition: color 0.2s;
 }
 .hover-trigger:hover { color: #000; text-decoration-color: #000; }
+.hover-trigger:hover { color: #000; }
 .hover-image {
     position: absolute; bottom: 100%; left: 50%;
     transform: translate(-50%, 10px) scale(0.8);
@@ -1723,11 +1736,18 @@ html.lenis, html.lenis body { height: auto; }
 
 .card-item {
     width: 220px;
-    background: #fff;
     padding: 10px 10px 16px 10px;
     border-radius: 16px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.1);
     border: 1px solid rgba(0,0,0,0.05);
+}
+
+.card-item--1 {
+    background-color: #9dd8ff; /* Light, cool gray-blue */
+}
+
+.card-item--2 {
+    background-color: #ffe6aa; /* Light, warm beige */
 }
 
 .card-item img {
@@ -1783,6 +1803,45 @@ html.lenis, html.lenis body { height: auto; }
     filter: drop-shadow(0 4px 10px rgba(0,0,0,0.1));
 }
 
+.sticker-item {
+    width: 100px;
+    height: 150px;
+    background: transparent; /* No background for sticker */
+    padding: 0;
+    border-radius: 12px;
+}
+
+.sticker-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Ensures sticker aspect ratio is maintained */
+    pointer-events: none;
+    /* Use drop-shadow to follow the image shape */
+    filter: drop-shadow(0 12px 15px rgba(0,0,0,0.1));
+}
+
+/* --- Desktop Positioning for Hero Items (Replaces Inline Styles) --- */
+@media (min-width: 992px) {
+    .hero-drag-layer .drag-item:nth-of-type(1) { /* Hi, I'm Dimas! */
+        top: 5%; left: 2%; transform: rotate(-5deg);
+    }
+    .hero-drag-layer .drag-item:nth-of-type(2) { /* Latest Work */
+        bottom: 5%; right: 2%; transform: rotate(3deg);
+    }
+    .hero-drag-layer .drag-item:nth-of-type(3) { /* Sticker Pill */
+        top: 5%; right: 5%; transform: rotate(5deg);
+    }
+    .hero-drag-layer .drag-item:nth-of-type(4) { /* Sticker Circle */
+        bottom: 8%; left: 5%; transform: rotate(-10deg);
+    }
+    .hero-drag-layer .drag-item:nth-of-type(5) { /* Star Icon */
+        top: 12%; left: 48%; transform: rotate(15deg);
+    }
+    .hero-drag-layer .drag-item:nth-of-type(6) { /* Sticker Placeholder */
+        top: 25%; left: 78%; transform: rotate(-8deg);
+    }
+}
+
 /* Tablet Adjustments (iPad/Portrait Tablets) */
 /* Refactored for Mobile-First: Applies to Tablet and Mobile */
 @media (max-width: 991px) {
@@ -1803,27 +1862,27 @@ html.lenis, html.lenis body { height: auto; }
     /* --- REPOSITION ITEMS TO EDGES for Tablet (Clear Center Text) --- */
     .hero-drag-layer .drag-item:nth-of-type(1) {
         top: 10% !important; left: 6% !important;
-        transform: rotate(-5deg) scale(0.9) !important;
+        transform: rotate(-5deg) scale(0.9);
     }
 
     .hero-drag-layer .drag-item:nth-of-type(2) {
         bottom: 10% !important; right: 6% !important;
-        transform: rotate(3deg) scale(0.9) !important;
+        transform: rotate(3deg) scale(0.9);
     }
 
     .hero-drag-layer .drag-item:nth-of-type(3) {
         top: 18% !important; right: 10% !important;
-        transform: rotate(5deg) scale(0.9) !important;
+        transform: rotate(5deg) scale(0.9);
     }
 
     .hero-drag-layer .drag-item:nth-of-type(4) {
         bottom: 18% !important; left: 10% !important;
-        transform: rotate(-10deg) scale(0.9) !important;
+        transform: rotate(-10deg) scale(0.9);
     }
 
     .hero-drag-layer .drag-item:nth-of-type(5) {
         top: 60% !important; right: 18% !important;
-        transform: rotate(15deg) scale(0.9) !important;
+        transform: rotate(15deg) scale(0.9);
     }
 }
 
@@ -1864,7 +1923,17 @@ html.lenis, html.lenis body { height: auto; }
 
     .drag-item {
         position: static !important; /* Override absolute positioning from tablet */
-        transform: none !important;
+        transform: none; /* Reset transform from desktop/tablet */
+    }
+
+    /* Apply floating animation to the visible cards on mobile */
+    .hero-drag-layer .card-item {
+        animation: float-animation 6s ease-in-out infinite;
+    }
+
+    /* Stagger the animation for a more natural effect */
+    .hero-drag-layer .card-item:nth-of-type(2) {
+        animation-delay: -3s; /* Start second card halfway through the animation */
     }
 
     .hero-huge-title { 
@@ -1880,7 +1949,8 @@ html.lenis, html.lenis body { height: auto; }
     /* Hide smaller decorative items for a cleaner look on mobile */
     .sticker-pill,
     .sticker-circle,
-    .sticker-icon {
+    .sticker-icon,
+    .sticker-item {
         display: none !important;
     }
 }
