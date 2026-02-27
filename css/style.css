@@ -1323,6 +1323,7 @@ html.lenis, html.lenis body { height: auto; }
     .about-layout-grid {
         grid-template-columns: 1fr 2fr; /* Sidebar smaller, content wider */
         gap: 80px;
+        align-items: start; /* Vertically align grid items to the top */
     }
     .about-sidebar {
         position: sticky;
@@ -1854,7 +1855,7 @@ html.lenis, html.lenis body { height: auto; }
 /* --- Desktop Positioning for Hero Items (Replaces Inline Styles) --- */
 @media (min-width: 992px) {
     .hero-drag-layer .drag-item:nth-of-type(1) { /* Hi, I'm Dimas! */
-        top: 5%; left: 2%; transform: rotate(-5deg);
+        top: 87px; left: 2%; transform: rotate(-5deg);
     }
     .hero-drag-layer .drag-item:nth-of-type(2) { /* Latest Work */
         bottom: 5%; right: 2%; transform: rotate(3deg);
@@ -1892,28 +1893,33 @@ html.lenis, html.lenis body { height: auto; }
 
     /* --- REPOSITION ITEMS TO EDGES for Tablet (Clear Center Text) --- */
     .hero-drag-layer .drag-item:nth-of-type(1) {
-        top: 10% !important; left: 6% !important;
+        top: 5%; left: 2%;
         transform: rotate(-5deg) scale(0.9);
     }
 
     .hero-drag-layer .drag-item:nth-of-type(2) {
-        bottom: 10% !important; right: 6% !important;
+        bottom: 122; right: 2%;
         transform: rotate(3deg) scale(0.9);
     }
 
     .hero-drag-layer .drag-item:nth-of-type(3) {
-        top: 18% !important; right: 10% !important;
+        top: 171px; right: 38%;
         transform: rotate(5deg) scale(0.9);
     }
 
     .hero-drag-layer .drag-item:nth-of-type(4) {
-        bottom: 18% !important; left: 10% !important;
+        bottom: 8%; left: 5%;
         transform: rotate(-10deg) scale(0.9);
     }
 
     .hero-drag-layer .drag-item:nth-of-type(5) {
-        top: 60% !important; right: 18% !important;
+        top: 211px; left: 48%;
         transform: rotate(15deg) scale(0.9);
+    }
+
+    .hero-drag-layer .drag-item:nth-of-type(6) {
+        top: 220px; left: 78%;
+        transform: rotate(-8deg) scale(0.9);
     }
 }
 

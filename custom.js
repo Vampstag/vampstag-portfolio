@@ -17,10 +17,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
         // Optimized Initialization: Wait for Window Load + Preloader to prevent layout shifts
         const startSequence = () => {
             if (document.readyState === 'complete') {
-                initFooterMagnetic();
+                // initFooterMagnetic(); // DISABLED FOR PERFORMANCE
                 // initExperienceTilt(); // DISABLED FOR PERFORMANCE
             } else {
-                window.addEventListener('load', initFooterMagnetic);
+                // window.addEventListener('load', initFooterMagnetic); // DISABLED FOR PERFORMANCE
             }
         };
 
@@ -31,60 +31,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
         }
 
         // --- 4. Magnetic Button Effect ---
-        const magneticButtons = document.querySelectorAll('.btn-primary, .button-normal-black-wrapper-2, .button-normal-white-wrapper-2, .work-card__cta');
-        magneticButtons.forEach((btn) => {
-            btn.addEventListener('mousemove', (e) => {
-                const rect = btn.getBoundingClientRect();
-                const x = e.clientX - rect.left - rect.width / 2;
-                const y = e.clientY - rect.top - rect.height / 2;
-
-                gsap.to(btn, {
-                    x: x * 0.5, 
-                    y: y * 0.5,
-                    duration: 0.3,
-                    ease: "power2.out"
-                });
-            });
-
-            btn.addEventListener('mouseleave', () => {
-                gsap.to(btn, {
-                    x: 0,
-                    y: 0,
-                    duration: 1,
-                    ease: "elastic.out(1, 0.3)"
-                });
-            });
-        });
+        // DISABLED FOR PERFORMANCE: This effect adds listeners to mouse movement, which can cause scroll lag.
 
         // --- 6. Footer Magnetic Links ---
-        function initFooterMagnetic() {
-            // Select links within the footer container (loaded dynamically)
-            const footerLinks = document.querySelectorAll('#footer-container a');
-            
-            footerLinks.forEach((link) => {
-                link.addEventListener('mousemove', (e) => {
-                    const rect = link.getBoundingClientRect();
-                    const x = e.clientX - rect.left - rect.width / 2;
-                    const y = e.clientY - rect.top - rect.height / 2;
-
-                    gsap.to(link, {
-                        x: x * 0.3, 
-                        y: y * 0.3,
-                        duration: 0.3,
-                        ease: "power2.out"
-                    });
-                });
-
-                link.addEventListener('mouseleave', () => {
-                    gsap.to(link, {
-                        x: 0,
-                        y: 0,
-                        duration: 0.8,
-                        ease: "elastic.out(1, 0.3)"
-                    });
-                });
-            });
-        }
+        // DISABLED FOR PERFORMANCE: This effect adds listeners to mouse movement, which can cause scroll lag.
+        // function initFooterMagnetic() { ... }
 
     });
     //#endregion
