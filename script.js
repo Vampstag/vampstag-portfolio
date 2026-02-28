@@ -3,65 +3,110 @@
 // 1. CORE SETUP & EVENT LISTENERS
 // =========================================
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. Initialize Lenis (Smooth Scroll)
-    const lenis = new Lenis({
-        duration: 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        direction: 'vertical',
-        gestureDirection: 'vertical',
-        smooth: true,
-        mouseMultiplier: 1,
-        smoothTouch: false,
-        touchMultiplier: 2,
-    });
-    window.lenis = lenis;
+    // first, pull in shared navbar if placeholder exists
+    loadNavbar().then(() => {
+        // 1. Initialize Lenis (Smooth Scroll)
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            smooth: true,
+            mouseMultiplier: 1,
+            smoothTouch: false,
+            touchMultiplier: 2,
+        });
+        window.lenis = lenis;
 
-    function raf(time) {
-        lenis.raf(time);
-        requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-
-    // Connect Lenis to ScrollTrigger
-    gsap.registerPlugin(ScrollTrigger);
-    ScrollTrigger.config({ ignoreMobileResize: true });
-    
-    // 2. Navbar Logic (Scroll & Mobile)
-    initNavbar();
-
-    // 3. Render Projects
-    // renderProjects(); // This function is for portfolio.html, not index.html
-
-    // 4. Animations
-    initInteractiveHero(); // Changed from initHeroAnimation
-
-    // 5. Custom Cursor
-    initCustomCursor();
-
-    // 6. Bits Slider
-    initBitsSlider();
-
-    // 7. Lightbox
-    initLightbox();
-
-    // 8. FAQ Accordion
-    initFAQ();
-
-    // 10. Video Card Controls
-    initVideoCards();
-
-    // 11. Tab Title Switch
-    initTabTitleSwitch();
-
-    // 10. Refresh ScrollTrigger when preloader is done to ensure correct positions
-    window.addEventListener('preloaderDone', () => {
-        if (document.readyState === 'complete') {
-            ScrollTrigger.refresh();
-        } else {
-            window.addEventListener('load', () => ScrollTrigger.refresh());
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
         }
+        requestAnimationFrame(raf);
+
+        // Connect Lenis to ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+        ScrollTrigger.config({ ignoreMobileResize: true });
+        
+        // 2. Navbar Logic (Scroll & Mobile)
+        initNavbar();
+
+        // 3. Render Projects
+        // renderProjects(); // This function is for portfolio.html, not index.html
+
+        // 4. Animations
+        initInteractiveHero(); // Changed from initHeroAnimation
+
+        // 5. Custom Cursor
+        initCustomCursor();
+
+        // 6. Bits Slider
+        initBitsSlider();
+
+        // 7. Lightbox
+        initLightbox();
+
+        // 8. FAQ Accordion
+        initFAQ();
+
+        // 10. Video Card Controls
+        initVideoCards();
+
+        // 11. Tab Title Switch
+        initTabTitleSwitch();
+
+        // 10. Refresh ScrollTrigger when preloader is done to ensure correct positions
+        window.addEventListener('preloaderDone', () => {
+            if (document.readyState === 'complete') {
+                ScrollTrigger.refresh();
+            } else {
+                window.addEventListener('load', () => ScrollTrigger.refresh());
+            }
+        });
     });
 });
+
+// helper: load navbar html into placeholder, returns a promise that resolves after injection
+function loadNavbar() {
+    const container = document.getElementById('navbar-container');
+    if (!container) return Promise.resolve();
+    // choose path relative to current location; case study pages are one level deep
+    let url = 'navbar.html';
+    if (window.location.pathname.includes('/study-case/')) {
+        url = '../navbar.html';
+    }
+    return fetch(url)
+        .then(resp => resp.text())
+        .then(html => {
+            container.innerHTML = html;
+
+            // fix relative link paths when the page is inside a subfolder
+            if (window.location.pathname.includes('/study-case/')) {
+                container.querySelectorAll('a').forEach(link => {
+                    const href = link.getAttribute('href');
+                    if (href && !href.startsWith('http') && !href.startsWith('../')) {
+                        link.setAttribute('href', '../' + href);
+                    }
+                });
+            }
+
+            // If Webflow interactions are used inside navbar we need to re-init them
+            if (window.Webflow) {
+                Webflow.destroy();
+                Webflow.ready();
+                if (Webflow.require && Webflow.require('ix2')) {
+                    Webflow.require('ix2').init();
+                }
+            }
+
+            if (window.ScrollTrigger) {
+                ScrollTrigger.refresh();
+            }
+        })
+        .catch(err => {
+            console.error('Failed to load navbar:', err);
+        });
+}
 //#endregion
 
 //#region NAVBAR LOGIC

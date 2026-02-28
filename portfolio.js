@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
         // 1. Hero & UI Entry Animations
         // Fade in the headline
-        gsap.to('[data-w-id="b6a74ce0-53b7-4af7-a5ab-4044ee371a0f"]', {
+        gsap.to('.home-hero-headline-wrapper.page-portfolio', {
             opacity: 1,
             y: 0,
             duration: 1.2,
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         });
 
         // Fade in the portfolio tab menu
-        gsap.to('[data-w-id="b6a74ce0-53b7-4af7-a5ab-4044ee371ba0"]', {
+        gsap.to('.portfolio-menu.tab-work', {
             opacity: 1,
             y: 0,
             duration: 1,
@@ -30,7 +30,27 @@ document.addEventListener("DOMContentLoaded", (event) => {
         // 2. Portfolio Filter System (Dynamic & Optimized)
         const projectsData = [
             {
-                id: 1,
+                id: 7, // Pastikan ID unik
+                title: "Torch",
+                year: "2026",
+                category: "creative", // Pilih antara 'marketing', 'creative', atau 'web'
+                link: "study-case/torch.html", // Ganti dengan link detail proyek jika ada
+                description: "Driving brand awareness and conversions through high-impact visual storytelling and strategic video production.",
+                image: "https://images.unsplash.com/photo-1522199755839-a2bacb67c546?q=80&w=1000&auto=format&fit=crop", // Ganti dengan URL gambar Anda
+                srcset: "" // Kosongkan jika tidak ada srcset
+            },
+            {
+                id: 6,
+                title: "DIPDOP Creative Agency",
+                year: "2026",
+                category: "creative",
+                link: "study-case/dipdop.html",
+                description: "Digital marketing campaign driving +148K new audience reach.",
+                image: "https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image.jpg",
+                srcset: "https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image-p-800.jpg 800w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image-p-1080.jpg 1080w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image.jpg 1200w"
+            },
+            {
+                id: 5,
                 title: "Tsukamie Noodle Bar",
                 year: "2025",
                 category: "marketing",
@@ -38,16 +58,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 description: "Digital marketing campaign driving +148K new audience reach.",
                 image: "https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image.jpg",
                 srcset: "https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image-p-800.jpg 800w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image-p-1080.jpg 1080w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image.jpg 1200w"
-            },
-            {
-                id: 2,
-                title: "Wonderbliss Beauty",
-                year: "2024",
-                category: "marketing",
-                link: "/studi",
-                description: "Brand activation event coverage and social media strategy.",
-                image: "https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6936d1983965821485dc8b6b_461759911_641641511720796_817640999414108895_n.jpg",
-                srcset: "https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6936d1983965821485dc8b6b_461759911_641641511720796_817640999414108895_n-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6936d1983965821485dc8b6b_461759911_641641511720796_817640999414108895_n-p-800.jpg 800w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6936d1983965821485dc8b6b_461759911_641641511720796_817640999414108895_n.jpg 1080w"
             },
             // Placeholders for other categories
             {
@@ -68,6 +78,26 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 link: "#",
                 description: "High-performance e-commerce website built with Webflow.",
                 image: "https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=1000&auto=format&fit=crop",
+                srcset: ""
+            },
+            {
+                id: 5,
+                title: "Creative Campaign 02",
+                year: "2024",
+                category: "creative",
+                link: "#",
+                description: "A campaign focusing on brand aesthetics and visual identity.",
+                image: "https://images.unsplash.com/photo-1506792006437-256b665541e2?q=80&w=1000&auto=format&fit=crop",
+                srcset: ""
+            },
+            {
+                id: 1,
+                title: "Creative Campaign 03",
+                year: "2023",
+                category: "creative",
+                link: "#",
+                description: "Experimental art direction for a music festival.",
+                image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1000&auto=format&fit=crop",
                 srcset: ""
             }
         ];

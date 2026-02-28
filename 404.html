@@ -108,21 +108,20 @@
             <div class="error-content-wrapper">
                 <h1 class="error-code glitch" data-text="404">404</h1>
                 <div class="error-divider"></div>
-                <p class="error-message">The page you are looking for has vanished into the digital void.</p>
+                <p class="error-message">The page you're looking for has vanished into the digital void. Why not play a quick game while you reorient yourself?</p>
                 
                 <!-- Snake Game Container -->
                 <div id="snake-game-container">
-                    <div class="crt-scanlines"></div> <!-- Retro Effect Overlay -->
-                    <div class="score-wrapper" style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 10px;">
+                    <div class="score-wrapper" style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 10px; padding: 0 5px;">
                         <div id="game-score">Score: 0</div>
                         <div id="high-score" style="font-family: var(--font-primary); font-weight: 700; font-size: 1.2rem; display: none; color: #111;">High Score: 0</div>
                     </div>
                     <canvas id="game-canvas" width="300" height="300"></canvas>
-                    <button id="start-game-btn">Play Snake while you wait?</button>
+                    <button id="start-game-btn">Play Snake</button>
                 </div>
 
-                <a href="/" onclick="if(window.history.length > 1){window.history.back(); return false;}" class="button-normal-black-wrapper-2 w-inline-block">
-                    <div class="button-normal-black-text-2 text-sm text-weight-medium-2 text-color-white-2">Go Back</div>
+                <a href="index.html" class="button-normal-black-wrapper-2 w-inline-block">
+                    <div class="button-normal-black-text-2 text-sm text-weight-medium-2 text-color-white-2">Return Home</div>
                     <div class="button-normal-white-arrow-block-2">
                         <img src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d552f_arrow-black.svg" alt="" class="button-normal-black-arrow-image-black-2">
                         <img src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5530_arrow-white.svg" alt="" class="button-normal-black-arrow-image-white-2">
@@ -151,6 +150,7 @@
             const startBtn = document.getElementById('start-game-btn');
             const scoreEl = document.getElementById('game-score');
             const highScoreEl = document.getElementById('high-score');
+            const scoreWrapper = document.querySelector('.score-wrapper');
             const eatSound = document.getElementById('eat-sound');
             const gameOverSound = document.getElementById('game-over-sound');
             
@@ -180,12 +180,14 @@
             let isGameRunning = false;
             let isPaused = false;
 
-            // Initialize High Score Display
+            // Initialize High Score Display & Score Wrapper
             if (highScoreEl) highScoreEl.innerText = "High Score: " + highScore;
+            if(scoreWrapper) scoreWrapper.style.display = "none";
 
             // Prevent stacking listeners
             window.removeEventListener('keydown', keyPush);
             window.addEventListener('keydown', keyPush);
+            startBtn.addEventListener('click', startGame);
 
             function startGame() {
                 if (isGameRunning) return;
@@ -194,6 +196,7 @@
                 isPaused = false;
                 scoreEl.innerText = "Score: " + score;
                 scoreEl.style.display = "block";
+                if(scoreWrapper) scoreWrapper.style.display = "flex";
                 if (highScoreEl) highScoreEl.style.display = "block";
                 canvas.style.display = "block";
                 startBtn.style.display = "none";
@@ -337,7 +340,6 @@
                 startBtn.style.display = "block";
             }
 
-            startBtn.addEventListener('click', startGame);
         });
     </script>
 </body>
