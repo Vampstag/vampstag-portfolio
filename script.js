@@ -18,16 +18,19 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         window.lenis = lenis;
 
-        function raf(time) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-        }
-        requestAnimationFrame(raf);
-
-        // Connect Lenis to ScrollTrigger
+        // --- GSAP & SCROLLTRIGGER INTEGRATION ---
         gsap.registerPlugin(ScrollTrigger);
         ScrollTrigger.config({ ignoreMobileResize: true });
-        
+
+        // Connect Lenis to ScrollTrigger. This is the crucial part.
+        lenis.on('scroll', ScrollTrigger.update);
+
+        // Ensure GSAP animations are synchronized with Lenis's render loop.
+        gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
+
         // 2. Navbar Logic (Scroll & Mobile)
         initNavbar();
 
