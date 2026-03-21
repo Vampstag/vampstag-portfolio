@@ -13,45 +13,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     // =========================================
     mm.add("(min-width: 992px)", () => {
         
-        // --- 1. Tilt Effect for Project Cards ---
-        function initProjectCardTilt() {
-            const cards = document.querySelectorAll('.work-card');
-            if (!cards.length) return;
-
-            cards.forEach(card => {
-                card.addEventListener('mousemove', (e) => {
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
-
-                    // Calculate rotation based on mouse position, max 7 degrees
-                    const rotateX = ((y - centerY) / centerY) * -7; 
-                    const rotateY = ((x - centerX) / centerX) * 7;
-
-                    gsap.to(card, {
-                        rotationX: rotateX,
-                        rotationY: rotateY,
-                        transformPerspective: 1000,
-                        duration: 0.5,
-                        ease: "power2.out"
-                    });
-                });
-
-                card.addEventListener('mouseleave', () => {
-                    // Reset with a nice elastic bounce
-                    gsap.to(card, {
-                        rotationX: 0,
-                        rotationY: 0,
-                        duration: 0.8,
-                        ease: "elastic.out(1, 0.3)"
-                    });
-                });
-            });
-        }
-
         // --- 2. Magnetic Effect for Buttons & Links ---
         function initMagneticElements() {
             const magneticItems = document.querySelectorAll('.button-normal-black-wrapper-2, .button-normal-white-wrapper-2, .back-to-top');
@@ -74,11 +35,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
         // --- Initialization Sequence ---
         const startSequence = () => {
             if (document.readyState === 'complete') {
-                initProjectCardTilt();
                 initMagneticElements();
             } else {
                 window.addEventListener('load', () => {
-                    initProjectCardTilt();
                     initMagneticElements();
                 });
             }

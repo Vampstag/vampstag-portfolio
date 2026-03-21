@@ -19,6 +19,24 @@
     --text-h3: clamp(1.5rem, 2.5vw + 1rem, 2.5rem);
     --text-h4: clamp(1.25rem, 2vw + 1rem, 2rem);
     --text-body: clamp(1rem, 0.5vw + 0.875rem, 1.125rem); /* 16px -> 18px */
+
+    /* Spacing System (Base 4px/8px) */
+    --space-1: 0.25rem;  /* 4px */
+    --space-2: 0.5rem;   /* 8px */
+    --space-3: 0.75rem;  /* 12px */
+    --space-4: 1rem;     /* 16px */
+    --space-6: 1.5rem;   /* 24px */
+    --space-8: 2rem;     /* 32px */
+    --space-12: 3rem;    /* 48px */
+    --space-16: 4rem;    /* 64px */
+    --space-20: 5rem;    /* 80px */
+    --space-32: 8rem;    /* 128px */
+
+    /* Premium UI Details */
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --shadow-soft: 0 10px 40px -10px rgba(0, 0, 0, 0.05); /* Softer, deeper shadow */
+    --shadow-hover: 0 25px 60px -12px rgba(0, 0, 0, 0.12); /* Higher lift effect */
 }
 
 /* Global Reset: Remove Mobile Tap Highlight */
@@ -40,16 +58,55 @@ a:active, button:active, .hover-trigger:active {
 body {
     font-family: var(--font-primary);
     font-size: var(--text-body);
-    line-height: 1.6;
+    line-height: 1.65; /* Increased for better readability (Premium feel) */
     color: var(--text-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    }
+    text-rendering: optimizeLegibility; /* Improves text crispness */
+}
+
+/* [NEW] Premium Noise Texture Overlay */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.04; /* Sangat halus, memberikan tekstur 'kertas' */
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: multiply;
+    animation: grain 1s steps(10) infinite;
+}
+
+/* [NEW] Keyframes for Animated Grain Effect */
+@keyframes grain {
+    0%, 100% { background-position: 0 0; }
+    10% { background-position: -5% -10%; }
+    20% { background-position: -15% 5%; }
+    30% { background-position: 7% -25%; }
+    40% { background-position: -5% 25%; }
+    50% { background-position: -15% 10%; }
+    60% { background-position: 15% 0%; }
+    70% { background-position: 0% 15%; }
+    80% { background-position: 3% 35%; }
+    90% { background-position: -10% 10%; }
+}
+
+/* [NEW] Custom Scrollbar (Sleek & Minimal) */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 100px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover { background-color: rgba(0, 0, 0, 0.4); }
 
 ::selection {
-    background: var(--text-primary);
+    background: rgba(0, 0, 0, 0.9); /* Premium Selection Color */
     color: #ffffff;
-}
+    }
 
 h1, h2, h3, h4, h5, h6,
 .home-hero-headline-text-2,
@@ -117,9 +174,12 @@ p, li, span, .paragraph, .about-text {
 }
 .navbar.scrolled {
     padding: 0.6rem 5%; /* Maintain horizontal spacing on scroll */
-    /* backdrop-filter is removed for performance. Using a more opaque background instead. */
-    background-color: rgba(255, 255, 255, 0.952);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    /* [UPDATED] Premium Frosted Glass Effect */
+    background-color: rgba(255, 255, 255, 0.75) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+    border-bottom: 1px solid rgba(0,0,0,0.03);
 }
 .navbar.navbar-hidden {
     transform: translateY(-100%);
@@ -394,9 +454,9 @@ body.preloader-active { overflow: hidden; }
    ========================================= */
 /* Section Spacing */
 .section-margin {
-    margin-bottom: 160px !important;
+    margin-bottom: var(--space-32) !important; /* Consistent 128px spacing */
 }
-.section-headline-margin { margin-bottom: 80px !important; }
+.section-headline-margin { margin-bottom: var(--space-20) !important; }
 /* Hide Mobile Section on Desktop by default */
 .bits-and-pieces-section-mobile {
     display: none;
@@ -404,7 +464,7 @@ body.preloader-active { overflow: hidden; }
 
 @media (max-width: 991px) {
     .section-margin {
-        margin-bottom: 80px !important;
+        margin-bottom: var(--space-16) !important; /* 64px on mobile */
     }
     .section-headline-margin { margin-bottom: 40px !important; }
     
@@ -425,6 +485,30 @@ body.preloader-active { overflow: hidden; }
         margin-bottom: 0 !important; 
         padding-bottom: 50px !important; /* Ruang untuk shadow & dots */
         overflow: visible !important; /* Agar shadow tidak terpotong */
+    }
+
+    /* [NEW] Premium Fade Effect for Mobile Slider */
+    .bits-and-pieces-wrapper {
+        position: relative;
+    }
+
+    .bits-and-pieces-wrapper::before,
+    .bits-and-pieces-wrapper::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 15%; /* Lebar area fade */
+        z-index: 5; /* Pastikan di atas slide non-aktif */
+        pointer-events: none; /* Agar tidak menghalangi swipe */
+    }
+    .bits-and-pieces-wrapper::before {
+        left: 0;
+        background: linear-gradient(to right, white 20%, transparent);
+    }
+    .bits-and-pieces-wrapper::after {
+        right: 0;
+        background: linear-gradient(to left, white 20%, transparent);
     }
 }
 
@@ -1082,7 +1166,7 @@ html.lenis, html.lenis body { height: auto; }
 .bits-slider {
     width: 100%;
     padding: 60px 0 100px; /* Increased padding for breathing room & shadows */
-    overflow: hidden;
+    overflow: visible; /* [FIX] Allow slides to peek out from the sides */
 }
 
 /* Slide Styling (The "Center Focus" Logic) */
@@ -1339,7 +1423,7 @@ html.lenis, html.lenis body { height: auto; }
     font-family: var(--font-primary);
     font-size: clamp(1rem, 1.5vw, 1.25rem);
     line-height: 1.6;
-    color: #444;
+    color: #555; /* Softer text color for reading */
     margin-bottom: 24px;
     max-width: 55ch;
     font-weight: 400; /* Set to normal weight */
@@ -1398,19 +1482,22 @@ html.lenis, html.lenis body { height: auto; }
 .skill-card__wrapper {
     display: flex;
     flex-direction: column;
-    gap: 24px;
-    padding: 32px;
+    gap: var(--space-6);
+    padding: var(--space-8);
     background-color: #fcfcfc;
-    border: 1px solid #f0f0f0;
-    border-radius: 20px;
+    border: 1px solid rgba(0,0,0,0.06); /* Subtle border */
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-soft);
     height: 100%;
     text-decoration: none;
-    transition: background-color 0.4s ease, border-color 0.4s ease;
+    transition: all 0.4s var(--ease-smooth);
 }
 
 .skill-card__wrapper:hover {
     background-color: #111;
     border-color: #111;
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-hover);
 }
 
 .skill-card__wrapper:hover .skill-card__number,
@@ -1488,22 +1575,33 @@ html.lenis, html.lenis body { height: auto; }
     display: block;
     text-decoration: none;
     color: var(--text-primary);
-    border-radius: 20px;
+    border-radius: var(--radius-lg);
     overflow: hidden;
     background-color: #fff;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    transition: box-shadow 0.4s ease, transform 0.4s ease;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid rgba(0,0,0,0.04);
+    transition: all 0.5s var(--ease-smooth);
 }
 
 .work-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
+    box-shadow: var(--shadow-hover);
+}
+
+/* [NEW] Desktop size constraint for the single "Latest Work" card on the homepage */
+@media (min-width: 992px) {
+    .latest-work-section .work-card {
+        max-width: 1024px; /* Adjust this value as needed */
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
 
 .work-card__image-wrapper {
     position: relative;
     overflow: hidden;
-    aspect-ratio: 16/10; /* [REVERT] Mengembalikan rasio ke semula */
+    aspect-ratio: 21/9; /* Cinematic Ratio - Lebih pendek secara vertikal */
+    aspect-ratio: 16/9; /* Mobile: Standard Ratio agar detail tetap terlihat */
     background-color: #f5f5f7;
 }
 
@@ -1525,6 +1623,12 @@ html.lenis, html.lenis body { height: auto; }
 .work-card:hover .work-card__image,
 .work-card:hover .work-card__video {
     transform: scale(1.05);
+}
+
+@media (min-width: 768px) {
+    .work-card__image-wrapper {
+        aspect-ratio: 21/9; /* Desktop/Tablet: Cinematic/Ultrawide agar terlihat sleek */
+    }
 }
 
 .work-card__overlay {
@@ -2000,14 +2104,14 @@ html.lenis, html.lenis body { height: auto; }
     display: flex;
     justify-content: space-between;
     align-items: flex-start; /* Align to top for multi-line titles */
-    gap: 24px;
-    padding: 32px 16px;
-    border-bottom: 1px solid #e5e5e5;
+    gap: var(--space-6);
+    padding: var(--space-6) var(--space-4);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
     text-decoration: none;
     color: var(--text-primary);
     position: relative;
     overflow: hidden;
-    transition: background-color 0.4s ease;
+    transition: background-color 0.3s ease, padding-left 0.3s ease;
     /* Initial state for new GSAP animation */
     opacity: 0;
     transform: translateX(-30px);
@@ -2016,6 +2120,7 @@ html.lenis, html.lenis body { height: auto; }
 
 .experience-item:hover {
     background-color: #f9f9f9;
+    padding-left: var(--space-6); /* Micro-interaction: nudge content right */
 }
 
 .experience-item__info {
@@ -2051,4 +2156,21 @@ html.lenis, html.lenis body { height: auto; }
     background-color: #fcfcfc;
 }
 /* #endregion */
+
+/* #region 28. CASE STUDY RESPONSIVE FIXES */
+/* =========================================
+   28. CASE STUDY RESPONSIVE FIXES
+   ========================================= */
+@media (max-width: 767px) {
+    /* Fix for Hero Meta Info on Case Study Page */
+    .about-meta-grid {
+        grid-template-columns: 1fr; /* Force single column on mobile */
+        gap: 32px; /* Increase gap for vertical stacking */
+    }
+
+    .meta-item {
+        align-items: center; /* Center the text content within each item */
+        text-align: center;
+    }
+}
 /* #endregion */

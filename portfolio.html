@@ -122,17 +122,6 @@
                     document.body.style.overflow = "auto";
                     if (window.lenis) window.lenis.start();
                     window.dispatchEvent(new CustomEvent('preloaderDone'));
-
-                    const bgMusic = document.getElementById('bg-music');
-                    const player = document.getElementById('music-player');
-                    const playerText = player ? player.querySelector('.player-text') : null;
-                    
-                    if (bgMusic) {
-                        bgMusic.play().then(() => {
-                            if (player) player.classList.add('playing');
-                            if (playerText) playerText.innerText = "SOUND ON";
-                        }).catch(() => console.log("Autoplay blocked - waiting for interaction"));
-                    }
                 }
 
                 document.body.classList.add('preloader-active');

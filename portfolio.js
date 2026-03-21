@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 title: "Tsukamie Noodle Bar",
                 year: "2025",
                 category: "marketing",
-                link: "/studi",
+                link: "/study-case.html",
                 description: "Digital marketing campaign driving +148K new audience reach.",
                 image: "https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image.jpg",
                 srcset: "https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image-p-800.jpg 800w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image-p-1080.jpg 1080w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image.jpg 1200w"
@@ -319,7 +319,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
             });
         }
 
-        // 5. Premium Card Hover Effect & 3D Tilt
+        // 5. Premium Card Hover Effect (3D Tilt Disabled)
         function initCardHover() {
             const cards = document.querySelectorAll('.blog-main-wrapper');
             cards.forEach(card => {
@@ -327,35 +327,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 const wrapper = card.querySelector('.image-wrap');
                 if (!img || !wrapper) return;
 
+                // Keep the image zoom on hover
                 card.addEventListener('mouseenter', () => {
                     gsap.to(img, { scale: 1.3, duration: 0.8, ease: "power2.out", overwrite: "auto" });
                 });
                 
-                card.addEventListener('mousemove', (e) => {
-                    const rect = card.getBoundingClientRect();
-                    const xPct = ((e.clientX - rect.left) / rect.width - 0.5) * 2; // -1 to 1
-                    const yPct = ((e.clientY - rect.top) / rect.height - 0.5) * 2; // -1 to 1
-
-                    gsap.to(wrapper, {
-                        rotationY: xPct * 8, // Tilt range
-                        rotationX: -yPct * 8,
-                        transformPerspective: 1000,
-                        duration: 0.5,
-                        ease: "power2.out",
-                        overwrite: "auto",
-                        force3D: true
-                    });
-                });
-                
                 card.addEventListener('mouseleave', () => {
+                    // Reset the image zoom
                     gsap.to(img, { scale: 1.2, duration: 0.8, ease: "power2.out", overwrite: "auto" });
-                    gsap.to(wrapper, {
-                        rotationY: 0,
-                        rotationX: 0,
-                        duration: 0.8,
-                        ease: "power2.out",
-                        overwrite: "auto"
-                    });
                 });
             });
         }

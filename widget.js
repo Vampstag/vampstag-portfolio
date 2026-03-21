@@ -13,9 +13,9 @@ const widgetConfig = {
     // DAFTAR LAGU (PLAYLIST)
     // Tambahkan lagu baru dengan format: { src: 'folder/nama-file.mp3' },
     playlist: [
-        { src: 'audio/bgmusic.mp3' },
-        { src: 'audio/bgmusic2.mp3' },
-        { src: 'audio/bgmusic3.mp3' }
+        { src: '/audio/bgmusic.mp3' },
+        { src: '/audio/bgmusic2.mp3' },
+        { src: '/audio/bgmusic3.mp3' }
     ]
 };
 //#endregion

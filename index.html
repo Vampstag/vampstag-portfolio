@@ -182,21 +182,8 @@
                     document.body.style.overflow = "auto";
                     // Mulai Lenis scroll setelah loading selesai
                     if (window.lenis) window.lenis.start();
-
                     // Dispatch event agar custom.js tahu preloader sudah selesai
                     window.dispatchEvent(new CustomEvent('preloaderDone'));
-
-                    // Attempt to play background music (Autoplay)
-                    const bgMusic = document.getElementById('bg-music');
-                    const player = document.getElementById('music-player');
-                    const playerText = player ? player.querySelector('.player-text') : null;
-                    
-                    if (bgMusic) {
-                        bgMusic.play().then(() => {
-                            if (player) player.classList.add('playing');
-                            if (playerText) playerText.innerText = "SOUND ON";
-                        }).catch(() => console.log("Autoplay blocked - waiting for interaction"));
-                    }
                 }
 
                 document.body.classList.add('preloader-active');
@@ -271,14 +258,11 @@
                         
                         <!-- LAYER 1: Static Text (Background) -->
                         <div class="hero-static-layer">
-                            <div class="hero-badge">
-                                <span class="status-dot"></span> Open to Collaborate
-                            </div>
                             <h1 class="hero-huge-title">
-                                Creative<br>Marketer
+                                Creative<br>Specialist
                             </h1>
                             <p class="hero-subtitle">
-                                Helping brands grow through strategy and storytelling.
+                                Digital Content Creator specializing in 3D and Video.
                             </p>
                         </div>
 
@@ -332,7 +316,7 @@
                                 <div class="about-main-content">
                                     <div data-w-id="17981745-b76c-fdb8-d5a0-45626b3a0fb4" class="about-text-block">
                                         <p class="about-paragraph">
-                                            I combine design and marketing strategy to create work that’s visually engaging and data driven.
+                                            I'm a Creative Specialist dedicated to bringing ideas to life through high-end visuals. By blending Video Production, 3D Visualization, and Advanced Editing, I create immersive digital experiences that help brands stand out.
                                         </p>
                                         <p class="about-paragraph">
                                             Check out my 
@@ -345,25 +329,9 @@
                                                 Portfolio
                                                 <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=200&auto=format&fit=crop" class="hover-image" alt="My Work" loading="lazy" decoding="async"/>
                                             </a> 
-                                            to see my latest projects.
+                                            to see my projects.
                                         </p>
                                         
-                                        <div class="about-divider"></div>
-                                        
-                                        <div class="about-meta-grid">
-                                            <div class="meta-item">
-                                                <span class="meta-label">Location</span>
-                                                <span class="meta-value">Bandung, ID (Remote Ready)</span>
-                                            </div>
-                                            <div class="meta-item">
-                                                <span class="meta-label">Focus</span>
-                                                <span class="meta-value">Content & Strategy</span>
-                                            </div>
-                                            <div class="meta-item">
-                                                <span class="meta-label">Status</span>
-                                                <span class="meta-value">Open to Collaborate</span>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -411,7 +379,7 @@
                                     </div>
                                 </div>
                                 <div class="work-card__info">
-                                    <h3 class="work-card__title">Torch</h3>
+                                    <h3 class="work-card__title">Torch x Gundam</h3>
                                     <div class="work-card__cta">
                                         <span>View Case Study</span>
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -452,10 +420,10 @@
                                         <div class="skill-card__divider"></div>
                                         <div class="skill-card__body">
                                             <div class="skill-card__title-wrapper">
-                                                <div class="skill-card__title">Content Creation</div>
+                                                <div class="skill-card__title">Video Production</div>
                                             </div>
                                             <div class="skill-card__text-block">
-                                                <p class="skill-card__paragraph">Producing high-quality visuals and videos that tell a story. From concept to execution, I create assets that stop the scroll and engage your target audience instantly.</p>
+                                                <p class="skill-card__paragraph">Crafting cinematic narratives from concept to final delivery, focused on brand storytelling.</p>
                                             </div>
                                         </div>
                                     </a>
@@ -468,10 +436,10 @@
                                         <div class="skill-card__divider"></div>
                                         <div class="skill-card__body">
                                             <div class="skill-card__title-wrapper">
-                                                <div class="skill-card__title">Graphic Design</div>
+                                                <div class="skill-card__title">3D Visualization</div>
                                             </div>
                                             <div class="skill-card__text-block">
-                                                <p class="skill-card__paragraph">Crafting strong visual identities and cinematic cuts. Whether it’s a social media feed or a promotional video, I ensure every pixel and frame aligns perfectly with your brand voice.</p>
+                                                <p class="skill-card__paragraph">Building immersive 3D environments and product assets using Blender to elevate digital content.</p>
                                             </div>
                                         </div>
                                     </a>
@@ -484,10 +452,10 @@
                                         <div class="skill-card__divider"></div>
                                         <div class="skill-card__body">
                                             <div class="skill-card__title-wrapper">
-                                                <div class="skill-card__title">Social Media Marketing</div>
+                                                <div class="skill-card__title">Advanced Editing</div>
                                             </div>
                                             <div class="skill-card__text-block">
-                                                <p class="skill-card__paragraph">More than just posting. I handle the entire ecosystem from content planning, copywriting and KOL outreach to performance analysis. Let's grow your digital presence organically and sustainably.</p>
+                                                <p class="skill-card__paragraph">High-end post-production using DaVinci Resolve & Fusion for precision color and VFX.</p>
                                             </div>
                                         </div>
                                     </a>
