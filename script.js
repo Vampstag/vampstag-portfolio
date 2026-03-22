@@ -67,6 +67,9 @@ document.addEventListener("DOMContentLoaded", () => {
         // 14. Data Parallax
         initDataParallax();
 
+        // 15. Audio Narrator
+        initAudioNarrator();
+
         // 10. Refresh ScrollTrigger when preloader is done to ensure correct positions
         window.addEventListener('preloaderDone', () => {
             if (document.readyState === 'complete') {
@@ -84,7 +87,7 @@ function loadNavbar() {
     if (!container) return Promise.resolve();
     // choose path relative to current location; case study pages are one level deep
     let url = 'navbar.html';
-    if (window.location.pathname.includes('/study-case/')) {
+    if (window.location.pathname.includes('/case-study/') || window.location.pathname.includes('/study-case/')) {
         url = '../navbar.html';
     }
     return fetch(url)
@@ -93,7 +96,7 @@ function loadNavbar() {
             container.innerHTML = html;
 
             // fix relative link paths when the page is inside a subfolder
-            if (window.location.pathname.includes('/study-case/')) {
+            if (window.location.pathname.includes('/case-study/') || window.location.pathname.includes('/study-case/')) {
                 container.querySelectorAll('a').forEach(link => {
                     const href = link.getAttribute('href');
                     if (href && !href.startsWith('http') && !href.startsWith('../')) {
@@ -566,6 +569,125 @@ function initBitsSlider() {
             if (card) gsap.to(card, { rotationX: 0, rotationY: 0, scale: 1, duration: 0.5, ease: "power2.out" });
         }
     });
+}
+//#endregion
+
+//#region AUDIO NARRATOR
+// =========================================
+// 15. AUDIO NARRATOR PLAYER
+// =========================================
+function initAudioNarrator() {
+    const wrapper = document.querySelector('.audio-narrator-wrapper');
+    const player = document.querySelector('.audio-player-container');
+    if (!player || !wrapper) return;
+
+    const audio = player.querySelector('audio');
+    const playBtn = player.querySelector('.play-pause-btn');
+    const iconPlay = playBtn.querySelector('.icon-play');
+    const iconPause = playBtn.querySelector('.icon-pause');
+    const progressContainer = player.querySelector('.audio-progress-container');
+    const progressFill = player.querySelector('.audio-progress-fill');
+    const timeCurrent = player.querySelector('.audio-time-current');
+    const timeTotal = player.querySelector('.audio-time-total');
+    const tooltip = player.querySelector('.audio-tooltip');
+    const speedBtn = player.querySelector('.speed-btn');
+
+    // Helper: Format time
+    const formatTime = (s) => {
+        const min = Math.floor(s / 60);
+        const sec = Math.floor(s % 60);
+        return `${min}:${sec < 10 ? '0' + sec : sec}`;
+    };
+
+    // Toggle Play/Pause
+    playBtn.addEventListener('click', () => {
+        if (audio.paused) {
+            audio.play();
+            iconPlay.style.display = 'none';
+            iconPause.style.display = 'block';
+            player.classList.add('is-playing');
+        } else {
+            audio.pause();
+            iconPlay.style.display = 'block';
+            iconPause.style.display = 'none';
+            player.classList.remove('is-playing');
+        }
+    });
+
+    // Update Progress & Time
+    audio.addEventListener('timeupdate', () => {
+        const percent = (audio.currentTime / audio.duration) * 100;
+        progressFill.style.width = `${percent}%`;
+        timeCurrent.textContent = formatTime(audio.currentTime);
+    });
+
+    // Set Duration on Load
+    audio.addEventListener('loadedmetadata', () => {
+        timeTotal.textContent = formatTime(audio.duration);
+    });
+
+    // Seek/Scrub
+    progressContainer.addEventListener('click', (e) => {
+        const width = progressContainer.clientWidth;
+        const clickX = e.offsetX;
+        const duration = audio.duration;
+        audio.currentTime = (clickX / width) * duration;
+    });
+
+    // Tooltip Hover Logic
+    progressContainer.addEventListener('mousemove', (e) => {
+        const width = progressContainer.clientWidth;
+        const hoverX = e.offsetX;
+        const duration = audio.duration;
+        if (!duration) return;
+        
+        const hoverTime = (hoverX / width) * duration;
+        if (tooltip) {
+            tooltip.textContent = formatTime(hoverTime);
+            tooltip.style.left = `${hoverX}px`;
+        }
+    });
+
+    // Speed Control
+    const speeds = [1, 1.25, 1.5];
+    let speedIndex = 0;
+    speedBtn.addEventListener('click', () => {
+        speedIndex = (speedIndex + 1) % speeds.length;
+        audio.playbackRate = speeds[speedIndex];
+        speedBtn.textContent = speeds[speedIndex] + 'x';
+    });
+
+    // Reset UI on End
+    audio.addEventListener('ended', () => {
+        iconPlay.style.display = 'block';
+        iconPause.style.display = 'none';
+        progressFill.style.width = '0%';
+        player.classList.remove('is-playing');
+    });
+
+    // [NEW] Sticky Player Logic
+    // Set height wrapper agar layout tidak jumping saat player jadi fixed
+    wrapper.style.minHeight = player.offsetHeight + 'px';
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            // Jika wrapper sudah lewat (scroll ke bawah) DAN audio sedang play
+            if (!entry.isIntersecting && entry.boundingClientRect.top < 0) {
+                if (!audio.paused) {
+                    player.classList.add('is-sticky');
+                }
+            } 
+            // Jika user scroll kembali ke atas (wrapper terlihat lagi)
+            else if (entry.isIntersecting) {
+                player.classList.remove('is-sticky');
+            }
+        });
+    }, { 
+        threshold: 0,
+        rootMargin: "-100px 0px 0px 0px" // Trigger sedikit setelah elemen lewat
+    });
+
+    observer.observe(wrapper);
 }
 //#endregion
 

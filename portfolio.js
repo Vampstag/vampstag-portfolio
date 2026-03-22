@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 title: "Torch x Gundam",
                 year: "2026",
                 category: "Commercials", // Pilih antara 'Digital Content', 'Commercials', atau '3D & Visuals'
-                link: "study-case/torch.html", // Ganti dengan link detail proyek jika ada
+                link: "case-study/torch.html", // Ganti dengan link detail proyek jika ada
                 description: "High-stakes global IP collaboration. From cinematic teasers to visual storytelling, generating +1M views and 500K+ engagements.",
                 image: "https://images.unsplash.com/photo-1522199755839-a2bacb67c546?q=80&w=1000&auto=format&fit=crop", // Ganti dengan URL gambar Anda
                 srcset: "" // Kosongkan jika tidak ada srcset
