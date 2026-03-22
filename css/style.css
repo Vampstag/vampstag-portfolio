@@ -1581,11 +1581,15 @@ html.lenis, html.lenis body { height: auto; }
     box-shadow: var(--shadow-soft);
     border: 1px solid rgba(0,0,0,0.04);
     transition: all 0.5s var(--ease-smooth);
+    will-change: transform, box-shadow;
 }
 
 .work-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-hover);
+    transform: translateY(-8px) scale(1.005);
+    box-shadow: 
+        0 20px 40px -5px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(0, 0, 0, 0.05);
+    border-color: rgba(0,0,0,0.08);
 }
 
 /* [NEW] Desktop size constraint for the single "Latest Work" card on the homepage */
@@ -1802,10 +1806,11 @@ html.lenis, html.lenis body { height: auto; }
 
 .hero-huge-title {
     font-size: clamp(4rem, 12vw, 9rem);
-    line-height: 0.9;
+    line-height: 1.15;
     letter-spacing: -0.04em;
     font-weight: 800;
     margin-bottom: 24px;
+    padding-bottom: 0.2em; /* Tambahan ruang agar huruf g/y tidak terpotong */
     /* Animated Gradient Effect */
     background: linear-gradient(90deg, #000, #636363, #000);
     background-size: 200% auto;
@@ -1879,7 +1884,8 @@ html.lenis, html.lenis body { height: auto; }
     background-color: #ffe6aa; /* Light, warm beige */
 }
 
-.card-item img {
+.card-item img,
+.card-item video {
     width: 100%;
     aspect-ratio: 4/5;
     object-fit: cover;
@@ -2172,5 +2178,226 @@ html.lenis, html.lenis body { height: auto; }
         align-items: center; /* Center the text content within each item */
         text-align: center;
     }
+}
+/* #endregion */
+
+/* #region 29. LOGO MARQUEE */
+/* =========================================
+   29. INFINITE LOGO MARQUEE
+   ========================================= */
+.logo-marquee-section {
+    width: 100%;
+    overflow: hidden;
+    background-color: transparent;
+    padding-top: var(--space-8);
+    padding-bottom: var(--space-8);
+}
+
+.marquee-wrapper {
+    width: 100%;
+    overflow: hidden;
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.marquee-track {
+    display: flex;
+    width: max-content; /* Ganti fit-content ke max-content agar tidak wrapping */
+    gap: 0; /* Pastikan gap 0 */
+    animation: marquee-scroll 30s linear infinite;
+    will-change: transform;
+    transform: translate3d(0, 0, 0); /* Force Hardware Acceleration */
+}
+
+.marquee-content {
+    display: flex;
+    align-items: center;
+    gap: 0; /* Hapus gap container */
+    padding-right: 0; /* Hapus padding container */
+    flex-shrink: 0;
+}
+
+.marquee-logo {
+    height: 40px; /* Mobile height */
+    width: auto;
+    object-fit: contain;
+    margin-right: 4rem; /* Spacing dipindah ke margin item agar presisi */
+    filter: grayscale(100%) brightness(0); /* Black silhouettes */
+    opacity: 0.6;
+    transition: filter 0.3s ease, opacity 0.3s ease;
+    cursor: pointer;
+}
+
+.marquee-logo:hover {
+    filter: grayscale(0%) brightness(100%); /* Original color */
+    opacity: 1;
+}
+
+@keyframes marquee-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); /* Moves exactly half the total width */ }
+}
+
+@media (min-width: 992px) {
+    .marquee-logo { 
+        height: 60px; /* Desktop height */ 
+        margin-right: 6rem; /* Spacing desktop */
+    }
+    .marquee-content { gap: 0; padding-right: 0; }
+    .marquee-wrapper { mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent); }
+}
+/* #endregion */
+
+/* #region 30. DATA VALIDATION (THE NUMBERS) */
+/* =========================================
+   30. DATA VALIDATION
+   ========================================= */
+.data-validation-section {
+    width: 100%;
+    padding: 140px 0; /* Generous vertical padding */
+    background-color: #FAFAFA; /* Subtle off-white for contrast against white body */
+    border-top: 1px solid rgba(0,0,0,0.03);
+    border-bottom: 1px solid rgba(0,0,0,0.03);
+}
+
+.data-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    width: 100%;
+    text-align: center;
+}
+
+.data-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.data-number {
+    font-family: var(--font-primary);
+    font-size: clamp(4rem, 8vw, 7rem); /* Massive responsive text */
+    font-weight: 800; /* Black/ExtraBold */
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: #000000;
+    margin-bottom: 24px;
+}
+
+.data-label {
+    font-family: var(--font-primary);
+    font-size: 0.875rem; /* ~14px */
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #000000;
+    opacity: 0.6;
+    font-weight: 500;
+}
+
+@media (max-width: 767px) {
+    .data-validation-section { padding: 80px 0; }
+    .data-grid { grid-template-columns: 1fr; gap: 80px; }
+}
+/* #endregion */
+
+/* #region 31. WHY WORK WITH ME */
+/* =========================================
+   31. WHY WORK WITH ME
+   ========================================= */
+.why-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px; /* Reduced gap for compactness */
+}
+
+.why-item {
+    background: #fbfbfb; /* Very subtle grey for premium feel */
+    padding: 24px 20px; /* Significantly reduced padding to save space */
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.04);
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.why-item:hover {
+    background: #fff;
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px -5px rgba(0,0,0,0.08);
+    border-color: rgba(0,0,0,0.08);
+}
+
+.why-number {
+    display: inline-block;
+    font-family: var(--font-primary);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #999;
+    background: #eee;
+    padding: 4px 10px;
+    border-radius: 100px;
+    margin-bottom: 16px;
+}
+
+.why-title {
+    font-family: var(--font-primary);
+    font-size: 1.25rem; /* Smaller title */
+    font-weight: 700;
+    line-height: 1.2;
+    color: #111;
+    letter-spacing: -0.03em;
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 10px; /* Align icon */
+}
+
+.why-desc {
+    font-family: var(--font-primary);
+    font-size: 0.9375rem; /* Slightly smaller body text */
+    line-height: 1.6;
+    color: #666;
+    font-weight: 400;
+    margin: 0;
+}
+
+.why-icon {
+    width: 20px; /* Smaller icon */
+    height: 20px;
+    color: #000;
+    opacity: 0.8;
+    transition: transform 0.4s ease;
+}
+
+.why-item:hover .why-icon {
+    transform: scale(1.2) rotate(5deg);
+}
+
+@media (max-width: 991px) {
+    .why-grid {
+        /* [UPDATED] Horizontal Scroll (Swipe) Layout */
+        display: flex;
+        overflow-x: auto;
+        gap: 24px; /* Jarak antar kartu lebih lega */
+        padding: 10px 5% 40px 5%; /* Padding samping agar kartu pertama/terakhir tidak mepet, bawah besar untuk shadow */
+        scroll-snap-type: x mandatory; /* Efek magnet saat swipe */
+        -webkit-overflow-scrolling: touch; /* Smooth scroll di iOS */
+        scrollbar-width: none; /* Hide scrollbar Firefox */
+    }
+    /* Hide scrollbar Chrome/Safari/Edge */
+    .why-grid::-webkit-scrollbar { display: none; }
+
+    .why-item {
+        min-width: 280px;
+        width: 80vw; /* 80% layar: memberikan ruang intip untuk kartu selanjutnya (UX cues) */
+        max-width: 400px; /* Batas lebar di tablet */
+        flex: 0 0 auto; /* Mencegah kartu mengecil */
+        scroll-snap-align: center; /* Snap ke TENGAH layar (Premium feel) */
+        padding: 32px 24px;
+        margin: 0;
+    }
+    
+    /* Make typography compact on mobile to save vertical space */
+    .why-number { margin-bottom: 12px; padding: 2px 8px; font-size: 0.7rem; }
+    .why-title { font-size: 1.1rem; margin-bottom: 8px; }
+    .why-desc { font-size: 0.9rem; line-height: 1.5; }
 }
 /* #endregion */

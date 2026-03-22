@@ -61,6 +61,9 @@
         <link rel="stylesheet" href="css/style.css">
         <script>
             document.addEventListener("DOMContentLoaded", () => {
+                // [OPTIMIZATION] Start fetching footer immediately
+                const footerPromise = fetch('footer.html').then(response => response.text());
+
                 const counter = document.getElementById('counter');
                 const bar = document.getElementById('bar');
                 const preloader = document.getElementById('preloader');
@@ -68,19 +71,19 @@
                 let currentProgress = 0;
 
                 function updateCounter() {
-                    const jump = Math.floor(Math.random() * 43) + 1;
+                    const jump = Math.floor(Math.random() * 45) + 25;
                     currentProgress += jump;
                     if (currentProgress > 100) currentProgress = 100;
 
                     if(counter) counter.innerText = currentProgress.toString().padStart(2, '0') + "%";
                     if(bar) bar.style.width = currentProgress + "%";
 
-                    let delay = Math.floor(Math.random() * 200) + 50;
+                    let delay = Math.floor(Math.random() * 150) + 20;
 
                     if (currentProgress > 70 && currentProgress < 85 && Math.random() > 0.3) {
-                        delay = 800 + Math.random() * 1000; 
+                        delay = 400 + Math.random() * 500; // Reduced deliberate lag
                     } else if (currentProgress > 90 && currentProgress < 98) {
-                        delay = 400 + Math.random() * 400; 
+                        delay = 200 + Math.random() * 200; 
                     }
 
                     if (currentProgress < 100) {
@@ -94,9 +97,7 @@
                             sfx.play().catch(e => console.log("Audio autoplay blocked:", e));
                         }
 
-                        Promise.all([
-                            fetch('footer.html').then(response => response.text())
-                        ]).then(([footerData]) => {
+                        footerPromise.then((footerData) => {
                             const footerContainer = document.getElementById('footer-container');
                             if (footerContainer) footerContainer.innerHTML = footerData;
         
@@ -289,13 +290,13 @@
                                     <a data-filter="all" class="web-building-tab w-inline-block w-tab-link w--current">
                                         <div class="text-block-7">All</div>
                                     </a>
-                                    <a data-filter="marketing" class="social-media-tab w-inline-block w-tab-link">
-                                        <div class="text-block-7">Marketing</div>
+                                    <a data-filter="Digital Content" class="social-media-tab w-inline-block w-tab-link">
+                                        <div class="text-block-7">Digital Content</div>
                                     </a>
-                                    <a data-filter="creative" class="design-and-editing-tab w-inline-block w-tab-link">
-                                        <div class="text-block-7">Creative</div>
+                                    <a data-filter="Commercials" class="design-and-editing-tab w-inline-block w-tab-link">
+                                        <div class="text-block-7">Commercials</div>
                                     </a>
-                                    <a data-filter="web" class="web-building-tab w-inline-block w-tab-link">
+                                    <a data-filter="3D & Visuals" class="web-building-tab w-inline-block w-tab-link">
                                         <div class="text-block-7">Web</div>
                                     </a>
                                 </div>

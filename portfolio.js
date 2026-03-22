@@ -31,11 +31,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
         const projectsData = [
             {
                 id: 7, // Pastikan ID unik
-                title: "Torch",
+                title: "Torch x Gundam",
                 year: "2026",
-                category: "creative", // Pilih antara 'marketing', 'creative', atau 'web'
+                category: "Commercials", // Pilih antara 'Digital Content', 'Commercials', atau '3D & Visuals'
                 link: "study-case/torch.html", // Ganti dengan link detail proyek jika ada
-                description: "Driving brand awareness and conversions through high-impact visual storytelling and strategic video production.",
+                description: "High-stakes global IP collaboration. From cinematic teasers to visual storytelling, generating +1M views and 500K+ engagements.",
                 image: "https://images.unsplash.com/photo-1522199755839-a2bacb67c546?q=80&w=1000&auto=format&fit=crop", // Ganti dengan URL gambar Anda
                 srcset: "" // Kosongkan jika tidak ada srcset
             },
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 id: 6,
                 title: "DIPDOP Creative Agency",
                 year: "2026",
-                category: "creative",
+                category: "Digital Content",
                 link: "study-case/dipdop.html",
                 description: "Digital marketing campaign driving +148K new audience reach.",
                 image: "https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image.jpg",
@@ -53,57 +53,17 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 id: 5,
                 title: "Tsukamie Noodle Bar",
                 year: "2025",
-                category: "marketing",
+                category: "Digital Content",
                 link: "/study-case.html",
-                description: "Digital marketing campaign driving +148K new audience reach.",
+                description: "",
                 image: "https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image.jpg",
                 srcset: "https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image-p-800.jpg 800w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image-p-1080.jpg 1080w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image.jpg 1200w"
             },
-            // Placeholders for other categories
-            {
-                id: 3,
-                title: "Creative Campaign 01",
-                year: "2024",
-                category: "creative",
-                link: "#",
-                description: "Visual storytelling project for a local fashion brand.",
-                image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop",
-                srcset: ""
-            },
-            {
-                id: 4,
-                title: "Web Project Alpha",
-                year: "2025",
-                category: "web",
-                link: "#",
-                description: "High-performance e-commerce website built with Webflow.",
-                image: "https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=1000&auto=format&fit=crop",
-                srcset: ""
-            },
-            {
-                id: 5,
-                title: "Creative Campaign 02",
-                year: "2024",
-                category: "creative",
-                link: "#",
-                description: "A campaign focusing on brand aesthetics and visual identity.",
-                image: "https://images.unsplash.com/photo-1506792006437-256b665541e2?q=80&w=1000&auto=format&fit=crop",
-                srcset: ""
-            },
-            {
-                id: 1,
-                title: "Creative Campaign 03",
-                year: "2023",
-                category: "creative",
-                link: "#",
-                description: "Experimental art direction for a music festival.",
-                image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1000&auto=format&fit=crop",
-                srcset: ""
-            }
+            
         ];
 
         // Update Tab Counts
-        const categories = ['all', 'marketing', 'creative', 'web'];
+        const categories = ['all', 'Digital Content', 'Commercials', '3D & Visuals'];
         categories.forEach(cat => {
             const count = cat === 'all' ? projectsData.length : projectsData.filter(p => p.category === cat).length;
             const tabText = document.querySelector(`[data-filter="${cat}"] .text-block-7`);

@@ -58,6 +58,15 @@ document.addEventListener("DOMContentLoaded", () => {
         // 11. Tab Title Switch
         initTabTitleSwitch();
 
+        // 12. Constant Marquee Speed
+        initMarqueeSpeed();
+
+        // 13. Data Validation Counter
+        initDataCounter();
+
+        // 14. Data Parallax
+        initDataParallax();
+
         // 10. Refresh ScrollTrigger when preloader is done to ensure correct positions
         window.addEventListener('preloaderDone', () => {
             if (document.readyState === 'complete') {
@@ -560,6 +569,146 @@ function initBitsSlider() {
 }
 //#endregion
 
+//#region DATA PARALLAX
+// =========================================
+// 14. DATA PARALLAX ANIMATION
+// =========================================
+function initDataParallax() {
+    const numbers = document.querySelectorAll('.data-number');
+    
+    if (!numbers.length) return;
+
+    numbers.forEach(number => {
+        gsap.fromTo(number, 
+            { yPercent: -15 }, // Start slightly shifted up
+            {
+                yPercent: 15, // Move down as user scrolls (creating "lag" behind scroll)
+                ease: "none",
+                scrollTrigger: {
+                    trigger: number.closest('.data-validation-section') || number,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: 0.5 // Smooth scrubbing
+                }
+            }
+        );
+    });
+}
+//#endregion
+
+//#region DATA COUNTER
+// =========================================
+// 13. DATA COUNTER ANIMATION
+// =========================================
+function initDataCounter() {
+    const counters = document.querySelectorAll('.data-number');
+    
+    counters.forEach(counter => {
+        // Regex to split: Prefix (non-digits), Number (digits/dots/commas), Suffix (non-digits)
+        // Handles formats like "+1M", "3+", "100%"
+        const text = counter.innerText;
+        const match = text.match(/^([^0-9]*)([0-9\.,]+)([^0-9]*)$/);
+        
+        if (match) {
+            const prefix = match[1];
+            // Remove commas for numeric parsing (e.g. 1,000 -> 1000)
+            const numericString = match[2].replace(/,/g, '');
+            const targetVal = parseFloat(numericString);
+            const suffix = match[3];
+            
+            // Detect if original number had decimals
+            const hasDecimals = match[2].includes('.');
+            const decimals = hasDecimals ? match[2].split('.')[1].length : 0;
+            
+            // Initial state: Show 0 with prefix/suffix
+            counter.innerText = `${prefix}0${suffix}`;
+            
+            const proxy = { val: 0 };
+            
+            // Select the corresponding label
+            const label = counter.parentElement.querySelector('.data-label');
+            if (label) gsap.set(label, { opacity: 0 }); // Hide initially
+
+            gsap.to(proxy, {
+                val: targetVal,
+                duration: 2,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: counter,
+                    start: "top 85%", // Animation starts when element is near bottom of viewport
+                    once: true // Animate only once
+                },
+                onStart: () => {
+                    // Animate label fade-in with a slight delay
+                    if (label) {
+                        gsap.fromTo(label, 
+                            { opacity: 0, y: 15 },
+                            { opacity: 0.6, y: 0, duration: 1, ease: "power3.out", delay: 0.4 }
+                        );
+                    }
+                },
+                onUpdate: () => {
+                    // Format current value
+                    let current;
+                    if (hasDecimals) {
+                        current = proxy.val.toFixed(decimals);
+                    } else {
+                        current = Math.floor(proxy.val);
+                        // Add commas back for integer display if needed
+                        current = current.toLocaleString('en-US');
+                    }
+                    counter.innerText = `${prefix}${current}${suffix}`;
+                },
+                onComplete: () => {
+                    // Ensure it ends exactly on the original string
+                    counter.innerText = text;
+                }
+            });
+        }
+    });
+}
+//#endregion
+
+//#region MARQUEE SPEED
+// =========================================
+// 12. MARQUEE SPEED CONTROL
+// =========================================
+function initMarqueeSpeed() {
+    const track = document.querySelector('.marquee-track');
+    if (!track) return;
+
+    // CONFIG: Kecepatan dalam pixels per detik
+    // 50-60 adalah kecepatan yang nyaman dibaca.
+    // Semakin KECIL angka ini = Semakin LAMBAT.
+    const pixelsPerSecond = 50; 
+
+    const updateDuration = () => {
+        // Ambil lebar total track saat ini (fit-content menyesuaikan isi)
+        const trackWidth = track.offsetWidth;
+        // Jarak tempuh animasi CSS kita adalah -50% (setengah lebar total)
+        const distance = trackWidth / 2;
+        
+        if (distance > 0) {
+            // Rumus Fisika: Waktu = Jarak / Kecepatan
+            const duration = distance / pixelsPerSecond;
+            track.style.animationDuration = `${duration}s`;
+        }
+    };
+
+    // Hitung saat loading awal
+    requestAnimationFrame(updateDuration);
+
+    // Hitung ulang jika layar di-resize (responsif)
+    window.addEventListener('resize', updateDuration);
+    
+    // Hitung ulang saat gambar selesai loading (karena width gambar auto)
+    track.querySelectorAll('img').forEach(img => {
+        if (img.complete) updateDuration();
+        else img.addEventListener('load', updateDuration);
+    });
+}
+//#endregion
+
 //#region TAB TITLE SWITCH
 // =========================================
 // 11. TAB TITLE SWITCH
@@ -599,6 +748,10 @@ function initTabTitleSwitch() {
  */
 function initVideoCards() {
      const videoCards = document.querySelectorAll('.work-card');
+     
+     // Check connection status (Progressive Enhancement)
+     const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+     const isSaveData = connection ? connection.saveData : false;
  
      // 1. Intersection Observer for Play/Pause on Scroll
      const observer = new IntersectionObserver((entries) => {
@@ -608,6 +761,9 @@ function initVideoCards() {
 
              if (video) { 
                  if (entry.isIntersecting) {
+                    // Skip autoplay if Data Saver is on
+                    if (isSaveData) return;
+
                     // User Request: Always start muted when entering viewport
                     video.muted = true;
 
@@ -617,18 +773,24 @@ function initVideoCards() {
                     }
 
                      // Play the video
-                     video.play().catch(error => {
+                     const playPromise = video.play();
+                     if (playPromise !== undefined) {
+                         playPromise.catch(error => {
                          console.log("Video autoplay was prevented by browser policy:", error);
                      });
+                     }
                  } else {
                      // Pause the video when it leaves the viewport
-                     video.pause();
+                     if (!video.paused) {
+                         video.pause();
+                     }
                  }
              }
          });
      }, {
          root: null, // Observe intersections relative to the viewport
-         threshold: 0.2 // Trigger when 20% of the element is visible
+         threshold: 0.2, // Trigger when 20% of the element is visible
+         rootMargin: "200px 0px" // Preload slightly before element enters viewport
      });
  
      // 2. Initialize Each Card

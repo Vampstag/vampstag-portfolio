@@ -3,9 +3,9 @@
     <head>
         <meta charset="utf-8"/>
         <title>M. Dimas K. G. | Creative Marketer</title>
-        <meta content="Hi, I&#x27;m a Marketing Student from Bandung with a passion for creativity. Dive into this site to see my latest projects, thoughts, and what I’ve been working on." name="description"/>
+        <meta content="Portfolio of M. Dimas (MDKG) - Creative Marketer & Content Creator specializing in Video Production, 3D Visuals, and Data-Driven Storytelling based in Bandung." name="description"/>
         <meta content="M. Dimas K. G. | Creative Marketer" property="og:title"/>
-        <meta content="Discover the portfolio of Dimas (MDKG) | Marketing Student from Bandung showcasing portfolio, digital marketing projects, and creative storytelling." property="og:description"/>
+        <meta content="Explore the creative works of Dimas (MDKG). Integrating marketing strategy with high-end motion visuals and interactive web experiences." property="og:description"/>
         <meta content="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/693913757ee65e6f4176fa25_home.jpg" property="og:image"/>
         <meta content="M. Dimas K. G. | Creative Marketer" property="twitter:title"/>
         <meta content="Discover the portfolio of Dimas (MDKG) | Marketing Student from Bandung showcasing portfolio, digital marketing projects, and creative storytelling." property="twitter:description"/>
@@ -14,6 +14,10 @@
         <meta content="width=device-width, initial-scale=1" name="viewport"/>
         <meta content="Webflow" name="generator"/>
         <link href="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/css/mdkg.webflow.shared.4d3ebba11.css" rel="stylesheet" type="text/css" integrity="sha384-TT67oRMLIgdE62QKbLJVm4qWzvpdYU5Fte9HrMLErE4YLOwPeNlX0FQVkvPHI9IX" crossorigin="anonymous"/>
+        <!-- Mobile Premium Feel: Menyesuaikan warna toolbar browser dengan background website -->
+        <meta name="theme-color" content="#ffffff">
+        <meta name="ms-application-navbutton-color" content="#ffffff">
+        <meta name="apple-mobile-web-app-status-bar-style" content="default">
         <script type="application/ld+json">
         {
           "@context": "https://schema.org",
@@ -48,45 +52,31 @@
           "@type": "FAQPage",
           "mainEntity": [{
             "@type": "Question",
-            "name": "What kind of projects do you work on?",
+            "name": "What does your commercial production scope cover?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "I specialize in content strategy, branding, visual design, and website development, combining marketing insights with creative execution."
+              "text": "I execute technical visual production, specializing in cinematic video editing, color grading, and high-fidelity 3D product assets. My focus is on creating a consistent visual language that translates your brand identity into clean, broadcast-ready content."
             }
           }, {
             "@type": "Question",
-            "name": "Are you open to internship or freelance opportunities?",
+            "name": "How do you integrate with in-house teams?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Of course. I’m always open to roles where I can learn, grow, and contribute. Social media, content, and digital marketing roles are my main playground."
+              "text": "I operate as a direct extension of your creative or marketing team, handling the execution bottleneck so your internal resources can focus on core strategy. My process ensures full transparency and direct communication, resulting in seamless brand alignment from brief to final render."
             }
           }, {
             "@type": "Question",
-            "name": "How do you usually start a new project?",
+            "name": "What are your engagement models?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "I like to keep things simple: understand the goal → do a bit of research → build a concept → execute → evaluate. It keeps everything clear, structured, and not stressful."
+              "text": "I am available for project-based contracts—ideal for specific product launches and campaigns—as well as long-term retainer partnerships for ongoing visual support. These models ensure dedicated availability and a consistent creative output for your brand’s roadmap."
             }
           }, {
             "@type": "Question",
-            "name": "Can people reach out for collaborations or discussions?",
+            "name": "How do you handle production timelines?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Absolutely. Whether it’s work-related, brainstorming ideas, or just talking about digital stuff, feel free to reach out via Whatsapp or LinkedIn."
-            }
-          }, {
-            "@type": "Question",
-            "name": "What makes you different from other content creators?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "I merge data-driven marketing strategy with creative storytelling, ensuring that every piece of content is not only visually engaging but also impactful and meaningful for both brands and audiences."
-            }
-          }, {
-            "@type": "Question",
-            "name": "Why do you write a blog?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Because thinking is better when it’s written. The blog helps me document my learning, share insights, and train myself to think more strategically."
+              "text": "Timelines are established based on the technical complexity and the level of polish required for your project. I prioritize realistic schedules that ensure professional, high-quality output while maintaining the speed-to-market necessary for modern digital campaigns."
             }
           }]
         }
@@ -106,6 +96,10 @@
         <link rel="stylesheet" href="css/style.css">
         <script>
             document.addEventListener("DOMContentLoaded", () => {
+                // [OPTIMIZATION] Start fetching footer immediately (Parallel Loading)
+                // Don't wait for animation to finish.
+                const footerPromise = fetch('footer.html').then(response => response.text());
+
                 const counter = document.getElementById('counter');
                 const bar = document.getElementById('bar');
                 const preloader = document.getElementById('preloader');
@@ -114,8 +108,8 @@
 
                 function updateCounter() {
                     // UBAH DI SINI: Angka lompatan (jump).
-                    // Ganti 23 menjadi angka lebih besar (misal 40) agar lebih cepat selesai.
-                    const jump = Math.floor(Math.random() * 40) + 20;
+                    // Increased jump range for faster perceived loading
+                    const jump = Math.floor(Math.random() * 45) + 25;
                     currentProgress += jump;
                     if (currentProgress > 100) currentProgress = 100;
 
@@ -124,7 +118,7 @@
 
                     // UBAH DI SINI: Delay dasar (dalam milidetik).
                     // Semakin kecil angkanya, semakin cepat angkanya berganti.
-                    let delay = Math.floor(Math.random() * 50) + 10;
+                    let delay = Math.floor(Math.random() * 40) + 5;
 
                     if (currentProgress < 100) {
                         setTimeout(updateCounter, delay);
@@ -140,10 +134,8 @@
                             sfx.play().catch(e => console.log("Audio autoplay blocked:", e));
                         }
 
-                        // Once the counter reaches 100, fetch the footer
-                        Promise.all([
-                            fetch('footer.html').then(response => response.text())
-                        ]).then(([footerData]) => {
+                        // Use the promise we started at the beginning
+                        footerPromise.then((footerData) => {
                             // Inject the footer HTML
                             const footerContainer = document.getElementById('footer-container');
                             
@@ -259,10 +251,10 @@
                         <!-- LAYER 1: Static Text (Background) -->
                         <div class="hero-static-layer">
                             <h1 class="hero-huge-title">
-                                Creative<br>Specialist
+                                Visual<br>Strategist
                             </h1>
                             <p class="hero-subtitle">
-                                Digital Content Creator specializing in 3D and Video.
+                                Crafting intentional narratives through 3D, video, and immersive design.
                             </p>
                         </div>
 
@@ -277,8 +269,10 @@
 
                             <!-- Item 2: Project Preview -->
                             <div class="drag-item card-item card-item--2">
-                                <img src="assets/images/project/tsukamie/tsukamie2.webp" alt="Latest Project" draggable="false" loading="lazy" decoding="async">
-                                <div class="card-caption">Latest Work</div>
+                                <video autoplay loop muted playsinline draggable="false">
+                                    <source src="assets/videos/Portrait_Top_Ads 2_NO LICENSE.mp4" type="video/mp4">
+                                </video>
+                                <div class="card-caption">Showreel</div>
                             </div>
 
                             <!-- Item 3: Sticker Pill -->
@@ -316,20 +310,20 @@
                                 <div class="about-main-content">
                                     <div data-w-id="17981745-b76c-fdb8-d5a0-45626b3a0fb4" class="about-text-block">
                                         <p class="about-paragraph">
-                                            I'm a Creative Specialist dedicated to bringing ideas to life through high-end visuals. By blending Video Production, 3D Visualization, and Advanced Editing, I create immersive digital experiences that help brands stand out.
+                                            I am a visual strategist focusing on the technical execution of commercial video and 3D product assets. My goal is to bridge the gap between creative concepts and final delivery by centralizing high-fidelity editing and asset development into a streamlined workflow.
                                         </p>
                                         <p class="about-paragraph">
-                                            Check out my 
+                                            By integrating 3D product visualization and cinematic editing, I eliminate the friction of traditional agency models. Read my 
                                             <a href="about.html" class="hover-trigger">
-                                                About page
+                                                Full Bio
                                                 <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop" class="hover-image" alt="My Portrait" loading="lazy" decoding="async"/>
                                             </a> 
-                                            for the full story, or explore my 
+                                            or analyze the 
                                             <a href="portfolio.html" class="hover-trigger">
-                                                Portfolio
+                                                Commercial Impact
                                                 <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=200&auto=format&fit=crop" class="hover-image" alt="My Work" loading="lazy" decoding="async"/>
                                             </a> 
-                                            to see my projects.
+                                            of my recent work.
                                         </p>
                                         
                                     </div>
@@ -361,7 +355,7 @@
                             <a href="project-detail.html?id=tsukamie" class="work-card">
                                 <div class="work-card__image-wrapper">
                                     <!-- Video Element -->
-                                    <video class="work-card__video" autoplay loop muted playsinline preload="metadata" poster="assets/videos/poster-torch.webp">   
+                                    <video class="work-card__video" loop muted playsinline preload="none" poster="assets/videos/poster-torch.webp">   
                                         <source src="assets/videos/Portrait_Top_Ads 2_NO LICENSE.mp4" type="video/mp4">
                                         Your browser does not support the video tag.
                                     </video>
@@ -393,17 +387,17 @@
                     </div>
                 </div>
             </section>
-            <section id="hardskills" class="hardskills-section section-margin fade-in-section">
+            <section id="services" class="hardskills-section section-margin fade-in-section">
                 <div class="w-layout-blockcontainer global-wrapper w-container">
                     <div class="global-padding">
                         <div class="whjy-choose-me-section-wrapper">
                             <div class="skills--headline-content-wrapper section-headline-margin">
                                 <div class="why-choose-me-headline">
-                                    <div class="section-headline-text text-3xl text-weight-semibold text-color-black-900 text-reveal">What I Do</div>
+                                    <div class="section-headline-text text-3xl text-weight-semibold text-color-black-900 text-reveal">Services</div>
                                 </div>
                                 <div data-w-id="17981745-b76c-fdb8-d5a0-45626b3a1038" style="opacity:0" class="why-choose-me-button-wrappe">
-                                    <a href="https://webflow.com/templates/designers/quix-studio" target="_blank" class="button-normal-white-wrapper-2 w-inline-block">
-                                        <div class="button-normal-white-text-2 text-sm text-weight-medium text-style-no_wrap text-color-black-900">Get to Know Me</div>
+                                    <a href="contact.html" class="button-normal-white-wrapper-2 w-inline-block">
+                                        <div class="button-normal-white-text-2 text-sm text-weight-medium text-style-no_wrap text-color-black-900">Start a Project</div>
                                         <div class="button-normal-white-arrow-block-2">
                                             <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d552f_arrow-black.svg" alt="Arrow Image" class="button-white-arrow-image-black-2"/>
                                             <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5530_arrow-white.svg" alt="Arrow Image" class="button-white-arrow-image-white-2"/>
@@ -413,49 +407,49 @@
                             </div>                          
                             <div class="skills-grid fade-in-section">
                                 <div class="skill-card">
-                                    <a href="#" class="skill-card__wrapper w-inline-block">
+                                    <a href="portfolio.html" class="skill-card__wrapper w-inline-block">
                                         <div class="skill-card__header">
-                                            <div class="skill-card__number">[01]</div>
+                                            <div class="skill-card__number">01</div>
                                         </div>
                                         <div class="skill-card__divider"></div>
                                         <div class="skill-card__body">
                                             <div class="skill-card__title-wrapper">
-                                                <div class="skill-card__title">Video Production</div>
+                                                <div class="skill-card__title">Post-Production & Editing</div>
                                             </div>
                                             <div class="skill-card__text-block">
-                                                <p class="skill-card__paragraph">Crafting cinematic narratives from concept to final delivery, focused on brand storytelling.</p>
+                                                <p class="skill-card__paragraph">Technical execution of commercial video content. Focusing on clean, cinematic editing and color grading to ensure every frame aligns with the brand’s visual identity.</p>
                                             </div>
                                         </div>
                                     </a>
                                 </div>
                                 <div class="skill-card">
-                                    <a href="#" class="skill-card__wrapper w-inline-block">
+                                    <a href="portfolio.html" class="skill-card__wrapper w-inline-block">
                                         <div class="skill-card__header">
-                                            <div class="skill-card__number">[02]</div>
+                                            <div class="skill-card__number">02</div>
                                         </div>
                                         <div class="skill-card__divider"></div>
                                         <div class="skill-card__body">
                                             <div class="skill-card__title-wrapper">
-                                                <div class="skill-card__title">3D Visualization</div>
+                                                <div class="skill-card__title">3D Product Visualization</div>
                                             </div>
                                             <div class="skill-card__text-block">
-                                                <p class="skill-card__paragraph">Building immersive 3D environments and product assets using Blender to elevate digital content.</p>
+                                                <p class="skill-card__paragraph">Developing high-fidelity 3D assets and product replicas. Creating digital twins that allow for detailed, cinematic presentation without the limitations of traditional photography.</p>
                                             </div>
                                         </div>
                                     </a>
                                 </div>
                                 <div class="skill-card">
-                                    <a href="#" class="skill-card__wrapper w-inline-block">
+                                    <a href="portfolio.html" class="skill-card__wrapper w-inline-block">
                                         <div class="skill-card__header">
-                                            <div class="skill-card__number">[03]</div>
+                                            <div class="skill-card__number">03</div>
                                         </div>
                                         <div class="skill-card__divider"></div>
                                         <div class="skill-card__body">
                                             <div class="skill-card__title-wrapper">
-                                                <div class="skill-card__title">Advanced Editing</div>
+                                                <div class="skill-card__title">Visual Identity Design</div>
                                             </div>
                                             <div class="skill-card__text-block">
-                                                <p class="skill-card__paragraph">High-end post-production using DaVinci Resolve & Fusion for precision color and VFX.</p>
+                                                <p class="skill-card__paragraph">Building cohesive design systems and branding assets. From logo suites to marketing collaterals, ensuring a consistent visual language across all digital touchpoints.</p>
                                             </div>
                                         </div>
                                     </a>
@@ -465,79 +459,92 @@
                     </div>
                 </div>
             </section>
-            <section id="experience" class="experience-section section-margin fade-in-section">
+            <section class="why-work-section section-margin fade-in-section">
                 <div class="w-layout-blockcontainer global-wrapper w-container">
                     <div class="global-padding">
-                        <div class="experience-wrapper">
-                            <div class="section-headlne-content-wrapper section-headline-margin">
-                                <div class="experience-headline">
-                                    <div class="section-headline-text text-3xl text-weight-semibold text-color-black-900 text-reveal">Experience</div>
+                        <div class="section-headlne-content-wrapper section-headline-margin">
+                            <div class="section-headline">
+                                <div class="section-headline-text text-3xl text-weight-semibold text-color-black-900 text-reveal">Why Work With Me</div>
+                            </div>
+                        </div>
+                        <div class="why-grid">
+                            <div class="why-item">
+                                <div class="why-number">01</div>
+                                <h3 class="why-title">
+                                    Streamlined Velocity
+                                    <svg class="why-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </h3>
+                                <p class="why-desc">By utilizing a direct, in-house workflow, I deliver broadcast-ready assets at the speed of modern marketing, eliminating the bureaucratic bloat of traditional structures.</p>
+                            </div>
+                            <div class="why-item">
+                                <div class="why-number">02</div>
+                                <h3 class="why-title">
+                                    Technical Precision
+                                    <svg class="why-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </h3>
+                                <p class="why-desc">Every project is approached with a focus on high-fidelity 3D and cinematic motion, ensuring your brand is presented with professional polish and visual clarity.</p>
+                            </div>
+                            <div class="why-item">
+                                <div class="why-number">03</div>
+                                <h3 class="why-title">
+                                    Direct Collaboration
+                                    <svg class="why-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </h3>
+                                <p class="why-desc">No middlemen or complex hierarchies. You collaborate directly with the person executing your vision, ensuring total alignment and immediate implementation.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="logo-marquee-section section-margin fade-in-section">
+                <div class="w-layout-blockcontainer global-wrapper w-container">
+                    <div class="global-padding">
+                        <div class="marquee-wrapper">
+                            <div class="marquee-track">
+                                <!-- Group 1 -->
+                                <div class="marquee-content">
+                                    <img src="assets/images/home/TORCH LOGO-01.svg" alt="Torch" class="marquee-logo" loading="lazy">
+                                    <img src="assets/images/home/logo-gundam.svg" alt="Gundam" class="marquee-logo" loading="lazy">
+                                    <img src="assets/images/home/logo-dipdop.svg" alt="DIPDOP" class="marquee-logo" loading="lazy">
                                 </div>
-                                <div data-w-id="17981745-b76c-fdb8-d5a0-45626b3a107e" style="opacity:0" class="experience-section-contact-button">
-                                    <a href="https://webflow.com/templates/designers/quix-studio" target="_blank" class="button-normal-white-wrapper-2 w-inline-block">
-                                        <div class="button-normal-white-text-2 text-sm text-weight-medium text-style-no_wrap text-color-black-900">Contact Now</div>
-                                        <div class="button-normal-white-arrow-block-2">
-                                            <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d552f_arrow-black.svg" alt="Arrow Image" class="button-white-arrow-image-black-2"/>
-                                            <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5530_arrow-white.svg" alt="Arrow Image" class="button-white-arrow-image-white-2"/>
-                                        </div>
-                                    </a>
+                                <!-- Group 2 (Duplicate for infinite loop) -->
+                                <div class="marquee-content" aria-hidden="true">
+                                    <img src="assets/images/home/TORCH LOGO-01.svg" alt="Torch" class="marquee-logo" loading="lazy">
+                                    <img src="assets/images/home/logo-gundam.svg" alt="Gundam" class="marquee-logo" loading="lazy">
+                                    <img src="assets/images/home/logo-dipdop.svg" alt="DIPDOP" class="marquee-logo" loading="lazy">
+                                </div>
+                                <!-- Group 3 (Tambahan agar track lebih panjang) -->
+                                <div class="marquee-content" aria-hidden="true">
+                                    <img src="assets/images/home/TORCH LOGO-01.svg" alt="Torch" class="marquee-logo" loading="lazy">
+                                    <img src="assets/images/home/logo-gundam.svg" alt="Gundam" class="marquee-logo" loading="lazy">
+                                    <img src="assets/images/home/logo-dipdop.svg" alt="DIPDOP" class="marquee-logo" loading="lazy">
+                                </div>
+                                <!-- Group 4 (Tambahan agar track lebih panjang) -->
+                                <div class="marquee-content" aria-hidden="true">
+                                    <img src="assets/images/home/TORCH LOGO-01.svg" alt="Torch" class="marquee-logo" loading="lazy">
+                                    <img src="assets/images/home/logo-gundam.svg" alt="Gundam" class="marquee-logo" loading="lazy">
+                                    <img src="assets/images/home/logo-dipdop.svg" alt="DIPDOP" class="marquee-logo" loading="lazy">
                                 </div>
                             </div>
-                            <div class="experience-list">
-                                <a href="#" class="experience-item fade-in-section">
-                                    <div class="experience-item__info">
-                                        <h3 class="experience-item__title">Brand Creative Intern</h3>
-                                        <div class="experience-item__company">Torch</div>
-                                    </div>
-                                    <div class="experience-item__meta">
-                                        <div class="experience-item__year">Jan 2026 - Present</div>
-                                    </div>
-                                </a>
-                                <a href="#" class="experience-item fade-in-section">
-                                    <div class="experience-item__info">
-                                        <h3 class="experience-item__title">Graphic Designer Intern (Remote)</h3>
-                                        <div class="experience-item__company">DIPDOP Creative Agency</div>
-                                    </div>
-                                    <div class="experience-item__meta">
-                                        <div class="experience-item__year">Jan 2026 - Present</div>
-                                    </div>
-                                </a>
-                                <a href="#" class="experience-item fade-in-section">
-                                    <div class="experience-item__info">
-                                        <h3 class="experience-item__title">Digital Marketing Intern</h3>
-                                        <div class="experience-item__company">Tsukamie Noodle Bar</div>
-                                    </div>
-                                    <div class="experience-item__meta">
-                                        <div class="experience-item__year">Aug - Oct 2025</div>
-                                    </div>
-                                </a>
-                                <a href="#" class="experience-item fade-in-section">
-                                    <div class="experience-item__info">
-                                        <h3 class="experience-item__title">Content Creator</h3>
-                                        <div class="experience-item__company">Wondebliss Beauty (Event)</div>
-                                    </div>
-                                    <div class="experience-item__meta">
-                                        <div class="experience-item__year">Aug - Nov 2024</div>
-                                    </div>
-                                </a>
-                                <a href="#" class="experience-item fade-in-section">
-                                    <div class="experience-item__info">
-                                        <h3 class="experience-item__title">Video Editor & Photographer</h3>
-                                        <div class="experience-item__company">Polban Mengajar</div>
-                                    </div>
-                                    <div class="experience-item__meta">
-                                        <div class="experience-item__year">Aug 2024 - Aug 2025</div>
-                                    </div>
-                                </a>
-                                <a href="#" class="experience-item fade-in-section">
-                                    <div class="experience-item__info">
-                                        <h3 class="experience-item__title">Graphic Designer & Photographer</h3>
-                                        <div class="experience-item__company">PKKMB Polban 2024</div>
-                                    </div>
-                                    <div class="experience-item__meta">
-                                        <div class="experience-item__year">Jun - Aug 2024</div>
-                                    </div>
-                                </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="data-validation-section section-margin fade-in-section">
+                <div class="w-layout-blockcontainer global-wrapper w-container">
+                    <div class="global-padding">
+                        <div class="data-grid">
+                            <div class="data-item">
+                                <div class="data-number">+1M</div>
+                                <div class="data-label">Total Campaign Views</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-number">3+</div>
+                                <div class="data-label">Global IP & B2B Clients</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-number">100%</div>
+                                <div class="data-label">In-House Execution</div>
                             </div>
                         </div>
                     </div>
@@ -1200,49 +1207,49 @@
                                 <!-- Item 1 -->
                                 <div class="faq__item">
                                     <button class="faq__trigger" aria-expanded="false">
-                                        <span class="faq__question">What's your area of expertise?</span>
+                                        <span class="faq__question">What does your commercial production scope cover?</span>
                                         <div class="faq__icon">
                                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 0V16" stroke="currentColor" stroke-width="1.5"/><path d="M0 8H16" stroke="currentColor" stroke-width="1.5"/></svg>
                                         </div>
                                     </button>
                                     <div class="faq__content" aria-hidden="true">
-                                        <div class="faq__answer"><p>I focus on the intersection of marketing and creativity. This includes content strategy, social media management, branding, and front-end web development to build engaging digital experiences.</p></div>
+                                        <div class="faq__answer"><p>I execute technical visual production, specializing in cinematic video editing, color grading, and high-fidelity 3D product assets. My focus is on creating a consistent visual language that translates your brand identity into clean, broadcast-ready content.</p></div>
                                     </div>
                                 </div>
                                 <!-- Item 2 -->
                                 <div class="faq__item">
                                     <button class="faq__trigger" aria-expanded="false">
-                                        <span class="faq__question">Are you available for hire?</span>
+                                        <span class="faq__question">How do you integrate with in-house teams?</span>
                                         <div class="faq__icon">
                                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 0V16" stroke="currentColor" stroke-width="1.5"/><path d="M0 8H16" stroke="currentColor" stroke-width="1.5"/></svg>
                                         </div>
                                     </button>
                                     <div class="faq__content" aria-hidden="true">
-                                        <div class="faq__answer"><p>Yes! I'm actively looking for internship or freelance roles, especially in social media, content strategy, and digital marketing. I'm ready to contribute and learn.</p></div>
+                                        <div class="faq__answer"><p>I operate as a direct extension of your creative or marketing team, handling the execution bottleneck so your internal resources can focus on core strategy. My process ensures full transparency and direct communication, resulting in seamless brand alignment from brief to final render.</p></div>
                                     </div>
                                 </div>
                                 <!-- Item 3 -->
                                 <div class="faq__item">
                                     <button class="faq__trigger" aria-expanded="false">
-                                        <span class="faq__question">What's your work process like?</span>
+                                        <span class="faq__question">What are your engagement models?</span>
                                         <div class="faq__icon">
                                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 0V16" stroke="currentColor" stroke-width="1.5"/><path d="M0 8H16" stroke="currentColor" stroke-width="1.5"/></svg>
                                         </div>
                                     </button>
                                     <div class="faq__content" aria-hidden="true">
-                                        <div class="faq__answer"><p>I keep things simple and structured: understand the goal → research → build a concept → execute → evaluate. This ensures clarity and focus from start to finish.</p></div>
+                                        <div class="faq__answer"><p>I am available for project-based contracts—ideal for specific product launches and campaigns—as well as long-term retainer partnerships for ongoing visual support. These models ensure dedicated availability and a consistent creative output for your brand’s roadmap.</p></div>
                                     </div>
                                 </div>
                                 <!-- Item 4 -->
                                 <div class="faq__item">
                                     <button class="faq__trigger" aria-expanded="false">
-                                        <span class="faq__question">Where are you based? Can you work remotely?</span>
+                                        <span class="faq__question">How do you handle production timelines?</span>
                                         <div class="faq__icon">
                                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 0V16" stroke="currentColor" stroke-width="1.5"/><path d="M0 8H16" stroke="currentColor" stroke-width="1.5"/></svg>
                                         </div>
                                     </button>
                                     <div class="faq__content" aria-hidden="true">
-                                        <div class="faq__answer"><p>I'm based in Bandung, Indonesia, but I'm fully equipped and experienced in working remotely. I'm open to opportunities anywhere in the world.</p></div>
+                                        <div class="faq__answer"><p>Timelines are established based on the technical complexity and the level of polish required for your project. I prioritize realistic schedules that ensure professional, high-quality output while maintaining the speed-to-market necessary for modern digital campaigns.</p></div>
                                     </div>
                                 </div>
                             </div>
