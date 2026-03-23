@@ -60,6 +60,20 @@ function makeDraggable(element) {
     let isDragging = false;
     let startX, startY, initialLeft, initialTop;
 
+    // Definisikan handler di dalam closure agar dapat dihapus nantinya
+    const mouseMoveHandler = (e) => {
+        if (typeof onMouseMove === 'function') onMouseMove(e);
+    };
+
+    const mouseUpHandler = (e) => {
+        if (typeof onMouseUp === 'function') onMouseUp(e);
+        isDragging = false;
+        element.style.cursor = 'grab'; // Kembalikan kursor
+        // [CRITICAL FIX] Hapus listener dari window agar tidak terjadi Memory Leak
+        window.removeEventListener('mousemove', mouseMoveHandler);
+        window.removeEventListener('mouseup', mouseUpHandler);
+    };
+
     element.addEventListener('mousedown', (e) => {
         isDragging = true;
         
@@ -73,30 +87,10 @@ function makeDraggable(element) {
         initialTop = element.offsetTop;
 
         element.style.cursor = 'grabbing';
-    });
 
-    window.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-
-        e.preventDefault();
-
-        // Hitung pergeseran
-        const dx = e.clientX - startX;
-        const dy = e.clientY - startY;
-
-        // Set posisi baru
-        element.style.left = `${initialLeft + dx}px`;
-        element.style.top = `${initialTop + dy}px`;
-
-        // UPDATE GARIS SECARA REAL-TIME SAAT DIGESER
-        drawConnections();
-    });
-
-    window.addEventListener('mouseup', () => {
-        if (isDragging) {
-            isDragging = false;
-            element.style.cursor = 'grab';
-        }
+        // Pasang event listener global HANYA saat elemen sedang ditekan
+        window.addEventListener('mousemove', mouseMoveHandler);
+        window.addEventListener('mouseup', mouseUpHandler);
     });
 }
 

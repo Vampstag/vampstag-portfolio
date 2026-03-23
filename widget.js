@@ -46,11 +46,20 @@ class MdkgWidget {
         // Validate index in case playlist changed
         if (this.currentTrackIndex >= this.playlist.length) this.currentTrackIndex = 0;
         
-        // Initialize when DOM is ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => this.init());
+        // OPTIMIZATION: Tunda inisialisasi widget agar tidak memblokir animasi utama (Hero/Preloader)
+        const runInit = () => {
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(() => this.init(), { timeout: 2000 });
+            } else {
+                setTimeout(() => this.init(), 1000); // Fallback delay 1 detik
+            }
+        };
+
+        // Menunggu semua resource halaman utama (gambar, font) selesai dimuat terlebih dahulu
+        if (document.readyState === 'complete') {
+            runInit();
         } else {
-            this.init();
+            window.addEventListener('load', runInit);
         }
     }
 
@@ -64,6 +73,7 @@ class MdkgWidget {
         this.initTyping();
         this.initMusicPlayer();
         this.initScrollBehavior();
+        this.initMagneticButton();
     }
 
     // --- Render HTML ---
@@ -240,18 +250,104 @@ class MdkgWidget {
     initScrollBehavior() {
         let lastScrollTop = 0;
         const statusWidget = document.querySelector('.mdkg-widget-status');
+        const playerWidget = document.querySelector('.mdkg-widget-player');
         
-        if (statusWidget) {
+        if (statusWidget || playerWidget) {
             window.addEventListener('scroll', () => {
                 const scrollTop = window.scrollY || document.documentElement.scrollTop;
                 if (scrollTop > lastScrollTop && scrollTop > 50) {
-                    statusWidget.classList.add('widget-hidden');
+                    if (statusWidget) statusWidget.classList.add('widget-hidden');
+                    if (playerWidget) playerWidget.classList.add('widget-hidden');
                 } else {
-                    statusWidget.classList.remove('widget-hidden');
+                    if (statusWidget) statusWidget.classList.remove('widget-hidden');
+                    if (playerWidget) playerWidget.classList.remove('widget-hidden');
                 }
                 lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
             });
         }
+    }
+
+    // --- Feature: Magnetic Button ---
+    initMagneticButton() {
+        const btn = document.querySelector('.mdkg-book-btn');
+        // Hanya inisialisasi jika tombol ada dan GSAP sudah dimuat di website
+        if (!btn || typeof gsap === 'undefined') return;
+
+        // 1. Buat elemen cursor khusus
+        let cursor = document.querySelector('.mdkg-snap-cursor');
+        if (!cursor) {
+            cursor = document.createElement('div');
+            cursor.className = 'mdkg-snap-cursor';
+            document.body.appendChild(cursor);
+        }
+
+        // Centering mutlak via GSAP
+        gsap.set(cursor, { xPercent: -50, yPercent: -50 });
+
+        let isSnapped = false;
+
+        // 2. Track pergerakan mouse global
+        window.addEventListener('mousemove', (e) => {
+            if (!isSnapped) {
+                // Update koordinat tanpa animasi agar siap saat mouse enter
+                gsap.set(cursor, { x: e.clientX, y: e.clientY });
+            }
+        });
+
+        // 3. Efek saat mouse masuk ke tombol
+        btn.addEventListener('mouseenter', (e) => {
+            isSnapped = true;
+            const rect = btn.getBoundingClientRect();
+            
+            // Cursor membesar menjadi bungkus pil (pill shape) dan snap ke tombol
+            gsap.to(cursor, {
+                opacity: 1,
+                width: rect.width + 16, // Lebar tombol + padding luar
+                height: rect.height + 16,
+                borderRadius: "100px",
+                x: rect.left + rect.width / 2,
+                y: rect.top + rect.height / 2,
+                duration: 0.4,
+                ease: "power3.out"
+            });
+        });
+
+        // 4. Efek magnetik & snapping bergerak
+        btn.addEventListener('mousemove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            
+            // Logika Magnetik Tombol
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            gsap.to(btn, { x: x * 0.3, y: y * 0.3, duration: 0.4, ease: "power2.out" });
+
+            // Cursor selalu menempel persis di tengah tombol yang ikut bergeser
+            gsap.to(cursor, {
+                x: rect.left + rect.width / 2,
+                y: rect.top + rect.height / 2,
+                duration: 0.1, // Dibuat cepat agar terasa menempel kuat
+                ease: "power2.out"
+            });
+        });
+        
+        // 5. Efek saat mouse keluar dari tombol
+        btn.addEventListener('mouseleave', (e) => {
+            isSnapped = false;
+            
+            // Tombol memantul kembali ke posisi awal
+            gsap.to(btn, { x: 0, y: 0, duration: 0.8, ease: "elastic.out(1, 0.4)" });
+            
+            // Cursor mengecil, menghilang, dan kembali ke koordinat pointer mouse
+            gsap.to(cursor, {
+                opacity: 0,
+                width: 10,
+                height: 10,
+                x: e.clientX,
+                y: e.clientY,
+                duration: 0.3,
+                ease: "power2.out"
+            });
+        });
     }
 }
 //#endregion

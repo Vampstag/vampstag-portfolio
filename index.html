@@ -136,10 +136,16 @@
 
                         // Use the promise we started at the beginning
                         footerPromise.then((footerData) => {
-                            // Inject the footer HTML
+                            // [FIX] Bersihkan atribut data Webflow (data-w-id) dari footer sebelum diinjeksi
+                            // Ini akan mematikan animasi lawas/berantakan dari Webflow IX2 pada footer
+                            const tempDiv = document.createElement('div');
+                            tempDiv.innerHTML = footerData;
+                            tempDiv.querySelectorAll('[data-w-id]').forEach(el => el.removeAttribute('data-w-id'));
+
+                            // Injeksi HTML footer yang sudah bersih
                             const footerContainer = document.getElementById('footer-container');
                             
-                            if (footerContainer) footerContainer.innerHTML = footerData;
+                            if (footerContainer) footerContainer.innerHTML = tempDiv.innerHTML;
 
                             // [OPTIMIZATION] Lakukan semua setup berat SEBELUM mengizinkan scroll.
                             // Gunakan requestAnimationFrame untuk memastikan DOM sudah di-render.
@@ -151,6 +157,10 @@
                                     if (Webflow.require('ix2')) {
                                         Webflow.require('ix2').init();
                                     }
+                                }
+                                // [FIX] Panggil animasi footer premium konsisten dari script.js
+                                if (typeof window.initFooterGSAP === 'function') {
+                                    window.initFooterGSAP();
                                 }
                                 // [FIX] Beri tahu ScrollTrigger untuk menghitung ulang posisi setelah footer ditambahkan.
                                 // Ini adalah kunci untuk menghilangkan lag animasi scroll.
@@ -270,7 +280,7 @@
                             <!-- Item 2: Project Preview -->
                             <div class="drag-item card-item card-item--2">
                                 <video autoplay loop muted playsinline draggable="false">
-                                    <source src="assets/videos/Portrait_Top_Ads 2_NO LICENSE.mp4" type="video/mp4">
+                                    <source src="assets/videos/" type="video/mp4">
                                 </video>
                                 <div class="card-caption">Showreel</div>
                             </div>
@@ -356,7 +366,7 @@
                                 <div class="work-card__image-wrapper">
                                     <!-- Video Element -->
                                     <video class="work-card__video" loop muted playsinline preload="none" poster="assets/videos/poster-torch.webp">   
-                                        <source src="assets/videos/Portrait_Top_Ads 2_NO LICENSE.mp4" type="video/mp4">
+                                        <source src="assets/videos/" type="video/mp4">
                                         Your browser does not support the video tag.
                                     </video>
                                     <!-- Mute/Unmute Button -->
@@ -407,7 +417,7 @@
                             </div>                          
                             <div class="skills-grid fade-in-section">
                                 <div class="skill-card">
-                                    <a href="portfolio.html" class="skill-card__wrapper w-inline-block">
+                                    <div class="skill-card__wrapper">
                                         <div class="skill-card__header">
                                             <div class="skill-card__number">01</div>
                                         </div>
@@ -420,10 +430,10 @@
                                                 <p class="skill-card__paragraph">Technical execution of commercial video content. Focusing on clean, cinematic editing and color grading to ensure every frame aligns with the brand’s visual identity.</p>
                                             </div>
                                         </div>
-                                    </a>
+                                    </div>
                                 </div>
                                 <div class="skill-card">
-                                    <a href="portfolio.html" class="skill-card__wrapper w-inline-block">
+                                    <div class="skill-card__wrapper">
                                         <div class="skill-card__header">
                                             <div class="skill-card__number">02</div>
                                         </div>
@@ -436,10 +446,10 @@
                                                 <p class="skill-card__paragraph">Developing high-fidelity 3D assets and product replicas. Creating digital twins that allow for detailed, cinematic presentation without the limitations of traditional photography.</p>
                                             </div>
                                         </div>
-                                    </a>
+                                    </div>
                                 </div>
                                 <div class="skill-card">
-                                    <a href="portfolio.html" class="skill-card__wrapper w-inline-block">
+                                    <div class="skill-card__wrapper">
                                         <div class="skill-card__header">
                                             <div class="skill-card__number">03</div>
                                         </div>
@@ -452,7 +462,7 @@
                                                 <p class="skill-card__paragraph">Building cohesive design systems and branding assets. From logo suites to marketing collaterals, ensuring a consistent visual language across all digital touchpoints.</p>
                                             </div>
                                         </div>
-                                    </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -504,25 +514,25 @@
                                 <!-- Group 1 -->
                                 <div class="marquee-content">
                                     <img src="assets/images/home/TORCH LOGO-01.svg" alt="Torch" class="marquee-logo" loading="lazy">
-                                    <img src="assets/images/home/logo-gundam.svg" alt="Gundam" class="marquee-logo" loading="lazy">
+                                    <img src="assets/images/project/tsukamie/logo-tsukamie.webp" alt="Tsukamie" class="marquee-logo" loading="lazy">
                                     <img src="assets/images/home/logo-dipdop.svg" alt="DIPDOP" class="marquee-logo" loading="lazy">
                                 </div>
                                 <!-- Group 2 (Duplicate for infinite loop) -->
                                 <div class="marquee-content" aria-hidden="true">
                                     <img src="assets/images/home/TORCH LOGO-01.svg" alt="Torch" class="marquee-logo" loading="lazy">
-                                    <img src="assets/images/home/logo-gundam.svg" alt="Gundam" class="marquee-logo" loading="lazy">
+                                    <img src="assets/images/project/tsukamie/logo-tsukamie.webp" alt="Tsukamie" class="marquee-logo" loading="lazy">
                                     <img src="assets/images/home/logo-dipdop.svg" alt="DIPDOP" class="marquee-logo" loading="lazy">
                                 </div>
                                 <!-- Group 3 (Tambahan agar track lebih panjang) -->
                                 <div class="marquee-content" aria-hidden="true">
                                     <img src="assets/images/home/TORCH LOGO-01.svg" alt="Torch" class="marquee-logo" loading="lazy">
-                                    <img src="assets/images/home/logo-gundam.svg" alt="Gundam" class="marquee-logo" loading="lazy">
+                                    <img src="assets/images/project/tsukamie/logo-tsukamie.webp" alt="Tsukamie" class="marquee-logo" loading="lazy">
                                     <img src="assets/images/home/logo-dipdop.svg" alt="DIPDOP" class="marquee-logo" loading="lazy">
                                 </div>
                                 <!-- Group 4 (Tambahan agar track lebih panjang) -->
                                 <div class="marquee-content" aria-hidden="true">
                                     <img src="assets/images/home/TORCH LOGO-01.svg" alt="Torch" class="marquee-logo" loading="lazy">
-                                    <img src="assets/images/home/logo-gundam.svg" alt="Gundam" class="marquee-logo" loading="lazy">
+                                    <img src="assets/images/project/tsukamie/logo-tsukamie.webp" alt="Tsukamie" class="marquee-logo" loading="lazy">
                                     <img src="assets/images/home/logo-dipdop.svg" alt="DIPDOP" class="marquee-logo" loading="lazy">
                                 </div>
                             </div>
@@ -963,173 +973,7 @@
                     </div>
                 </div>
             </section>
-            <section id="bits-and-pieces" class="bits-and-pieces-section-desktop section-margin fade-in-section">
-                <div class="w-layout-blockcontainer global-wrapper w-container">
-                    <div class="global-padding">
-                        <div class="section-headlne-content-wrapper section-headline-margin">
-                            <div class="section-headline">
-                                <div class="section-headline-text text-3xl text-weight-semibold text-color-black-900 text-reveal">Bits and Pieces</div>
-                            </div>
-                        </div>
-                        <div class="slices-of-life-section">
-                            <div data-w-id="b8407f2b-d155-852d-e67e-a5907e551d30" class="grid-wrapper">
-                                <div id="w-node-b8407f2b-d155-852d-e67e-a5907e551d3d-6f5c2c14" data-w-id="b8407f2b-d155-852d-e67e-a5907e551d3d" class="about-images-wrapper">
-                                    <div style="display:block;-webkit-transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="background-load-top"></div>
-                                    <div style="display:block;-webkit-transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="background-load-bottom"></div>
-                                    <div class="about-images">
-                                        <a href="#" class="about-image-item w-inline-block w-lightbox">
-                                            <div class="team-image-lightbox">
-                                                <div class="team-background-image" style="background-image:url('assets/images/home/dimas1.webp');background-size:cover;background-position:center">
-                                                    <div class="overlay extra-light"></div>
-                                                </div>
-                                                <div class="team-image-location">
-                                                    <div id="w-node-b8407f2b-d155-852d-e67e-a5907e551d46-6f5c2c14" class="team-location-icon">
-                                                        <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6935321018e0727241ab83ce_View.svg" alt=""/>
-                                                    </div> 
-                                                    <div class="click-to-view">View image</div>
-                                                </div>
-                                            </div>
-                                            <script type="application/json" class="w-json">
-                                                {
-                                                    "items": [
-                                                        {
-                                                            "_id": "local_dimas1",
-                                                            "origFileName": "dimas1.webp",
-                                                            "fileName": "dimas1.webp",
-                                                            "fileSize": 214678,
-                                                            "height": 1600,
-                                                            "url": "assets/images/home/dimas1.webp",
-                                                            "width": 1326,
-                                                            "type": "image"
-                                                        }
-                                                    ],
-                                                    "group": "team"
-                                                }</script>
-                                        </a>
-                                        <a href="#" class="about-image-item w-inline-block w-lightbox">
-                                            <div class="team-image-lightbox">
-                                                <div class="team-background-image two" style="background-image:url('assets/images/home/dimas2.webp');background-size:cover;background-position:center">
-                                                    <div class="overlay extra-light"></div>
-                                                </div>
-                                                <div class="team-image-location">
-                                                    <div id="w-node-b8407f2b-d155-852d-e67e-a5907e551d4f-6f5c2c14" class="team-location-icon">
-                                                        <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6935321018e0727241ab83ce_View.svg" alt=""/>
-                                                    </div> 
-                                                    <div class="click-to-view">View image</div>
-                                                </div>
-                                            </div>
-                                            <script type="application/json" class="w-json">
-                                                {
-                                                    "items": [
-                                                        {
-                                                            "_id": "local_dimas2",
-                                                            "origFileName": "dimas2.webp",
-                                                            "fileName": "dimas2.webp",
-                                                            "fileSize": 2774656,
-                                                            "height": 2304,
-                                                            "url": "assets/images/home/dimas2.webp",
-                                                            "width": 3456,
-                                                            "type": "image"
-                                                        }
-                                                    ],
-                                                    "group": "team"
-                                                }</script>
-                                        </a>
-                                        <a href="#" class="about-image-item w-inline-block w-lightbox">
-                                            <div class="team-image-lightbox">
-                                                <div class="team-background-image three" style="background-image:url('assets/images/home/dimas3.webp');background-size:cover;background-position:center">
-                                                    <div class="overlay extra-light"></div>
-                                                </div>
-                                                <div class="team-image-location">
-                                                    <div id="w-node-b8407f2b-d155-852d-e67e-a5907e551d58-6f5c2c14" class="team-location-icon">
-                                                        <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6935321018e0727241ab83ce_View.svg" alt=""/>
-                                                    </div> 
-                                                    <div class="click-to-view">View image</div>
-                                                </div>
-                                            </div>
-                                            <script type="application/json" class="w-json">
-                                                {
-                                                    "items": [
-                                                        {
-                                                            "_id": "local_dimas3",
-                                                            "origFileName": "dimas3.webp",
-                                                            "fileName": "dimas3.webp",
-                                                            "fileSize": 75959,
-                                                            "height": 1055,
-                                                            "url": "assets/images/home/dimas3.webp",
-                                                            "width": 844,
-                                                            "type": "image"
-                                                        }
-                                                    ],
-                                                    "group": "team"
-                                                }</script>
-                                        </a>
-                                        <a href="#" class="about-image-item w-inline-block w-lightbox">
-                                            <div class="team-image-lightbox">
-                                                <div class="team-background-image five" style="background-image:url('assets/images/home/dimas4.webp');background-size:cover;background-position:center">
-                                                    <div class="overlay extra-light"></div>
-                                                </div>
-                                                <div class="team-image-location">
-                                                    <div id="w-node-b8407f2b-d155-852d-e67e-a5907e551d6a-6f5c2c14" class="team-location-icon">
-                                                        <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6935321018e0727241ab83ce_View.svg" alt=""/>
-                                                    </div> 
-                                                    <div class="click-to-view">View image</div>
-                                                </div>
-                                            </div>
-                                            <script type="application/json" class="w-json">
-                                                {
-                                                    "items": [
-                                                        {
-                                                            "_id": "local_dimas4",
-                                                            "origFileName": "dimas4.webp",
-                                                            "fileName": "dimas4.webp",
-                                                            "fileSize": 100884,
-                                                            "height": 1280,
-                                                            "url": "assets/images/home/dimas4.webp",
-                                                            "width": 720,
-                                                            "type": "image"
-                                                        }
-                                                    ],
-                                                    "group": "team"
-                                                }</script>
-                                        </a>
-                                        <a href="#" class="about-image-item w-inline-block w-lightbox">
-                                            <div class="team-image-lightbox">
-                                                <div class="team-background-image six" style="background-image:url('assets/images/home/dimas5.webp');background-size:cover;background-position:center">
-                                                    <div class="overlay extra-light"></div>
-                                                </div>
-                                                <div class="team-image-location">
-                                                    <div id="w-node-b8407f2b-d155-852d-e67e-a5907e551d73-6f5c2c14" class="team-location-icon">
-                                                        <img loading="lazy" src="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6935321018e0727241ab83ce_View.svg" alt=""/>
-                                                    </div> 
-                                                    <div class="click-to-view">View image</div>
-                                                </div>
-                                            </div>
-                                            <script type="application/json" class="w-json">
-                                                {
-                                                    "items": [
-                                                        {
-                                                            "_id": "local_dimas5",
-                                                            "origFileName": "dimas5.webp",
-                                                            "fileName": "dimas5.webp",
-                                                            "fileSize": 162626,
-                                                            "height": 866,
-                                                            "url": "assets/images/home/dimas5.webp",
-                                                            "width": 693,
-                                                            "type": "image"
-                                                        }
-                                                    ],
-                                                    "group": "team"
-                                                }</script>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <div class="bits-and-pieces-section-mobile">
+            <section id="bits-and-pieces" class="section-margin fade-in-section">
                 <div class="w-layout-blockcontainer global-wrapper w-container">
                     <div class="global-padding">
                         <div class="section-headlne-content-wrapper section-headline-margin">
@@ -1180,10 +1024,12 @@
                                 </div>
                             </div>
                             <div class="swiper-pagination"></div>
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-button-prev"></div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
             <section id="faq" class="faq-section section-margin fade-in-section">
                 <div class="w-layout-blockcontainer global-wrapper w-container">
                     <div class="global-padding">

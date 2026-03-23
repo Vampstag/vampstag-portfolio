@@ -3,8 +3,8 @@
 // 1. CORE SETUP & EVENT LISTENERS
 // =========================================
 document.addEventListener("DOMContentLoaded", () => {
-    // first, pull in shared navbar if placeholder exists
-    loadNavbar().then(() => {
+    // first, pull in shared navbar AND footer if placeholders exist
+    Promise.all([loadNavbar(), loadFooter()]).then(() => {
         // 1. Initialize Lenis (Smooth Scroll)
         const lenis = new Lenis({
             duration: 1.2,
@@ -25,11 +25,38 @@ document.addEventListener("DOMContentLoaded", () => {
         // Connect Lenis to ScrollTrigger. This is the crucial part.
         lenis.on('scroll', ScrollTrigger.update);
 
+        // [FIX] Handle anchor links smoothly with Lenis (Fixes Back to Top jump)
+        // Intercepts clicks on hash links and uses Lenis to scroll smoothly
+        // Menggunakan parameter 'true' (Capture Phase) untuk mencegat klik sebelum script Webflow berjalan
+        document.addEventListener('click', (e) => {
+            const link = e.target.closest('a[href^="#"], .back-to-top');
+            if (link) {
+                const targetId = link.getAttribute('href');
+                
+                // Skenario "Back to Top" (Class .back-to-top, atau href "#", atau href "#top")
+                if (link.classList.contains('back-to-top') || targetId === '#' || targetId === '#top') {
+                    e.preventDefault();
+                    e.stopPropagation(); // Mencegah Webflow ikut mengatur scroll
+                    lenis.scrollTo(0, { 
+                        duration: 1.5, // Durasi scroll lebih lambat dan mewah
+                        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) // Curve easing halus
+                    });
+                } 
+                // Skenario anchor section normal (contoh: #about, #portfolio)
+                else if (targetId && targetId.startsWith('#') && document.querySelector(targetId)) {
+                    e.preventDefault();
+                    e.stopPropagation(); // Mencegah Webflow ikut mengatur scroll
+                    lenis.scrollTo(targetId, { duration: 1.2 });
+                }
+            }
+        }, true);
+
         // Ensure GSAP animations are synchronized with Lenis's render loop.
         gsap.ticker.add((time) => {
             lenis.raf(time * 1000);
         });
-        gsap.ticker.lagSmoothing(0);
+        
+        // OPTIMIZED: Dihapus agar GSAP bisa menangani frame-drop dengan lebih halus
 
         // 2. Navbar Logic (Scroll & Mobile)
         initNavbar();
@@ -40,11 +67,19 @@ document.addEventListener("DOMContentLoaded", () => {
         // 4. Animations
         initInteractiveHero(); // Changed from initHeroAnimation
 
-        // 5. Custom Cursor
-        initCustomCursor();
-
-        // 6. Bits Slider
-        initBitsSlider();
+        // 6. Lazy Load Bits Slider (Hanya jalankan Swiper saat elemen mendekati viewport)
+        const bitsSliderEl = document.querySelector('.bits-slider');
+        if (bitsSliderEl && typeof IntersectionObserver !== 'undefined') {
+            const sliderObserver = new IntersectionObserver((entries, obs) => {
+                if (entries[0].isIntersecting) {
+                    initBitsSlider();
+                    obs.disconnect(); // Hentikan observasi setelah slider berhasil dibuat
+                }
+            }, { rootMargin: "300px 0px" }); // Trigger 300px sebelum masuk layar
+            sliderObserver.observe(bitsSliderEl);
+        } else if (bitsSliderEl) {
+            initBitsSlider(); // Fallback
+        }
 
         // 7. Lightbox
         initLightbox();
@@ -122,6 +157,97 @@ function loadNavbar() {
             console.error('Failed to load navbar:', err);
         });
 }
+
+// helper: load footer html into placeholder
+function loadFooter() {
+    const container = document.getElementById('footer-container');
+    // Don't interfere if the page has its own preloader logic (like index.html) that loads footer
+    if (!container || document.getElementById('preloader')) return Promise.resolve();
+
+    let url = 'footer.html';
+    const isSubPage = window.location.pathname.includes('/case-study/') || window.location.pathname.includes('/study-case/');
+    
+    if (isSubPage) {
+        url = '../footer.html';
+    }
+
+    return fetch(url)
+        .then(resp => resp.text())
+        .then(html => {
+            // [FIX] Bersihkan atribut data Webflow dari footer untuk mematikan animasi lawas
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = html;
+            tempDiv.querySelectorAll('[data-w-id]').forEach(el => el.removeAttribute('data-w-id'));
+
+            container.innerHTML = tempDiv.innerHTML;
+
+            // Fix relative paths for links and images in footer
+            if (isSubPage) {
+                container.querySelectorAll('a, img').forEach(el => {
+                    const href = el.getAttribute('href');
+                    const src = el.getAttribute('src');
+                    // Fix links that are relative (not http, mailto, hash, or already corrected)
+                    if (href && !href.match(/^(http|#|mailto:|\.\.\/)/)) el.setAttribute('href', '../' + href);
+                    if (src && !src.match(/^(http|data:|\.\.\/)/)) el.setAttribute('src', '../' + src);
+                });
+            }
+
+            // [MATCH HOME] Use requestAnimationFrame for consistent timing
+            requestAnimationFrame(() => {
+                // 1. Re-initialize Webflow Interactions (Diaktifkan kembali untuk fitur halaman lain, footer aman karena atributnya sudah dicopot)
+                if (window.Webflow) {
+                    Webflow.destroy(); 
+                    Webflow.ready();
+                    if (Webflow.require && Webflow.require('ix2')) {
+                        Webflow.require('ix2').init();
+                    }
+                }
+
+                // 2. Universal Premium Footer Animation
+                if (typeof window.initFooterGSAP === 'function') {
+                    window.initFooterGSAP();
+                }
+
+                // 3. Refresh ScrollTrigger
+                if (window.ScrollTrigger) {
+                    ScrollTrigger.refresh();
+                }
+            });
+        })
+        .catch(err => {
+            console.error('Failed to load footer:', err);
+        });
+}
+
+// [NEW] Universal Premium Footer Entry Animation
+window.initFooterGSAP = function() {
+    const footerContainer = document.getElementById('footer-container');
+    if (!footerContainer) return;
+
+    // Cari elemen pembungkus (kolom atau grid) di dalam footer untuk di-stagger
+    let targets = footerContainer.querySelectorAll('.w-layout-grid > div, .footer-column, .footer-wrapper > div, .footer-main-block > div');
+    
+    // Fallback jika class spesifik tidak ditemukan
+    if (!targets || targets.length === 0) {
+        targets = footerContainer.firstElementChild;
+    }
+
+    gsap.fromTo(targets, 
+        { y: 50, opacity: 0 },
+        {
+            y: 0, 
+            opacity: 1, 
+            duration: 1.2, 
+            stagger: 0.1, 
+            ease: "power3.out",
+            scrollTrigger: {
+                trigger: footerContainer,
+                start: "top 95%", // Memicu animasi ketika bagian atas footer baru terlihat 5%
+                once: true
+            }
+        }
+    );
+};
 //#endregion
 
 //#region NAVBAR LOGIC
@@ -261,9 +387,9 @@ function renderProjects() {
  * Uses a single IntersectionObserver to handle all scroll-triggered animations
  * for better performance than multiple ScrollTriggers.
  */
-function initObserverAnimations() {
+function initObserverAnimations(context = document) {
     // Select all elements intended for scroll-based animations
-    const animatedElements = document.querySelectorAll('.fade-in-section, .text-reveal');
+    const animatedElements = context.querySelectorAll('.fade-in-section, .text-reveal');
 
     if (!animatedElements.length) return;
 
@@ -292,6 +418,8 @@ function initObserverAnimations() {
     });
 
     animatedElements.forEach(el => {
+        if (el.dataset.observed) return; // Prevent double observation
+        el.dataset.observed = "true";
         observer.observe(el);
     });
 }
@@ -370,8 +498,18 @@ function initInteractiveHero() {
             edgeResistance: 1,
             bounds: ".hero-playground-section",
             inertia: true,
+            onDrag: function() {
+                // Efek ayunan fisik (tilt) berdasarkan kecepatan tarik (deltaX)
+                const target = this.target;
+                const tilt = Math.max(-15, Math.min(15, this.deltaX * 0.4));
+                gsap.to(target, { rotation: target._baseRotation + tilt, duration: 0.5, ease: "power2.out", overwrite: "auto" });
+            },
             onPress: function() {
                 const target = this.target;
+                
+                // Simpan rotasi asli elemen dari CSS sebelum diubah-ubah
+                target._baseRotation = gsap.getProperty(target, "rotation") || 0;
+
                 // Check if the item is the sticker to apply drop-shadow instead of box-shadow
                 if (target.classList.contains('sticker-item')) {
                     const img = target.querySelector('img');
@@ -385,6 +523,10 @@ function initInteractiveHero() {
             },
             onRelease: function() {
                 const target = this.target;
+                
+                // Kembalikan ke rotasi asli dengan efek memantul (elastic)
+                gsap.to(target, { rotation: target._baseRotation, ease: "elastic.out(1, 0.4)", duration: 1, overwrite: "auto" });
+
                 // Revert to the appropriate shadow type
                 if (target.classList.contains('sticker-item')) {
                     const img = target.querySelector('img');
@@ -404,13 +546,13 @@ function initInteractiveHero() {
     
     // Animate Text First
     tl.fromTo(".hero-huge-title", 
-        { y: 50, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1, ease: "power3.out" }
+        { y: 80, opacity: 0, filter: "blur(24px)", scale: 0.95 },
+        { y: 0, opacity: 1, filter: "blur(0px)", scale: 1, duration: 1.8, ease: "power4.out" }
     )
     .fromTo(".hero-subtitle, .hero-badge", 
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" },
-        "-=0.6"
+        { y: 30, opacity: 0, filter: "blur(12px)" },
+        { y: 0, opacity: 1, filter: "blur(0px)", duration: 1.2, ease: "power3.out" },
+        "-=1.4"
     );
 
     // Animate Draggable Items (Staggered Pop)
@@ -424,68 +566,6 @@ function initInteractiveHero() {
     }
     // Call the observer-based animations after the main hero is set up
     initObserverAnimations();
-}
-//#endregion
-
-//#region CUSTOM CURSOR
-// =========================================
-// 5. CUSTOM CURSOR
-// =========================================
-/**
- * Creates and manages the custom cursor follower.
- * Why: Adds a premium feel to the desktop experience.
- */
-function initCustomCursor() {
-    // Disable on touch devices/mobile
-    if (window.matchMedia("(max-width: 991px)").matches) return;
-
-    // Error Prevention: Remove existing cursor if any to prevent duplicates
-    const existingCursor = document.querySelector('.custom-cursor');
-    if (existingCursor) existingCursor.remove();
-
-    // -- Setup --
-    const cursor = document.createElement('div');
-    cursor.classList.add('custom-cursor');
-    document.body.appendChild(cursor);
-
-    // Set initial position off-screen to avoid jump
-    gsap.set(cursor, { xPercent: -50, yPercent: -50, x: window.innerWidth / 2, y: window.innerHeight / 2 });
-
-    // Use GSAP quickTo for high performance mouse following
-    const xTo = gsap.quickTo(cursor, "x", {duration: 0.1, ease: "power3.out"});
-    const yTo = gsap.quickTo(cursor, "y", {duration: 0.1, ease: "power3.out"});
-
-    // -- Movement --
-    window.addEventListener('mousemove', (e) => {
-        xTo(e.clientX);
-        yTo(e.clientY);
-    });
-
-    // -- Hover Effects --
-    const hoverSelectors = 'a, button, .hover-trigger, input, select, textarea, .w-tab-link, .project-card';
-    const hoverables = document.querySelectorAll(hoverSelectors);
-
-    // Add listeners to existing elements
-    const addHoverListeners = (elements) => {
-        elements.forEach(el => {
-            el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
-            el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
-        });
-    };
-
-    addHoverListeners(hoverables);
-
-    // Observer for dynamic elements (e.g., portfolio items loaded via JS)
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.addedNodes.length) {
-                const newLinks = document.querySelectorAll(hoverSelectors);
-                addHoverListeners(newLinks);
-            }
-        });
-    });
-    
-    observer.observe(document.body, { childList: true, subtree: true });
 }
 //#endregion
 
@@ -506,9 +586,15 @@ function initBitsSlider() {
         centeredSlides: true,
         spaceBetween: 20,
         grabCursor: true,
+        speed: 800, // Cinematic smooth sliding speed
+        keyboard: { enabled: true }, // Aksesibilitas navigasi via keyboard
         pagination: {
             el: ".swiper-pagination",
             clickable: true,
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
         },
         breakpoints: {
             768: {
@@ -550,14 +636,14 @@ function initBitsSlider() {
             gsap.to(card, {
                 rotationX: rotateX,
                 rotationY: rotateY,
-                scale: 1.02, // Subtle scale up
-                transformPerspective: 1000,
-                duration: 0.4,
-                ease: "power2.out"
+                scale: 1.03, // Cinematic slightly bigger zoom
+                transformPerspective: 1200,
+                duration: 0.6,
+                ease: "power3.out"
             });
         } else {
             // Reset if hovering slider but not the card
-            gsap.to(card, { rotationX: 0, rotationY: 0, scale: 1, duration: 0.5, ease: "power2.out" });
+            gsap.to(card, { rotationX: 0, rotationY: 0, scale: 1, duration: 0.8, ease: "power3.out" });
         }
     });
 
@@ -566,7 +652,7 @@ function initBitsSlider() {
         const activeSlide = slider.querySelector('.swiper-slide-active');
         if (activeSlide) {
             const card = activeSlide.querySelector('.photo-card');
-            if (card) gsap.to(card, { rotationX: 0, rotationY: 0, scale: 1, duration: 0.5, ease: "power2.out" });
+            if (card) gsap.to(card, { rotationX: 0, rotationY: 0, scale: 1, duration: 0.8, ease: "power3.out" });
         }
     });
 }
@@ -586,11 +672,44 @@ function initAudioNarrator() {
     const iconPlay = playBtn.querySelector('.icon-play');
     const iconPause = playBtn.querySelector('.icon-pause');
     const progressContainer = player.querySelector('.audio-progress-container');
-    const progressFill = player.querySelector('.audio-progress-fill');
     const timeCurrent = player.querySelector('.audio-time-current');
     const timeTotal = player.querySelector('.audio-time-total');
-    const tooltip = player.querySelector('.audio-tooltip');
     const speedBtn = player.querySelector('.speed-btn');
+
+    // --- WEB AUDIO API VARIABLES ---
+    let audioCtx, analyser, dataArray, source;
+    let animationId;
+    const staticHeights = []; // To store original waveform shape for pause state
+
+    // --- WAVEFORM GENERATION ---
+    // Bersihkan container lama dan siapkan mode waveform
+    progressContainer.innerHTML = '';
+    progressContainer.classList.add('waveform-mode');
+
+    // [FIX] Kurangi jumlah bar di mobile agar tidak overflow/kepotong (60 desktop, 28 mobile)
+    const isMobile = window.matchMedia("(max-width: 767px)").matches;
+    const barCount = isMobile ? 28 : 60; 
+    const bars = [];
+    
+    // Buat batang-batang visualizer
+    for (let i = 0; i < barCount; i++) {
+        const bar = document.createElement('div');
+        bar.classList.add('waveform-bar');
+        // Random tinggi antara 25% sampai 100% untuk efek gelombang suara natural
+        // Kita simpan height statis ini untuk dipakai saat pause
+        const height = Math.floor(Math.random() * 60) + 20; 
+        staticHeights.push(height);
+        
+        bar.style.height = `${height}%`;
+        progressContainer.appendChild(bar);
+        bars.push(bar);
+    }
+
+    // Tambahkan kembali tooltip (karena innerHTML dihapus)
+    const tooltip = document.createElement('div');
+    tooltip.classList.add('audio-tooltip');
+    tooltip.textContent = "0:00";
+    progressContainer.appendChild(tooltip);
 
     // Helper: Format time
     const formatTime = (s) => {
@@ -599,32 +718,126 @@ function initAudioNarrator() {
         return `${min}:${sec < 10 ? '0' + sec : sec}`;
     };
 
+    // --- AUDIO CONTEXT SETUP (Lazy Load) ---
+    const initAudioContext = () => {
+        try {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+                
+                analyser = audioCtx.createAnalyser();
+                analyser.fftSize = 128; // Balance between detail and performance
+                
+                // Create Source from HTML Audio Element
+                source = audioCtx.createMediaElementSource(audio);
+                source.connect(analyser);
+                analyser.connect(audioCtx.destination);
+                
+                const bufferLength = analyser.frequencyBinCount;
+                dataArray = new Uint8Array(bufferLength);
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        } catch (error) {
+            console.warn("Web Audio API blocked by CORS/Browser policy. Playing basic audio.", error);
+        }
+    };
+
+    // --- VISUALIZER LOOP ---
+    const renderVisualizer = () => {
+        if (audio.paused) return;
+        
+        animationId = requestAnimationFrame(renderVisualizer);
+        analyser.getByteFrequencyData(dataArray);
+        
+        // Calculate sampling step to map 64 bins to 'barCount' bars
+        // We focus on the lower-mid spectrum where most musical energy is
+        const step = Math.ceil(dataArray.length / barCount);
+
+        bars.forEach((bar, i) => {
+            // Get frequency value
+            const dataIndex = Math.min(i * step, dataArray.length - 1);
+            const value = dataArray[dataIndex];
+            
+            // Map 0-255 to percentage height (min 15% so it's visible)
+            const percent = (value / 255) * 100;
+            const height = Math.max(percent, 15);
+            
+            bar.style.height = `${height}%`;
+        });
+    };
+
+    const resetVisualizer = () => {
+        cancelAnimationFrame(animationId);
+        // Restore the "aesthetic" random waveform when paused
+        bars.forEach((bar, i) => {
+            bar.style.height = `${staticHeights[i]}%`;
+        });
+    };
+
     // Toggle Play/Pause
     playBtn.addEventListener('click', () => {
         if (audio.paused) {
-            audio.play();
-            iconPlay.style.display = 'none';
-            iconPause.style.display = 'block';
-            player.classList.add('is-playing');
+            // Init Web Audio on first user interaction
+            initAudioContext();
+            
+            // Play with Fade In
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    audio.volume = 1; // FIX: Hapus GSAP Volume fade karena memblokir audio di iOS/Desktop
+                    
+                    iconPlay.style.display = 'none';
+                    iconPause.style.display = 'block';
+                    player.classList.add('is-playing');
+                    
+                    updateStickyState(); // FIX: Langsung cek state sticky sesaat sesudah play
+                    // Start Visualizer
+                    renderVisualizer();
+                }).catch((e) => {
+                    console.warn("Audio play failed:", e);
+                });
+            }
         } else {
-            audio.pause();
+            // Fade Out then Pause
             iconPlay.style.display = 'block';
             iconPause.style.display = 'none';
             player.classList.remove('is-playing');
+            
+            resetVisualizer();
+            audio.pause();
+            audio.volume = 1;
+            updateStickyState(); // FIX: Cek state sticky sesaat sesudah pause
         }
     });
 
     // Update Progress & Time
     audio.addEventListener('timeupdate', () => {
-        const percent = (audio.currentTime / audio.duration) * 100;
-        progressFill.style.width = `${percent}%`;
+        const percent = audio.currentTime / audio.duration;
+        
+        // Update Active Class (Coloring) based on Time
+        const activeIndex = Math.floor(percent * barCount);
+        bars.forEach((bar, index) => {
+            if (index <= activeIndex) {
+                bar.classList.add('active');
+            } else {
+                bar.classList.remove('active');
+            }
+        });
+
         timeCurrent.textContent = formatTime(audio.currentTime);
     });
 
     // Set Duration on Load
-    audio.addEventListener('loadedmetadata', () => {
-        timeTotal.textContent = formatTime(audio.duration);
-    });
+    const setDuration = () => {
+        if (!isNaN(audio.duration) && isFinite(audio.duration)) {
+            timeTotal.textContent = formatTime(audio.duration);
+        }
+    };
+
+    if (audio.readyState >= 1) setDuration();
+    audio.addEventListener('loadedmetadata', setDuration);
 
     // Seek/Scrub
     progressContainer.addEventListener('click', (e) => {
@@ -661,30 +874,39 @@ function initAudioNarrator() {
     audio.addEventListener('ended', () => {
         iconPlay.style.display = 'block';
         iconPause.style.display = 'none';
-        progressFill.style.width = '0%';
+        // Reset visual state
+        resetVisualizer();
+        bars.forEach(bar => bar.classList.remove('active'));
         player.classList.remove('is-playing');
+        audio.volume = 1; // Reset volume for next play
+        updateStickyState(); // Tambahkan ini agar sticky hilang otomatis saat lagu tamat
     });
 
     // [NEW] Sticky Player Logic
     // Set height wrapper agar layout tidak jumping saat player jadi fixed
     wrapper.style.minHeight = player.offsetHeight + 'px';
 
+    let isWrapperVisible = true;
+
+    // Helper untuk update sticky kapan saja (saat play ditekan, atau saat scroll)
+    const updateStickyState = () => {
+        // Syarat diubah: Muncul asalkan tidak di layar atas DAN audio sudah jalan tapi belum tamat
+        if (!isWrapperVisible && audio.currentTime > 0 && !audio.ended) {
+            player.classList.add('is-sticky');
+        } else {
+            player.classList.remove('is-sticky');
+        }
+    };
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            // Jika wrapper sudah lewat (scroll ke bawah) DAN audio sedang play
-            if (!entry.isIntersecting && entry.boundingClientRect.top < 0) {
-                if (!audio.paused) {
-                    player.classList.add('is-sticky');
-                }
-            } 
-            // Jika user scroll kembali ke atas (wrapper terlihat lagi)
-            else if (entry.isIntersecting) {
-                player.classList.remove('is-sticky');
-            }
+            // Wrapper dianggap "terlihat" jika intersect ATAU masih berada di bawah layar (belum terlewat)
+            isWrapperVisible = entry.isIntersecting || entry.boundingClientRect.top > 0;
+            updateStickyState();
         });
     }, { 
         threshold: 0,
-        rootMargin: "-100px 0px 0px 0px" // Trigger sedikit setelah elemen lewat
+        rootMargin: "0px 0px 0px 0px"
     });
 
     observer.observe(wrapper);

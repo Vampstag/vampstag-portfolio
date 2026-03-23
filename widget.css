@@ -113,16 +113,16 @@
     bottom: 40px;
     left: 40px;
     z-index: 9990;
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(0, 0, 0, 0.12);
-    padding: 24px;
-    border-radius: 16px;
-    color: #222222;
-    font-family: 'Courier New', 'Roboto Mono', monospace;
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(24px) saturate(150%);
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
+    border: none;
+    padding: 20px 24px;
+    border-radius: 24px;
+    color: #111111;
+    font-family: var(--font-primary, 'Inter', sans-serif);
     width: 280px;
-    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -132,28 +132,30 @@
     transform: translateZ(0);
 }
 
-.mdkg-widget-status.widget-hidden {
+.mdkg-widget-status.widget-hidden,
+.mdkg-widget-player.widget-hidden {
     transform: translateY(200%) !important;
     opacity: 0;
     pointer-events: none;
 }
 
 .mdkg-widget-status:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: translateY(-3px);
-    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.15);
+    background: rgba(255, 255, 255, 0.6);
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .mdkg-widget-header {
     display: flex;
     justify-content: space-between;
-    font-size: 12px;
-    color: #444444;
+    font-size: 11px;
+    color: #666666;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin: 0;
     padding: 0;
     border: none;
+    font-weight: 600;
 }
 
 .mdkg-widget-status-row {
@@ -166,16 +168,16 @@
 .mdkg-status-dot {
     width: 8px;
     height: 8px;
-    background-color: #00ff41; /* Bright Green */
+    background-color: #28cd41; /* Apple Green */
     border-radius: 50%;
-    box-shadow: 0 0 0 0 rgba(0, 255, 65, 0.7);
-    animation: mdkgStatusPulse 3s ease-in-out infinite;
+    box-shadow: 0 0 0 0 rgba(40, 205, 65, 0.7);
+    animation: mdkgStatusPulse 2.5s infinite cubic-bezier(0.66, 0, 0, 1);
 }
 
 @keyframes mdkgStatusPulse {
-    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 255, 65, 0.7); }
-    50% { transform: scale(1.1); box-shadow: 0 0 10px 2px rgba(0, 255, 65, 0.4); }
-    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 255, 65, 0.7); }
+    0% { box-shadow: 0 0 0 0 rgba(40, 205, 65, 0.5); }
+    70% { box-shadow: 0 0 0 8px rgba(40, 205, 65, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(40, 205, 65, 0); }
 }
 
 .mdkg-status-text {
@@ -188,7 +190,7 @@
 .mdkg-status-text::after {
     content: '_';
     animation: mdkgCursorBlink 1s step-end infinite;
-    color: #00ff41;
+    color: #28cd41;
     margin-left: 2px;
     font-weight: 700;
 }
@@ -204,23 +206,25 @@
     align-items: center;
     gap: 8px;
     width: 100%;
-    padding: 12px;
-    background: #ffffff;
-    color: #000000;
+    padding: 14px;
+    background: #111111;
+    color: #ffffff;
     text-align: center;
     text-decoration: none;
-    font-size: 14px;
-    font-weight: 700;
-    border-radius: 8px;
-    text-transform: uppercase;
-    transition: all 0.3s ease;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 100px;
+    letter-spacing: 0.5px;
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    border: 1px solid transparent;
+    cursor: none !important;
 }
 
 .mdkg-book-btn:hover {
-    background: #000000;
-    color: #ffffff;
-    border-color: #ffffff;
-    
+    background: #ffffff;
+    color: #111111;
+    border-color: #111111;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
 /* Calendar Icon Pulse Animation */
@@ -232,6 +236,19 @@
 
 .mdkg-book-btn > svg:first-child {
     animation: mdkgIconPulse 2s infinite ease-in-out;
+}
+
+/* --- CUSTOM SNAP CURSOR --- */
+.mdkg-snap-cursor {
+    position: fixed;
+    top: 0; left: 0;
+    width: 10px; height: 10px;
+    border: none;
+    background: rgba(0, 0, 0, 0.06);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9991; /* Berada tepat di atas widget status */
+    opacity: 0;
 }
 
 /* --- MOBILE RESPONSIVE --- */
@@ -257,7 +274,7 @@
         width: auto;
         min-width: 0;
         max-width: calc(100% - 100px); /* Prevent overlap with music player */
-        padding: 8px 12px;
+        padding: 10px 14px;
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -269,12 +286,14 @@
     .mdkg-status-text { font-size: 11px; }
     
     .mdkg-book-btn {
-        width: 30px; height: 30px; padding: 0; border-radius: 6px; flex-shrink: 0;
+        width: 34px; height: 34px; padding: 0; border-radius: 50%; flex-shrink: 0;
         display: flex; align-items: center; justify-content: center;
         font-size: 10px;
+        background: #111; color: #fff; /* Pastikan ikon terlihat di mobile */
     }
     .mdkg-book-btn > * { display: none; } /* Hide text and arrow */
     .mdkg-book-btn > svg:first-child { display: block; } /* Show Calendar Icon */
     .mdkg-book-btn { text-indent: 0; position: relative; } 
     .mdkg-book-btn::after { content: none; }
+    .mdkg-snap-cursor { display: none !important; } /* Nonaktifkan kursor pada sentuhan layar HP */
 }

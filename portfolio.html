@@ -98,17 +98,33 @@
                         }
 
                         footerPromise.then((footerData) => {
+                            // [FIX] Bersihkan atribut data Webflow (data-w-id) dari footer sebelum diinjeksi
+                            // Ini mematikan animasi lawas/berantakan dari Webflow IX2 pada footer
+                            const tempDiv = document.createElement('div');
+                            tempDiv.innerHTML = footerData;
+                            tempDiv.querySelectorAll('[data-w-id]').forEach(el => el.removeAttribute('data-w-id'));
+
                             const footerContainer = document.getElementById('footer-container');
-                            if (footerContainer) footerContainer.innerHTML = footerData;
+                            if (footerContainer) footerContainer.innerHTML = tempDiv.innerHTML;
         
-                            if (window.Webflow) {
-                                Webflow.destroy();
-                                Webflow.ready();
-                                if (Webflow.require('ix2')) {
-                                    Webflow.require('ix2').init();
+                            requestAnimationFrame(() => {
+                                if (window.Webflow) {
+                                    Webflow.destroy();
+                                    Webflow.ready();
+                                    if (Webflow.require('ix2')) {
+                                        Webflow.require('ix2').init();
+                                    }
                                 }
-                            }
-                            setTimeout(finishLoading, 500);
+                                // Panggil animasi footer premium konsisten dari script.js
+                                if (typeof window.initFooterGSAP === 'function') {
+                                    window.initFooterGSAP();
+                                }
+                                // Refresh ScrollTrigger agar tidak ada elemen yang lompat
+                                if (window.ScrollTrigger) {
+                                    ScrollTrigger.refresh();
+                                }
+                                setTimeout(finishLoading, 200); // Lebih responsif
+                            });
                         }).catch(error => {
                             console.error("Error fetching content:", error);
                             finishLoading();
@@ -285,27 +301,44 @@
                                     <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                                 </div>
                             </div>
-                            <div data-current="Tab 1" data-easing="ease" data-duration-in="300" data-duration-out="100" class="w-tabs">
-                                <div style="opacity:0" class="portfolio-menu tab-work w-tab-menu">
-                                    <a data-filter="all" class="web-building-tab w-inline-block w-tab-link w--current">
-                                        <div class="text-block-7">All</div>
-                                    </a>
-                                    <a data-filter="Digital Content" class="social-media-tab w-inline-block w-tab-link">
-                                        <div class="text-block-7">Digital Content</div>
-                                    </a>
-                                    <a data-filter="Commercials" class="design-and-editing-tab w-inline-block w-tab-link">
-                                        <div class="text-block-7">Commercials</div>
-                                    </a>
-                                    <a data-filter="3D & Visuals" class="web-building-tab w-inline-block w-tab-link">
-                                        <div class="text-block-7">Web</div>
-                                    </a>
-                                </div>
-                                <div class="w-tab-content">
-                                    <!-- Dynamic Grid Container -->
-                                    <div id="portfolio-grid">
-                                        <!-- Items will be injected here by JS -->
-                                    </div>
-                                </div>
+
+                            <!-- Dropdown Filters -->
+                            <div class="portfolio-filters-wrapper">
+                                <select id="filter-industry" class="custom-select">
+                                    <option value="all">All Industries</option>
+                                    <option value="Fashion">Fashion</option>
+                                    <option value="Agency">Agency</option>
+                                    <option value="F&B">F&B</option>
+                                </select>
+                                
+                                <select id="filter-role" class="custom-select">
+                                    <option value="all">All Roles</option>
+                                    <option value="Video Editing">Video Editing</option>
+                                    <option value="Videography">Videography</option>
+                                    <option value="Content Strategy">Content Strategy</option>
+                                    <option value="Video Production">Video Production</option>
+                                    <option value="Brand Design">Brand Design</option>
+                                </select>
+                                
+                                <select id="filter-year" class="custom-select">
+                                    <option value="all">All Years</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2024">2024</option>
+                                </select>
+
+                                <button id="reset-filters" class="reset-filters-btn">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+                                    Reset
+                                </button>
+                            </div>
+
+                            <!-- Text Counter -->
+                            <div id="portfolio-results-count" class="portfolio-results-count"></div>
+
+                            <!-- Dynamic Grid Container -->
+                            <div id="portfolio-grid">
+                                <!-- Items will be injected here by JS -->
                             </div>
                         </div>
                     </div>

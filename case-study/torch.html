@@ -31,8 +31,23 @@
             Ganti URL di bawah ini untuk mengubah gambar latar hero pada halaman ini.
             ================================================
             */
-            .portfolio-hero-section {
-                background-image: url('../assets/images/project/torch/Gemini_Generated_Image_lvjwtclvjwtclvjw.png');
+            .hero-bg-image {
+                background-image: url('../assets/images/project/torch/torch-gundam-model.webp');
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-size: cover;
+                background-position: center center;
+                z-index: 0;
+                /* Efek Ken Burns: Zoom Out perlahan (1.2x -> 1.0x) selama 20 detik */
+                animation: kenBurns 20s ease-out forwards;
+            }
+            
+            @keyframes kenBurns {
+                from { transform: scale(1.2); }
+                to { transform: scale(1.0); }
             }
         </style>
         
@@ -73,34 +88,27 @@
             <!-- Navbar will be injected here -->
             <div id="navbar-container"></div>
 
-            <!-- 1. Project Hero -->
-            <!-- Sticky Sidebar Navigation Structure -->
-            <nav class="cs-sidebar">
-                <a href="#overview" class="cs-nav-link">Overview</a>
-                <a href="#hardskills" class="cs-nav-link">Challenge</a>
-                <a href="#solution" class="cs-nav-link">Solution</a>
-                <a href="#impact" class="cs-nav-link">Impact</a>
-                <a href="#key-takeaways" class="cs-nav-link">Takeaways</a>
-            </nav>
-
-            <section id="top" class="portfolio-hero-section section-margin" style="position: relative; padding-top: 160px; padding-bottom: 80px; background-size: cover; background-position: center center;">
+            <section id="top" class="portfolio-hero-section portfolio-hero-section-center section-margin" style="position: relative; overflow: hidden;">
+                <!-- [NEW] Background Image Container for Ken Burns Effect -->
+                <div class="hero-bg-image"></div>
+                
                 <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1;"></div>
-                <div class="w-layout-blockcontainer global-wrapper w-container" style="position: relative; z-index: 2;">
+                <!-- Hapus z-index inline agar mix-blend-mode bisa tembus ke background -->
+                <div class="w-layout-blockcontainer global-wrapper w-container" style="position: relative; z-index: 2; mix-blend-mode: normal;">
                     <div class="global-padding">
-                        <div class="home-hero-wrapper">
-                            <div class="home-hero-headline-wrapper page-portfolio">
-                                <div class="home-hero-headline-text-2 text-reveal" style="color: #fff;">Torch x Gundam</div>
-                                <div class="about-divider" style="margin: 40px 0; max-width: 400px; background-color: rgba(255,255,255,0.3); height: 1px;"></div>
-                                <div class="about-meta-grid" style="max-width: 800px; margin: 0 auto;">
-                                    <div class="meta-item">
-                                        <span class="meta-label" style="color: #ddd;">Read Time</span>
-                                        <span class="meta-value" style="color: #fff;">5 Mins</span>
-                                    </div>
-                                    <div class="meta-item">
-                                        <span class="meta-label" style="color: #ddd;">Scope of Work</span>
-                                        <span class="meta-value" style="color: #fff;">Commercial Video Production, Post-production</span>
-                                    </div>
-                                </div>
+                        <div class="cs-hero-wrapper">
+                            <!-- 1. Main Title (Tight Leading) -->
+                            <h1 class="cs-hero-title cs-anim-el" style="opacity: 0;">TORCH × GUNDAM</h1>
+                            
+                            <!-- 2. Sub-title (Wide Tracking) -->
+                            <div class="cs-hero-subtitle cs-anim-el" style="opacity: 0;">CAMPAIGN COLLABORATION</div>
+                            
+                            <!-- 3. Metadata (Muted & Separated) -->
+                            <div class="cs-hero-meta cs-anim-el" style="opacity: 0;">
+                                <span>2026</span>
+                                <span class="cs-meta-separator">•</span>
+                                <span>Lead Editing / Color / 2nd Videography</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -122,20 +130,13 @@
                                     <div class="audio-player-container">
                                         <audio id="audio-narrator" preload="metadata">
                                             <!-- GANTI 'src' DI BAWAH INI DENGAN FILE AUDIO ANDA -->
-                                            <source src="../assets/audio/torch-case-study.mp3" type="audio/mpeg">
+                                            <source src="../assets/audio/torch-case-study(placeholder).mp3" type="audio/mpeg">
                                         </audio>
                                         
                                         <button class="audio-control-btn play-pause-btn" aria-label="Play/Pause">
                                             <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
                                             <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
                                         </button>
-                                        
-                                        <div class="audio-visualizer">
-                                            <div class="bar"></div>
-                                            <div class="bar"></div>
-                                            <div class="bar"></div>
-                                            <div class="bar"></div>
-                                        </div>
 
                                         <div class="audio-time-current">0:00</div>
                                         <div class="audio-progress-container">
@@ -226,7 +227,7 @@
                                 </div>
                                 <div class="solution-video-player">
                                     <div class="video-player-wrapper is-reel">
-                                        <video class="video-element" playsinline loop muted poster="../assets/videos/poster-torch.webp"><source src="../assets/videos/Portrait_Top_Ads 2_NO LICENSE.mp4" type="video/mp4"></video>
+                                        <video class="video-element" playsinline loop muted poster="../assets/videos/poster-torch.webp"><source src="../assets/videos/masukanfile" type="video/mp4"></video>
                                         <div class="video-center-feedback">
                                             <div class="video-feedback-icon icon-feedback-play"><svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg></div>
                                             <div class="video-feedback-icon icon-feedback-pause"><svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path></svg></div>
@@ -305,38 +306,123 @@
                 </div>
             </section>
 
-            <!-- 6. Key Takeaways -->
-            <section id="key-takeaways" class="section-margin fade-in-section">
+            <!-- 6. Process & Craft (New Section without Headline) -->
+            <section id="process" class="section-margin fade-in-section">
                 <div class="w-layout-blockcontainer global-wrapper w-container">
                     <div class="global-padding">
-                        <div class="section-headlne-content-wrapper section-headline-margin">
-                            <div class="section-headline">
-                                <h2 class="section-headline-text text-3xl text-weight-semibold text-color-black-900 text-reveal">Key Takeaways</h2>
+                        <!-- Swiper Container (Bits & Pieces Style) -->
+                        <div class="swiper bits-slider">
+                            <div class="swiper-wrapper">
+                                <!-- Slide 1: Timeline -->
+                                <div class="swiper-slide">
+                                    <div class="photo-card">
+                                        <img src="../assets/images/project/torch/torch-gundam-model.webp" alt="Timeline Editing" class="photo-img" loading="lazy">
+                                    </div>
+                                </div>
+                                <!-- Slide 2: Nodes -->
+                                <div class="swiper-slide">
+                                    <div class="photo-card">
+                                        <img src="../assets/images/project/torch/torch-gundam-model-space.webp" alt="Color Grading Nodes" class="photo-img" loading="lazy">
+                                    </div>
+                                </div>
+                                <!-- Slide 3: BTS -->
+                                <div class="swiper-slide">
+                                    <div class="photo-card">
+                                        <img src="../assets/images/project/torch/torch-bg.webp" alt="Behind The Scenes" class="photo-img" loading="lazy">
+                                    </div>
+                                </div>
+                                <!-- Slide 4: Money Shot -->
+                                <div class="swiper-slide">
+                                    <div class="photo-card">
+                                        <img src="../assets/images/project/torch/torch-model.webp" alt="Final Frame" class="photo-img" loading="lazy">
+                                    </div>
+                                </div>
                             </div>
+                            <!-- Minimal Navigation -->
+                            <div class="swiper-pagination"></div>
+                            <!-- Arrows -->
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-button-prev"></div>
                         </div>
-                        <div class="takeaways-grid">
-                            <div class="takeaway-item">
-                                <h3 class="takeaway-title">Theory to Practice</h3>
-                                <p class="takeaway-text">This was my first time applying classroom theory to a real business where every decision had tangible results, bridging the gap between academic knowledge and practical application.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7. Key Takeaways (Refactored to Paragraph Style) -->
+            <section id="key-takeaways" class="home-about-section section-margin fade-in-section">
+                <div class="w-layout-blockcontainer global-wrapper w-container">
+                    <div class="global-padding">
+                        <!-- [UPDATED] Layout changed to paragraph style (Like Overview) -->
+                        <div class="about-layout-grid"> 
+                            <div class="about-sidebar">
+                                <div class="section-headline-text text-3xl text-weight-semibold text-color-black-900 text-reveal">Key Takeaways</div>
                             </div>
-                            <div class="takeaway-item">
-                                <h3 class="takeaway-title">Professional Development</h3>
-                                <p class="takeaway-text">Working with a team, reporting to a business owner, and managing social media for real-world outcomes taught me invaluable professional skills beyond textbooks.</p>
-                            </div>
-                            <div class="takeaway-item">
-                                <h3 class="takeaway-title">Core Marketing Principles</h3>
-                                <p class="takeaway-text">I learned firsthand the critical importance of structure, data-driven decisions, and consistency in executing a successful digital marketing strategy.</p>
-                            </div>
-                            <div class="takeaway-item">
-                                <h3 class="takeaway-title">Career Foundation</h3>
-                                <p class="takeaway-text">This pivotal internship at Torch x Gundam was where I truly began to build the confidence and practical skills necessary for my future marketing career.</p>
+                            <div class="about-main-content">
+                                <div class="about-text-block">
+                                    <p class="about-paragraph">This pivotal internship at Torch x Gundam was where I truly began to build the confidence and practical skills necessary for my future marketing career. It was my first time applying classroom theory to a real business, bridging the gap between academic knowledge and practical application.</p>
+                                    <p class="about-paragraph">Working with a team and reporting to stakeholders taught me that creativity must always be grounded in strategy. I learned firsthand the critical importance of structure, data-driven decisions, and consistency in executing a successful digital marketing strategy.</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- 7. Next Project Navigation -->
+            <!-- 7. Credits -->
+            <section id="credits" class="section-margin fade-in-section">
+                <div class="w-layout-blockcontainer global-wrapper w-container">
+                    <div class="global-padding">
+                        <div class="credits-divider"></div>
+                        <div class="section-headlne-content-wrapper section-headline-margin">
+                            <div class="section-headline">
+                                <h2 class="section-headline-text text-3xl text-weight-semibold text-color-black-900 text-reveal">Credits</h2>
+                            </div>
+                        </div>
+                        <div class="credits-grid">
+                            <!-- Direction & Strategy -->
+                            <div class="credits-group">
+                                <h4 class="credits-role">Direction & Strategy</h4>
+                                <ul class="credits-list">
+                                    <li>Reza Lazuardi <span>(Brand Manager)</span></li>
+                                    <li>Irfan <span>(Assistant Manager)</span></li>
+                                    <li>Aldo Bangga Permana <span>(Creative Lead)</span></li>
+                                </ul>
+                            </div>
+
+                            <!-- Narrative & Copy -->
+                            <div class="credits-group">
+                                <h4 class="credits-role">Narrative & Copy</h4>
+                                <ul class="credits-list">
+                                    <li>Ikhsan</li>
+                                    <li>Ranna</li>
+                                </ul>
+                            </div>
+
+                            <!-- Production -->
+                            <div class="credits-group">
+                                <h4 class="credits-role">Production</h4>
+                                <ul class="credits-list">
+                                    <li>Alfenda <span>(Lead Videographer)</span></li>
+                                    <li>Dimas Krisnadhita <span>(2nd Videographer)</span></li>
+                                    <li>Saffa <span>(Videographer)</span></li>
+                                </ul>
+                            </div>
+
+                            <!-- Post-Production -->
+                            <div class="credits-group">
+                                <h4 class="credits-role">Post-Production</h4>
+                                <ul class="credits-list">
+                                    <li>Dimas Krisnadhita <span>(Lead Editor)</span></li>
+                                    <li>Dimas Krisnadhita <span>(Colorist)</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- 8. Next Project Navigation -->
             <section class="next-project-section fade-in-section">
                 <div class="w-layout-blockcontainer global-wrapper w-container">
                     <a href="dipdop.html" class="next-project-link">
@@ -346,12 +432,19 @@
                 </div>
             </section>
 
+
             <!-- Footer will be injected here -->
             <div id="footer-container"></div>
         </div>
 
         <!-- MDKG Widget Container -->
         <div id="mdkg-widget-container"></div>
+
+        <!-- Lightbox Modal (Required for Fullscreen Image) -->
+        <div id="lightbox-modal" class="lightbox-modal">
+            <span class="lightbox-close">&times;</span>
+            <img class="lightbox-content" id="lightbox-img" alt="Full Screen View">
+        </div>
 
         <!-- Scripts from index.html -->
         <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=6933c25a0996b0f96f5c2bc3" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
@@ -361,262 +454,35 @@
         <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
         <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
         <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Draggable.min.js"></script>
+
         <script defer src="../script.js"></script>
         <script defer src="../custom.js"></script>
         <script defer src="../widget.js"></script>
         <script>
-            // This script is for the Impact section card interaction
+            // Script for Premium Hero Entrance Animation
             document.addEventListener('DOMContentLoaded', () => {
-                const impactSection = document.getElementById('impact');
-                if (!impactSection) return;
-
-                gsap.registerPlugin(Draggable);
-        
-                const STATS_DATA = [
-                    { value: '247K+', label: 'Impressions Growth', image: 'https://images.unsplash.com/photo-1599691119126-294b9b3a7e6c?q=80&w=600&auto=format&fit=crop' },
-                    { value: '+441%', label: 'Profile Visits', image: 'https://images.unsplash.com/photo-1554224155-16954405a255?q=80&w=600&auto=format&fit=crop' },
-                    { value: '15.3K', label: 'Total Organic Views', image: 'https://images.unsplash.com/photo-1516321497487-e288fb19713f?q=80&w=600&auto=format&fit=crop' },
-                    { value: '+304%', label: 'New Audience Reach', image: 'https://images.unsplash.com/photo-1556740758-90de374c12ad?q=80&w=600&auto=format&fit=crop' }
-                ];
-        
-                const CONTAINER = document.getElementById('table-impact');
-                let cardElements = [];
-                let globalZIndex = 100;
-                const isMobile = window.matchMedia("(max-width: 991px)").matches;
-        
-                function init() {
-                    // Clear container before init
-                    CONTAINER.innerHTML = '';
-                    cardElements = [];
-        
-                    STATS_DATA.forEach((stat) => {
-                        const el = document.createElement('div');
-                        el.classList.add('card', 'is-loading');
-                        el.innerHTML = `
-                            <img class="card-img" src="${stat.image}" alt="${stat.label}" onload="this.parentElement.classList.remove('is-loading'); this.classList.add('loaded');">
-                            <div class="card-overlay">
-                                <div class="stat-card__value">${stat.value}</div>
-                                <div class="stat-card__label">${stat.label}</div>
-                            </div>
-                        `;
-                        CONTAINER.appendChild(el);
-                        cardElements.push(el);
-                    });
-        
-                    if (isMobile) {
-                        // On mobile, we use a button, not drag-and-drop.
-                        updateStackAppearance(0);
-                        // [FIX] Use a more specific selector to target the 'ORDER' button, not the 'CHAOS' button.
-                        const orderBtn = document.querySelector('.controls .btn:not(.btn-outline)');
-                        if (orderBtn) orderBtn.innerText = 'NEXT';
-                    } else {
-                        setupDesktopInteraction();
-                    }
-                }
-        
-                // --- MOBILE/TABLET LOGIC ---
-                function setupMobileStack() {
-                    // Position cards in a stack
-                    updateStackAppearance(0);
-                    // Make only the top card draggable
-                    makeTopCardDraggable();
-                }
-        
-                function updateStackAppearance(duration = 0.4) {
-                    // Corrected logic: Iterate and style from bottom to top.
-                    // The card at index `i` will be styled based on its position in the stack.
-                    cardElements.forEach((card, i) => {
-                        // `i = 0` is the bottom-most card.
-                        // `i = cardElements.length - 1` is the top-most card.
-                        const distance_from_top = cardElements.length - 1 - i;
-
-                        // [FIX] Set z-index immediately to prevent flickering. Do not animate it.
-                        card.style.zIndex = i;
-
-                        gsap.to(card, {
-                            x: 0,
-                            y: distance_from_top * -15, // [ADJUSTED] Increased offset for a more visible stack
-                            scale: 1 - (distance_from_top * 0.06), // [ADJUSTED] Increased scale difference
-                            rotation: 0,
-                            opacity: 1, // Pastikan kartu terlihat saat dianimasikan
-                            duration: duration,
-                            ease: "power2.out"
-                        });
-                    });
-                }
-        
-                function makeTopCardDraggable() {
-                    // Kill old draggables on all cards to be safe
-                    cardElements.forEach(card => {
-                        const d = Draggable.get(card);
-                        if (d) d.kill();
-                    });
-        
-                    if (cardElements.length === 0) return;
-        
-                    const topCard = cardElements[cardElements.length - 1];
-                    Draggable.create(topCard, {
-                        type: "x,y",
-                        edgeResistance: 0.8,
-                        bounds: window,
-                        inertia: true,
-                        onDrag: function() {
-                            gsap.to(this.target, { rotation: this.x * 0.05, duration: 0.1 });
-                        },
-                        onRelease: function() {
-                            // Sesuai permintaan, setiap kali kartu dilepas (setelah digeser), kartu akan langsung dibuang.
-                            // `onRelease` hanya terpicu setelah ada pergerakan drag, jadi kita bisa langsung panggil handleSwipe.
-                            // Arah swipe ditentukan oleh posisi akhir 'x'. Jika x > 0, swipe ke kanan.
-                            handleSwipe(this.target, this.x > 0);
-                        }
-                    });
-                }
-        
-                function handleSwipe(card, swipeRight) {
-                    // Safely disable draggable if it exists (for old drag logic)
-                    const draggable = Draggable.get(card);
-                    if (draggable) {
-                        draggable.disable();
-                    }
-        
-                    gsap.to(card, {
-                        x: swipeRight ? window.innerWidth : -window.innerWidth,
-                        rotation: swipeRight ? 30 : -30,
-                        opacity: 0,
-                        duration: 0.5,
-                        ease: "power1.in",
-                        onComplete: () => {
-                            // Move card from top of array/DOM to bottom
-                            const swiped = cardElements.pop();
-                            cardElements.unshift(swiped);
-                            CONTAINER.prepend(swiped);
-                            
-                            // [FIX] Reset the card's position to the center while it's still invisible (opacity: 0).
-                            // This prevents the card from animating in from off-screen, which causes a "streaking" or "flickering" effect.
-                            // It will now appear to fade and scale into place at the bottom of the stack.
-                            gsap.set(swiped, { x: 0, y: 0, rotation: 0, opacity: 0 });
-
-                            // Animate the stack to new positions.
-                            updateStackAppearance();
-                            // No need to re-enable draggable on mobile as we are using a button.
-                        }
-                    });
-                }
-        
-                // --- DESKTOP LOGIC ---
-                function setupDesktopInteraction() {
-                    cardElements.forEach(el => {
-                        Draggable.create(el, {
-                            type: "x,y",
-                            edgeResistance: 0.65,
-                            bounds: window,
-                            inertia: true,
-                            onPress: function() {
-                                bringToFront(this.target);
-                                gsap.to(this.target, { scale: 1.05, duration: 0.2, boxShadow: "0 20px 40px rgba(0,0,0,0.3)" });
-                            },
-                            onRelease: function() {
-                                gsap.to(this.target, { scale: 1, duration: 0.2, boxShadow: "0 5px 15px rgba(0,0,0,0.1)" });
-                            },
-                            onDrag: function() {
-                                gsap.to(this.target, { rotation: this.x * 0.05, duration: 0.1 });
-                            }
-                        });
-                    });
-                    organizeCards(0);
-                }
-        
-                function bringToFront(element) {
-                    globalZIndex++;
-                    element.style.zIndex = globalZIndex;
-                }
-        
-                function organizeCardsDesktop(duration = 0.8) {
-                    globalZIndex = 100;
-                    cardElements.forEach((card, i) => {
-                        card.style.zIndex = i + 1;
-                        const randomRot = (Math.random() * 6) - 3;
-                        gsap.to(card, {
-                            x: 0, y: i * -2, rotation: randomRot, scale: 1,
-                            duration: duration, ease: "elastic.out(1, 0.7)", overwrite: "auto"
-                        });
-                    });
-                }
-
-                function scatterCardsDesktop() {
-                    cardElements.forEach((card) => {
-                        bringToFront(card);
-                        const interactiveArea = document.querySelector('.card-interactive-area');
-                        const bounds = interactiveArea.getBoundingClientRect();
-                        const rangeX = bounds.width / 2 - card.offsetWidth / 2 - 20;
-                        const rangeY = bounds.height / 2 - card.offsetHeight / 2 - 20;
-                        const randomX = (Math.random() * rangeX * 2) - rangeX;
-                        const randomY = (Math.random() * rangeY * 2) - rangeY;
-                        const randomRot = (Math.random() * 90) - 45;
-                        gsap.to(card, {
-                            x: randomX, y: randomY, rotation: randomRot, scale: 1,
-                            duration: 0.6 + Math.random() * 0.4, ease: "power2.out"
-                        });
-                    });
-                }
-        
-                // --- Global button functions ---
-                window.organizeCards = function(duration = 0.8) {
-                    if (isMobile) {
-                        // On mobile, this button throws the top card.
-                        if (cardElements.length > 0) {
-                            handleSwipe(cardElements[cardElements.length - 1], true);
-                        }
-                    } else {
-                        organizeCardsDesktop(duration);
-                    }
-                }
-        
-                window.scatterCards = function() {
-                    // This button is hidden on mobile, but we add this for safety.
-                    if (!isMobile) scatterCardsDesktop();
-                }
-        
-                // START
-                init();
-            });
-        </script>
-        <script>
-            // This script is for the hero section entrance animation
-            document.addEventListener('DOMContentLoaded', () => {
-                const initCaseStudyHeroAnimation = () => {
-                    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
-                        setTimeout(initCaseStudyHeroAnimation, 100);
+                const initCSHero = () => {
+                    if (typeof gsap === 'undefined') {
+                        setTimeout(initCSHero, 50);
                         return;
                     }
-
-                    const heroTitle = document.querySelector('.home-hero-headline-text-2');
-                    const heroDivider = document.querySelector('.about-divider');
-                    const metaItems = document.querySelectorAll('.meta-item');
-
-                    if (!heroTitle || !heroDivider || !metaItems.length) return;
-
-                    // The text-reveal animation is handled by an observer in script.js
-                    // This timeline animates the other elements after the title is supposed to have appeared.
-                    const tl = gsap.timeline({
-                        delay: 0.5, // A slight delay to let the title reveal start
-                        defaults: { ease: "power3.out" }
-                    });
-
-                    // Animate the divider's width from the center
-                    tl.from(heroDivider, {
-                        scaleX: 0,
-                        transformOrigin: 'center',
-                        duration: 1,
-                        ease: "power2.inOut"
-                    });
-
-                    // Stagger-animate the meta items (Role, Duration, etc.)
-                    tl.from(metaItems, { y: 20, opacity: 0, duration: 0.6, stagger: 0.15 }, "-=0.7");
+                    
+                    // Animate the hero elements gracefully (Apple-like blur reveal)
+                    gsap.fromTo('.cs-anim-el', 
+                        { y: 30, opacity: 0, filter: 'blur(10px)', scale: 0.98 },
+                        {
+                            y: 0,
+                            opacity: 1,
+                            filter: 'blur(0px)',
+                            scale: 1,
+                            duration: 1.5,
+                            stagger: 0.2,
+                            ease: "power3.out",
+                            delay: 0.1
+                        }
+                    );
                 };
-                
-                // The text-reveal class uses an intersection observer, so we can run this on DOMContentLoaded.
-                initCaseStudyHeroAnimation();
+                initCSHero();
             });
         </script>
         <script>

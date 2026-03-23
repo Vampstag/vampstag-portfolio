@@ -18,14 +18,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
             delay: 0.2
         });
 
-        // Fade in the portfolio tab menu
-        gsap.to('.portfolio-menu.tab-work', {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: "power3.out",
-            delay: 0.5
-        });
 
         // 2. Portfolio Filter System (Dynamic & Optimized)
         const projectsData = [
@@ -34,9 +26,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 title: "Torch x Gundam",
                 year: "2026",
                 category: "Commercials", // Pilih antara 'Digital Content', 'Commercials', atau '3D & Visuals'
+                industry: "Fashion", // [NEW] Properti Industri
+                roles: ["Video Editing", "Video Production", "Videography"], // [NEW] Properti Layanan/Role (bisa lebih dari satu)
                 link: "case-study/torch.html", // Ganti dengan link detail proyek jika ada
-                description: "High-stakes global IP collaboration. From cinematic teasers to visual storytelling, generating +1M views and 500K+ engagements.",
-                image: "https://images.unsplash.com/photo-1522199755839-a2bacb67c546?q=80&w=1000&auto=format&fit=crop", // Ganti dengan URL gambar Anda
+                description: "Bringing the Gundam universe to life for Torch’s biggest collaboration.", // Ganti dengan deskripsi proyek
+                image: "assets/images/project/torch/torch-model-backpack.webp", // Ganti dengan URL gambar Anda
                 srcset: "" // Kosongkan jika tidak ada srcset
             },
             {
@@ -44,6 +38,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 title: "DIPDOP Creative Agency",
                 year: "2026",
                 category: "Digital Content",
+                industry: "Agency",
+                roles: ["Brand Design", "Content Strategy"],
                 link: "study-case/dipdop.html",
                 description: "Digital marketing campaign driving +148K new audience reach.",
                 image: "https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image.jpg",
@@ -54,6 +50,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 title: "Tsukamie Noodle Bar",
                 year: "2025",
                 category: "Digital Content",
+                industry: "F&B",
+                roles: ["Video Production", "Brand Design"],
                 link: "/study-case.html",
                 description: "",
                 image: "https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image.jpg",
@@ -62,31 +60,51 @@ document.addEventListener("DOMContentLoaded", (event) => {
             
         ];
 
-        // Update Tab Counts
-        const categories = ['all', 'Digital Content', 'Commercials', '3D & Visuals'];
-        categories.forEach(cat => {
-            const count = cat === 'all' ? projectsData.length : projectsData.filter(p => p.category === cat).length;
-            const tabText = document.querySelector(`[data-filter="${cat}"] .text-block-7`);
-            if (tabText) tabText.innerText = `${tabText.innerText} (${count})`;
-        });
-
         const gridContainer = document.getElementById('portfolio-grid');
-        const filterLinks = document.querySelectorAll('[data-filter]');
         const searchInput = document.getElementById('portfolio-search');
         const searchContainer = document.querySelector('.portfolio-search-container');
         
-        let currentFilter = 'all';
         let currentSearch = '';
+        let currentIndustry = 'all'; // [NEW] State default filter industri
+        let currentRole = 'all'; // [NEW] State default filter role
+        let currentYear = 'all'; // State default filter tahun
 
         function renderProjects(animate = true) {
             // Filter data
             const filteredData = projectsData.filter(item => {
-                const categoryMatch = currentFilter === 'all' || item.category === currentFilter;
+                // Pencocokan Search
                 const searchMatch = item.title.toLowerCase().includes(currentSearch.toLowerCase());
-                return categoryMatch && searchMatch;
+                
+                // Logika pencocokan filter dropdown
+                const industryMatch = currentIndustry === 'all' || (item.industry && item.industry === currentIndustry);
+                const roleMatch = currentRole === 'all' || (item.roles && item.roles.includes(currentRole));
+                const yearMatch = currentYear === 'all' || (item.year && item.year === currentYear);
+                
+                return searchMatch && industryMatch && roleMatch && yearMatch;
             });
 
+            // [NEW] Update Text Counter "X Projects Found"
+            const resultCountEl = document.getElementById('portfolio-results-count');
+            if (resultCountEl) {
+                resultCountEl.innerText = `${filteredData.length} Project${filteredData.length === 1 ? '' : 's'} Found`;
+            }
+
+            // [NEW] Tampilkan / Sembunyikan Tombol Reset
+            const resetBtn = document.getElementById('reset-filters');
+            if (resetBtn) {
+                if (currentSearch !== '' || currentIndustry !== 'all' || currentRole !== 'all' || currentYear !== 'all') {
+                    resetBtn.classList.add('active'); // Munculkan tombol
+                } else {
+                    resetBtn.classList.remove('active'); // Sembunyikan tombol
+                }
+            }
+
             const updateContent = () => {
+                // CLEANUP: Matikan semua proses GSAP pada elemen lama sebelum dihancurkan agar tidak menjadi Zombie Memory
+                if (gridContainer.children.length > 0 && typeof gsap !== 'undefined') {
+                    gsap.killTweensOf(gridContainer.querySelectorAll('.paralax-image, .portfolio-cta'));
+                }
+                
                 gridContainer.innerHTML = '';
                 
                 if (filteredData.length === 0) {
@@ -116,7 +134,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
                                          onload="this.classList.remove('img-loading'); this.classList.add('img-loaded'); this.previousElementSibling.style.opacity='0';">
                                     <div class="portfolio-overlay">
                                         <p class="portfolio-description">${project.description}</p>
-                                        <div class="portfolio-cta">View Case Study</div>
+                                        <div class="portfolio-cta">
+                                            View Project
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="margin-15px right">
@@ -131,7 +152,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
                 // Re-init parallax for new items
                 ScrollTrigger.refresh();
-                initParallax();
                 initCardHover(); // Initialize hover effect for new items
                 initMagneticButtons(); // Initialize magnetic effect for buttons
             };
@@ -139,17 +159,18 @@ document.addEventListener("DOMContentLoaded", (event) => {
             if (animate) {
                 // Premium Exit Animation
                 gsap.to(gridContainer.children, { 
-                    opacity: 0, 
-                    y: -20, 
-                    duration: 0.3, 
+                    opacity: 0,
+                    y: -30,
+                    scale: 0.95,
+                    duration: 0.4, 
                     stagger: 0.05, 
-                    ease: "power2.in",
+                    ease: "power3.inOut",
                     onComplete: () => {
                         updateContent();
-                        // Premium Entrance Animation
+                        // Premium Entrance Animation (Clip-Path Reveal)
                         gsap.fromTo(gridContainer.children, 
-                            { opacity: 0, y: 30 },
-                            { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: "power3.out" }
+                            { opacity: 0, y: 50, clipPath: "inset(100% 0 0 0)" },
+                            { opacity: 1, y: 0, clipPath: "inset(0% 0 0 0)", duration: 1.2, stagger: 0.1, ease: "expo.out" }
                         );
                     }
                 });
@@ -161,24 +182,22 @@ document.addEventListener("DOMContentLoaded", (event) => {
         // Initialize with default category
         renderProjects(true);
 
-        // Filter Click Logic
-        filterLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                
-                // Update Active State
-                filterLinks.forEach(l => l.classList.remove('w--current'));
-                link.classList.add('w--current');
-
-                // Render
-                currentFilter = link.getAttribute('data-filter');
-                renderProjects(true);
-            });
-        });
+        // Debounce helper function
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
 
         // Search Input Logic
         if (searchInput) {
-            searchInput.addEventListener('input', (e) => {
+            searchInput.addEventListener('input', debounce((e) => {
                 currentSearch = e.target.value.trim();
                 
                 // Toggle Clear Button
@@ -189,7 +208,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 }
                 
                 renderProjects(false); // No fade animation for typing to keep it snappy
-            });
+            }, 250)); // Tunggu 250ms setelah user selesai mengetik
         }
 
         // Clear Button Logic
@@ -217,6 +236,72 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 if (searchInput.value.trim() === '') {
                     searchContainer.classList.remove('active');
                 }
+            });
+        }
+
+        // Filter Dropdowns Logic (Industry & Role)
+        const industryFilter = document.getElementById('filter-industry');
+        const roleFilter = document.getElementById('filter-role');
+        const yearFilter = document.getElementById('filter-year');
+
+        if (industryFilter) {
+            industryFilter.addEventListener('change', (e) => {
+                currentIndustry = e.target.value;
+                renderProjects(true); // Panggil render dengan animasi
+            });
+        }
+
+        if (roleFilter) {
+            roleFilter.addEventListener('change', (e) => {
+                currentRole = e.target.value;
+                renderProjects(true); // Panggil render dengan animasi
+            });
+        }
+
+        if (yearFilter) {
+            yearFilter.addEventListener('change', (e) => {
+                currentYear = e.target.value;
+                renderProjects(true); // Panggil render dengan animasi
+            });
+        }
+
+        // Reset Button Logic
+        const resetBtn = document.getElementById('reset-filters');
+        if (resetBtn) {
+            resetBtn.addEventListener('click', () => {
+                // 1. Reset state (variabel JS)
+                currentIndustry = 'all';
+                currentRole = 'all';
+                currentYear = 'all';
+                currentSearch = '';
+                
+                // 2. Reset tampilan Dropdown HTML
+                if (industryFilter) industryFilter.value = 'all';
+                if (roleFilter) roleFilter.value = 'all';
+                if (yearFilter) yearFilter.value = 'all';
+                
+                // [NEW] Sinkronisasi Reset pada UI Premium Dropdown
+                document.querySelectorAll('.premium-dropdown').forEach(wrapper => {
+                    const select = wrapper.previousElementSibling;
+                    if(select) {
+                        const text = select.options[select.selectedIndex].text;
+                        wrapper.querySelector('span').textContent = text;
+                        wrapper.querySelectorAll('.premium-dropdown-option').forEach(opt => {
+                            if (opt.dataset.value === 'all') {
+                                opt.classList.add('selected');
+                            } else {
+                                opt.classList.remove('selected');
+                            }
+                        });
+                    }
+                });
+
+                // 3. Reset tampilan Search Box HTML
+                if (searchInput) searchInput.value = '';
+                if (searchContainer) searchContainer.classList.remove('has-text', 'active');
+                
+                // 4. Render ulang grid dengan animasi
+                renderProjects(true);
             });
         }
 
@@ -249,37 +334,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
             });
         });
 
-        // 4. Parallax Images (Function to be called after render)
-        function initParallax() {
-            // Kill existing ScrollTriggers to prevent memory leaks/conflicts
-            ScrollTrigger.getAll().forEach(t => {
-                if (t.trigger && (t.trigger.classList.contains('image-wrap') || t.trigger.parentElement?.classList.contains('image-wrap'))) {
-                    t.kill();
-                }
-            });
+        // 4. Parallax Images (Dihapus agar tidak ada zoom mendadak)
+        // Efek parallax telah dimatikan untuk tampilan yang lebih bersih dan premium.
 
-            gsap.utils.toArray('.paralax-image').forEach(image => {
-                // Set initial state (Zoomed in slightly to allow movement without showing edges)
-                gsap.set(image, { scale: 1.2 });
-
-                gsap.fromTo(image, 
-                    { yPercent: -15 }, // Increased range for better visibility
-                    {
-                        yPercent: 15,
-                        ease: "none",
-                        scrollTrigger: {
-                            trigger: image.parentElement,
-                            start: "top bottom",
-                            end: "bottom top",
-                            scrub: true // Instant sync with Lenis for smoother feel
-                        },
-                        force3D: true
-                    }
-                );
-            });
-        }
-
-        // 5. Premium Card Hover Effect (3D Tilt Disabled)
+        // 5. Premium Card Hover Effect (Subtle & Smooth)
         function initCardHover() {
             const cards = document.querySelectorAll('.blog-main-wrapper');
             cards.forEach(card => {
@@ -287,14 +345,17 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 const wrapper = card.querySelector('.image-wrap');
                 if (!img || !wrapper) return;
 
-                // Keep the image zoom on hover
+                // Pastikan gambar direset ke ukuran dan posisi normal (karena parallax dihapus)
+                gsap.set(img, { scale: 1, yPercent: 0 });
+
+                // Zoom in yang sangat halus & natural (Premium Subtle Feel)
                 card.addEventListener('mouseenter', () => {
-                    gsap.to(img, { scale: 1.3, duration: 0.8, ease: "power2.out", overwrite: "auto" });
+                    gsap.to(img, { scale: 1.03, duration: 1.5, ease: "power4.out", overwrite: "auto" });
                 });
                 
                 card.addEventListener('mouseleave', () => {
-                    // Reset the image zoom
-                    gsap.to(img, { scale: 1.2, duration: 0.8, ease: "power2.out", overwrite: "auto" });
+                    // Kembali ke ukuran normal dengan smooth
+                    gsap.to(img, { scale: 1, duration: 1.5, ease: "power4.out", overwrite: "auto" });
                 });
             });
         }
@@ -307,11 +368,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
                     const rect = btn.getBoundingClientRect();
                     const x = e.clientX - rect.left - rect.width / 2;
                     const y = e.clientY - rect.top - rect.height / 2;
-                    gsap.to(btn, { x: x * 0.5, y: y * 0.5, duration: 0.3, ease: "power2.out" });
+                    // Mengurangi intensitas tarikan magnet agar lebih elegan
+                    gsap.to(btn, { x: x * 0.3, y: y * 0.3, duration: 0.4, ease: "power2.out" });
                 });
                 
                 btn.addEventListener('mouseleave', () => {
-                    gsap.to(btn, { x: 0, y: 0, duration: 1, ease: "elastic.out(1, 0.3)" });
+                    gsap.to(btn, { x: 0, y: 0, duration: 0.8, ease: "elastic.out(1, 0.4)" });
                 });
             });
         }
@@ -328,6 +390,73 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 repeat: -1
             });
         }
+
+        // [NEW] Premium Dropdown Engine (Auto-convert HTML Select)
+        function initPremiumDropdowns() {
+            const selects = document.querySelectorAll('.custom-select');
+            
+            selects.forEach(select => {
+                // 1. Sembunyikan elemen bawaan OS
+                select.style.display = 'none';
+                
+                // 2. Buat pembungkus Premium
+                const wrapper = document.createElement('div');
+                wrapper.className = 'premium-dropdown';
+                
+                // 3. Buat UI Tombol Terpilih
+                const selected = document.createElement('div');
+                selected.className = 'premium-dropdown-selected';
+                selected.innerHTML = `<span>${select.options[select.selectedIndex].text}</span>
+                                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>`;
+                
+                // 4. Buat List Opsi
+                const optionsBox = document.createElement('div');
+                optionsBox.className = 'premium-dropdown-options';
+                
+                Array.from(select.options).forEach(option => {
+                    const optEl = document.createElement('div');
+                    optEl.className = 'premium-dropdown-option';
+                    optEl.textContent = option.text;
+                    optEl.dataset.value = option.value;
+                    
+                    if (option.value === select.value) optEl.classList.add('selected');
+                    
+                    optEl.addEventListener('click', () => {
+                        // Update elemen HTML aslinya
+                        select.value = option.value;
+                        select.dispatchEvent(new Event('change')); // Trigger fungsi filter portofolio
+                        
+                        // Update Tampilan UI
+                        selected.querySelector('span').textContent = option.text;
+                        optionsBox.querySelectorAll('.premium-dropdown-option').forEach(el => el.classList.remove('selected'));
+                        optEl.classList.add('selected');
+                        
+                        wrapper.classList.remove('open'); // Tutup menu
+                    });
+                    
+                    optionsBox.appendChild(optEl);
+                });
+                
+                wrapper.appendChild(selected);
+                wrapper.appendChild(optionsBox);
+                
+                // Sisipkan ke dalam halaman
+                select.parentNode.insertBefore(wrapper, select.nextSibling);
+                
+                // Logika Buka/Tutup
+                selected.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    document.querySelectorAll('.premium-dropdown').forEach(d => {
+                        if (d !== wrapper) d.classList.remove('open');
+                    });
+                    wrapper.classList.toggle('open');
+                });
+            });
+            
+            // Tutup dropdown jika area luar layar diklik
+            document.addEventListener('click', () => document.querySelectorAll('.premium-dropdown').forEach(d => d.classList.remove('open')));
+        }
+        initPremiumDropdowns();
     };
     
     // Run initialization
