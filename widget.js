@@ -13,9 +13,9 @@ const widgetConfig = {
     // DAFTAR LAGU (PLAYLIST)
     // Tambahkan lagu baru dengan format: { src: 'folder/nama-file.mp3' },
     playlist: [
-        { src: '/audio/bgmusic.mp3' },
-        { src: '/audio/bgmusic2.mp3' },
-        { src: '/audio/bgmusic3.mp3' }
+        { src: 'audio/bgmusic.mp3' },
+        { src: 'audio/bgmusic2.mp3' },
+        { src: 'audio/bgmusic3.mp3' }
     ]
 };
 //#endregion
@@ -37,7 +37,17 @@ class MdkgWidget {
         this.currentVolume = savedVolume !== null ? parseFloat(savedVolume) : (options.initialVolume !== undefined ? options.initialVolume : 0.4);
         
         // Playlist Setup
-        this.playlist = options.playlist || [{ src: 'audio/bgmusic.mp3' }];
+        const rawPlaylist = options.playlist || [{ src: 'audio/bgmusic.mp3' }];
+        
+        // [FIX] Otomatis perbaiki path audio jika dibuka dari dalam folder case-study
+        const isSubPage = window.location.pathname.includes('/case-study/') || window.location.pathname.includes('/study-case/');
+        const pathPrefix = isSubPage ? '../' : '';
+        
+        this.playlist = rawPlaylist.map(track => {
+            let src = track.src;
+            if (src.startsWith('/')) src = src.substring(1); // Hapus leading slash (mencegah error di GitHub Pages)
+            return { src: src.startsWith('http') ? src : pathPrefix + src };
+        });
         
         // Load last played index from localStorage
         const savedIndex = localStorage.getItem('mdkg_last_track_index');
@@ -105,9 +115,7 @@ class MdkgWidget {
 
             <!-- Music Player Widget -->
             <div class="mdkg-widget-player hover-trigger">
-                <audio class="mdkg-bg-music">
-                    <source src="${currentTrack.src}" type="audio/mpeg">
-                </audio>
+                <audio class="mdkg-bg-music" src="${currentTrack.src}" preload="auto"></audio>
                 <div class="mdkg-player-icon">
                     <!-- Muted Icon -->
                     <svg class="mdkg-icon-muted" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -238,6 +246,7 @@ class MdkgWidget {
                 this.currentTrackIndex = (this.currentTrackIndex + 1) % this.playlist.length;
                 localStorage.setItem('mdkg_last_track_index', this.currentTrackIndex); // Save to localStorage
                 audio.src = this.playlist[this.currentTrackIndex].src;
+                audio.load(); // [FIX] Wajib dipanggil untuk Safari iOS agar src baru dikenali
                 audio.play().then(() => updateUI(true)).catch(e => console.error("Next track failed:", e));
             };
 
