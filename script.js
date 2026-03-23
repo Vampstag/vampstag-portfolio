@@ -105,6 +105,9 @@ document.addEventListener("DOMContentLoaded", () => {
         // 15. Audio Narrator
         initAudioNarrator();
 
+        // 16. Share Buttons (Web Share API)
+        initShareButtons();
+
         // 10. Refresh ScrollTrigger when preloader is done to ensure correct positions
         window.addEventListener('preloaderDone', () => {
             if (document.readyState === 'complete') {
@@ -654,6 +657,43 @@ function initBitsSlider() {
             const card = activeSlide.querySelector('.photo-card');
             if (card) gsap.to(card, { rotationX: 0, rotationY: 0, scale: 1, duration: 0.8, ease: "power3.out" });
         }
+    });
+}
+//#endregion
+
+//#region SHARE BUTTONS
+// =========================================
+// 16. WEB SHARE API
+// =========================================
+function initShareButtons() {
+    const shareBtns = document.querySelectorAll('.cs-share-btn, .share-btn');
+    
+    shareBtns.forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            
+            const shareData = {
+                title: document.title,
+                text: 'Check out this project: ' + document.title,
+                url: window.location.href
+            };
+
+            // Cek apakah browser mendukung fitur Native Share (biasanya di Mobile)
+            if (navigator.share) {
+                try {
+                    await navigator.share(shareData);
+                } catch (err) {
+                    console.log('Share canceled or failed:', err);
+                }
+            } else {
+                // Fallback untuk Desktop: Otomatis Copy Link ke Clipboard
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    const originalText = btn.innerHTML;
+                    btn.innerHTML = 'Link Copied!';
+                    setTimeout(() => { btn.innerHTML = originalText; }, 2000);
+                });
+            }
+        });
     });
 }
 //#endregion

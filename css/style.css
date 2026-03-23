@@ -3236,6 +3236,33 @@ html.lenis, html.lenis body { height: auto; }
         line-height: 0.8 !important; /* Sedikit lebih lega di desktop tapi tetap rapat */
     }
 }
+
+/* [NEW] Case Study Share Button */
+.cs-share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.6);
+    border: none;
+    padding: 8px 0;
+    font-family: var(--font-primary);
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.cs-share-btn:hover {
+    color: #ffffff;
+}
+.cs-share-btn svg {
+    transition: transform 0.3s ease;
+}
+.cs-share-btn:hover svg {
+    transform: translateY(-2px);
+}
 /* #endregion */
 
 /* #region 35. UNIVERSAL HOVER (FOOTER & SOCIAL) */
