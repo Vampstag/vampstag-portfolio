@@ -950,7 +950,7 @@ function initDataCounter() {
     counters.forEach(counter => {
         // Regex to split: Prefix (non-digits), Number (digits/dots/commas), Suffix (non-digits)
         // Handles formats like "+1M", "3+", "100%"
-        const text = counter.innerText;
+        const text = counter.innerText.trim();
         const match = text.match(/^([^0-9]*)([0-9\.,]+)([^0-9]*)$/);
         
         if (match) {
@@ -975,12 +975,18 @@ function initDataCounter() {
 
             gsap.to(proxy, {
                 val: targetVal,
-                duration: 2,
-                ease: "power3.out",
+                duration: 2.5, // Sedikit diperpanjang agar efek melambatnya lebih terlihat
+                ease: "expo.out", // Membuat putaran angka berhenti perlahan-lahan di akhir
                 scrollTrigger: {
-                    trigger: counter,
+                    trigger: counter.closest('.data-item') || counter,
                     start: "top 85%", // Animation starts when element is near bottom of viewport
-                    once: true // Animate only once
+                    toggleActions: "play none none reset", // Mainkan saat masuk, reset saat di-scroll ke atas
+                    onLeaveBack: () => {
+                        // Pastikan label ikut menghilang dan reset ke posisi semula
+                        if (label) gsap.killTweensOf(label); 
+                        if (label) gsap.set(label, { opacity: 0, y: 15 });
+                        counter.innerText = `${prefix}0${suffix}`; // Kembalikan angka ke 0 secara visual
+                    }
                 },
                 onStart: () => {
                     // Animate label fade-in with a slight delay

@@ -807,7 +807,6 @@ html.lenis, html.lenis body { height: auto; }
 
 /* [OPTIMIZATION] Lazy render sections below the fold */
 .journal-section,
-.data-validation-section,
 .logo-marquee-section,
 .why-work-section {
     content-visibility: auto;
