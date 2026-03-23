@@ -28,9 +28,6 @@ document.addEventListener("DOMContentLoaded", () => {
         // Add class to body to enable scroll if hidden
         document.body.classList.remove('preloader-active');
         
-        // [FIX] Dispatch event to notify GSAP ScrollTrigger to refresh coordinates
-        window.dispatchEvent(new Event('preloaderDone'));
-        
         // Animate out
         if (preloader) {
             setTimeout(() => {

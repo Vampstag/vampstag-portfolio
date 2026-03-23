@@ -105,27 +105,12 @@ document.addEventListener("DOMContentLoaded", () => {
         // 15. Audio Narrator
         initAudioNarrator();
 
-        // [NEW] Fallback global refresh untuk halaman TANPA preloader (seperti torch.html)
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                if (window.ScrollTrigger) ScrollTrigger.refresh();
-            }, 500);
-        });
-
         // 10. Refresh ScrollTrigger when preloader is done to ensure correct positions
         window.addEventListener('preloaderDone', () => {
-            const refreshST = () => {
-                // Beri jeda agar browser sempat melakukan reflow layout 
-                // setelah class 'preloader-active' (overflow: hidden) dihapus
-                setTimeout(() => {
-                    ScrollTrigger.refresh();
-                }, 200);
-            };
-
             if (document.readyState === 'complete') {
-                refreshST();
+                ScrollTrigger.refresh();
             } else {
-                window.addEventListener('load', refreshST);
+                window.addEventListener('load', () => ScrollTrigger.refresh());
             }
         });
     });
@@ -165,7 +150,7 @@ function loadNavbar() {
             }
 
             if (window.ScrollTrigger) {
-                setTimeout(() => ScrollTrigger.refresh(), 200);
+                ScrollTrigger.refresh();
             }
         })
         .catch(err => {
@@ -225,7 +210,7 @@ function loadFooter() {
 
                 // 3. Refresh ScrollTrigger
                 if (window.ScrollTrigger) {
-                    setTimeout(() => ScrollTrigger.refresh(), 200);
+                    ScrollTrigger.refresh();
                 }
             });
         })
@@ -965,7 +950,7 @@ function initDataCounter() {
     counters.forEach(counter => {
         // Regex to split: Prefix (non-digits), Number (digits/dots/commas), Suffix (non-digits)
         // Handles formats like "+1M", "3+", "100%"
-        const text = counter.innerText.trim();
+        const text = counter.innerText;
         const match = text.match(/^([^0-9]*)([0-9\.,]+)([^0-9]*)$/);
         
         if (match) {
@@ -986,49 +971,41 @@ function initDataCounter() {
             
             // Select the corresponding label
             const label = counter.parentElement.querySelector('.data-label');
-            if (label) gsap.set(label, { opacity: 0, y: 15 }); // Hide initially
+            if (label) gsap.set(label, { opacity: 0 }); // Hide initially
 
-            // [FIX] Pisahkan ScrollTrigger dari Tween proxy agar animasi selalu di-generate ulang dengan akurat
-            ScrollTrigger.create({
-                trigger: counter.closest('.data-item') || counter,
-                start: "top 85%",
-                onEnter: () => {
-                    // Reset proxy ke 0 dan eksekusi tween baru secara mandiri
-                    proxy.val = 0;
-                    gsap.killTweensOf(proxy);
-                    
-                    gsap.to(proxy, {
-                        val: targetVal,
-                        duration: 2.5,
-                        ease: "expo.out",
-                        onUpdate: () => {
-                            let current = hasDecimals ? proxy.val.toFixed(decimals) : Math.floor(proxy.val).toLocaleString('en-US');
-                            counter.innerText = `${prefix}${current}${suffix}`;
-                        },
-                        onComplete: () => {
-                            counter.innerText = text;
-                        }
-                    });
-
-                    // Animate label
+            gsap.to(proxy, {
+                val: targetVal,
+                duration: 3, // Durasi diperpanjang agar efek menghitung lebih terasa
+                ease: "power2.out", // Kurva yang lebih seimbang untuk menghitung angka (tidak melompat terlalu cepat)
+                scrollTrigger: {
+                    trigger: counter.closest('.data-validation-section') || counter, // Menggunakan section utamanya sebagai patokan scroll
+                    start: "top 75%", // Menunda animasi hingga section lebih masuk ke area pandang (viewport)
+                    once: true // Animate only once
+                },
+                onStart: () => {
+                    // Animate label fade-in with a slight delay
                     if (label) {
-                        gsap.killTweensOf(label);
                         gsap.fromTo(label, 
                             { opacity: 0, y: 15 },
-                            { opacity: 0.6, y: 0, duration: 1, ease: "power3.out", delay: 0.2 }
+                            { opacity: 0.6, y: 0, duration: 1, ease: "power3.out", delay: 0.4 }
                         );
                     }
                 },
-                onLeaveBack: () => {
-                    // Matikan dan reset ke 0 ketika elemen melewati viewport ke atas
-                    gsap.killTweensOf(proxy);
-                    proxy.val = 0;
-                    counter.innerText = `${prefix}0${suffix}`;
-                    
-                    if (label) {
-                        gsap.killTweensOf(label); 
-                        gsap.set(label, { opacity: 0, y: 15 });
+                onUpdate: () => {
+                    // Format current value
+                    let current;
+                    if (hasDecimals) {
+                        current = proxy.val.toFixed(decimals);
+                    } else {
+                        current = Math.floor(proxy.val);
+                        // Add commas back for integer display if needed
+                        current = current.toLocaleString('en-US');
                     }
+                    counter.innerText = `${prefix}${current}${suffix}`;
+                },
+                onComplete: () => {
+                    // Ensure it ends exactly on the original string
+                    counter.innerText = text;
                 }
             });
         }

@@ -805,13 +805,15 @@ html.lenis, html.lenis body { height: auto; }
     contain-intrinsic-size: 1px 1000px; /* Estimate height to prevent scrollbar jumping */
 }
 
-/* [OPTIMIZATION] Lazy render sections below the fold */
-.journal-section,
-.logo-marquee-section,
-.why-work-section {
+/* [OPTIMIZATION] Dimatikan sementara karena bentrok dengan kalkulasi
+   tinggi dari GSAP ScrollTrigger (membuat animasi selesai lebih awal) */
+/* .journal-section,
+   .data-validation-section,
+   .logo-marquee-section,
+   .why-work-section {
     content-visibility: auto;
     contain-intrinsic-size: 1px 600px;
-}
+} */
 
 /* Prevent performance bottleneck in complex sliders */
 .bits-slider, .works-slider {
@@ -1288,15 +1290,20 @@ html.lenis, html.lenis body { height: auto; }
    ========================================= */
 .bits-slider {
     width: 100%;
-    padding: 80px 0 120px; /* Increased for premium cinematic feel */
+    padding: 60px 0 100px; /* Disesuaikan agar proporsional */
     overflow: visible !important; /* Mencegah clipping shadow dan scale-up arrow bawaan swiper */
+}
+
+.bits-slider .swiper-wrapper {
+    padding-top: 20px;
+    padding-bottom: 70px; /* Memberi ruang ekstra agar shadow terdalam tidak terpotong (clipping) */
 }
 
 /* Slide Styling (The "Center Focus" Logic) */
 .bits-slider .swiper-slide {
     width: 75%; /* Mobile width for 'auto' mode */
-    transform: scale(0.85);
-    opacity: 0.4;
+    transform: scale(0.8); /* Dikecilkan untuk efek 3D (mundur ke belakang) */
+    opacity: 0.3; /* Lebih transparan agar fokus tertuju ke tengah */
     transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1), 
                 opacity 0.8s cubic-bezier(0.19, 1, 0.22, 1);
     height: auto;
@@ -1307,12 +1314,12 @@ html.lenis, html.lenis body { height: auto; }
     .bits-slider .swiper-slide {
         width: 30%; /* Neater width for desktop */
         max-width: 450px;
-        transform: scale(0.8);
+        transform: scale(0.75); /* Dikecilkan di desktop agar kontras 3D maksimal */
     }
 }
 
 .bits-slider .swiper-slide-active {
-    transform: scale(1);
+    transform: scale(1.05); /* Diperbesar sedikit agar terlihat menonjol ke depan (pop-out) */
     opacity: 1;
     z-index: 10;
 }
@@ -1320,12 +1327,12 @@ html.lenis, html.lenis body { height: auto; }
 .bits-slider .swiper-pagination {
     position: relative !important;
     bottom: auto !important; /* Mereset posisi agar tidak naik */
-    margin-top: 40px; /* Memberi jarak ke bawah dari foto */
+    margin-top: 10px; /* Memberi jarak karena sudah dibantu padding-bottom swiper-wrapper */
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
+    gap: 12px; /* Memberi jarak titik yang lebih longgar ala Apple UI */
     z-index: 10;
 }
 
@@ -1556,6 +1563,7 @@ html.lenis, html.lenis body { height: auto; }
     color: #555;
     max-width: 60ch;
     margin: 0;
+    font-weight: 400; /* Menipiskan teks (normal) untuk estetika yang lebih premium */
 }
 /* #endregion */
 
@@ -2603,19 +2611,20 @@ html.lenis, html.lenis body { height: auto; }
 .works-slider {
     width: 100%;
     padding: 40px 0 80px;
-    overflow: visible;
+    overflow: visible !important; /* Memastikan overflow kiri-kanan tembus meluber batas layar */
 }
 .works-slider .swiper-slide {
     width: 80%;
     max-width: 420px;
     height: auto;
-    opacity: 0.4;
-    transform: scale(0.85);
-    transition: opacity 0.4s ease, transform 0.4s ease;
+    opacity: 0.3; /* Kontras kedalaman 3D */
+    transform: scale(0.8); /* Efek 3D ditekankan */
+    transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.8s cubic-bezier(0.19, 1, 0.22, 1);
 }
 .works-slider .swiper-slide-active {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1.05); /* Pop-up (keluar) untuk slide tengah */
+    z-index: 10;
 }
 .works-slider .swiper-pagination { bottom: 20px !important; }
 .works-slider .swiper-pagination-bullet { background: #ccc; opacity: 1; }
@@ -3296,5 +3305,32 @@ a.social-icon:hover img {
     width: 20px;
     height: 20px;
     transition: transform 0.3s ease;
+}
+/* #endregion */
+
+/* #region 37. SHOWREEL SECTION */
+/* =========================================
+   37. SHOWREEL SECTION (4:3 Ratio)
+   ========================================= */
+.showreel-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 1600px; /* Batas maksimal ukuran desktop */
+    margin: 0 auto;
+    aspect-ratio: 4/3; /* Memastikan rasio 1600x1200 terjaga di semua ukuran layar */
+    overflow: hidden;
+    background-color: #f5f5f7;
+    border-radius: var(--radius-lg); /* Mengikuti radius premium dari tema */
+    box-shadow: var(--shadow-soft);
+    transform: translateZ(0); /* Akselerasi hardware untuk performa video */
+    border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.showreel-video,
+.showreel-lottie {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none; /* Mencegah interaksi tidak sengaja karena ini looping otomatis */
 }
 /* #endregion */
