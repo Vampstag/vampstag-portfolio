@@ -41,6 +41,7 @@
                 background-size: cover;
                 background-position: center center;
                 z-index: 0;
+                will-change: transform;
                 /* Efek Ken Burns: Zoom Out perlahan (1.2x -> 1.0x) selama 20 detik */
                 animation: kenBurns 20s ease-out forwards;
             }
@@ -111,7 +112,7 @@
                 <!-- [NEW] Background Image Container for Ken Burns Effect -->
                 <div class="hero-bg-image"></div>
                 
-                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1;"></div>
+                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.7) 100%); z-index: 1;"></div>
                 <!-- Hapus z-index inline agar mix-blend-mode bisa tembus ke background -->
                 <div class="w-layout-blockcontainer global-wrapper w-container" style="position: relative; z-index: 2; mix-blend-mode: normal;">
                     <div class="global-padding">
@@ -194,9 +195,17 @@
                 <div class="w-layout-blockcontainer global-wrapper w-container">
                     <div class="global-padding">
                         <div class="showreel-wrapper">
-                            <!-- Lottie player untuk animasi showreel looping -->
-                            <!-- Pastikan path src file .json Lottie Anda sudah benar -->
-                            <lottie-player class="showreel-lottie" src="../assets/videos/project/torch//lottie/showreel(placeholder).json" background="transparent" speed="1" loop autoplay></lottie-player>
+                            <!-- Lottie Player -->
+                            <lottie-player 
+                                src="../assets/videos/project/torch/lottie/showreel(placeholder).json" 
+                                background="transparent" 
+                                speed="1" 
+                                loop 
+                                autoplay 
+                                class="showreel-lottie"
+                                style="width: 100%; height: 100%; object-fit: cover;"
+                                preserveAspectRatio="xMidYMid slice">
+                            </lottie-player>
                         </div>
                     </div>
                 </div>
@@ -263,7 +272,7 @@
             <!-- [NEW] Full-Bleed Media Break (Edge-to-Edge) -->
             <section class="section-margin fade-in-section">
                 <div style="width: 100%; height: 70vh; position: relative; overflow: hidden;">
-                    <!-- Lottie Player menggantikan Video -->
+                    <!-- Lottie Full-Bleed Animation -->
                     <lottie-player 
                         src="../assets/videos/project/torch/lottie/full-bleed-animation(placeholder).json" 
                         background="transparent" 
@@ -358,17 +367,20 @@
                             </div>
                         </div>
                         <div class="data-grid">
-                            <div class="data-item">
+                            <div class="data-item" tabindex="0">
                                 <div class="data-number">247K+</div>
                                 <div class="data-label">Impressions Growth</div>
+                                <div class="metric-tooltip">Combined likes, shares, and saves across TikTok & Instagram.</div>
                             </div>
-                            <div class="data-item">
+                            <div class="data-item" tabindex="0">
                                 <div class="data-number">+441%</div>
                                 <div class="data-label">Total Engagements</div>
+                                <div class="metric-tooltip">Organic data tracked compared to previous quarter (Q3 2025).</div>
                             </div>
-                            <div class="data-item">
+                            <div class="data-item" tabindex="0">
                                 <div class="data-number">+20M</div>
                                 <div class="data-label">Budget Saved</div>
+                                <div class="metric-tooltip">Budget saved from efficient in-house systemized workflow.</div>
                             </div>
                         </div>
                     </div>
@@ -388,18 +400,18 @@
                             <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 40%; background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 100%); pointer-events: none; z-index: 1;"></div>
                             
                             <!-- RAW/Log Image (Foreground, Clipped) -->
-                            <div class="raw-image-wrapper" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; width: 50%; border-right: 2px solid rgba(255,255,255,0.8);">
+                            <div class="raw-image-wrapper" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; width: 50%; border-right: 2px solid rgba(255,255,255,0.8); z-index: 2;">
                                 <!-- Note: Filter CSS ditambahkan sementara untuk meniru S-LOG 3 mentah jika file asli belum ada -->
                                 <img src="../assets/images/project/torch/torch-model.webp" alt="RAW" style="position: absolute; top: 0; left: 0; width: 100cqw; height: 100%; object-fit: cover; max-width: none; filter: grayscale(60%) contrast(0.7) brightness(1.1);">
                                 
                                 <!-- Foreground Protection Gradient -->
                                 <div style="position: absolute; bottom: 0; left: 0; width: 100cqw; height: 40%; background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 100%); pointer-events: none;"></div>
                                 <!-- Label RAW -->
-                                <div style="position: absolute; bottom: 32px; left: 32px; background: rgba(0,0,0,0.4); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: white; padding: 10px 20px; border-radius: 12px; font-weight: 600; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.1);">S-LOG 3</div>
+                                <div style="position: absolute; bottom: 32px; left: 32px; background: rgba(0,0,0,0.4); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: white; padding: 10px 20px; border-radius: 12px; font-weight: 600; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.1); white-space: nowrap;">S-LOG 3</div>
                             </div>
                             
                             <!-- Label GRADED -->
-                            <div style="position: absolute; bottom: 32px; right: 32px; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: #111; padding: 10px 20px; border-radius: 12px; font-weight: 600; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; border: 1px solid rgba(0,0,0,0.05); z-index: 3;">GRADED</div>
+                            <div style="position: absolute; bottom: 32px; right: 32px; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: #111; padding: 10px 20px; border-radius: 12px; font-weight: 600; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; border: 1px solid rgba(0,0,0,0.05); z-index: 1;">GRADED</div>
 
                             <!-- Custom Range Slider (Invisible but interactive) -->
                             <input type="range" min="0" max="100" value="50" class="grade-slider-input" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: col-resize; z-index: 10;">
@@ -476,9 +488,12 @@
                             
                             <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;">
                                 <!-- [NEW] Premium Avatar -->
-                                <img src="../assets/images/project/torch/client-testimoni.jpg" alt="Reza Lazuardi" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; margin-bottom: 8px; box-shadow: 0 10px 20px -5px rgba(0,0,0,0.15); border: 1px solid rgba(0,0,0,0.05);">
-                                <span style="font-family: var(--font-primary); font-weight: 700; font-size: 1.1rem; color: #111;">Reza Lazuardi</span>
-                                <span style="font-family: var(--font-primary); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: #888;">Brand Manager, Torch</span>
+                                <div style="position: relative; display: inline-block;">
+                                    <img src="../assets/images/project/torch/client-testimoni.jpg" alt="Reza Lazuardi" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; margin-bottom: 8px; box-shadow: 0 10px 20px -5px rgba(0,0,0,0.15); border: 1px solid rgba(0,0,0,0.05);">
+                                    <img src="../assets/images/home/TORCH LOGO-01.svg" alt="Torch" style="position: absolute; bottom: 0px; right: -24px; height: 26px; width: auto; max-width: 60px; object-fit: contain; background: #fff; border-radius: 6px; padding: 4px 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1px solid #eee;">
+                                </div>
+                                <span style="font-family: var(--font-primary); font-weight: 700; font-size: 1.1rem; color: #111; margin-top: 4px;">Reza Lazuardi</span>
+                                <span style="font-family: var(--font-primary); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: #888;">Brand Manager</span>
                             </div>
                         </div>
                     </div>
@@ -580,11 +595,28 @@
                                     <li><a href="https://www.linkedin.com/in/dimasghadavi" target="_blank" rel="noopener noreferrer">Dimas Krisnadhita</a> <span>(Colorist)</span></li>
                                 </ul>
                             </div>
+                            <div class="metric-tooltip">Budget saved from efficient in-house systemized workflow.</div>
                         </div>
                     </div>
                 </div>
             </section>
 
+
+            <!-- [NEW] Soft CTA (Conversion Optimization) -->
+            <section class="section-margin fade-in-section">
+                <div class="w-layout-blockcontainer global-wrapper w-container">
+                    <div class="global-padding">
+                        <div class="premium-soft-cta">
+                            <h2 class="premium-soft-cta-title">Ready to scale your visual impact?</h2>
+                            <p class="premium-soft-cta-desc">Let's discuss how a systemized content strategy and high-end production can elevate your brand's digital presence.</p>
+                            <a href="../contact.html" class="premium-soft-cta-btn">
+                                Start a Project
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             <!-- 8. Next Project Navigation -->
             <section class="next-project-section section-margin fade-in-section">

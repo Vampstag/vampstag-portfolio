@@ -202,7 +202,7 @@ p, li, span, .paragraph, .about-text {
 /* Premium Global Button Overrides (Smooth & Pill-shaped) */
 .button-normal-black-wrapper-2,
 .button-normal-white-wrapper-2 {
-    border-radius: 16px !important;
+    border-radius: 10px !important;
     transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1) !important;
 }
 .button-normal-black-wrapper-2:hover {
@@ -549,7 +549,7 @@ html.lenis, html.lenis body { height: auto; }
     background-color: #000000;
     color: #ffffff;
     padding: 16px 32px;
-    border-radius: 12px;
+    border-radius: 10px;
     text-decoration: none;
     transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
     border: 1px solid #000000;
@@ -966,7 +966,7 @@ html.lenis, html.lenis body { height: auto; }
     -webkit-appearance: none;
     background-color: #f9f9f9;
     border: 1px solid #e5e5e5;
-    border-radius: 16px; /* Squircle */
+    border-radius: 10px; /* Squircle */
     padding: 12px 40px 12px 24px;
     font-family: var(--font-primary);
     font-size: 0.9rem;
@@ -1002,7 +1002,7 @@ html.lenis, html.lenis body { height: auto; }
 .premium-dropdown-selected {
     background-color: #f9f9f9;
     border: 1px solid #e5e5e5;
-    border-radius: 16px;
+    border-radius: 10px;
     padding: 12px 20px 12px 24px;
     font-size: 0.9rem;
     font-weight: 500;
@@ -1042,7 +1042,7 @@ html.lenis, html.lenis body { height: auto; }
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(0,0,0,0.08);
-    border-radius: 16px;
+    border-radius: 10px;
     padding: 8px;
     min-width: 180px;
     box-shadow: 0 20px 40px -10px rgba(0,0,0,0.15);
@@ -1088,7 +1088,7 @@ html.lenis, html.lenis body { height: auto; }
     -webkit-appearance: none;
     background-color: transparent;
     border: 1px solid #e5e5e5;
-    border-radius: 16px;
+    border-radius: 10px;
     padding: 12px 20px;
     font-family: var(--font-primary);
     font-size: 0.9rem;
@@ -1264,7 +1264,7 @@ html.lenis, html.lenis body { height: auto; }
     letter-spacing: 1.5px;
     border: none;
     padding: 12px 24px;
-    border-radius: 16px;
+    border-radius: 10px;
     transform: translateY(20px);
     transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
     box-shadow: 0 10px 30px rgba(0,0,0,0.15);
@@ -1323,7 +1323,7 @@ html.lenis, html.lenis body { height: auto; }
     padding: 12px 24px;
     font-family: var(--font-primary);
     font-weight: 600;
-    border-radius: 50px;
+    border-radius: 10px;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
     text-transform: uppercase;
@@ -3255,8 +3255,8 @@ html.lenis, html.lenis body { height: auto; }
     text-align: center;
     
     /* [UPDATED] Artistic Blending Effect */
-    mix-blend-mode: overlay; /* Membuat teks menyatu dengan background */
-    text-shadow: none; /* Hapus shadow agar efek blend bersih */
+    mix-blend-mode: normal; /* Normal untuk keterbacaan maksimal di background terang/gelap */
+    text-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 2px 10px rgba(0, 0, 0, 0.5); /* Cinematic deep shadow */
     position: relative;
     z-index: 10;
 }
@@ -3519,7 +3519,7 @@ a.social-icon:hover img {
     background-color: #111;
     color: #fff;
     padding: 16px 32px;
-    border-radius: 16px;
+    border-radius: 10px;
     font-weight: 600;
     font-size: 1rem;
     text-decoration: none;
@@ -3615,6 +3615,7 @@ a.social-icon:hover img {
     border: 1px solid rgba(0, 0, 0, 0.04);
     transition: all 0.5s var(--ease-smooth);
     will-change: transform, box-shadow;
+    height: 100%;
 }
 
 .journal-card:hover {
@@ -3628,6 +3629,7 @@ a.social-icon:hover img {
     width: 100%;
     overflow: hidden;
     background-color: #f5f5f7;
+    aspect-ratio: 16/10;
 }
 
 .journal-card__image {
@@ -3644,6 +3646,46 @@ a.social-icon:hover img {
 
 .journal-card__content {
     padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.journal-card.text-only-card {
+    background-color: #f9f9f9;
+}
+
+.journal-card.text-only-card .journal-card__content {
+    justify-content: center;
+    padding: 48px 32px;
+}
+
+.journal-card.text-only-card .journal-card__title {
+    font-size: 2rem;
+}
+
+@media (max-width: 767px) {
+    .journal-card__content {
+        padding: 20px 16px;
+    }
+    .journal-card.text-only-card .journal-card__content {
+        padding: 32px 24px;
+    }
+    .journal-card__title {
+        font-size: 1.25rem;
+        margin-bottom: 8px;
+    }
+    .journal-card.text-only-card .journal-card__title {
+        font-size: 1.5rem;
+    }
+    .journal-card__excerpt {
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+    .journal-card__meta {
+        margin-bottom: 12px;
+        font-size: 0.75rem;
+    }
 }
 
 .journal-card__meta {
@@ -3709,6 +3751,7 @@ a.social-icon:hover img {
         scroll-snap-align: center;
         min-width: 280px;
         height: auto;
+        align-self: stretch;
     }
 }
 /* #endregion */
@@ -3749,6 +3792,16 @@ a.social-icon:hover img {
     overflow: hidden;
     aspect-ratio: 16/9;
     box-shadow: var(--shadow-soft);
+}
+
+@media (max-width: 767px) {
+    .article-hero-image {
+        border-radius: 0;
+        width: calc(100% + 40px); /* Menutupi padding kiri 20px dan kanan 20px */
+        margin-left: -20px;
+        margin-right: -20px;
+        max-width: none;
+    }
 }
 
 .article-hero-image img {
@@ -3893,7 +3946,7 @@ a.social-icon:hover img {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(0,0,0,0.08);
-    border-radius: 14px; /* Minimalist Squircle */
+    border-radius: 10px; /* Minimalist Squircle */
     transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
@@ -4013,5 +4066,138 @@ a.social-icon:hover img {
     color: #111;
     text-decoration: underline; text-decoration-color: #111;
     text-decoration-thickness: 1px; text-underline-offset: 4px;
+}
+/* #endregion */
+
+/* #region 42. METRIC TOOLTIPS & PREMIUM CTA */
+/* =========================================
+   42. DATA TOOLTIP & PREMIUM SOFT CTA
+   ========================================= */
+.data-item {
+    position: relative;
+    cursor: help;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+}
+
+.metric-tooltip {
+    position: absolute;
+    bottom: calc(100% + 15px);
+    left: 50%;
+    transform: translateX(-50%) translateY(10px) scale(0.95);
+    background: #111;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-family: var(--font-primary);
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.4;
+    width: max-content;
+    max-width: 240px;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+    z-index: 10;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    pointer-events: none;
+}
+
+.data-item:hover .metric-tooltip,
+.data-item:focus .metric-tooltip,
+.data-item:active .metric-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0) scale(1);
+}
+
+.metric-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: #111 transparent transparent transparent;
+}
+
+/* Premium CTA Section */
+.premium-soft-cta {
+    position: relative;
+    background-color: #050505;
+    background-image: radial-gradient(circle at top right, rgba(255,255,255,0.05) 0%, transparent 60%);
+    color: #fff;
+    border-radius: 24px;
+    padding: 80px 40px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    box-shadow: 0 30px 60px -15px rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.05);
+    overflow: hidden;
+    z-index: 1;
+}
+
+.premium-soft-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.premium-soft-cta-title {
+    font-family: var(--font-primary);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: -0.03em;
+    color: #fff;
+}
+
+.premium-soft-cta-desc {
+    font-family: var(--font-primary);
+    font-size: 1.125rem;
+    color: #a1a1aa;
+    max-width: 50ch;
+    margin: 0;
+    line-height: 1.6;
+    font-weight: 400;
+}
+
+.premium-soft-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: #fff;
+    color: #000;
+    padding: 16px 36px;
+    border-radius: 12px;
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    margin-top: 12px;
+}
+
+.premium-soft-cta-btn:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(255,255,255,0.2);
+    background: #f0f0f0;
+}
+
+.premium-soft-cta-btn svg {
+    transition: transform 0.3s ease;
+}
+
+.premium-soft-cta-btn:hover svg {
+    transform: translateX(4px);
 }
 /* #endregion */

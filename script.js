@@ -85,20 +85,20 @@ document.addEventListener("DOMContentLoaded", () => {
                 
                 html += `
                 <div class="latest-insight-card-wrap">
-                    <a href="${linkPath}" class="journal-card" ${post.isTextOnly ? 'style="background-color: #f9f9f9; height: 100%;"' : 'style="height: 100%;"'}>
+                    <a href="${linkPath}" class="journal-card ${post.isTextOnly ? 'text-only-card' : ''}">
                         ${!post.isTextOnly ? `
-                        <div class="journal-card__image-wrapper" style="aspect-ratio: 16/10;">
+                        <div class="journal-card__image-wrapper">
                             <img src="${imgPath}" alt="${post.title}" class="journal-card__image" loading="lazy">
                         </div>
                         ` : ''}
-                        <div class="journal-card__content" ${post.isTextOnly ? 'style="padding: 48px 32px; display: flex; flex-direction: column; justify-content: center; height: 100%;"' : 'style="display: flex; flex-direction: column; flex-grow: 1;"'}>
+                        <div class="journal-card__content">
                             <div class="journal-card__meta">
                                 <span>${post.displayDate}</span>
                                 <span>•</span>
                                 <span>${post.readTime}</span>
                             </div>
-                            <h3 class="journal-card__title" ${post.isTextOnly ? 'style="font-size: 2rem;"' : 'style="font-size: 1.35rem; margin-bottom: 12px;"'}>${post.title}</h3>
-                            <p class="journal-card__excerpt" style="font-size: 0.95rem; line-height: 1.6;">${post.excerpt}</p>
+                            <h3 class="journal-card__title">${post.title}</h3>
+                            <p class="journal-card__excerpt">${post.excerpt}</p>
                         </div>
                     </a>
                 </div>
@@ -116,19 +116,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 
                 html += `
                 <div class="masonry-item journal-anim-item" style="opacity: 0; transform: translateY(40px);">
-                    <a href="${linkPath}" class="journal-card" ${post.isTextOnly ? 'style="background-color: #f9f9f9;"' : ''}>
+                    <a href="${linkPath}" class="journal-card ${post.isTextOnly ? 'text-only-card' : ''}">
                         ${!post.isTextOnly ? `
-                        <div class="journal-card__image-wrapper" style="aspect-ratio: ${post.aspectRatio};">
+                        <div class="journal-card__image-wrapper">
                             <img src="${imgPath}" alt="${post.title}" class="journal-card__image" loading="lazy">
                         </div>
                         ` : ''}
-                        <div class="journal-card__content" ${post.isTextOnly ? 'style="padding: 48px 32px;"' : ''}>
+                        <div class="journal-card__content">
                             <div class="journal-card__meta">
                                 <span>${post.displayDate}</span>
                                 <span>•</span>
                                 <span>${post.readTime}</span>
                             </div>
-                            <h3 class="journal-card__title" ${post.isTextOnly ? 'style="font-size: 2rem;"' : ''}>${post.title}</h3>
+                            <h3 class="journal-card__title">${post.title}</h3>
                             <p class="journal-card__excerpt">${post.excerpt}</p>
                         </div>
                     </a>
@@ -559,8 +559,8 @@ function initObserverAnimations(context = document) {
             }
         });
     }, {
-        threshold: 0.15, // Trigger when 15% of the element is visible
-        rootMargin: "0px 0px -50px 0px" // Trigger a bit earlier
+        threshold: 0.05, // Mulai lebih cepat (hanya 5% masuk)
+        rootMargin: "0px 0px 50px 0px" // Trigger 50px SEBELUM elemen masuk layar
     });
 
     animatedElements.forEach(el => {
@@ -609,20 +609,20 @@ function animateInsightsSection(section) {
     const headline = section.querySelector('.section-headline-margin');
     const cards = section.querySelectorAll('.latest-insight-card-wrap');
     
-    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+    const tl = gsap.timeline({ defaults: { ease: "power2.out" } }); // Kurva ease lebih snappy
     
     if (headline) {
         tl.fromTo(headline, 
-            { y: 50, opacity: 0 },
-            { y: 0, opacity: 1, duration: 1.5 }
+            { y: 30, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.6 }
         );
     }
     
     if (cards.length > 0) {
         tl.fromTo(cards,
-            { y: 80, opacity: 0 },
-            { y: 0, opacity: 1, duration: 1.5, stagger: 0.2 },
-            "-=1.0" // Animasi kartu dimulai sebelum headline selesai (overlap)
+            { y: 30, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.6, stagger: 0.1 },
+            "-=0.4" // Mulai hampir bersamaan dengan headline
         );
     }
 }

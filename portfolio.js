@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         gsap.to('.home-hero-headline-wrapper.page-portfolio', {
             opacity: 1,
             y: 0,
-            duration: 1.2,
+            duration: 0.8,
             ease: "power3.out",
             delay: 0.2
         });
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 year: "2026",
                 category: "Commercials", // Pilih antara 'Digital Content', 'Commercials', atau '3D & Visuals'
                 industry: "Fashion", // [NEW] Properti Industri
-                roles: ["Video Editing", "Video Production", "Videography"], // [NEW] Properti Layanan/Role (bisa lebih dari satu)
+                roles: ["Video Editing", "Video Production"], // [NEW] Properti Layanan/Role (bisa lebih dari satu)
                 link: "case-study/torch.html", // Ganti dengan link detail proyek jika ada
                 description: "Bringing the Gundam universe to life for Torch’s biggest collaboration.", // Ganti dengan deskripsi proyek
                 image: "assets/images/project/torch/torch-model-backpack.webp", // Ganti dengan URL gambar Anda
@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         let currentRole = 'all'; // [NEW] State default filter role
         let currentYear = 'all'; // State default filter tahun
 
-        function renderProjects(animate = true) {
+        function renderProjects(animationType = 'normal') {
             // Filter data
             const filteredData = projectsData.filter(item => {
                 // Pencocokan Search
@@ -144,21 +144,36 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 initMagneticButtons(); // Initialize magnetic effect for buttons
             };
 
-            if (animate) {
+            if (animationType === 'normal') {
                 // Premium Exit Animation
                 gsap.to(gridContainer.children, { 
                     opacity: 0,
                     y: -30,
                     scale: 0.95,
-                    duration: 0.4, 
-                    stagger: 0.05, 
+                    duration: 0.3, 
+                    stagger: 0.03, 
                     ease: "power3.inOut",
                     onComplete: () => {
                         updateContent();
                         // Premium Entrance Animation (Clip-Path Reveal)
                         gsap.fromTo(gridContainer.children, 
-                            { opacity: 0, y: 50, clipPath: "inset(100% 0 0 0)" },
-                            { opacity: 1, y: 0, clipPath: "inset(0% 0 0 0)", duration: 1.2, stagger: 0.1, ease: "expo.out" }
+                            { opacity: 0, y: 30, clipPath: "inset(100% 0 0 0)" },
+                            { opacity: 1, y: 0, clipPath: "inset(0% 0 0 0)", duration: 0.6, stagger: 0.05, ease: "power2.out" }
+                        );
+                    }
+                });
+            } else if (animationType === 'fast') {
+                // Micro-animation crossfade khusus untuk efek typing/search agar sangat snappy
+                gsap.to(gridContainer.children, { 
+                    opacity: 0, 
+                    scale: 0.98, 
+                    duration: 0.15, 
+                    ease: "power2.inOut",
+                    onComplete: () => {
+                        updateContent();
+                        gsap.fromTo(gridContainer.children, 
+                            { opacity: 0, scale: 0.98 },
+                            { opacity: 1, scale: 1, duration: 0.2, ease: "power2.out" }
                         );
                     }
                 });
@@ -168,7 +183,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         }
 
         // Initialize with default category
-        renderProjects(true);
+        renderProjects('normal');
 
         // Debounce helper function
         function debounce(func, wait) {
@@ -195,7 +210,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                     searchContainer.classList.remove('has-text');
                 }
                 
-                renderProjects(false); // No fade animation for typing to keep it snappy
+                renderProjects('fast'); // Micro-animation fade untuk search
             }, 250)); // Tunggu 250ms setelah user selesai mengetik
         }
 
@@ -207,7 +222,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 searchInput.value = '';
                 currentSearch = '';
                 searchContainer.classList.remove('has-text');
-                renderProjects(false);
+                renderProjects('fast');
                 searchInput.focus();
             });
         }
@@ -235,21 +250,21 @@ document.addEventListener("DOMContentLoaded", (event) => {
         if (industryFilter) {
             industryFilter.addEventListener('change', (e) => {
                 currentIndustry = e.target.value;
-                renderProjects(true); // Panggil render dengan animasi
+                renderProjects('normal'); // Panggil render dengan animasi
             });
         }
 
         if (roleFilter) {
             roleFilter.addEventListener('change', (e) => {
                 currentRole = e.target.value;
-                renderProjects(true); // Panggil render dengan animasi
+                renderProjects('normal'); // Panggil render dengan animasi
             });
         }
 
         if (yearFilter) {
             yearFilter.addEventListener('change', (e) => {
                 currentYear = e.target.value;
-                renderProjects(true); // Panggil render dengan animasi
+                renderProjects('normal'); // Panggil render dengan animasi
             });
         }
 
@@ -289,7 +304,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 if (searchContainer) searchContainer.classList.remove('has-text', 'active');
                 
                 // 4. Render ulang grid dengan animasi
-                renderProjects(true);
+                renderProjects('normal');
             });
         }
 
