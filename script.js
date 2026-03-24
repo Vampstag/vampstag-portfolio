@@ -142,6 +142,33 @@ document.addEventListener("DOMContentLoaded", () => {
     // Jalankan render data HTML sebelum elemen GSAP menginisialisasi animasi scroll
     renderJournal();
 
+    // [NEW] Premium Mobile Snap untuk Latest Insights (Scale & Blur Center)
+    function initMobileInsightsSnap() {
+        const container = document.getElementById('latest-insights-grid');
+        if (!container) return;
+
+        const cards = container.querySelectorAll('.latest-insight-card-wrap');
+        if (!cards.length) return;
+
+        // Use IntersectionObserver to detect which card is in the center
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-center');
+                } else {
+                    entry.target.classList.remove('is-center');
+                }
+            });
+        }, {
+            root: container,
+            rootMargin: "0px -40% 0px -40%", // Deteksi hanya akan aktif jika kartu masuk di 20% area titik tengah layar
+            threshold: 0
+        });
+
+        cards.forEach(card => observer.observe(card));
+    }
+    initMobileInsightsSnap();
+
     // first, pull in shared navbar AND footer if placeholders exist
     Promise.all([loadNavbar(), loadFooter()]).then(() => {
         // 1. Initialize Lenis (Smooth Scroll)

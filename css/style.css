@@ -220,12 +220,21 @@ html, body { /* [REFINEMENT] Hindari !important. Jika terjadi overflow, cari ele
     max-width: 100%;
 }
 
+/* [FIX] Strict horizontal containment for mobile */
+.body-wrapper {
+    overflow-x: clip !important; /* Prevents side scrolling without breaking position: sticky */
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+}
+
 /* Fix: Footer Spacing */
 .footer-main-block, .footer-name-block, .cta-wrapper {
     margin-bottom: 0 !important;
     padding-bottom: 0 !important;
     overflow: hidden !important;
-    max-width: 100vw !important;
+    max-width: 100% !important; /* [FIX] Avoid 100vw to prevent horizontal scrollbars */
 }
 #footer-container {
     display: block !important;
@@ -233,7 +242,7 @@ html, body { /* [REFINEMENT] Hindari !important. Jika terjadi overflow, cari ele
 }
 
 /* Fix Overflow Issues */
-.body-wrapper, .home-about-section, .global-wrapper, .global-padding, .about-section-wrapper, .about-text-block {
+.home-about-section, .global-wrapper, .global-padding, .about-section-wrapper, .about-text-block {
     overflow: visible !important; position: relative;
 }
 .home-about-section { z-index: 50 !important; }
@@ -426,25 +435,21 @@ body.preloader-active { overflow: hidden; }
     .section-headline-margin { margin-bottom: 40px !important; }
 
     /* [NEW] Premium Fade Effect for Mobile Slider */
-    .bits-and-pieces-wrapper {
-        position: relative;
-    }
-
-    .bits-and-pieces-wrapper::before,
-    .bits-and-pieces-wrapper::after {
+    .bits-slider::before,
+    .bits-slider::after {
         content: "";
         position: absolute;
         top: 0;
         bottom: 0;
         width: 15%; /* Lebar area fade */
-        z-index: 5; /* Pastikan di atas slide non-aktif */
+        z-index: 15; /* Pastikan di atas slide non-aktif */
         pointer-events: none; /* Agar tidak menghalangi swipe */
     }
-    .bits-and-pieces-wrapper::before {
+    .bits-slider::before {
         left: 0;
         background: linear-gradient(to right, white 20%, transparent);
     }
-    .bits-and-pieces-wrapper::after {
+    .bits-slider::after {
         right: 0;
         background: linear-gradient(to left, white 20%, transparent);
     }
@@ -1358,8 +1363,18 @@ html.lenis, html.lenis body { height: auto; }
 /* =========================================
    20. BITS & PIECES SLIDER
    ========================================= */
-.bits-slider {
+/* [FIX] Prevent slides from expanding page width */
+.bits-and-pieces-wrapper, 
+.slider-wrapper {
+    position: relative;
     width: 100%;
+    overflow: visible !important; 
+}
+.bits-slider {
+    /* [FIX] Full Bleed Edge-to-Edge pada Desktop & Mobile tanpa clipping */
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
     padding: 60px 0 100px; /* Disesuaikan agar proporsional */
     overflow: visible !important; /* Mencegah clipping shadow dan scale-up arrow bawaan swiper */
 }
@@ -1372,12 +1387,14 @@ html.lenis, html.lenis body { height: auto; }
 /* Slide Styling (The "Center Focus" Logic) */
 .bits-slider .swiper-slide {
     width: 75%; /* Mobile width for 'auto' mode */
-    transform: scale(0.8); /* Dikecilkan untuk efek 3D (mundur ke belakang) */
-    opacity: 0.3; /* Lebih transparan agar fokus tertuju ke tengah */
+    transform: scale(0.85); /* [PREMIUM] Disesuaikan agar proporsi kartu di pinggir seimbang */
+    opacity: 0.5; /* [PREMIUM] Transparansi cukup untuk bayangan intip */
+    filter: blur(3px); /* [NEW] Efek blur pada kartu yang tidak fokus */
     transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1), 
-                opacity 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+                opacity 0.8s cubic-bezier(0.19, 1, 0.22, 1),
+                filter 0.8s ease; /* Transisi filter */
     height: auto;
-    will-change: transform, opacity;
+    will-change: transform, opacity, filter;
 }
 
 @media (min-width: 992px) {
@@ -1391,6 +1408,7 @@ html.lenis, html.lenis body { height: auto; }
 .bits-slider .swiper-slide-active {
     transform: scale(1.05); /* Diperbesar sedikit agar terlihat menonjol ke depan (pop-out) */
     opacity: 1;
+    filter: blur(0px); /* [NEW] Fokus tajam di tengah */
     z-index: 10;
 }
 
@@ -2651,6 +2669,10 @@ html.lenis, html.lenis body { height: auto; }
         scroll-snap-type: x mandatory; /* Efek magnet saat swipe */
         -webkit-overflow-scrolling: touch; /* Smooth scroll di iOS */
         scrollbar-width: none; /* Hide scrollbar Firefox */
+        /* [FIX] Full bleed 100% layar tanpa sisa */
+        width: 100vw;
+        margin-left: calc(-50vw + 50%);
+        margin-right: calc(-50vw + 50%);
     }
     /* Hide scrollbar Chrome/Safari/Edge */
     .why-grid::-webkit-scrollbar { display: none; }
@@ -3736,10 +3758,13 @@ a.social-icon:hover img {
         display: flex;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
-        gap: 20px;
-        padding: 10px 5% 40px 5%; /* Padding samping untuk efek bleed (ngintip) */
-        margin-left: -5%; /* Tarik keluar dari global padding */
-        margin-right: -5%;
+        gap: 16px; /* Jarak antar kartu */
+        /* [FIX] Full bleed trick agar menempel layar 100% tanpa margin gap */
+        width: 100vw;
+        margin-left: calc(-50vw + 50%);
+        margin-right: calc(-50vw + 50%);
+        /* Padding kiri & kanan (100vw - 75vw) / 2 = 12.5vw agar tepat di tengah */
+        padding: 20px 12.5vw 40px 12.5vw;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none; /* Hide scrollbar Firefox */
     }
@@ -3747,11 +3772,26 @@ a.social-icon:hover img {
         display: none; /* Hide scrollbar Chrome/Safari */
     }
     .latest-insight-card-wrap {
-        flex: 0 0 85vw; /* Kartu mengambil 85% layar mobile */
+        flex: 0 0 75vw; /* Mengambil 75% layar mobile agar yang lain 'ngintip' */
         scroll-snap-align: center;
-        min-width: 280px;
         height: auto;
         align-self: stretch;
+        
+        /* [PREMIUM] Efek Blur & Scale untuk kartu yang tidak aktif di tengah */
+        transform: scale(0.85);
+        opacity: 0.5;
+        filter: blur(3px);
+        transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1), 
+                    opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1),
+                    filter 0.5s ease;
+        will-change: transform, opacity, filter;
+    }
+
+    /* State aktif saat di-snap ke tengah (Di-trigger oleh JS IntersectionObserver) */
+    .latest-insight-card-wrap.is-center {
+        transform: scale(1);
+        opacity: 1;
+        filter: blur(0px);
     }
 }
 /* #endregion */
@@ -3797,10 +3837,11 @@ a.social-icon:hover img {
 @media (max-width: 767px) {
     .article-hero-image {
         border-radius: 0;
-        width: calc(100% + 40px); /* Menutupi padding kiri 20px dan kanan 20px */
-        margin-left: -20px;
-        margin-right: -20px;
-        max-width: none;
+        /* [FIX] Pastikan membentang 100% layar HP tanpa menimbulkan scrollbar */
+        width: 100vw;
+        margin-left: calc(-50vw + 50%);
+        margin-right: calc(-50vw + 50%);
+        max-width: 100vw;
     }
 }
 
