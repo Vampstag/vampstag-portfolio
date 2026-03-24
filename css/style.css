@@ -2178,11 +2178,11 @@ html.lenis, html.lenis body { height: auto; }
 }
 
 .card-item--1 {
-    background-color: #121212; /* Light, cool gray-blue */
+    background-color: #1e1e1e; /* Light, cool gray-blue */
 }
 
 .card-item--2 {
-    background-color: #510808; /* Light, warm beige */
+    background-color: #580f0f; /* Light, warm beige */
 }
 
 .card-item img,

@@ -127,13 +127,6 @@
                         const counterWrapper = document.querySelector('.counter-wrapper');
                         if (counterWrapper) counterWrapper.classList.add('fade-out');
 
-                        // MAINKAN SFX SAAT SELESAI
-                        // Browser mungkin memblokir ini jika user belum klik apapun (Autoplay Policy)
-                        const sfx = document.getElementById('completion-sound');
-                        if (sfx) {
-                            sfx.play().catch(e => console.log("Audio autoplay blocked:", e));
-                        }
-
                         // Use the promise we started at the beginning
                         footerPromise.then((footerData) => {
                             // [FIX] Bersihkan atribut data Webflow (data-w-id) dari footer sebelum diinjeksi
@@ -245,11 +238,6 @@
             <div class="progress-track">
                 <div class="progress-fill" id="bar"></div>
             </div>
-            <!-- Audio Element: Ganti 'src' dengan file audio lokal Anda jika ada (misal: audio/success.mp3) -->
-            <!-- Link di bawah adalah contoh suara interface futuristik -->
-            <audio id="completion-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3" preload="auto"></audio>
-            <!-- Audio Klik Halus -->
-            <audio id="click-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-modern-technology-select-3124.mp3" preload="auto"></audio>
         </div>
         <div class="body-wrapper">
             <!-- navbar will be injected here via fetch -->

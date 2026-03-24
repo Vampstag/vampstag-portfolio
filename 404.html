@@ -17,12 +17,6 @@
     </script>
 </head>
 <body class="body-2">
-    <!-- Audio Assets (Hidden) -->
-    <div style="display:none;">
-        <audio id="eat-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3" preload="auto"></audio>
-        <audio id="game-over-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-retro-game-over-213.mp3" preload="auto"></audio>
-    </div>
-
     <div class="body-wrapper">
             <div class="navbar-progress-container">
                 <div class="navbar-progress-bar" id="scroll-progress"></div>
@@ -157,8 +151,6 @@
             const scoreEl = document.getElementById('game-score');
             const highScoreEl = document.getElementById('high-score');
             const headerEl = document.getElementById('game-header');
-            const eatSound = document.getElementById('eat-sound');
-            const gameOverSound = document.getElementById('game-over-sound');
             
             if (!canvas || !startBtn || !scoreEl) return;
 
@@ -337,9 +329,6 @@
                     score++;
                     scoreEl.innerText = score;
                     
-                    // Play Eat Sound
-                    if (eatSound) { eatSound.currentTime = 0; eatSound.play().catch(() => {}); }
-
                     // Spawn Confetti Particles
                     for (let i = 0; i < 20; i++) {
                         particles.push({
@@ -442,8 +431,6 @@
             function gameOver() {
                 clearInterval(gameInterval);
                 isGameRunning = false;
-                // Play Game Over Sound
-                if (gameOverSound) { gameOverSound.play().catch(() => {}); }
                 
                 // Tambahkan efek gempa di layar
                 canvas.classList.add('shake-animation');

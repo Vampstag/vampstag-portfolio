@@ -92,37 +92,6 @@
                         const counterWrapper = document.querySelector('.counter-wrapper');
                         if (counterWrapper) counterWrapper.classList.add('fade-out');
 
-                    const progressTrack = document.querySelector('.progress-track');
-                    if (progressTrack) {
-                        progressTrack.style.transition = "opacity 0.5s ease";
-                        progressTrack.style.opacity = "0";
-                    }
-
-                    const enterWrapper = document.getElementById('enter-btn-wrapper');
-                    if (enterWrapper) {
-                        enterWrapper.style.display = 'block';
-                        setTimeout(() => enterWrapper.style.opacity = '1', 50);
-                    }
-
-                    const enterBtn = document.getElementById('enter-btn');
-                    if (enterBtn) {
-                        enterBtn.addEventListener('mouseenter', () => enterBtn.style.transform = 'scale(1.05)');
-                        enterBtn.addEventListener('mouseleave', () => enterBtn.style.transform = 'scale(1)');
-                        
-                        enterBtn.addEventListener('click', () => {
-                            const sfx = document.getElementById('completion-sound');
-                            if (sfx) {
-                                sfx.currentTime = 0;
-                                sfx.play().catch(e => console.log("Audio blocked:", e));
-                            }
-                            enterWrapper.style.opacity = '0';
-                            continueLoading();
-                        });
-                    } else {
-                        continueLoading();
-                    }
-
-                    function continueLoading() {
                         footerPromise.then((footerData) => {
                             // [FIX] Bersihkan atribut data Webflow (data-w-id) dari footer sebelum diinjeksi
                             // Ini mematikan animasi lawas/berantakan dari Webflow IX2 pada footer
@@ -155,7 +124,6 @@
                             console.error("Error fetching content:", error);
                             finishLoading();
                         });
-                    }
                     }
                 }
 
@@ -221,15 +189,6 @@
             <div class="progress-track">
                 <div class="progress-fill" id="bar"></div>
             </div>
-            <!-- Tombol Enter (Mengatasi Autoplay Policy) -->
-            <div id="enter-btn-wrapper" style="display: none; opacity: 0; transition: opacity 0.5s ease; position: absolute; z-index: 10;">
-                <button id="enter-btn" style="appearance: none; border: none; cursor: pointer; padding: 16px 36px; font-size: 1rem; border-radius: 100px; display: flex; align-items: center; gap: 12px; background: #fff; color: #000; font-family: var(--font-primary, sans-serif); font-weight: 600; box-shadow: 0 10px 30px rgba(255,255,255,0.2); transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1);">
-                    Enter Experience
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </button>
-            </div>
-            <audio id="completion-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3" preload="auto"></audio>
-            <audio id="click-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-modern-technology-select-3124.mp3" preload="auto"></audio>
         </div>
         <div class="body-wrapper">
             <div class="navbar-progress-container">

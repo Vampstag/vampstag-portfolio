@@ -782,26 +782,26 @@ function initInteractiveHero() {
 function initAboutStickyFlip() {
     if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
 
-    const layout = document.querySelector('.about-sticky-layout');
-    const cardInner = document.querySelector('.flip-card-inner');
-    const steps = document.querySelectorAll('.about-scroll-step');
-    const video = document.querySelector('.flip-video');
+    const track = document.querySelector('.about-scroll-track');
+    const cardInner = document.getElementById('flip-card');
+    const bgText = document.getElementById('hero-bg-text');
+    const steps = document.querySelectorAll('.scroll-step');
 
-    if (!layout || !cardInner || steps.length === 0) return;
+    if (!track || !cardInner) return;
 
-    // 1. Animasi Flip Kartu: Selesai lebih awal di awal scroll
-    const flipTrigger = gsap.to(cardInner, {
-        rotationY: 180,
-        ease: "sine.inOut", // Putaran natural, tidak kaku
+    const video = cardInner.querySelector('.flip-video');
+
+    // Buat Timeline terikat dengan Scroll
+    const tl = gsap.timeline({
         scrollTrigger: {
-            trigger: layout,
-            start: "top 30%",     
-            end: "top -40%", // Selesai memutar saat layout baru di-scroll naik sejauh 70vh
-            scrub: 1, // Smooth momentum ala Apple
+            trigger: track,
+            start: "top top",
+            end: "bottom bottom",
+            scrub: 1, // Efek inertia smooth ala Apple
             onUpdate: (self) => {
-                // Mainkan video begitu kartu mulai menghadap depan (melewati 90 derajat)
+                // Otomatis Play/Pause video saat kartu membalik (setelah 45% putaran timeline)
                 if (video) {
-                    if (self.progress > 0.5) {
+                    if (self.progress > 0.45) {
                         if (video.paused) video.play();
                     } else {
                         if (!video.paused) video.pause();
@@ -811,28 +811,28 @@ function initAboutStickyFlip() {
         }
     });
 
-    // 2. Animasi Sorotan Teks (Berjalan mulus selagi kartu sudah dalam posisi sticky & terbalik)
-    steps.forEach((step) => {
-        ScrollTrigger.create({
-            trigger: step,
-            start: "top 55%",
-            end: "bottom 45%", 
-            toggleClass: "is-active",
-        });
+    // 1. Teks Latar Belakang memudar & sedikit membesar
+    if (bgText) {
+        tl.to(bgText, { scale: 1.1, opacity: 0.05, duration: 1 }, 0);
+    }
+
+    // 2. Kartu berbalik perlahan (Y-axis 180deg)
+    tl.to(cardInner, { rotationY: 180, duration: 1.5, ease: "sine.inOut" }, 0.2);
+
+    // 3. Teks Keterangan muncul bergantian di bawah kartu
+    steps.forEach((step, i) => {
+        const isLast = i === steps.length - 1;
+        const startTime = 0.2 + (i * 0.7); // Jeda masuk antar box teks
+        
+        // Fade In dari bawah
+        tl.fromTo(step, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }, startTime);
+        
+        // Fade Out ke atas (Kecuali item terakhir yang akan stay hingga section selesai)
+        if (!isLast) {
+            tl.to(step, { opacity: 0, y: -40, duration: 0.3, ease: "power2.in" }, startTime + 0.5);
+        }
     });
 
-    // 3. Pastikan video mati jika user sudah scroll sepenuhnya melewati section About
-    if (video) {
-        ScrollTrigger.create({
-            trigger: layout,
-            start: "top 30%",
-            end: "bottom top", // Titik di mana layout keluar dari atas layar
-            onLeave: () => { if (!video.paused) video.pause(); },
-            onEnterBack: () => { 
-                if (flipTrigger.scrollTrigger.progress > 0.5 && video.paused) video.play(); 
-            }
-        });
-    }
 }
 
 //#region BITS SLIDER
