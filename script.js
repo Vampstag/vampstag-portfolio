@@ -160,8 +160,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
         }, {
-            root: container,
-            rootMargin: "0px -40% 0px -40%", // Deteksi hanya akan aktif jika kartu masuk di 20% area titik tengah layar
+            root: null, // Pakai Viewport sebagai patokan (jauh lebih akurat di Mobile untuk container horizontal)
+            rootMargin: "0px -35% 0px -35%", // Lebar trigger sedikit diperbesar agar animasi tidak 'nyangkut'
             threshold: 0
         });
 
@@ -232,6 +232,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // 4. Animations
         initInteractiveHero(); // Changed from initHeroAnimation
+        
+        // 5. About Sticky Flip Anim
+        initAboutStickyFlip();
 
         // 6. Lazy Load Bits Slider (Hanya jalankan Swiper saat elemen mendekati viewport)
         const bitsSliderEl = document.querySelector('.bits-slider');
@@ -773,6 +776,65 @@ function initInteractiveHero() {
 }
 //#endregion
 
+/**
+ * Initializes the Sticky Scroll & 3D Flip Card on the About page.
+ */
+function initAboutStickyFlip() {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+
+    const layout = document.querySelector('.about-sticky-layout');
+    const cardInner = document.querySelector('.flip-card-inner');
+    const steps = document.querySelectorAll('.about-scroll-step');
+    const video = document.querySelector('.flip-video');
+
+    if (!layout || !cardInner || steps.length === 0) return;
+
+    // 1. Animasi Flip Kartu: Selesai lebih awal di awal scroll
+    const flipTrigger = gsap.to(cardInner, {
+        rotationY: 180,
+        ease: "sine.inOut", // Putaran natural, tidak kaku
+        scrollTrigger: {
+            trigger: layout,
+            start: "top 30%",     
+            end: "top -40%", // Selesai memutar saat layout baru di-scroll naik sejauh 70vh
+            scrub: 1, // Smooth momentum ala Apple
+            onUpdate: (self) => {
+                // Mainkan video begitu kartu mulai menghadap depan (melewati 90 derajat)
+                if (video) {
+                    if (self.progress > 0.5) {
+                        if (video.paused) video.play();
+                    } else {
+                        if (!video.paused) video.pause();
+                    }
+                }
+            }
+        }
+    });
+
+    // 2. Animasi Sorotan Teks (Berjalan mulus selagi kartu sudah dalam posisi sticky & terbalik)
+    steps.forEach((step) => {
+        ScrollTrigger.create({
+            trigger: step,
+            start: "top 55%",
+            end: "bottom 45%", 
+            toggleClass: "is-active",
+        });
+    });
+
+    // 3. Pastikan video mati jika user sudah scroll sepenuhnya melewati section About
+    if (video) {
+        ScrollTrigger.create({
+            trigger: layout,
+            start: "top 30%",
+            end: "bottom top", // Titik di mana layout keluar dari atas layar
+            onLeave: () => { if (!video.paused) video.pause(); },
+            onEnterBack: () => { 
+                if (flipTrigger.scrollTrigger.progress > 0.5 && video.paused) video.play(); 
+            }
+        });
+    }
+}
+
 //#region BITS SLIDER
 // =========================================
 // 6. BITS & PIECES SLIDER
@@ -790,7 +852,7 @@ function initBitsSlider() {
         centeredSlides: true,
         spaceBetween: 20,
         grabCursor: true,
-        speed: 800, // Cinematic smooth sliding speed
+        speed: 350, // Dipercepat dari 800 ke 350 agar responsif & 1:1 mengikuti kecepatan swipe jari user
         keyboard: { enabled: true }, // Aksesibilitas navigasi via keyboard
         pagination: {
             el: ".swiper-pagination",

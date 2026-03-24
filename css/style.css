@@ -433,26 +433,6 @@ body.preloader-active { overflow: hidden; }
         margin-bottom: var(--space-16) !important; /* 64px on mobile */
     }
     .section-headline-margin { margin-bottom: 40px !important; }
-
-    /* [NEW] Premium Fade Effect for Mobile Slider */
-    .bits-slider::before,
-    .bits-slider::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 15%; /* Lebar area fade */
-        z-index: 15; /* Pastikan di atas slide non-aktif */
-        pointer-events: none; /* Agar tidak menghalangi swipe */
-    }
-    .bits-slider::before {
-        left: 0;
-        background: linear-gradient(to right, white 20%, transparent);
-    }
-    .bits-slider::after {
-        right: 0;
-        background: linear-gradient(to left, white 20%, transparent);
-    }
 }
 
 /* Scroll Progress Bar */
@@ -508,8 +488,8 @@ html.lenis, html.lenis body { height: auto; }
     justify-content: center;
     align-items: center;
     text-align: center;
-    background-color: #ffffff;
-    padding: 220px 20px 40px; /* Tambah padding atas agar tidak kepotong navbar */
+    background-color: #ffffff; /* [FIX] Adjusted padding to prevent scrolling */
+    padding: 120px 20px 40px;
     position: relative;
     z-index: 10; /* Turunkan z-index agar tidak menutupi mobile menu overlay (998) */
 }
@@ -1299,56 +1279,97 @@ html.lenis, html.lenis body { height: auto; }
    19. 404 SNAKE GAME
    ========================================= */
 #snake-game-container {
-    margin: 20px auto 40px;
+    margin: 0 auto 40px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
+    gap: 20px;
     width: 100%;
-    max-width: 400px; /* Increased for better visibility on modern phones */
-    position: relative; /* For CRT overlay positioning */
+    max-width: 360px;
+    position: relative;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    background: #f9f9f9;
+    padding: 12px 20px;
+    border-radius: 16px;
+    border: 1px solid rgba(0,0,0,0.05);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+}
+
+.score-pill {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.score-pill:last-child {
+    align-items: flex-end;
+}
+
+.score-label {
+    font-family: var(--font-primary);
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.score-value {
+    font-family: var(--font-primary);
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #111;
+    line-height: 1.2;
 }
 
 #game-canvas {
-    background-color: #f4f4f4;
-    border: 2px solid #111;
-    border-radius: 12px;
-    display: none; /* Hidden initially */
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    width: 100%; /* Responsive width */
+    background-color: #fafafa;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 20px;
+    display: none;
+    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1);
+    width: 100%;
     height: auto;
     aspect-ratio: 1/1;
-    touch-action: none; /* Prevent browser zooming/scrolling while playing */
+    touch-action: none;
+    transition: background-color 1s ease, border-color 0.3s ease;
+}
+
+@keyframes canvas-shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-4px) rotate(-1deg); }
+    20%, 40%, 60%, 80% { transform: translateX(4px) rotate(1deg); }
+}
+
+.shake-animation {
+    animation: canvas-shake 0.6s cubic-bezier(.36,.07,.19,.97) both;
+    border-color: rgba(255, 0, 64, 0.5) !important; /* Pinggiran menyala merah saat mati */
 }
 
 #start-game-btn {
-    background: transparent;
-    border: 2px solid #111;
-    color: #111;
-    padding: 12px 24px;
+    background: #111;
+    border: none;
+    color: #fff;
+    padding: 16px 32px;
     font-family: var(--font-primary);
     font-weight: 600;
-    border-radius: 10px;
+    border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
-    text-transform: uppercase;
-    font-size: 0.9rem;
+    font-size: 1rem;
     letter-spacing: 0.5px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
 #start-game-btn:hover {
-    background: #111;
-    color: #fff;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-#game-score {
-    font-family: var(--font-primary);
-    font-weight: 700;
-    font-size: 1.2rem;
-    display: none;
-    color: #111;
+    background: #000;
+    transform: translateY(-4px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
 }
 
 /* #endregion */
@@ -1386,29 +1407,21 @@ html.lenis, html.lenis body { height: auto; }
 
 /* Slide Styling (The "Center Focus" Logic) */
 .bits-slider .swiper-slide {
-    width: 75%; /* Mobile width for 'auto' mode */
-    transform: scale(0.85); /* [PREMIUM] Disesuaikan agar proporsi kartu di pinggir seimbang */
-    opacity: 0.5; /* [PREMIUM] Transparansi cukup untuk bayangan intip */
-    filter: blur(3px); /* [NEW] Efek blur pada kartu yang tidak fokus */
-    transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1), 
-                opacity 0.8s cubic-bezier(0.19, 1, 0.22, 1),
-                filter 0.8s ease; /* Transisi filter */
+    width: clamp(260px, 70vw, 400px); /* Ukuran dinamis */
+    filter: blur(5px);
+    transition: filter 0.4s ease;
     height: auto;
-    will-change: transform, opacity, filter;
+    will-change: filter;
 }
 
 @media (min-width: 992px) {
     .bits-slider .swiper-slide {
-        width: 30%; /* Neater width for desktop */
-        max-width: 450px;
-        transform: scale(0.75); /* Dikecilkan di desktop agar kontras 3D maksimal */
+        width: clamp(300px, 30vw, 450px); /* Ukuran dinamis desktop */
     }
 }
 
 .bits-slider .swiper-slide-active {
-    transform: scale(1.05); /* Diperbesar sedikit agar terlihat menonjol ke depan (pop-out) */
-    opacity: 1;
-    filter: blur(0px); /* [NEW] Fokus tajam di tengah */
+    filter: blur(0px);
     z-index: 10;
 }
 
@@ -2165,11 +2178,11 @@ html.lenis, html.lenis body { height: auto; }
 }
 
 .card-item--1 {
-    background-color: #9dd8ff; /* Light, cool gray-blue */
+    background-color: #121212; /* Light, cool gray-blue */
 }
 
 .card-item--2 {
-    background-color: #ffe6aa; /* Light, warm beige */
+    background-color: #510808; /* Light, warm beige */
 }
 
 .card-item img,
@@ -2185,7 +2198,7 @@ html.lenis, html.lenis body { height: auto; }
     margin-top: 10px;
     font-size: 0.9rem;
     font-weight: 600;
-    color: #111;
+    color: #ffffff;
     text-align: center;
     font-family: var(--font-primary);
 }
@@ -3772,25 +3785,19 @@ a.social-icon:hover img {
         display: none; /* Hide scrollbar Chrome/Safari */
     }
     .latest-insight-card-wrap {
-        flex: 0 0 75vw; /* Mengambil 75% layar mobile agar yang lain 'ngintip' */
+        flex: 0 0 auto;
+        width: clamp(280px, 80vw, 400px); /* Perubahan ukuran dinamis */
         scroll-snap-align: center;
         height: auto;
         align-self: stretch;
         
-        /* [PREMIUM] Efek Blur & Scale untuk kartu yang tidak aktif di tengah */
-        transform: scale(0.85);
-        opacity: 0.5;
-        filter: blur(3px);
-        transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1), 
-                    opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1),
-                    filter 0.5s ease;
-        will-change: transform, opacity, filter;
+        filter: blur(5px); /* Kembalikan efek blur pinggir */
+        transition: filter 0.4s ease;
+        will-change: filter;
     }
 
     /* State aktif saat di-snap ke tengah (Di-trigger oleh JS IntersectionObserver) */
     .latest-insight-card-wrap.is-center {
-        transform: scale(1);
-        opacity: 1;
         filter: blur(0px);
     }
 }
@@ -4241,4 +4248,83 @@ a.social-icon:hover img {
 .premium-soft-cta-btn:hover svg {
     transform: translateX(4px);
 }
+/* #endregion */
+
+/* #region 43. ABOUT PAGE (STICKY FLIP) */
+/* =========================================
+   43. ABOUT PAGE (STICKY FLIP)
+   ========================================= */
+.about-sticky-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    position: relative;
+}
+
+@media (min-width: 992px) {
+    .about-sticky-layout {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+}
+
+.about-visual-col {
+    flex: 1;
+    position: sticky;
+    top: 20vh;
+    height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1500px;
+    z-index: 10;
+}
+
+.about-text-col {
+    flex: 1;
+    padding: 50vh 0 40vh 0; /* Memberi ruang scroll awal agar kartu bisa berputar utuh dulu */
+    display: flex;
+    flex-direction: column;
+    gap: 35vh; /* Sedikit dirapatkan agar user tidak kelelahan scroll */
+}
+
+@media (max-width: 991px) {
+    .about-visual-col {
+        top: 10vh;
+        height: 40vh;
+        margin-bottom: 20px;
+    }
+    .about-text-col {
+        padding: 40vh 0 20vh 0; /* Ruang scroll flip khusus untuk mobile */
+        gap: 30vh;
+    }
+}
+
+.about-scroll-step {
+    opacity: 0.2;
+    transform: translateY(20px);
+    transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+    max-width: 500px;
+}
+
+.about-scroll-step.is-active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.flip-card-container { width: 100%; max-width: 420px; aspect-ratio: 4/5; position: relative; }
+@media (max-width: 991px) { .flip-card-container { max-width: 280px; } }
+
+.flip-card-inner {
+    width: 100%; height: 100%; position: relative; transform-style: preserve-3d;
+    border-radius: 24px; box-shadow: var(--shadow-hover); will-change: transform;
+}
+
+.flip-card-front, .flip-card-back {
+    width: 100%; height: 100%; position: absolute; top: 0; left: 0; backface-visibility: hidden;
+    border-radius: 24px; overflow: hidden; background-color: #f5f5f7; border: 1px solid rgba(0,0,0,0.04);
+}
+
+.flip-card-back { transform: rotateY(180deg); background: #000; }
+.flip-img, .flip-video { width: 100%; height: 100%; object-fit: cover; display: block; }
 /* #endregion */

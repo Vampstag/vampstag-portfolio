@@ -112,9 +112,15 @@
                 
                 <!-- Snake Game Container -->
                 <div id="snake-game-container">
-                    <div class="score-wrapper" style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 10px; padding: 0 5px;">
-                        <div id="game-score">Score: 0</div>
-                        <div id="high-score" style="font-family: var(--font-primary); font-weight: 700; font-size: 1.2rem; display: none; color: #111;">High Score: 0</div>
+                    <div class="game-header" id="game-header">
+                        <div class="score-pill">
+                            <span class="score-label">Score</span>
+                            <span id="game-score" class="score-value">0</span>
+                        </div>
+                        <div class="score-pill">
+                            <span class="score-label">High Score</span>
+                            <span id="high-score" class="score-value">0</span>
+                        </div>
                     </div>
                     <canvas id="game-canvas" width="300" height="300"></canvas>
                     <button id="start-game-btn">Play Snake</button>
@@ -150,7 +156,7 @@
             const startBtn = document.getElementById('start-game-btn');
             const scoreEl = document.getElementById('game-score');
             const highScoreEl = document.getElementById('high-score');
-            const scoreWrapper = document.querySelector('.score-wrapper');
+            const headerEl = document.getElementById('game-header');
             const eatSound = document.getElementById('eat-sound');
             const gameOverSound = document.getElementById('game-over-sound');
             
@@ -166,6 +172,16 @@
             const gridSize = 20; 
             const tileCount = internalSize / gridSize; 
             
+            // Array Warna Level-Up (Warna premium/pastel ala Apple)
+            const levelColors = [
+                "#fafafa", // Level 0 (0-4): Clean White
+                "#f0f8ff", // Level 1 (5-9): Ice Blue
+                "#f5fff0", // Level 2 (10-14): Mint Green
+                "#fff5f0", // Level 3 (15-19): Soft Peach
+                "#f9f0ff", // Level 4 (20-24): Lavender
+                "#fff0f0"  // Level 5 (25+): Light Danger Red
+            ];
+            
             let score = 0;
             let highScore = localStorage.getItem('snake_high_score') || 0;
             let velocityX = 0;
@@ -176,13 +192,14 @@
             let tail = 5;
             let appleX = 15;
             let appleY = 15;
+            let particles = []; // Array untuk menyimpan partikel confetti
             let gameInterval;
             let isGameRunning = false;
             let isPaused = false;
 
             // Initialize High Score Display & Score Wrapper
-            if (highScoreEl) highScoreEl.innerText = "High Score: " + highScore;
-            if(scoreWrapper) scoreWrapper.style.display = "none";
+            if (highScoreEl) highScoreEl.innerText = highScore;
+            if(headerEl) headerEl.style.display = "none";
 
             // Prevent stacking listeners
             window.removeEventListener('keydown', keyPush);
@@ -194,10 +211,12 @@
                 isGameRunning = true;
                 score = 0;
                 isPaused = false;
-                scoreEl.innerText = "Score: " + score;
-                scoreEl.style.display = "block";
-                if(scoreWrapper) scoreWrapper.style.display = "flex";
-                if (highScoreEl) highScoreEl.style.display = "block";
+                scoreEl.innerText = score;
+                if(headerEl) headerEl.style.display = "flex";
+                
+                // Reset Animasi dan Warna Layar
+                canvas.classList.remove('shake-animation');
+                canvas.style.backgroundColor = levelColors[0];
                 canvas.style.display = "block";
                 startBtn.style.display = "none";
                 
@@ -207,6 +226,7 @@
                 velocityY = 0;
                 trail = [];
                 tail = 5;
+                particles = []; // Reset partikel saat mulai ulang
                 
                 placeApple();
                 if (gameInterval) clearInterval(gameInterval);
@@ -224,33 +244,121 @@
                 if (playerY < 0) playerY = tileCount - 1;
                 if (playerY > tileCount - 1) playerY = 0;
 
-                ctx.fillStyle = "#f4f4f4";
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                // Hapus isi canvas (Background di-handle oleh CSS agar transisinya bisa di-animate)
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                ctx.fillStyle = "#111";
+                // DRAW GRID
+                ctx.strokeStyle = "rgba(0,0,0,0.03)";
+                ctx.lineWidth = 1;
+                for(let i=0; i<=tileCount; i++) {
+                    ctx.beginPath(); ctx.moveTo(i*gridSize, 0); ctx.lineTo(i*gridSize, canvas.height); ctx.stroke();
+                    ctx.beginPath(); ctx.moveTo(0, i*gridSize); ctx.lineTo(canvas.width, i*gridSize); ctx.stroke();
+                }
+
+                // DRAW CONFETTI PARTICLES
+                for (let i = particles.length - 1; i >= 0; i--) {
+                    let p = particles[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.8; // Efek gravitasi menarik ke bawah
+                    p.life -= 0.06; // Kecepatan memudar
+
+                    if (p.life <= 0) {
+                        particles.splice(i, 1); // Hapus partikel yang sudah mati
+                    } else {
+                        ctx.globalAlpha = p.life;
+                        ctx.fillStyle = p.color;
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.globalAlpha = 1.0; // Kembalikan alpha normal untuk elemen lain
+                    }
+                }
+
+                // CHECK COLLISION
                 for (let i = 0; i < trail.length; i++) {
-                    ctx.fillRect(trail[i].x * gridSize, trail[i].y * gridSize, gridSize - 2, gridSize - 2);
                     if (trail[i].x === playerX && trail[i].y === playerY && (velocityX !== 0 || velocityY !== 0)) {
                         gameOver();
                         return;
                     }
                 }
 
+                // UPDATE TRAIL
                 trail.push({ x: playerX, y: playerY });
                 while (trail.length > tail) {
                     trail.shift();
                 }
 
+                // DRAW APPLE (Glowing Circle)
+                const ax = appleX * gridSize + gridSize / 2;
+                const ay = appleY * gridSize + gridSize / 2;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = "rgba(255, 0, 64, 0.4)";
                 ctx.fillStyle = "#ff0040";
-                ctx.fillRect(appleX * gridSize, appleY * gridSize, gridSize - 2, gridSize - 2);
+                ctx.beginPath();
+                ctx.arc(ax, ay, gridSize / 2 - 2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+
+                // DRAW SNAKE
+                for (let i = 0; i < trail.length; i++) {
+                    const isHead = i === trail.length - 1;
+                    const tx = trail[i].x * gridSize;
+                    const ty = trail[i].y * gridSize;
+
+                    ctx.fillStyle = isHead ? "#111" : "#555";
+                    
+                    // Rounded Body
+                    ctx.beginPath();
+                    if(ctx.roundRect) {
+                        ctx.roundRect(tx + 1, ty + 1, gridSize - 2, gridSize - 2, 6);
+                    } else {
+                        ctx.fillRect(tx + 1, ty + 1, gridSize - 2, gridSize - 2);
+                    }
+                    ctx.fill();
+
+                    // Cute Eyes for the Head
+                    if (isHead) {
+                        ctx.fillStyle = "#fff";
+                        let ex1, ey1, ex2, ey2;
+                        if (velocityX === 1) { ex1=tx+14; ey1=ty+6; ex2=tx+14; ey2=ty+14; }
+                        else if (velocityX === -1) { ex1=tx+6; ey1=ty+6; ex2=tx+6; ey2=ty+14; }
+                        else if (velocityY === 1) { ex1=tx+6; ey1=ty+14; ex2=tx+14; ey2=ty+14; }
+                        else if (velocityY === -1) { ex1=tx+6; ey1=ty+6; ex2=tx+14; ey2=ty+6; }
+                        else { ex1=tx+14; ey1=ty+6; ex2=tx+14; ey2=ty+14; } // Default Right
+                        
+                        ctx.beginPath(); ctx.arc(ex1, ey1, 2, 0, Math.PI * 2); ctx.fill();
+                        ctx.beginPath(); ctx.arc(ex2, ey2, 2, 0, Math.PI * 2); ctx.fill();
+                    }
+                }
 
                 if (appleX === playerX && appleY === playerY) {
                     tail++;
                     score++;
-                    scoreEl.innerText = "Score: " + score;
+                    scoreEl.innerText = score;
                     
                     // Play Eat Sound
                     if (eatSound) { eatSound.currentTime = 0; eatSound.play().catch(() => {}); }
+
+                    // Spawn Confetti Particles
+                    for (let i = 0; i < 20; i++) {
+                        particles.push({
+                            x: appleX * gridSize + gridSize / 2,
+                            y: appleY * gridSize + gridSize / 2,
+                            vx: (Math.random() - 0.5) * 16, // Lontaran acak horizontal
+                            vy: (Math.random() - 0.5) * 16 - 4, // Lontaran acak vertikal (cenderung ke atas)
+                            life: 1.0,
+                            color: ["#ff0040", "#28cd41", "#FFC107", "#00fff9", "#ff00c1"][Math.floor(Math.random() * 5)], // Warna premium neon
+                            size: Math.random() * 3 + 1.5
+                        });
+                    }
+
+                    // Level Up System - Ubah warna background tiap kelipatan 5
+                    if (score % 5 === 0) {
+                        const level = Math.floor(score / 5);
+                        const newColor = levelColors[Math.min(level, levelColors.length - 1)];
+                        canvas.style.backgroundColor = newColor;
+                    }
 
                     // Increase Speed (Difficulty)
                     clearInterval(gameInterval);
@@ -261,7 +369,7 @@
                     if (score > highScore) {
                         highScore = score;
                         localStorage.setItem('snake_high_score', highScore);
-                        if (highScoreEl) highScoreEl.innerText = "High Score: " + highScore;
+                        if (highScoreEl) highScoreEl.innerText = highScore;
                     }
                     placeApple();
                 }
@@ -289,12 +397,12 @@
                 if (evt.keyCode === 32) { // Spacebar
                     isPaused = !isPaused;
                     if (isPaused) {
-                        ctx.fillStyle = "rgba(244, 244, 244, 0.8)";
+                        ctx.fillStyle = "rgba(250, 250, 250, 0.85)";
                         ctx.fillRect(0, 0, canvas.width, canvas.height);
                         ctx.fillStyle = "#111";
-                        ctx.font = "bold 30px Arial";
+                        ctx.font = "800 32px var(--font-primary, sans-serif)";
                         ctx.textAlign = "center";
-                        ctx.fillText("PAUSED", canvas.width/2, canvas.height/2);
+                        ctx.fillText("PAUSED", canvas.width/2, canvas.height/2 + 10);
                     }
                     return;
                 }
@@ -336,8 +444,15 @@
                 isGameRunning = false;
                 // Play Game Over Sound
                 if (gameOverSound) { gameOverSound.play().catch(() => {}); }
-                startBtn.innerText = "Game Over! Play Again?";
-                startBtn.style.display = "block";
+                
+                // Tambahkan efek gempa di layar
+                canvas.classList.add('shake-animation');
+                
+                // Tunda tombol muncul sampai animasi bergetar selesai (600ms)
+                setTimeout(() => {
+                    startBtn.innerText = "Game Over! Play Again?";
+                    startBtn.style.display = "block";
+                }, 600);
             }
 
         });
