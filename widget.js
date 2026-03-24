@@ -313,7 +313,7 @@ class MdkgWidget {
                 opacity: 1,
                 width: rect.width + 16, // Lebar tombol + padding luar
                 height: rect.height + 16,
-                borderRadius: "100px",
+                borderRadius: "16px",
                 x: rect.left + rect.width / 2,
                 y: rect.top + rect.height / 2,
                 duration: 0.4,

@@ -35,8 +35,8 @@
     /* Premium UI Details */
     --radius-md: 16px;
     --radius-lg: 24px;
-    --shadow-soft: 0 10px 40px -10px rgba(0, 0, 0, 0.05); /* Softer, deeper shadow */
-    --shadow-hover: 0 25px 60px -12px rgba(0, 0, 0, 0.12); /* Higher lift effect */
+    --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.04); /* More subtle, Apple-like shadow */
+    --shadow-hover: 0 20px 40px -8px rgba(0, 0, 0, 0.1); /* Smoother lift */
 }
 
 /* Global Reset: Remove Mobile Tap Highlight */
@@ -87,8 +87,8 @@ h1, h2, h3, h4, h5, h6,
     font-family: var(--font-primary);
     font-weight: 700;
     line-height: 1.15;
-    letter-spacing: -0.03em; /* Lebih rapat untuk kesan modern/Swiss style */
-    color: #000;
+    letter-spacing: -0.03em;
+    color: #111; /* Softer black for premium feel */
 }
 
 .home-hero-headline-text-2 { font-size: var(--text-display) !important; }
@@ -146,13 +146,12 @@ p, li, span, .paragraph, .about-text {
     margin: 0 !important; /* Remove any default margins */
 }
 .navbar.scrolled {
-    padding: 0.6rem 5%; /* Maintain horizontal spacing on scroll */
-    /* [UPDATED] Premium Frosted Glass Effect */
+    padding: 1rem 5%; /* Keep padding generous even when scrolled */
     background-color: rgba(255, 255, 255, 0.75) !important;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
-    border-bottom: 1px solid rgba(0,0,0,0.03);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+    border-bottom: 1px solid rgba(0,0,0,0.04);
 }
 .navbar.navbar-hidden {
     transform: translateY(-100%);
@@ -198,6 +197,21 @@ p, li, span, .paragraph, .about-text {
 .navigation-link.w--current .line-below,
 .navigation-link.active .line-below {
     width: 100%;
+}
+
+/* Premium Global Button Overrides (Smooth & Pill-shaped) */
+.button-normal-black-wrapper-2,
+.button-normal-white-wrapper-2 {
+    border-radius: 16px !important;
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1) !important;
+}
+.button-normal-black-wrapper-2:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -5px rgba(0,0,0,0.2) !important;
+}
+.button-normal-white-wrapper-2:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1) !important;
 }
 
 /* Fix: Prevent Horizontal Scroll */
@@ -834,7 +848,7 @@ html.lenis, html.lenis body { height: auto; }
     max-width: 54px;
     margin: 0 auto 60px; /* Jarak ke tabs */
     background-color: #f9f9f9;
-    border-radius: 100px;
+    border-radius: 16px;
     transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1); /* Smooth ease */
     cursor: pointer;
     overflow: hidden;
@@ -952,7 +966,7 @@ html.lenis, html.lenis body { height: auto; }
     -webkit-appearance: none;
     background-color: #f9f9f9;
     border: 1px solid #e5e5e5;
-    border-radius: 100px; /* Bentuk pill kapsul */
+    border-radius: 16px; /* Squircle */
     padding: 12px 40px 12px 24px;
     font-family: var(--font-primary);
     font-size: 0.9rem;
@@ -988,7 +1002,7 @@ html.lenis, html.lenis body { height: auto; }
 .premium-dropdown-selected {
     background-color: #f9f9f9;
     border: 1px solid #e5e5e5;
-    border-radius: 100px;
+    border-radius: 16px;
     padding: 12px 20px 12px 24px;
     font-size: 0.9rem;
     font-weight: 500;
@@ -1074,7 +1088,7 @@ html.lenis, html.lenis body { height: auto; }
     -webkit-appearance: none;
     background-color: transparent;
     border: 1px solid #e5e5e5;
-    border-radius: 100px;
+    border-radius: 16px;
     padding: 12px 20px;
     font-family: var(--font-primary);
     font-size: 0.9rem;
@@ -1137,12 +1151,68 @@ html.lenis, html.lenis body { height: auto; }
 /* =========================================
    18. PORTFOLIO HOVER EFFECTS
    ========================================= */
+.blog-main-wrapper {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--text-primary);
+    box-shadow: var(--shadow-soft);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    transition: transform 0.5s var(--ease-smooth);
+    will-change: transform, box-shadow;
+    height: 100%;
+}
+
+.blog-main-wrapper:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.1);
+    border-color: rgba(0,0,0,0.08);
+}
+
 .image-wrap {
     position: relative;
-    overflow: hidden; /* Ensure overlay stays inside */
-    border-radius: 12px; /* Smooth corners for premium look */
-    transform-style: preserve-3d;
-    will-change: transform;
+    overflow: hidden;
+    width: 100%;
+    background-color: #f5f5f7;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    transform: translateZ(0);
+}
+
+/* Portfolio specific text padding */
+.blog-main-wrapper .margin-15px.right {
+    padding: 24px;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    background: #fff;
+}
+
+.blog-main-wrapper .margin-15px.right .text-block-3 {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: 1.125rem;
+    color: #111;
+    margin: 0;
+}
+
+.blog-main-wrapper .margin-15px.right .text-block-3:last-child {
+    font-weight: 600;
+    color: #888;
+    font-size: 0.875rem;
+}
+
+.paralax-image {
+    transition: transform 1.2s var(--ease-smooth);
+}
+
+.blog-main-wrapper:hover .paralax-image {
+    transform: scale(1.05);
 }
 
 .portfolio-overlay {
@@ -1194,7 +1264,7 @@ html.lenis, html.lenis body { height: auto; }
     letter-spacing: 1.5px;
     border: none;
     padding: 12px 24px;
-    border-radius: 100px;
+    border-radius: 16px;
     transform: translateY(20px);
     transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
     box-shadow: 0 10px 30px rgba(0,0,0,0.15);
@@ -1615,7 +1685,7 @@ html.lenis, html.lenis body { height: auto; }
     font-size: clamp(1rem, 1.5vw, 1.25rem);
     line-height: 1.6;
     color: #555; /* Softer text color for reading */
-    margin-bottom: 24px;
+    margin-bottom: 28px;
     max-width: 55ch;
     font-weight: 400; /* Set to normal weight */
 }
@@ -1854,7 +1924,7 @@ html.lenis, html.lenis body { height: auto; }
     backdrop-filter: blur(8px);
     color: #fff;
     padding: 8px 16px;
-    border-radius: 50px;
+    border-radius: 12px;
     font-size: 0.8rem;
     font-weight: 600;
     border: 1px solid rgba(255,255,255,0.2);
@@ -1909,7 +1979,7 @@ html.lenis, html.lenis body { height: auto; }
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
+    border-radius: 12px;
     color: #fff;
     display: flex;
     align-items: center;
@@ -2023,7 +2093,7 @@ html.lenis, html.lenis body { height: auto; }
 .hero-subtitle {
     font-size: clamp(1rem, 1.5vw, 1.25rem);
     color: #666;
-    font-weight: 500;
+    font-weight: 400; /* Softer for premium feel */
     max-width: 600px;
     margin: 0 auto;
 }
@@ -2034,7 +2104,7 @@ html.lenis, html.lenis body { height: auto; }
     gap: 8px;
     padding: 8px 16px;
     background: #f5f5f7;
-    border-radius: 50px;
+    border-radius: 12px;
     font-size: 0.875rem;
     font-weight: 600;
     color: #333;
@@ -2107,7 +2177,7 @@ html.lenis, html.lenis body { height: auto; }
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     padding: 12px 24px;
-    border-radius: 100px;
+    border-radius: 16px;
     border: 1px solid rgba(0,0,0,0.08);
     box-shadow: 0 10px 20px rgba(0,0,0,0.05);
     font-weight: 600;
@@ -2535,7 +2605,7 @@ html.lenis, html.lenis body { height: auto; }
     color: #999;
     background: #eee;
     padding: 4px 10px;
-    border-radius: 100px;
+    border-radius: 8px;
     margin-bottom: 16px;
 }
 
@@ -2631,7 +2701,7 @@ html.lenis, html.lenis body { height: auto; }
 .works-slider .swiper-pagination-bullet-active { background: #000; }
 .works-slider .swiper-button-next, .works-slider .swiper-button-prev {
     color: #000; background: rgba(255,255,255,0.8);
-    width: 50px; height: 50px; border-radius: 50%;
+    width: 50px; height: 50px; border-radius: 16px;
     backdrop-filter: blur(5px); box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 .works-slider .swiper-button-next:after, .works-slider .swiper-button-prev:after { font-size: 20px; font-weight: 800; }
@@ -2790,7 +2860,7 @@ html.lenis, html.lenis body { height: auto; }
     position: absolute; top: 16px; right: 16px;
     width: 36px; height: 36px; background: rgba(0,0,0,0.5);
     backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 50%; color: #fff; cursor: pointer;
+    border-radius: 12px; color: #fff; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
 }
 .video-mute-btn svg { width: 18px; height: 18px; }
@@ -2896,7 +2966,7 @@ html.lenis, html.lenis body { height: auto; }
     width: 64px; height: 64px;
     background-color: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-    border-radius: 50%;
+    border-radius: 16px;
     display: flex; align-items: center; justify-content: center;
     color: #fff; opacity: 0; transform: scale(0.5);
     position: absolute; /* Stack icons on top of each other */
@@ -2933,7 +3003,7 @@ html.lenis, html.lenis body { height: auto; }
     background: #f5f5f7;
     border: 1px solid rgba(0,0,0,0.05);
     padding: 12px 20px;
-    border-radius: 50px; /* Pill shape */
+    border-radius: 20px; /* Squircle shape */
     max-width: 480px;
     transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
@@ -2995,7 +3065,7 @@ html.lenis, html.lenis body { height: auto; }
     background: #111;
     color: #fff;
     padding: 4px 8px;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 0.7rem;
     font-weight: 600;
     opacity: 0;
@@ -3207,16 +3277,18 @@ html.lenis, html.lenis body { height: auto; }
     flex-wrap: wrap;
     justify-content: center; /* [UPDATED] Center metadata */
     gap: 16px;
-    font-size: 1rem;
-    color: rgba(255, 255, 255, 0.6);
-    font-weight: 400;
+    font-size: 0.75rem; /* [PREMIUM] Jauh lebih kecil dan subtle */
+    text-transform: uppercase; /* [PREMIUM] Estetika film credit */
+    letter-spacing: 0.15em; /* [PREMIUM] Tracking lebar */
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: 600;
     line-height: 1.5;
     align-items: center;
 }
 
 .cs-meta-separator {
-    font-size: 0.6em;
-    opacity: 0.4;
+    font-size: 0.8em;
+    opacity: 0.3;
     transform: translateY(-1px);
 }
 
@@ -3312,7 +3384,7 @@ a.social-icon:hover img {
     justify-content: center;
     width: 44px;
     height: 44px;
-    border-radius: 50%;
+    border-radius: 12px;
     background-color: #f5f5f7;
     color: #111;
     transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
@@ -3447,7 +3519,7 @@ a.social-icon:hover img {
     background-color: #111;
     color: #fff;
     padding: 16px 32px;
-    border-radius: 100px;
+    border-radius: 16px;
     font-weight: 600;
     font-size: 1rem;
     text-decoration: none;
@@ -3467,5 +3539,479 @@ a.social-icon:hover img {
 
 .archive-banner__btn:hover svg {
     transform: translateX(4px);
+}
+
+/* Premium Link Hover for Credits */
+.credits-list li a {
+    color: inherit;
+    text-decoration: none;
+    position: relative;
+    display: inline-block;
+    transition: color 0.3s ease;
+}
+
+.credits-list li a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    bottom: 0px;
+    left: 0;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.credits-list li a:hover {
+    color: #555;
+}
+
+.credits-list li a:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+/* #endregion */
+
+/* #region 39. JOURNAL MASONRY */
+/* =========================================
+   39. JOURNAL MASONRY LAYOUT
+   ========================================= */
+.masonry-grid {
+    column-count: 1;
+    column-gap: 40px;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .masonry-grid {
+        column-count: 2;
+    }
+}
+
+@media (min-width: 1024px) {
+    .masonry-grid {
+        column-count: 3;
+    }
+}
+
+.masonry-item {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 40px;
+    display: inline-block; /* Fix for some browsers ignoring break-inside */
+    width: 100%;
+}
+
+.journal-card {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--text-primary);
+    box-shadow: var(--shadow-soft);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    transition: all 0.5s var(--ease-smooth);
+    will-change: transform, box-shadow;
+}
+
+.journal-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.1);
+    border-color: rgba(0,0,0,0.08);
+}
+
+.journal-card__image-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background-color: #f5f5f7;
+}
+
+.journal-card__image {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    transition: transform 1.2s var(--ease-smooth);
+}
+
+.journal-card:hover .journal-card__image {
+    transform: scale(1.05);
+}
+
+.journal-card__content {
+    padding: 32px 24px;
+}
+
+.journal-card__meta {
+    display: flex;
+    gap: 16px;
+    font-family: var(--font-primary);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #888;
+    margin-bottom: 16px;
+}
+
+.journal-card__title {
+    font-family: var(--font-primary);
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+}
+
+.journal-card__excerpt {
+    font-family: var(--font-primary);
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+    font-weight: 400;
+    margin: 0;
+}
+/* #endregion */
+
+/* #region 40. INSIGHTS GRID (HOME) */
+/* =========================================
+   40. INSIGHTS GRID LAYOUT & MOBILE SLIDER
+   ========================================= */
+.insights-home-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    width: 100%; /* Mengisi kontainer dengan wajar */
+    align-items: stretch;
+}
+
+@media (max-width: 767px) {
+    .insights-home-grid {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 20px;
+        padding: 10px 5% 40px 5%; /* Padding samping untuk efek bleed (ngintip) */
+        margin-left: -5%; /* Tarik keluar dari global padding */
+        margin-right: -5%;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; /* Hide scrollbar Firefox */
+    }
+    .insights-home-grid::-webkit-scrollbar { 
+        display: none; /* Hide scrollbar Chrome/Safari */
+    }
+    .latest-insight-card-wrap {
+        flex: 0 0 85vw; /* Kartu mengambil 85% layar mobile */
+        scroll-snap-align: center;
+        min-width: 280px;
+        height: auto;
+    }
+}
+/* #endregion */
+
+/* #region 41. SINGLE ARTICLE (EDITORIAL) */
+/* =========================================
+   41. SINGLE ARTICLE TYPOGRAPHY
+   ========================================= */
+.article-container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 60px 20px 80px;
+}
+
+.article-header {
+    text-align: center;
+    margin-bottom: 60px;
+    padding-top: 80px;
+    border-bottom: 1px solid rgba(0,0,0,0.08); /* Garis batas ala koran */
+    padding-bottom: 40px;
+}
+
+.article-title {
+    font-family: var(--font-primary);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    color: #111;
+    margin-bottom: 32px;
+}
+
+.article-hero-image {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto 60px;
+    border-radius: 24px;
+    overflow: hidden;
+    aspect-ratio: 16/9;
+    box-shadow: var(--shadow-soft);
+}
+
+.article-hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.article-content p {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: #444;
+    margin-bottom: 24px;
+    max-width: 65ch; /* Constrain width for optimal reading */
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 400;
+}
+
+/* [PREMIUM] Lead Paragraph (First Paragraph) */
+.article-content > p.lead-paragraph {
+    font-size: 1.25rem; /* Lebih besar dari teks biasa */
+    line-height: 1.7;
+    color: #111; /* Lebih hitam */
+    font-weight: 500; /* Sedikit lebih tebal */
+}
+
+.article-content h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 60px auto 24px;
+    max-width: 65ch;
+    letter-spacing: -0.02em;
+    color: #111;
+}
+
+.article-content blockquote {
+    margin: 40px auto;
+    max-width: 65ch;
+    padding: 0;
+    border: none;
+    text-align: center;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 500;
+    font-style: italic;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    color: #111;
+}
+
+.article-content blockquote::before {
+    content: "“";
+    display: block;
+    font-size: 4rem;
+    color: rgba(0,0,0,0.1);
+    line-height: 0;
+    margin-bottom: 24px;
+    font-style: normal;
+}
+
+/* [PREMIUM] Drop Cap untuk paragraf pertama */
+.article-content > p:first-of-type::first-letter {
+    float: left;
+    font-size: 4.5rem;
+    line-height: 0.8;
+    padding-top: 4px;
+    padding-right: 12px;
+    font-weight: 800;
+    color: #111;
+    text-transform: uppercase;
+}
+
+/* [PREMIUM] Author Byline & Image Caption */
+.article-author-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.article-author-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.article-author-name {
+    font-weight: 600;
+    color: #111;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.article-meta {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #888;
+}
+
+.article-image-caption {
+    text-align: center;
+    font-size: 0.7rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-top: 16px;
+}
+
+.article-content ul, .article-content ol {
+    max-width: 65ch;
+    margin: 0 auto 32px;
+    padding-left: 20px;
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: #444;
+}
+
+.article-content li {
+    margin-bottom: 12px;
+    max-width: 100%;
+}
+
+
+.back-to-journal {
+    position: fixed;
+    top: 120px;
+    left: 4%; /* Posisi strategis di kiri layar */
+    z-index: 900; /* Bebas dari halangan Navbar */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    color: #111;
+    text-decoration: none;
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 14px; /* Minimalist Squircle */
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.back-text {
+    display: none; /* Sembunyikan teks */
+}
+
+.back-to-journal:hover {
+    background-color: #111;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.back-to-journal svg {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.back-to-journal:hover svg {
+    transform: translateX(-2px);
+}
+
+@media (max-width: 767px) {
+    .back-to-journal {
+        top: 90px;
+        left: 5%;
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* [PREMIUM] Tombstone Mark (Akhir Artikel) */
+.end-mark {
+    display: inline-block;
+    margin-left: 6px;
+    color: #111;
+    font-size: 0.75em;
+    vertical-align: baseline;
+}
+
+/* [PREMIUM] Article Footer (Tags & Share) */
+.article-footer {
+    margin-top: 60px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.article-tags { display: flex; gap: 8px; }
+.article-tags .tag {
+    background: #f5f5f7; padding: 6px 12px; border-radius: 8px;
+    font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 1px; color: #555; border: 1px solid rgba(0,0,0,0.04);
+}
+
+.article-share { display: flex; align-items: center; gap: 16px; font-size: 0.85rem; font-weight: 600; color: #111; }
+.article-share span { color: #999; text-transform: uppercase; letter-spacing: 1px; font-size: 0.75rem; }
+.article-share a { color: #111; text-decoration: none; }
+
+/* [PREMIUM] Article Summary (TL;DR & TOC) */
+.article-summary-block {
+    background-color: #f9f9f9;
+    border: 1px solid rgba(0,0,0,0.04);
+    border-radius: 16px;
+    padding: 32px;
+    margin: 0 auto 48px auto;
+    max-width: 65ch;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+@media (min-width: 768px) {
+    .article-summary-block {
+        flex-direction: row;
+        gap: 40px;
+    }
+    .tldr-section {
+        flex: 3;
+        border-right: 1px solid rgba(0,0,0,0.08);
+        padding-right: 40px;
+    }
+    .toc-section {
+        flex: 2;
+    }
+}
+
+.summary-label {
+    display: block;
+    font-family: var(--font-primary);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #111;
+    margin-bottom: 12px;
+}
+
+.tldr-section p { font-size: 0.95rem; line-height: 1.6; color: #555; margin: 0; font-weight: 500; }
+.toc-section ul { list-style: none !important; padding: 0 !important; margin: 0 !important; }
+.toc-section li { margin-bottom: 12px !important; }
+.toc-section a {
+    font-size: 0.9rem;
+    color: #555;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    display: inline-block;
+}
+.toc-section a:hover {
+    color: #111;
+    text-decoration: underline; text-decoration-color: #111;
+    text-decoration-thickness: 1px; text-underline-offset: 4px;
 }
 /* #endregion */

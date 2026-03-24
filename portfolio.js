@@ -34,26 +34,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 srcset: "" // Kosongkan jika tidak ada srcset
             },
             {
-                id: 6,
-                title: "DIPDOP Creative Agency",
-                year: "2026",
-                category: "Digital Content",
-                industry: "Agency",
-                roles: ["Brand Design", "Content Strategy"],
-                link: "study-case/dipdop.html",
-                description: "Digital marketing campaign driving +148K new audience reach.",
-                image: "https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image.jpg",
-                srcset: "https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image-p-800.jpg 800w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image-p-1080.jpg 1080w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image.jpg 1200w"
-            },
-            {
                 id: 5,
                 title: "Tsukamie Noodle Bar",
                 year: "2025",
                 category: "Digital Content",
                 industry: "F&B",
-                roles: ["Video Production", "Brand Design"],
-                link: "/study-case.html",
-                description: "",
+                roles: ["Video Production", "Brand Design", "Content Strategy"],
+                link: "case-study/tsukamie.html",
+                description: "Digital marketing and content strategy driving +148K new audience reach.",
                 image: "https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image.jpg",
                 srcset: "https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image-p-500.jpg 500w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image-p-800.jpg 800w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image-p-1080.jpg 1080w, https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/6933c31afde10e239b6d5532_148abd4d73a501a39005296e17b15db5_image.jpg 1200w"
             },
@@ -339,43 +327,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
         // 5. Premium Card Hover Effect (Subtle & Smooth)
         function initCardHover() {
-            const cards = document.querySelectorAll('.blog-main-wrapper');
-            cards.forEach(card => {
-                const img = card.querySelector('.paralax-image');
-                const wrapper = card.querySelector('.image-wrap');
-                if (!img || !wrapper) return;
-
-                // Pastikan gambar direset ke ukuran dan posisi normal (karena parallax dihapus)
-                gsap.set(img, { scale: 1, yPercent: 0 });
-
-                // Zoom in yang sangat halus & natural (Premium Subtle Feel)
-                card.addEventListener('mouseenter', () => {
-                    gsap.to(img, { scale: 1.03, duration: 1.5, ease: "power4.out", overwrite: "auto" });
-                });
-                
-                card.addEventListener('mouseleave', () => {
-                    // Kembali ke ukuran normal dengan smooth
-                    gsap.to(img, { scale: 1, duration: 1.5, ease: "power4.out", overwrite: "auto" });
-                });
-            });
-        }
-
-        // 6. Magnetic Button Effect (Portfolio CTA)
-        function initMagneticButtons() {
-            const buttons = document.querySelectorAll('.portfolio-cta');
-            buttons.forEach(btn => {
-                btn.addEventListener('mousemove', (e) => {
-                    const rect = btn.getBoundingClientRect();
-                    const x = e.clientX - rect.left - rect.width / 2;
-                    const y = e.clientY - rect.top - rect.height / 2;
-                    // Mengurangi intensitas tarikan magnet agar lebih elegan
-                    gsap.to(btn, { x: x * 0.3, y: y * 0.3, duration: 0.4, ease: "power2.out" });
-                });
-                
-                btn.addEventListener('mouseleave', () => {
-                    gsap.to(btn, { x: 0, y: 0, duration: 0.8, ease: "elastic.out(1, 0.4)" });
-                });
-            });
+            // Effect is now fully handled by CSS to match Insights Card style
         }
 
         // 7. Footer Marquee (Text Rotator)

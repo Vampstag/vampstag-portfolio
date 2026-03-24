@@ -3,6 +3,145 @@
 // 1. CORE SETUP & EVENT LISTENERS
 // =========================================
 document.addEventListener("DOMContentLoaded", () => {
+    // --- CENTRALIZED JOURNAL DATA (HEADLESS CMS) ---
+    // Tambahkan artikel baru di bawah ini, urutan bebas karena akan di-sort otomatis by date!
+    const journalData = [
+        {
+            date: "2025-12-20", // Format wajib YYYY-MM-DD untuk sorting logis
+            displayDate: "Dec 20, 2025",
+            readTime: "5 Min Read",
+            title: "Kenapa Banyak UMKM Gagal di Sosial Media?",
+            excerpt: "Menganalisis kesalahan umum dalam strategi visual UMKM dan bagaimana cara memperbaikinya dengan pendekatan data-driven.",
+            image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=800&auto=format&fit=crop", // Placeholder: Optimal untuk rasio potret 4:5
+            link: "journal/umkm-gagal.html",
+            isTextOnly: false,
+            aspectRatio: "4/5"
+        },
+        {
+            date: "2025-11-12",
+            displayDate: "Nov 12, 2025",
+            readTime: "Opinion",
+            title: "The Illusion of Viral Content",
+            excerpt: "Why chasing virality often destroys brand consistency, and what you should focus on instead to build long-term audience trust.",
+            image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=800&auto=format&fit=crop",
+            link: "#",
+            isTextOnly: false,
+            aspectRatio: "16/9"
+        },
+        // --- TAMBAHAN ARTIKEL DUMMY UNTUK PATOKAN MASONRY GRID ---
+        {
+            date: "2025-12-08",
+            displayDate: "Dec 08, 2025",
+            readTime: "Case Breakdown",
+            title: "Decoding Spotify Wrapped 2025",
+            excerpt: "A deep dive into why people love being quantified and how Spotify uses UI/UX to make sharing addictive.",
+            image: "https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?q=80&w=800&auto=format&fit=crop", // Placeholder: Optimal untuk rasio landscape 16:9
+            link: "#",
+            isTextOnly: false,
+            aspectRatio: "16/9"
+        },
+        {
+            date: "2025-10-24",
+            displayDate: "Oct 24, 2025",
+            readTime: "4 Min Read",
+            title: "Cara Menjaga Kreativitas di Tengah Tuntutan Harian",
+            excerpt: "Sistem manajemen waktu dan ide yang saya gunakan untuk menghindari burnout saat menangani multiple project komersial.",
+            image: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=800&auto=format&fit=crop", // Placeholder: Optimal untuk rasio persegi 1:1
+            link: "#",
+            isTextOnly: false,
+            aspectRatio: "1/1"
+        },
+        {
+            date: "2025-09-10",
+            displayDate: "Sep 10, 2025",
+            readTime: "Brand Design",
+            title: "Brand Anatomy: Netflix (2025)",
+            excerpt: "A closer look at Netflix’s branding DNA and their latest subtle visual identity shifts.",
+            image: "https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?q=80&w=800&auto=format&fit=crop", // Placeholder: Optimal untuk rasio potret 3:4
+            link: "#",
+            isTextOnly: false,
+            aspectRatio: "3/4"
+        }
+    ];
+
+    // Sort artikel dari yang terbaru ke yang terlama secara otomatis
+    journalData.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    function renderJournal() {
+        const homeGrid = document.getElementById('latest-insights-grid');
+        const journalGrid = document.getElementById('journal-grid');
+        
+        // Otomatis menyesuaikan path folder
+        const isSubPage = window.location.pathname.includes('/case-study/') || window.location.pathname.includes('/study-case/') || window.location.pathname.includes('/journal/');
+        const prefix = isSubPage ? '../' : '';
+
+        // 1. Render untuk Halaman Home (Ambil 3 teratas)
+        if (homeGrid) {
+            const latestThree = journalData.slice(0, 3);
+            let html = '';
+            latestThree.forEach(post => {
+                const imgPath = post.image ? (post.image.startsWith('http') ? post.image : prefix + post.image) : '';
+                const linkPath = post.link.startsWith('http') || post.link === '#' ? post.link : prefix + post.link;
+                
+                html += `
+                <div class="latest-insight-card-wrap">
+                    <a href="${linkPath}" class="journal-card" ${post.isTextOnly ? 'style="background-color: #f9f9f9; height: 100%;"' : 'style="height: 100%;"'}>
+                        ${!post.isTextOnly ? `
+                        <div class="journal-card__image-wrapper" style="aspect-ratio: 16/10;">
+                            <img src="${imgPath}" alt="${post.title}" class="journal-card__image" loading="lazy">
+                        </div>
+                        ` : ''}
+                        <div class="journal-card__content" ${post.isTextOnly ? 'style="padding: 48px 32px; display: flex; flex-direction: column; justify-content: center; height: 100%;"' : 'style="display: flex; flex-direction: column; flex-grow: 1;"'}>
+                            <div class="journal-card__meta">
+                                <span>${post.displayDate}</span>
+                                <span>•</span>
+                                <span>${post.readTime}</span>
+                            </div>
+                            <h3 class="journal-card__title" ${post.isTextOnly ? 'style="font-size: 2rem;"' : 'style="font-size: 1.35rem; margin-bottom: 12px;"'}>${post.title}</h3>
+                            <p class="journal-card__excerpt" style="font-size: 0.95rem; line-height: 1.6;">${post.excerpt}</p>
+                        </div>
+                    </a>
+                </div>
+                `;
+            });
+            homeGrid.innerHTML = html;
+        }
+
+        // 2. Render untuk Halaman Insights (Semua)
+        if (journalGrid) {
+            let html = '';
+            journalData.forEach(post => {
+                const imgPath = post.image ? (post.image.startsWith('http') ? post.image : prefix + post.image) : '';
+                const linkPath = post.link.startsWith('http') || post.link === '#' ? post.link : prefix + post.link;
+                
+                html += `
+                <div class="masonry-item journal-anim-item" style="opacity: 0; transform: translateY(40px);">
+                    <a href="${linkPath}" class="journal-card" ${post.isTextOnly ? 'style="background-color: #f9f9f9;"' : ''}>
+                        ${!post.isTextOnly ? `
+                        <div class="journal-card__image-wrapper" style="aspect-ratio: ${post.aspectRatio};">
+                            <img src="${imgPath}" alt="${post.title}" class="journal-card__image" loading="lazy">
+                        </div>
+                        ` : ''}
+                        <div class="journal-card__content" ${post.isTextOnly ? 'style="padding: 48px 32px;"' : ''}>
+                            <div class="journal-card__meta">
+                                <span>${post.displayDate}</span>
+                                <span>•</span>
+                                <span>${post.readTime}</span>
+                            </div>
+                            <h3 class="journal-card__title" ${post.isTextOnly ? 'style="font-size: 2rem;"' : ''}>${post.title}</h3>
+                            <p class="journal-card__excerpt">${post.excerpt}</p>
+                        </div>
+                    </a>
+                </div>
+                `;
+            });
+            journalGrid.innerHTML = html;
+        }
+    }
+
+    // Jalankan render data HTML sebelum elemen GSAP menginisialisasi animasi scroll
+    renderJournal();
+
     // first, pull in shared navbar AND footer if placeholders exist
     Promise.all([loadNavbar(), loadFooter()]).then(() => {
         // 1. Initialize Lenis (Smooth Scroll)
@@ -125,7 +264,7 @@ function loadNavbar() {
     if (!container) return Promise.resolve();
     // choose path relative to current location; case study pages are one level deep
     let url = 'navbar.html';
-    if (window.location.pathname.includes('/case-study/') || window.location.pathname.includes('/study-case/')) {
+    if (window.location.pathname.includes('/case-study/') || window.location.pathname.includes('/study-case/') || window.location.pathname.includes('/journal/')) {
         url = '../navbar.html';
     }
     return fetch(url)
@@ -134,7 +273,7 @@ function loadNavbar() {
             container.innerHTML = html;
 
             // fix relative link paths when the page is inside a subfolder
-            if (window.location.pathname.includes('/case-study/') || window.location.pathname.includes('/study-case/')) {
+            if (window.location.pathname.includes('/case-study/') || window.location.pathname.includes('/study-case/') || window.location.pathname.includes('/journal/')) {
                 container.querySelectorAll('a').forEach(link => {
                     const href = link.getAttribute('href');
                     if (href && !href.startsWith('http') && !href.startsWith('../')) {
@@ -168,7 +307,7 @@ function loadFooter() {
     if (!container || document.getElementById('preloader')) return Promise.resolve();
 
     let url = 'footer.html';
-    const isSubPage = window.location.pathname.includes('/case-study/') || window.location.pathname.includes('/study-case/');
+    const isSubPage = window.location.pathname.includes('/case-study/') || window.location.pathname.includes('/study-case/') || window.location.pathname.includes('/journal/');
     
     if (isSubPage) {
         url = '../footer.html';
@@ -407,6 +546,10 @@ function initObserverAnimations(context = document) {
                 else if (entry.target.classList.contains('experience-item')) {
                     animateExperienceItem(entry.target);
                 }
+                        // [NEW] Handle specific Latest Insights reveal (Slower fade-in)
+                        else if (entry.target.id === 'latest-insights') {
+                            animateInsightsSection(entry.target);
+                        }
                 // Handle simple fade-in animations
                 else {
                     entry.target.classList.add('is-visible');
@@ -451,6 +594,37 @@ function animateExperienceItem(item) {
         { y: 0, opacity: 1, duration: 0.6, stagger: 0.1 },
         "-=0.6" // Overlap animations for a smoother effect
     );
+}
+
+/**
+ * Slower, grander reveal for Latest Insights section
+ * @param {HTMLElement} section The insights section element.
+ */
+function animateInsightsSection(section) {
+    // Matikan transisi CSS bawaan agar tidak bentrok dengan GSAP
+    section.classList.remove('fade-in-section');
+    section.style.opacity = 1;
+    section.style.transform = 'none';
+    
+    const headline = section.querySelector('.section-headline-margin');
+    const cards = section.querySelectorAll('.latest-insight-card-wrap');
+    
+    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+    
+    if (headline) {
+        tl.fromTo(headline, 
+            { y: 50, opacity: 0 },
+            { y: 0, opacity: 1, duration: 1.5 }
+        );
+    }
+    
+    if (cards.length > 0) {
+        tl.fromTo(cards,
+            { y: 80, opacity: 0 },
+            { y: 0, opacity: 1, duration: 1.5, stagger: 0.2 },
+            "-=1.0" // Animasi kartu dimulai sebelum headline selesai (overlap)
+        );
+    }
 }
 
 /**
@@ -1283,6 +1457,18 @@ function initFAQ() {
                 content.setAttribute('aria-hidden', 'true');
                 content.style.height = '0px';
             }
+
+            // [NEW] Dynamic Active State for Navbar Links
+            let currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            if (currentPage === '') currentPage = 'index.html';
+            
+            container.querySelectorAll('.navigation-link, .mobile-link').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && href.split('/').pop() === currentPage) {
+                    link.classList.add('w--current', 'active');
+                    link.setAttribute('aria-current', 'page');
+                }
+            });
         });
     });
 }
