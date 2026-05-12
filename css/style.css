@@ -1796,6 +1796,22 @@ html.lenis, html.lenis body { height: auto; }
 }
 /* #endregion */
 
+/* #region 48. PAGE TRANSITION */
+/* =========================================
+   48. SEAMLESS PAGE TRANSITION
+   ========================================= */
+.page-transition-overlay {
+    position: fixed;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: #111; /* Premium Dark color */
+    z-index: 999999; /* Pastikan selalu menutupi seluruh elemen */
+    will-change: top;
+}
+/* #endregion */
+
 /* #region 23. LATEST WORK */
 /* =========================================
    23. LATEST WORK TYPOGRAPHY
