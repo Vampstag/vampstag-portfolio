@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /404
 
-Sitemap: https://vampstag-portfolio.github.io/sitemap.xml
+Sitemap: https://hellodimas.my.id/sitemap.xml

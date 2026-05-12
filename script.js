@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 "@context": "https://schema.org",
                 "@type": "ItemList",
                 "itemListElement": journalData.map((post, index) => {
-                    const absoluteUrl = post.link.startsWith('http') ? post.link : `https://vampstag-portfolio.github.io/${post.link.replace('../', '')}`;
+                    const absoluteUrl = post.link.startsWith('http') ? post.link : `https://hellodimas.my.id/${post.link.replace('../', '')}`;
                     return {
                         "@type": "ListItem",
                         "position": index + 1,
@@ -277,6 +277,9 @@ document.addEventListener("DOMContentLoaded", () => {
         // 7. Lightbox
         initLightbox();
 
+        // [NEW] Intro Video Modal
+        initVideoModal();
+
         // 8. FAQ Accordion
         initFAQ();
 
@@ -330,7 +333,7 @@ function loadNavbar() {
             if (window.location.pathname.includes('/case-study/') || window.location.pathname.includes('/study-case/') || window.location.pathname.includes('/journal/')) {
                 container.querySelectorAll('a').forEach(link => {
                     const href = link.getAttribute('href');
-                    if (href && !href.startsWith('http') && !href.startsWith('../')) {
+                    if (href && !href.startsWith('http') && !href.startsWith('../') && !href.startsWith('/')) {
                         link.setAttribute('href', '../' + href);
                     }
                 });
@@ -956,6 +959,44 @@ function initBitsSlider() {
             const card = activeSlide.querySelector('.photo-card');
             if (card) gsap.to(card, { rotationX: 0, rotationY: 0, scale: 1, duration: 0.8, ease: "power3.out" });
         }
+    });
+}
+//#endregion
+
+//#region VIDEO MODAL
+// =========================================
+// 17. GLOBAL VIDEO MODAL LOGIC
+// =========================================
+function initVideoModal() {
+    const videoModal = document.getElementById('video-modal');
+    const modalVideo = document.getElementById('modal-video-player');
+    const introBtns = document.querySelectorAll('.video-intro-btn');
+    
+    if (!videoModal || !modalVideo || introBtns.length === 0) return;
+
+    const closeVideoModal = () => {
+        videoModal.classList.remove('active');
+        modalVideo.pause();
+        modalVideo.src = '';
+        document.body.style.overflow = '';
+    };
+
+    videoModal.addEventListener('click', (e) => { if (e.target === videoModal) closeVideoModal(); });
+    const closeBtn = videoModal.querySelector('.video-modal-close');
+    if (closeBtn) closeBtn.addEventListener('click', closeVideoModal);
+    document.addEventListener('keydown', (e) => { if (e.key === "Escape" && videoModal.classList.contains('active')) closeVideoModal(); });
+
+    introBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const src = btn.getAttribute('data-video-src');
+            if (src) {
+                modalVideo.src = src;
+                videoModal.classList.add('active');
+                modalVideo.play();
+                document.body.style.overflow = 'hidden';
+            }
+        });
     });
 }
 //#endregion
