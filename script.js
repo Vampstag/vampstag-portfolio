@@ -67,6 +67,30 @@ document.addEventListener("DOMContentLoaded", () => {
     // Sort artikel dari yang terbaru ke yang terlama secara otomatis
     journalData.sort((a, b) => new Date(b.date) - new Date(a.date));
 
+    // [NEW] Injeksi JSON-LD (SEO Meta Tags) Dinamis untuk daftar artikel Journal
+    function injectJournalSchema() {
+        if (document.getElementById('journal-grid')) {
+            const schema = {
+                "@context": "https://schema.org",
+                "@type": "ItemList",
+                "itemListElement": journalData.map((post, index) => {
+                    const absoluteUrl = post.link.startsWith('http') ? post.link : `https://vampstag-portfolio.github.io/${post.link.replace('../', '')}`;
+                    return {
+                        "@type": "ListItem",
+                        "position": index + 1,
+                        "url": absoluteUrl,
+                        "name": post.title
+                    };
+                })
+            };
+            const scriptTag = document.createElement('script');
+            scriptTag.type = 'application/ld+json';
+            scriptTag.text = JSON.stringify(schema, null, 2);
+            document.head.appendChild(scriptTag);
+        }
+    }
+    injectJournalSchema();
+
     function renderJournal() {
         const homeGrid = document.getElementById('latest-insights-grid');
         const journalGrid = document.getElementById('journal-grid');
