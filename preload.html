@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Realistic Preloader (Fixed)</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- CSS VISUAL --- */
+        :root {
+            --bg-color: #000000;
+            --text-color: #ffffff;
+            --ease-smooth: cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            /* ================================================================== */
+            /* [FONT] TERAPKAN FONT DISINI. Ganti 'Space Grotesk' dgn nama fontmu */
+            /* ================================================================== */
+            font-family: 'Space Grotesk', sans-serif; 
+            /* ================================================================== */
+            
+            background-color: #ffffff;
+            overflow: hidden;
+        }
+
+        #preloader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--bg-color); color: var(--text-color);
+            z-index: 99999;
+            display: flex; justify-content: center; align-items: center; flex-direction: column;
+            transition: transform 1.6s var(--ease-smooth);
+            transform-origin: top;
+        }
+
+        #preloader.finished { transform: translateY(-100%); }
+
+        .counter-wrapper { 
+            position: relative; 
+            overflow: visible; /* FIX: Ubah dari hidden ke visible biar ga kepotong */
+            text-align: center;
+            /* Tambah padding sedikit biar aman */
+            padding: 20px;
+        }
+
+        #counter {
+            /* FIX: Ukuran diperkecil sedikit biar aman di semua layar */
+            font-size: 15vw; 
+            font-weight: 700;
+            /* FIX: Hapus line-height yang bikin kepotong */
+            /* line-height: 0.9; <-- HAPUS INI */
+            letter-spacing: -0.04em;
+            font-variant-numeric: tabular-nums; 
+            display: block;
+        }
+
+        .corner-text {
+            position: absolute; font-size: 11px; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.6;
+        }
+        .tl { top: 30px; left: 30px; }
+        .tr { top: 30px; right: 30px; }
+        .bl { bottom: 40px; left: 30px; }
+        .br { bottom: 40px; right: 30px; text-align: right; }
+
+        .progress-track {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 6px; background: #1a1a1a;
+        }
+        .progress-fill {
+            height: 100%; width: 0%; background: #ffffff; transition: width 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        @media (max-width: 768px) {
+            #counter { font-size: 20vw; /* FIX: Perbaiki ukuran mobile juga */ }
+            .corner-text { font-size: 9px; }
+            .tl, .tr { top: 20px; left: 20px; right: 20px;}
+            .bl, .br { bottom: 25px; left: 20px; right: 20px;}
+        }
+    </style>
+</head>
+<body>
+
+    <div id="preloader">
+        <div class="corner-text tl">LOADING</div>
+        <div class="corner-text tr">PLEASE WAIT</div>
+        <div class="corner-text bl">SYSTEM CHECK</div>
+        <div class="corner-text br">ASSETS v.2.0</div>
+
+        <div class="counter-wrapper">
+            <span id="counter">00</span>
+        </div>
+
+        <div class="progress-track">
+            <div class="progress-fill" id="bar"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const counter = document.getElementById('counter');
+            const bar = document.getElementById('bar');
+            const preloader = document.getElementById('preloader');
+            
+            let currentProgress = 0;
+
+            function updateCounter() {
+                const jump = Math.floor(Math.random() * 23) + 1;
+                currentProgress += jump;
+                if (currentProgress > 100) currentProgress = 100;
+
+                counter.innerText = currentProgress.toString().padStart(2, '0');
+                bar.style.width = currentProgress + "%";
+
+                let delay = Math.floor(Math.random() * 200) + 50;
+
+                if (currentProgress > 70 && currentProgress < 85 && Math.random() > 0.3) {
+                    delay = 800 + Math.random() * 1000;
+                } else if (currentProgress > 90 && currentProgress < 98) {
+                    delay = 400 + Math.random() * 400; 
+                }
+
+                if (currentProgress < 100) {
+                    setTimeout(updateCounter, delay);
+                } else {
+                    setTimeout(finishLoading, 500);
+                }
+            }
+
+            function finishLoading() {
+                preloader.classList.add('finished');
+                document.body.style.overflow = "auto";
+            }
+
+            setTimeout(updateCounter, 500);
+        });
+    </script>
+
+</body>
+</html>

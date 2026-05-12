@@ -1,0 +1,4933 @@
+/* #region 0. TYPOGRAPHY & VARIABLES */
+/* =========================================
+   0. TYPOGRAPHY & VARIABLES
+   ========================================= */
+:root {
+    /* Colors */
+    --bg-color: #000000;
+    --text-color: #ffffff;
+    --text-primary: #111111;
+    --ease-smooth: cubic-bezier(0.19, 1, 0.22, 1);
+
+    /* Typography Scale (Inter) */
+    --font-primary: 'Inter', sans-serif;
+    
+    /* Fluid Typography: clamp(min, preferred, max) */
+    --text-display: clamp(2.5rem, 10vw + 1rem, 8.5rem); /* Hero Text - Optimized min for mobile */
+    --text-h1: clamp(2rem, 5vw + 1rem, 4.5rem);
+    --text-h2: clamp(1.75rem, 3.5vw + 1rem, 3.5rem);
+    --text-h3: clamp(1.5rem, 2.5vw + 1rem, 2.5rem);
+    --text-h4: clamp(1.25rem, 2vw + 1rem, 2rem);
+    --text-body: clamp(1rem, 0.5vw + 0.875rem, 1.125rem); /* 16px -> 18px */
+
+    /* Spacing System (Base 4px/8px) */
+    --space-1: 0.25rem;  /* 4px */
+    --space-2: 0.5rem;   /* 8px */
+    --space-3: 0.75rem;  /* 12px */
+    --space-4: 1rem;     /* 16px */
+    --space-6: 1.5rem;   /* 24px */
+    --space-8: 2rem;     /* 32px */
+    --space-12: 3rem;    /* 48px */
+    --space-16: 4rem;    /* 64px */
+    --space-20: 5rem;    /* 80px */
+    --space-32: 8rem;    /* 128px */
+
+    /* Premium UI Details */
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.04); /* More subtle, Apple-like shadow */
+    --shadow-hover: 0 20px 40px -8px rgba(0, 0, 0, 0.1); /* Smoother lift */
+}
+
+/* Global Reset: Remove Mobile Tap Highlight */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Accessibility: Ensure focus indicators remain */
+*:focus-visible {
+    outline: 2px solid var(--text-primary);
+    outline-offset: 2px;
+}
+
+/* UX: Subtle feedback on tap */
+a:active, button:active, .hover-trigger:active {
+    opacity: 0.8;
+}
+
+body {
+    font-family: var(--font-primary);
+    font-size: var(--text-body);
+    line-height: 1.65; /* Increased for better readability (Premium feel) */
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility; /* Improves text crispness */
+}
+
+/* [NEW] Custom Scrollbar (Sleek & Minimal) */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 100px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover { background-color: rgba(0, 0, 0, 0.4); }
+
+::selection {
+    background: rgba(0, 0, 0, 0.9); /* Premium Selection Color */
+    color: #ffffff;
+    }
+
+h1, h2, h3, h4, h5, h6,
+.home-hero-headline-text-2,
+.section-headline-text {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    color: #111; /* Softer black for premium feel */
+}
+
+.home-hero-headline-text-2 { font-size: var(--text-display) !important; }
+.section-headline-text { 
+    font-size: var(--text-h2) !important;
+    font-weight: 700; /* Bold agar terlihat solid dan tidak tipis */
+    letter-spacing: -0.03em; /* Konsisten dengan headline lain */
+    line-height: 1.2;
+    color: #000000; /* Pure Black untuk kontras maksimal */
+}
+
+.home-hero-headline-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: nowrap;
+}
+
+p, li, span, .paragraph, .about-text {
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.6;
+    max-width: 60ch;
+}
+/* #endregion */
+
+/* #region 1. GLOBAL & UTILITIES */
+/* =========================================
+   1. GLOBAL & UTILITIES
+   ========================================= */
+/* Hide Webflow Badge */
+.w-webflow-badge {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+/* Navbar Sticky & Hide Animation */
+.navbar {
+    position: fixed;
+    top: 0 !important; /* Ensure it sticks to the very top */
+    left: 0;
+    width: 100%;
+    z-index: 1100; /* Increased to avoid conflict with .hover-image (1000) */
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), padding 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), background-color 0.4s ease;
+    transform: translateY(0%);
+    overflow: visible;
+    padding: 1rem 5% !important; /* Edge-to-Edge Spacing */
+    box-sizing: border-box;
+    height: auto;
+    display: flex;
+    justify-content: space-between; /* Align content to far left/right */
+    align-items: center;
+    margin: 0 !important; /* Remove any default margins */
+}
+.navbar.scrolled {
+    padding: 1rem 5%; /* Keep padding generous even when scrolled */
+    background-color: rgba(255, 255, 255, 0.75) !important;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+.navbar.navbar-hidden {
+    transform: translateY(-100%);
+}
+
+/* Force Full Width for Navbar Container */
+.navbar .global-wrapper,
+.navbar .w-container {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.navbar .global-padding {
+    padding: 0 !important;
+    width: 100%;
+}
+
+/* Navbar Alignment & Logo Sizing */
+.nav-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.logo.w-nav-brand {
+    max-height: 40px; /* Enforce max height */
+    display: flex;
+    align-items: center;
+}
+
+/* Hover Line Animation Polish */
+.navigation-link .line-below {
+    height: 2px;
+    width: 0%;
+    background-color: #000000;
+    transition: width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    margin-top: 4px;
+}
+.navigation-link:hover .line-below,
+.navigation-link.w--current .line-below,
+.navigation-link.active .line-below {
+    width: 100%;
+}
+
+/* Premium Global Button Overrides (Smooth & Pill-shaped) */
+.button-normal-black-wrapper-2,
+.button-normal-white-wrapper-2 {
+    border-radius: 10px !important;
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1) !important;
+}
+.button-normal-black-wrapper-2:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -5px rgba(0,0,0,0.2) !important;
+}
+.button-normal-white-wrapper-2:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1) !important;
+}
+
+/* Fix: Prevent Horizontal Scroll */
+html, body { /* [REFINEMENT] Hindari !important. Jika terjadi overflow, cari elemen penyebabnya. */
+    overflow-x: hidden;
+    max-width: 100%;
+}
+
+/* [FIX] Strict horizontal containment for mobile */
+.body-wrapper {
+    overflow-x: clip !important; /* Prevents side scrolling without breaking position: sticky */
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+}
+
+/* Fix: Footer Spacing */
+.footer-main-block, .footer-name-block, .cta-wrapper {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+    overflow: hidden !important;
+    max-width: 100% !important; /* [FIX] Avoid 100vw to prevent horizontal scrollbars */
+}
+#footer-container {
+    display: block !important;
+    width: 100%;
+}
+
+/* Fix Overflow Issues */
+.home-about-section, .global-wrapper, .global-padding, .about-section-wrapper, .about-text-block {
+    overflow: visible !important; position: relative;
+}
+.home-about-section { z-index: 50 !important; }
+
+/* =========================================
+   PERFORMANCE OPTIMIZATIONS
+   ========================================= */
+.hero-card, .paralax-image {
+    will-change: transform;
+    transform: translateZ(0); /* Force GPU Layer */
+}
+/* #endregion */
+
+/* #region 2. ANIMATIONS */
+/* =========================================
+   2. ANIMATIONS (KEYFRAMES)
+   ========================================= */
+@keyframes slideInFromBottom {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.animate-on-load-hello {
+    animation: slideInFromBottom 0.8s ease-out 0.5s forwards;
+    opacity: 0;
+}
+
+/* Emoji Wave Animation */
+.hi-emoji {
+    display: inline-block;
+    transform-origin: 70% 70%;
+    animation: wave-hand 2.5s infinite;
+}
+
+@keyframes wave-hand {
+    0% { transform: rotate(0deg); }
+    10% { transform: rotate(14deg); }
+    20% { transform: rotate(-8deg); }
+    30% { transform: rotate(14deg); }
+    40% { transform: rotate(-4deg); }
+    50% { transform: rotate(10deg); }
+    60% { transform: rotate(0deg); }
+    100% { transform: rotate(0deg); }
+}
+
+/* Sparkles Animation */
+.emoji-container { position: relative; display: inline-block; }
+.sparkle-1, .sparkle-2, .sparkle-3 {
+    position: absolute;
+    color: #FFC107;
+    opacity: 0;
+    pointer-events: none;
+    line-height: 1;
+}
+.sparkle-1 { top: -15%; right: -15%; font-size: 24px; animation: sparkle-pop 2.5s ease-in-out infinite; }
+.sparkle-2 { top: 30%; right: -30%; font-size: 16px; animation: sparkle-pop 2.5s ease-in-out infinite 0.5s; }
+.sparkle-3 { top: -30%; right: 10%; font-size: 14px; animation: sparkle-pop 2.5s ease-in-out infinite 1s; }
+
+@keyframes sparkle-pop {
+    0% { transform: scale(0) rotate(0deg); opacity: 0; }
+    50% { transform: scale(1) rotate(45deg); opacity: 1; }
+    100% { transform: scale(0) rotate(90deg); opacity: 0; }
+}
+
+/* Mobile Specific Animations */
+@media (max-width: 767px) {
+    .home-hero-image-card-wrapper-01-2, .home-hero-image-card-wrapper-03-2 {
+         opacity: 0;
+         animation: fadeIn 0.8s ease-out 1s forwards;
+    }
+    @keyframes fadeIn { to { opacity: 1; } }
+}
+/* #endregion */
+
+/* Floating animation for mobile hero items */
+@keyframes float-left-animation {
+    0%, 100% {
+        transform: rotate(-5deg) translateY(0px);
+    }
+    50% {
+        transform: rotate(-5deg) translateY(-10px);
+    }
+}
+
+@keyframes float-right-animation {
+    0%, 100% {
+        transform: rotate(5deg) translateY(0px);
+    }
+    50% {
+        transform: rotate(5deg) translateY(-10px);
+    }
+}
+
+/* #region 3. PRELOADER */
+/* =========================================
+   3. PRELOADER STYLES
+   ========================================= */
+body.preloader-active { overflow: hidden; }
+#preloader {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: var(--bg-color); color: var(--text-color);
+    z-index: 99999;
+    display: flex; justify-content: center; align-items: center; flex-direction: column;
+    transition: transform 1.6s var(--ease-smooth);
+    transform-origin: top;
+}
+#preloader.finished { transform: translateY(-100%); }
+.counter-wrapper {
+    position: relative; overflow: visible; text-align: center; padding: 20px;
+    transition: opacity 0.5s ease;
+}
+.counter-wrapper.fade-out { opacity: 0; }
+#counter {
+    font-size: 15vw; font-weight: 700; letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums; display: block;
+}
+.corner-text {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 1.5px; opacity: 0.6;
+}
+.top-corners, .bottom-corners {
+    position: absolute; width: calc(100% - 60px); left: 30px; right: 30px;
+    display: flex; justify-content: space-between;
+}
+.top-corners { top: 30px; }
+.bottom-corners { bottom: 40px; }
+.progress-track {
+    position: absolute; bottom: 0; left: 0; width: 100%; height: 6px;
+    background: #1a1a1a;
+}
+.progress-fill {
+    height: 100%; width: 0%; background: #ffffff;
+    transition: width 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+@media (max-width: 768px) {
+    #counter { font-size: 20vw; }
+    .corner-text { font-size: 9px; }
+    .top-corners, .bottom-corners { width: calc(100% - 40px); left: 20px; right: 20px; }
+    .top-corners { top: 20px; }
+    .bottom-corners { bottom: 25px; }
+}
+/* #endregion */
+
+/* #region 4. INTERACTIVE ELEMENTS */
+/* =========================================
+   4. INTERACTIVE ELEMENTS (Hover, Cursor)
+   ========================================= */
+/* Hover Image Effect */
+.hover-trigger {
+    position: relative; display: inline-block; font-weight: 700; cursor: pointer;
+    color: inherit; text-decoration: underline; text-decoration-thickness: 2px;
+    text-decoration-color: #767676; transition: color 0.2s, text-decoration-color 0.2s;
+    color: inherit; text-decoration: none;
+    transition: color 0.2s;
+}
+.hover-trigger:hover { color: #000; text-decoration-color: #000; }
+.hover-trigger:hover { color: #000; }
+.hover-image {
+    position: absolute; bottom: 100%; left: 50%;
+    transform: translate(-50%, 10px) scale(0.8);
+    width: 150px; height: auto; border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2); border: 1px solid rgba(0,0,0,0.1);
+    background: #fff; z-index: 1000; opacity: 0; visibility: hidden; pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.hover-trigger:hover .hover-image {
+    opacity: 1; visibility: visible; transform: translate(-50%, -15px) scale(1);
+}
+.hover-image::after {
+    content: ''; position: absolute; top: 100%; left: 50%; margin-left: -6px;
+    border-width: 6px; border-style: solid; border-color: #fff transparent transparent transparent;
+}
+
+/* #endregion */
+
+/* #region 5. LAYOUT & SPACING */
+/* =========================================
+   5. LAYOUT & SPACING
+   ========================================= */
+/* Section Spacing */
+.section-margin {
+    margin-bottom: var(--space-32) !important; /* Consistent 128px spacing */
+}
+.section-headline-margin { margin-bottom: var(--space-20) !important; }
+
+@media (max-width: 767px) {
+    .section-margin {
+        margin-bottom: var(--space-16) !important; /* 64px on mobile */
+    }
+    .section-headline-margin { margin-bottom: 40px !important; }
+}
+
+/* Scroll Progress Bar */
+.navbar-progress-container {
+    position: fixed; top: 0; left: 0; width: 100%; height: 3px;
+    background: transparent; z-index: 2000; pointer-events: none;
+}
+.navbar-progress-bar {
+    height: 100%; width: 0%; background-color: #000000;
+    transition: width 0.1s ease-out;
+}
+
+/* Lenis Scroll */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+.lenis.lenis-scrolling iframe { pointer-events: none; }
+/* #endregion */
+
+/* #region 7. EXPERIENCE REVEAL */
+/* =========================================
+   7. EXPERIENCE REVEAL IMAGE
+   ========================================= */
+.experience-reveal-img {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: auto;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    transform-origin: center center;
+}
+/* #endregion */
+
+
+/* #region 10. 404 ERROR PAGE */
+/* =========================================
+   10. 404 ERROR PAGE
+   ========================================= */
+.error-section {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: #ffffff; /* [FIX] Adjusted padding to prevent scrolling */
+    padding: 120px 20px 40px;
+    position: relative;
+    z-index: 10; /* Turunkan z-index agar tidak menutupi mobile menu overlay (998) */
+}
+
+.error-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.error-code {
+    font-family: var(--font-primary);
+    font-size: clamp(6rem, 20vw, 18rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    margin: 0;
+    color: #000000;
+}
+
+.error-message {
+    font-family: var(--font-primary);
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    line-height: 1.5;
+    margin-top: 24px;
+    margin-bottom: 48px;
+    font-weight: 400;
+    color: #000000;
+    max-width: 50ch;
+    text-align: center;
+    background-color: transparent;
+}
+
+/* 404 Button Styling */
+.error-section .button-normal-black-wrapper-2 {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background-color: #000000;
+    color: #ffffff;
+    padding: 16px 32px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+    border: 1px solid #000000;
+}
+
+.error-section .button-normal-black-wrapper-2:hover {
+    transform: translateY(-3px);
+    background-color: #1a1a1a;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.error-section .button-normal-black-text-2 {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 1rem;
+}
+/* #endregion */
+
+/* #region 11. CLIPBOARD TOOLTIP */
+/* =========================================
+   11. CLIPBOARD TOOLTIP
+   ========================================= */
+.clipboard-tooltip {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.9);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 500;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    z-index: 10000;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.clipboard-tooltip.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+/* #endregion */
+
+/* #region 12. GLITCH ANIMATION */
+/* =========================================
+   12. GLITCH ANIMATION (404)
+   ========================================= */
+.glitch {
+    position: relative;
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxMDAnIGhlaWdodD0nMTAwJz48ZmlsdGVyIGlkPSduJz48ZmVUdXJidWxlbmNlIHR5cGU9J2ZyYWN0YWxOb2lzZScgYmFzZUZyZXF1ZW5jeT0nMC44JyBzdGl0Y2hUaWxlc30nc3RpdGNoJy8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9JzEwMCUnIGhlaWdodD0nMTAwJScgZmlsdGVyPSd1cmwoI24pJyBvcGFjaXR5PScwLjQnLz48L3N2Zz4="), linear-gradient(to bottom, #000000, #333333);
+    background-size: 150px, 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.glitch::before,
+.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #ffffff; /* Matches page background to hide main text */
+    color: #000000; /* Ensure glitch slices remain visible despite parent transparency */
+}
+
+.glitch::before {
+    left: 2px;
+    text-shadow: -2px 0 #ff00c1;
+    clip-path: inset(10% 0 60% 0);
+    animation: glitch-anim-1 5s infinite linear alternate-reverse;
+}
+
+.glitch::after {
+    left: -2px;
+    text-shadow: -2px 0 #00fff9;
+    clip-path: inset(80% 0 5% 0);
+    animation: glitch-anim-2 4s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-anim-1 {
+    0% { clip-path: inset(20% 0 80% 0); }
+    5% { clip-path: inset(60% 0 10% 0); }
+    10% { clip-path: inset(50% 0 50% 0); } /* Pause */
+    45% { clip-path: inset(50% 0 50% 0); } /* Pause */
+    50% { clip-path: inset(10% 0 60% 0); }
+    55% { clip-path: inset(80% 0 5% 0); }
+    60% { clip-path: inset(50% 0 50% 0); } /* Pause */
+    95% { clip-path: inset(50% 0 50% 0); } /* Pause */
+    100% { clip-path: inset(30% 0 40% 0); }
+}
+
+@keyframes glitch-anim-2 {
+    0% { clip-path: inset(10% 0 60% 0); }
+    5% { clip-path: inset(50% 0 50% 0); } /* Pause */
+    30% { clip-path: inset(50% 0 50% 0); } /* Pause */
+    35% { clip-path: inset(80% 0 10% 0); }
+    40% { clip-path: inset(20% 0 50% 0); }
+    45% { clip-path: inset(50% 0 50% 0); } /* Pause */
+    85% { clip-path: inset(50% 0 50% 0); } /* Pause */
+    90% { clip-path: inset(10% 0 70% 0); }
+    100% { clip-path: inset(40% 0 20% 0); }
+}
+/* #endregion */
+
+/* #region 13. MOBILE NAVIGATION */
+/* =========================================
+   13. PREMIUM MOBILE NAVIGATION
+   ========================================= */
+.mobile-menu-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+    z-index: 999;
+    background: transparent;
+    position: relative;
+}
+
+.hamburger-line {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background-color: #000000;
+    transition: all 0.3s ease;
+    transform-origin: center;
+}
+
+.mobile-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 998;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-20px);
+    transition: all 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.mobile-menu-overlay.is-active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+/* Hamburger Animation States */
+.mobile-menu-btn.is-active .line-1 {
+    transform: translateY(8px) rotate(45deg);
+}
+.mobile-menu-btn.is-active .line-2 {
+    opacity: 0;
+}
+.mobile-menu-btn.is-active .line-3 {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+.mobile-menu-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2vh;
+    margin-bottom: 40px;
+}
+
+.mobile-link {
+    font-family: var(--font-primary);
+    font-size: clamp(2rem, 8vw, 4rem);
+    font-weight: 700;
+    color: #000000;
+    text-decoration: none;
+    letter-spacing: -0.03em;
+    opacity: 0; /* Hidden initially for stagger */
+    transform: translateY(40px);
+    transition: color 0.3s ease;
+}
+
+.mobile-link:hover {
+    color: #555555;
+}
+
+.mobile-cta {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+@media (min-width: 992px) {
+    .mobile-menu-overlay,
+    .mobile-menu-btn {
+        display: none !important;
+    }
+}
+/* #endregion */
+
+/* #region 14. CTA VISIBILITY */
+/* =========================================
+   14. CTA VISIBILITY MANAGEMENT
+   ========================================= */
+/* Desktop (Landscape & up) - Show CTA, Hide Burger */
+@media (min-width: 992px) {
+    .desktop-cta { display: block !important; }
+    .mobile-menu-btn { display: none !important; }
+}
+
+/* Tablet & Mobile (Portrait & Landscape) - Hide CTA, Show Burger */
+@media (max-width: 991px) {
+    .desktop-cta,
+    .desktop.w-nav-menu { display: none !important; }
+    .mobile-menu-btn { display: flex !important; }
+}
+/* #endregion */
+
+/* #region 15. HERO HEADLINE FIX */
+/* =========================================
+   15. HERO HEADLINE SINGLE LINE FIX (DESKTOP)
+   ========================================= */
+@media (min-width: 992px) {
+    .home-hero-headline-wrapper {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex-wrap: nowrap !important;
+        width: 100% !important;
+    }
+
+    .home-hero-headline-text-2 {
+        white-space: nowrap !important;
+        display: inline-block !important;
+        /* Adjusted clamp to ensure text fits on one line without overflow */
+        font-size: clamp(3.5rem, 9vw, 7.5rem) !important;
+    }
+
+    /* Remove any manual line breaks on desktop */
+    .home-hero-headline-text-2 br {
+        display: none !important;
+    }
+}
+
+/* Content Visibility for Heavy Sections */
+.footer-2 {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 1000px; /* Estimate height to prevent scrollbar jumping */
+}
+
+/* Content Visibility for Heavy Sections */
+.footer-2 {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 1000px; /* Estimate height to prevent scrollbar jumping */
+}
+
+/* [OPTIMIZATION] Dimatikan sementara karena bentrok dengan kalkulasi
+   tinggi dari GSAP ScrollTrigger (membuat animasi selesai lebih awal) */
+/* .journal-section,
+   .data-validation-section,
+   .logo-marquee-section,
+   .why-work-section {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 600px;
+} */
+
+/* Prevent performance bottleneck in complex sliders */
+.bits-slider, .works-slider {
+    contain: layout paint;
+}
+/* #endregion */
+
+/* #region 16. PORTFOLIO GRID & SEARCH */
+/* =========================================
+   16. PORTFOLIO GRID & SEARCH UI
+   ========================================= */
+
+/* Search Bar Styling */
+.portfolio-search-container {
+    position: relative;
+    width: 54px; /* Initial width (circle) */
+    height: 54px;
+    max-width: 54px;
+    margin: 0 auto 60px; /* Jarak ke tabs */
+    background-color: #f9f9f9;
+    border-radius: 16px;
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1); /* Smooth ease */
+    cursor: pointer;
+    overflow: hidden;
+    border: 1px solid #e5e5e5;
+}
+
+.portfolio-search-container.active {
+    width: 100%;
+    max-width: 400px;
+    background-color: #fff;
+    border-color: #000;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.search-input {
+    width: 100%;
+    height: 100%;
+    padding: 0 24px 0 54px;
+    border: none;
+    background: transparent;
+    font-family: var(--font-primary);
+    font-size: 1rem;
+    color: var(--text-primary);
+    outline: none;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease 0.1s;
+}
+
+.portfolio-search-container.active .search-input {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.search-icon {
+    position: absolute;
+    left: 17px; /* Centered in 54px */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    color: #111;
+    pointer-events: none;
+    z-index: 2;
+    transition: color 0.3s ease;
+}
+
+.clear-icon {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    color: #999;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.portfolio-search-container.has-text .clear-icon {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.clear-icon:hover {
+    color: #000;
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Portfolio Grid Layout */
+#portfolio-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    width: 100%;
+    margin-top: 40px;
+}
+
+@media (min-width: 768px) {
+    #portfolio-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 80px 40px; /* Vertical gap lebih besar */
+    }
+}
+
+/* No Results Message */
+.no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 80px 20px;
+    color: #666;
+    font-size: 1.1rem;
+    width: 100%;
+    border: 1px dashed #ddd;
+    border-radius: 12px;
+}
+
+/* Dropdown Filters UI */
+.portfolio-filters-wrapper {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 40px; /* Jarak ke grid portfolio */
+    flex-wrap: wrap;
+}
+
+.custom-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: #f9f9f9;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px; /* Squircle */
+    padding: 12px 40px 12px 24px;
+    font-family: var(--font-primary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+    /* Panah custom minimalis */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23111' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 5l3 3 3-3'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+}
+
+.custom-select:hover, .custom-select:focus {
+    background-color: #fff;
+    border-color: #000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+/* Premium Custom Dropdown */
+.premium-dropdown {
+    position: relative;
+    display: inline-block;
+    font-family: var(--font-primary);
+    z-index: 50; /* Base z-index */
+}
+
+.premium-dropdown.open {
+    z-index: 51; /* Mengambang di atas dropdown lainnya jika terbuka */
+}
+
+.premium-dropdown-selected {
+    background-color: #f9f9f9;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    padding: 12px 20px 12px 24px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+    user-select: none;
+}
+
+.premium-dropdown-selected:hover, .premium-dropdown.open .premium-dropdown-selected {
+    background-color: #fff;
+    border-color: #000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.premium-dropdown-selected svg {
+    transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    color: #999;
+}
+
+.premium-dropdown.open .premium-dropdown-selected svg {
+    transform: rotate(-180deg);
+    color: #000;
+}
+
+.premium-dropdown-options {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-10px) scale(0.95);
+    opacity: 0;
+    visibility: hidden;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 10px;
+    padding: 8px;
+    min-width: 180px;
+    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.15);
+    z-index: 100;
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.premium-dropdown.open .premium-dropdown-options {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0) scale(1);
+}
+
+.premium-dropdown-option {
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.premium-dropdown-option:hover {
+    background: rgba(0,0,0,0.04);
+    color: #111;
+}
+
+.premium-dropdown-option.selected {
+    background: #111;
+    color: #fff;
+    font-weight: 600;
+}
+
+/* Reset Filters Button */
+.reset-filters-btn {
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: transparent;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-family: var(--font-primary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #666;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+    display: none; /* Hide by default */
+    align-items: center;
+    gap: 8px;
+}
+.reset-filters-btn:hover {
+    background-color: #f5f5f7;
+    color: #111;
+    border-color: #ccc;
+}
+.reset-filters-btn svg {
+    transition: transform 0.4s ease;
+}
+.reset-filters-btn:hover svg {
+    transform: rotate(-180deg); /* Animasi putar ikon saat di-hover */
+}
+.reset-filters-btn.active {
+    display: flex; /* Muncul jika punya class active */
+}
+
+/* Portfolio Results Count */
+.portfolio-results-count {
+    text-align: center;
+    font-family: var(--font-primary);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #888;
+    margin-bottom: 24px;
+}
+/* #endregion */
+
+/* #region 17. PORTFOLIO HERO */
+/* =========================================
+   17. PORTFOLIO HERO SUBTITLE
+   ========================================= */
+.home-hero-headline-wrapper.page-portfolio {
+    flex-direction: column !important;
+    gap: 24px;
+}
+
+.subtitle {
+    font-size: clamp(1.125rem, 2vw, 1.5rem);
+    color: #666;
+    font-weight: 400;
+    max-width: 600px;
+    text-align: center;
+    line-height: 1.5;
+    margin: 0 auto;
+}
+/* #endregion */
+
+/* #region 18. PORTFOLIO HOVER */
+/* =========================================
+   18. PORTFOLIO HOVER EFFECTS
+   ========================================= */
+.blog-main-wrapper {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--text-primary);
+    box-shadow: var(--shadow-soft);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    transition: transform 0.5s var(--ease-smooth);
+    will-change: transform, box-shadow;
+    height: 100%;
+}
+
+.blog-main-wrapper:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.1);
+    border-color: rgba(0,0,0,0.08);
+}
+
+.image-wrap {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    background-color: #f5f5f7;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    transform: translateZ(0);
+}
+
+/* Portfolio specific text padding */
+.blog-main-wrapper .margin-15px.right {
+    padding: 24px;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    background: #fff;
+}
+
+.blog-main-wrapper .margin-15px.right .text-block-3 {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: 1.125rem;
+    color: #111;
+    margin: 0;
+}
+
+.blog-main-wrapper .margin-15px.right .text-block-3:last-child {
+    font-weight: 600;
+    color: #888;
+    font-size: 0.875rem;
+}
+
+.paralax-image {
+    transition: transform 1.2s var(--ease-smooth);
+}
+
+.blog-main-wrapper:hover .paralax-image {
+    transform: scale(1.05);
+}
+
+.portfolio-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 30px;
+    opacity: 0;
+    transition: all 0.4s ease;
+    z-index: 2;
+}
+
+.blog-main-wrapper:hover .portfolio-overlay {
+    opacity: 1;
+}
+
+.portfolio-description {
+    color: #fff;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    transform: translateY(20px);
+    transition: transform 0.4s ease;
+    font-weight: 500;
+}
+
+.blog-main-wrapper:hover .portfolio-description {
+    transform: translateY(0);
+}
+
+.portfolio-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #111; /* Kontras gelap di atas background putih */
+    background: rgba(255, 255, 255, 0.95);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    transform: translateY(20px);
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.portfolio-cta svg {
+    transition: transform 0.3s ease;
+}
+
+.portfolio-cta:hover {
+    background: #fff;
+    transform: translateY(0) scale(1.02); /* Pop sedikit saat di-hover */
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+}
+
+.blog-main-wrapper:hover .portfolio-cta {
+    transform: translateY(0);
+}
+
+.blog-main-wrapper:hover .portfolio-cta svg {
+    transform: translateX(3px); /* Panah maju sedikit */
+}
+
+/* Custom Link & Accordion for Portfolio Cards */
+.portfolio-title-link {
+    text-decoration: none;
+    color: #111 !important;
+    transition: color 0.3s ease;
+}
+.portfolio-title-link:hover {
+    color: #555 !important;
+}
+
+.client-accordion-trigger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-size: 0.75rem;
+    color: #888;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    margin-top: 12px;
+    transition: color 0.3s ease;
+}
+.client-accordion-trigger:hover { color: #111; }
+.client-accordion-trigger svg { transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1); }
+.client-accordion-trigger.is-open svg { transform: rotate(-180deg); }
+.client-accordion-content {
+    height: 0;
+    overflow: hidden;
+    transition: height 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.client-accordion-content p {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: #555;
+    margin: 12px 0 0 0;
+    padding-bottom: 4px;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: normal;
+}
+/* #endregion */
+
+/* #region 19. SNAKE GAME */
+/* =========================================
+   19. 404 SNAKE GAME
+   ========================================= */
+#snake-game-container {
+    margin: 0 auto 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 360px;
+    position: relative;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    background: #f9f9f9;
+    padding: 12px 20px;
+    border-radius: 16px;
+    border: 1px solid rgba(0,0,0,0.05);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+}
+
+.score-pill {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.score-pill:last-child {
+    align-items: flex-end;
+}
+
+.score-label {
+    font-family: var(--font-primary);
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.score-value {
+    font-family: var(--font-primary);
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #111;
+    line-height: 1.2;
+}
+
+#game-canvas {
+    background-color: #fafafa;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 20px;
+    display: none;
+    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1);
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1/1;
+    touch-action: none;
+    transition: background-color 1s ease, border-color 0.3s ease;
+}
+
+@keyframes canvas-shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-4px) rotate(-1deg); }
+    20%, 40%, 60%, 80% { transform: translateX(4px) rotate(1deg); }
+}
+
+.shake-animation {
+    animation: canvas-shake 0.6s cubic-bezier(.36,.07,.19,.97) both;
+    border-color: rgba(255, 0, 64, 0.5) !important; /* Pinggiran menyala merah saat mati */
+}
+
+#start-game-btn {
+    background: #111;
+    border: none;
+    color: #fff;
+    padding: 16px 32px;
+    font-family: var(--font-primary);
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+#start-game-btn:hover {
+    background: #000;
+    transform: translateY(-4px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+}
+
+/* #endregion */
+
+/* #region 19. SNAKE GAME */
+/* =========================================
+   19. 404 SNAKE GAME
+   ========================================= */
+/* #endregion */
+
+/* #region 20. BITS SLIDER (SWIPER) */
+/* =========================================
+   20. BITS & PIECES SLIDER
+   ========================================= */
+/* [FIX] Prevent slides from expanding page width */
+.bits-and-pieces-wrapper, 
+.slider-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: visible !important; 
+}
+.bits-slider {
+    /* [FIX] Full Bleed Edge-to-Edge pada Desktop & Mobile tanpa clipping */
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    padding: 60px 0 100px; /* Disesuaikan agar proporsional */
+    overflow: visible !important; /* Mencegah clipping shadow dan scale-up arrow bawaan swiper */
+}
+
+.bits-slider .swiper-wrapper {
+    padding-top: 20px;
+    padding-bottom: 70px; /* Memberi ruang ekstra agar shadow terdalam tidak terpotong (clipping) */
+}
+
+/* Slide Styling (The "Center Focus" Logic) */
+.bits-slider .swiper-slide {
+    width: clamp(260px, 70vw, 400px); /* Ukuran dinamis */
+    filter: blur(5px);
+    transition: filter 0.4s ease;
+    height: auto;
+    will-change: filter;
+}
+
+@media (min-width: 992px) {
+    .bits-slider .swiper-slide {
+        width: clamp(300px, 30vw, 450px); /* Ukuran dinamis desktop */
+    }
+}
+
+.bits-slider .swiper-slide-active {
+    filter: blur(0px);
+    z-index: 10;
+}
+
+.bits-slider .swiper-pagination {
+    position: relative !important;
+    bottom: auto !important; /* Mereset posisi agar tidak naik */
+    margin-top: 10px; /* Memberi jarak karena sudah dibantu padding-bottom swiper-wrapper */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px; /* Memberi jarak titik yang lebih longgar ala Apple UI */
+    z-index: 10;
+}
+
+.bits-slider .swiper-pagination-bullet {
+    background: rgba(0, 0, 0, 0.2);
+    opacity: 1;
+    width: 8px;
+    height: 8px;
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    border-radius: 50%;
+    margin: 0 !important;
+}
+
+.bits-slider .swiper-pagination-bullet-active {
+    background: #111111;
+    width: 32px; /* Lebih elegan ala Apple UI */
+    border-radius: 100px;
+}
+
+/* Custom Navigation Arrows for Bits Slider */
+.bits-slider .swiper-button-next, 
+.bits-slider .swiper-button-prev {
+    color: #111;
+    background: rgba(255, 255, 255, 0.85);
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    z-index: 20;
+}
+
+.bits-slider .swiper-button-next:after, 
+.bits-slider .swiper-button-prev:after {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.bits-slider .swiper-button-next:hover, 
+.bits-slider .swiper-button-prev:hover {
+    background: #ffffff;
+    transform: scale(1.08);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+}
+
+.bits-slider .swiper-button-next:active, 
+.bits-slider .swiper-button-prev:active {
+    transform: scale(0.95); /* Efek tombol tertekan fisik (Physical press feel) */
+}
+
+@media (max-width: 767px) {
+    .bits-slider .swiper-button-next, 
+    .bits-slider .swiper-button-prev {
+        display: none; /* Hide arrows on mobile, use swipe/dots */
+    }
+}
+
+/* The "Framed Photo" Card */
+.photo-card {
+    background-color: #ffffff;
+    padding: 16px; /* Frame lebih tebal */
+    border-radius: 20px;
+    box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    overflow: hidden;
+    transition: box-shadow 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.bits-slider .swiper-slide-active .photo-card {
+    box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.2); /* Shadow yang sangat dalam untuk slide aktif */
+}
+
+/* The Image */
+.photo-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 3/4; /* Enforce Portrait */
+    object-fit: cover;
+    border-radius: 10px; /* Slightly smaller radius than frame */
+}
+/* #endregion */
+
+/* #region 21. LIGHTBOX */
+/* =========================================
+   21. CUSTOM LIGHTBOX
+   ========================================= */
+.lightbox-modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    justify-content: center;
+    align-items: center;
+}
+
+.lightbox-modal.active {
+    display: flex;
+    opacity: 1;
+}
+
+.lightbox-content {
+    max-width: 90%;
+    max-height: 90vh;
+    object-fit: contain;
+    border-radius: 4px;
+    box-shadow: 0 0 50px rgba(0,0,0,0.5);
+    transform: scale(0.95);
+    transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.lightbox-modal.active .lightbox-content {
+    transform: scale(1);
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 32px;
+    right: 40px;
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    z-index: 10001;
+}
+
+.lightbox-close svg {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.lightbox-close:hover {
+    background: #fff;
+    color: #000;
+    transform: scale(1.05);
+}
+
+.lightbox-close:hover svg {
+    transform: rotate(90deg);
+}
+
+/* #region 21b. VIDEO MODAL */
+/* =========================================
+   21b. VIDEO MODAL (BENTO GRID)
+   ========================================= */
+.video-modal-content {
+    position: relative;
+    width: 100%;
+    max-width: 420px; /* Batas wajar untuk Desktop */
+    height: 85vh; /* Proporsional tinggi */
+    aspect-ratio: 9/16;
+    background-color: #000;
+    border-radius: 24px;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+    overflow: hidden;
+    transform: scale(0.95);
+    transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.lightbox-modal.active .video-modal-content {
+    transform: scale(1);
+}
+
+#modal-video-player {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Ensure full 9:16 video is visible without cropping */
+}
+
+@media (max-width: 767px) {
+    .lightbox-close {
+        top: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+    }
+    .lightbox-close svg {
+        width: 18px;
+        height: 18px;
+    }
+    .video-modal-content {
+        max-width: 100%;
+        height: 100vh;
+        border-radius: 0;
+        aspect-ratio: auto;
+    }
+}
+/* #endregion */
+
+/* #region 22. PREMIUM FAQ (SWISS STYLE) */
+/* =========================================
+   22. PREMIUM FAQ
+   ========================================= */
+.faq__list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-top: 1px solid rgba(0, 0, 0, 0.1); /* Top border for first item */
+}
+
+.faq__item {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Separators */
+    overflow: hidden;
+}
+
+.faq__trigger {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 32px 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: opacity 0.3s ease;
+}
+
+.faq__trigger:hover {
+    opacity: 0.7;
+}
+.faq__trigger:hover .faq__icon {
+    transform: scale(1.15);
+}
+.faq__trigger[aria-expanded="true"]:hover .faq__icon {
+    transform: rotate(45deg) scale(1.15);
+}
+
+.faq__question {
+    font-family: var(--font-primary);
+    font-size: clamp(1.125rem, 2vw, 1.5rem); /* Responsive font size */
+    font-weight: 500;
+    color: #111;
+    padding-right: 20px;
+}
+
+.faq__icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #111;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    flex-shrink: 0;
+}
+
+/* Rotate icon when active */
+.faq__trigger[aria-expanded="true"] .faq__icon {
+    transform: rotate(45deg);
+}
+
+.faq__content {
+    height: 0;
+    overflow: hidden;
+    transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: height;
+}
+
+.faq__answer {
+    padding-bottom: 32px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    transition-delay: 0.1s; /* Wait for height to start opening */
+}
+
+.faq__trigger[aria-expanded="true"] + .faq__content .faq__answer {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.faq__answer p {
+    font-family: var(--font-primary);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #555;
+    max-width: 60ch;
+    margin: 0;
+    font-weight: 400; /* Menipiskan teks (normal) untuk estetika yang lebih premium */
+}
+/* #endregion */
+
+/* #region 23. LATEST WORK */
+/* =========================================
+   23. LATEST WORK TYPOGRAPHY
+   ========================================= */
+.work-title {
+    line-height: 1.1;
+    margin-bottom: 20px;
+}
+/* #endregion */
+
+/* #region 24. NEW ABOUT SECTION */
+/* =========================================
+   24. NEW ABOUT SECTION (CLEAN UI)
+   ========================================= */
+.about-layout-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+}
+
+@media (min-width: 992px) {
+    .about-layout-grid {
+        grid-template-columns: 1fr 2fr; /* Sidebar smaller, content wider */
+        gap: 80px;
+        align-items: start; /* Vertically align grid items to the top */
+    }
+    .about-sidebar {
+        position: sticky;
+        top: 120px;
+        height: fit-content;
+    }
+}
+
+.about-lead-text {
+    font-family: var(--font-primary);
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 32px;
+    color: #111;
+    letter-spacing: -0.02em;
+}
+
+.about-paragraph {
+    font-family: var(--font-primary);
+    font-size: clamp(1rem, 1.5vw, 1.25rem);
+    line-height: 1.6;
+    color: #555; /* Softer text color for reading */
+    margin-bottom: 28px;
+    max-width: 55ch;
+    font-weight: 400; /* Set to normal weight */
+}
+
+.text-highlight {
+    color: #000;
+    font-weight: 600;
+    border-bottom: 1px solid #ccc;
+}
+
+.about-divider {
+    width: 100%;
+    height: 1px;
+    background-color: #eee;
+    margin: 40px 0;
+}
+
+.about-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 24px;
+}
+
+.meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.meta-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #888;
+    font-weight: 600;
+}
+
+.meta-value {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #000;
+}
+/* #endregion */
+
+/* #region 25. REFACTORED SKILL CARDS */
+/* =========================================
+   25. REFACTORED SKILL CARDS (What I Do)
+   ========================================= */
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 32px;
+}
+
+.skill-card__wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    padding: var(--space-8);
+    background-color: #fcfcfc;
+    border: 1px solid rgba(0,0,0,0.06); /* Subtle border */
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-soft);
+    height: 100%;
+    text-decoration: none;
+    transition: all 0.4s var(--ease-smooth);
+}
+
+.skill-card__wrapper:hover {
+    background-color: #111;
+    border-color: #111;
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-hover);
+}
+
+.skill-card__wrapper:hover .skill-card__number,
+.skill-card__wrapper:hover .skill-card__title,
+.skill-card__wrapper:hover .skill-card__paragraph {
+    color: #fff;
+}
+
+
+.skill-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.skill-card__number {
+    font-family: var(--font-primary);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #888;
+    transition: color 0.4s ease;
+}
+
+.skill-card__divider {
+    width: 100%;
+    height: 1px;
+    background-color: #eee;
+    transition: background-color 0.4s ease;
+}
+
+.skill-card__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #111;
+    margin-bottom: 12px;
+    transition: color 0.4s ease;
+}
+
+.skill-card__paragraph {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #555;
+    transition: color 0.4s ease;
+    font-weight: 400; /* Set to normal weight */
+}
+
+.skill-card__wrapper:hover .skill-card__divider {
+    background-color: #444;
+}
+/* #endregion */
+
+/* #region 25. REFACTORED WORK CARD */
+/* =========================================
+   25. LATEST WORK CARD (PREMIUM)
+   ========================================= */
+/* ... existing work-card styles ... */
+
+.work-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Default to single column on mobile */
+    gap: 40px; /* Generous spacing */
+}
+
+@media (min-width: 768px) {
+    .work-cards-grid {
+        grid-template-columns: repeat(2, 1fr); /* Two columns on tablet and desktop */
+        gap: 60px 40px; /* More vertical gap */
+    }
+}
+/* #region 25. REFACTORED WORK CARD */
+/* =========================================
+   25. LATEST WORK CARD (PREMIUM)
+   ========================================= */
+.work-card {
+    display: block;
+    text-decoration: none;
+    color: var(--text-primary);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid rgba(0,0,0,0.04);
+    transition: all 0.5s var(--ease-smooth);
+    will-change: transform, box-shadow;
+}
+
+.work-card:hover {
+    transform: translateY(-8px) scale(1.005);
+    box-shadow: 
+        0 20px 40px -5px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(0, 0, 0, 0.05);
+    border-color: rgba(0,0,0,0.08);
+}
+
+/* [NEW] Desktop size constraint for the single "Latest Work" card on the homepage */
+@media (min-width: 992px) {
+    .latest-work-section .work-card {
+        max-width: 1024px; /* Adjust this value as needed */
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+.work-card__image-wrapper {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 21/9; /* Cinematic Ratio - Lebih pendek secara vertikal */
+    aspect-ratio: 16/9; /* Mobile: Standard Ratio agar detail tetap terlihat */
+    background-color: #f5f5f7;
+}
+
+.work-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.2s var(--ease-smooth);
+}
+
+.work-card__video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.2s var(--ease-smooth);
+    position: absolute; /* Ensure it's within the wrapper bounds */
+    top: 0; left: 0;
+}
+.work-card:hover .work-card__image,
+.work-card:hover .work-card__video {
+    transform: scale(1.03);
+}
+
+@media (min-width: 768px) {
+    .work-card__image-wrapper {
+        aspect-ratio: 21/9; /* Desktop/Tablet: Cinematic/Ultrawide agar terlihat sleek */
+    }
+}
+
+.work-card__overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 40px 24px 24px;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.4s ease;
+}
+
+.work-card:hover .work-card__overlay {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.work-card__metrics {
+    display: flex;
+    gap: 16px; /* Increased gap for more breathing room between tags */
+    flex-wrap: wrap;
+}
+
+.metric-tag {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(8px);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.work-card__info {
+    padding: 28px; /* Increased padding for more breathing room */
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Align to top for better wrapping behavior */
+    background-color: #fff;
+    flex-wrap: wrap; /* Allow title and CTA to wrap on small screens */
+    gap: 12px; /* Add vertical gap when items wrap */
+}
+
+.work-card__title { font-size: 1.25rem; font-weight: 700; margin: 0; }
+.work-card__cta { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 600; color: #555; }
+/* #endregion */
+
+/* #region 32b. EXECUTIVE SUMMARY (TL;DR) & STICKY NAV */
+/* =========================================
+   32b. EXECUTIVE SUMMARY & STICKY NAV
+   ========================================= */
+.tldr-wrapper {
+    background: #fcfcfc;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 20px;
+    padding: 32px;
+    margin-bottom: 48px;
+    box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05);
+}
+.tldr-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+@media (max-width: 767px) {
+    .tldr-grid { grid-template-columns: 1fr; }
+    .tldr-wrapper { padding: 24px; }
+}
+.tldr-item { display: flex; flex-direction: column; gap: 8px; }
+.tldr-label { font-family: var(--font-primary); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: #888; font-weight: 700; }
+.tldr-text { font-family: var(--font-primary); font-size: 1rem; color: #111; font-weight: 500; line-height: 1.5; }
+
+/* Sticky Dot Navigation */
+.cs-sticky-nav {
+    position: fixed;
+    right: 32px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    z-index: 100;
+}
+@media (max-width: 991px) {
+    .cs-sticky-nav { display: none; } /* Hide on mobile/tablet */
+}
+.cs-nav-item { position: relative; display: flex; align-items: center; justify-content: flex-end; text-decoration: none; padding: 4px; }
+.cs-nav-dot { width: 8px; height: 8px; border-radius: 50%; background-color: rgba(0,0,0,0.15); transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1); }
+.cs-nav-item:hover .cs-nav-dot, .cs-nav-item.active .cs-nav-dot { background-color: #111; transform: scale(1.5); }
+.cs-nav-label {
+    position: absolute; right: 24px; font-family: var(--font-primary); font-size: 0.75rem; font-weight: 600; color: #111;
+    opacity: 0; transform: translateX(10px); transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+    pointer-events: none; white-space: nowrap; background: rgba(255,255,255,0.9); padding: 4px 10px; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+.cs-nav-item:hover .cs-nav-label { opacity: 1; transform: translateX(0); }
+.cs-nav-item.active .cs-nav-label {
+    /* Optional: Show label slightly when active, or keep it hidden unless hovered */
+    opacity: 1;
+    transform: translateX(0);
+    background: transparent;
+    box-shadow: none;
+    color: #888;
+}
+/* #endregion */
+
+/* Mobile adjustments for premium spacing */
+@media (max-width: 767px) {
+    .work-card {
+        width: 92%; /* Not full width, to give breathing room */
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Mobile-specific adjustments for metric tags */
+    .metric-tag {
+        font-size: 0.7rem; /* Smaller font */
+        padding: 6px 12px; /* Tighter padding */
+    }
+
+    /* Make mute button always visible on mobile for better UX */
+    .work-card__mute-btn {
+        opacity: 1;
+    }
+}
+
+/* #region 25b. VIDEO CARD CONTROLS */
+/* =========================================
+   25b. VIDEO CARD CONTROLS
+   ========================================= */
+.work-card__mute-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 3; /* Above video and overlay gradient */
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.3s ease;
+}
+
+.work-card:hover .work-card__mute-btn {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.work-card__mute-btn:hover {
+    background: rgba(0, 0, 0, 0.7);
+    transform: scale(1.1);
+}
+
+.work-card__mute-btn svg {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Default state: sound-on is visible, sound-off is hidden */
+.work-card__mute-btn .icon-sound-off {
+    opacity: 0;
+}
+
+.work-card__mute-btn .icon-sound-on {
+    opacity: 1;
+}
+
+/* Muted state: sound-off is visible, sound-on is hidden */
+.work-card__mute-btn.is-muted .icon-sound-off {
+    opacity: 1;
+}
+.work-card__mute-btn.is-muted .icon-sound-on {
+    opacity: 0;
+}
+/* #endregion */
+
+/* #region 26. NEW HERO PLAYGROUND */
+/* =========================================
+   26. HERO PLAYGROUND (APPLE STYLE)
+   ========================================= */
+.hero-playground-section {
+    position: relative;
+    width: 100%;
+    height: 100vh; /* Full viewport height */
+    min-height: 700px;
+    overflow: hidden; /* Prevent scrollbars when dragging out */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fcfcfc; /* Off-white premium */
+    background-image: 
+        linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px; /* Elegant Swiss grid */
+}
+
+.hero-playground-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* --- Static Layer (Text) --- */
+.hero-static-layer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 1;
+    width: 100%;
+    padding: 0 20px;
+    pointer-events: none; /* Allow clicking through text to drag items behind if needed */
+}
+
+.hero-huge-title {
+    font-size: clamp(4rem, 12vw, 9rem);
+    line-height: 1.15;
+    letter-spacing: -0.04em;
+    font-weight: 800;
+    margin-bottom: 24px;
+    padding-bottom: 0.2em; /* Tambahan ruang agar huruf g/y tidak terpotong */
+    /* Animated Gradient Effect */
+    background: linear-gradient(90deg, #000, #636363, #000);
+    background-size: 200% auto;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: textShimmer 8s linear infinite; /* Efek pantulan cahaya mengalir */
+        will-change: transform, opacity, filter;
+}
+
+@keyframes textShimmer {
+    to { background-position: 200% center; }
+}
+
+.hero-subtitle {
+    font-size: clamp(1rem, 1.5vw, 1.25rem);
+    color: #666;
+    font-weight: 400; /* Softer for premium feel */
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #f5f5f7;
+    border-radius: 12px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 24px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: #28cd41; /* Apple Green */
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px rgba(40, 205, 65, 0.2);
+}
+
+/* --- Drag Layer (Interactive) --- */
+.hero-drag-layer {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 2;
+}
+
+.drag-item {
+    position: absolute;
+    cursor: grab;
+    transition: box-shadow 0.2s ease;
+    will-change: transform;
+}
+
+.drag-item:active {
+    cursor: grabbing;
+    z-index: 100 !important; /* Bring to front when dragging */
+}
+
+.card-item {
+    width: 220px;
+    padding: 10px 10px 16px 10px;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.card-item--1 {
+    background-color: #1e1e1e; /* Light, cool gray-blue */
+}
+
+.card-item--2 {
+    background-color: #580f0f; /* Light, warm beige */
+}
+
+.card-item img,
+.card-item video {
+    width: 100%;
+    aspect-ratio: 4/5;
+    object-fit: cover;
+    border-radius: 12px;
+    pointer-events: none; /* Prevent image dragging default behavior */
+}
+
+.card-caption {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #ffffff;
+    text-align: center;
+    font-family: var(--font-primary);
+}
+
+.sticker-pill {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 12px 24px;
+    border-radius: 16px;
+    border: 1px solid rgba(0,0,0,0.08);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.sticker-circle {
+    width: 100px;
+    height: 100px;
+    background: #111;
+    color: #fff;
+    padding: 10px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    line-height: 1.2;
+    transform: rotate(-10deg);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+}
+
+.sticker-icon {
+    font-size: 3rem;
+    color: #FFC107;
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.1));
+}
+
+.sticker-item {
+    width: 100px;
+    height: 150px;
+    background: transparent; /* No background for sticker */
+    padding: 0;
+    border-radius: 12px;
+}
+
+.sticker-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Ensures sticker aspect ratio is maintained */
+    pointer-events: none;
+    /* Use drop-shadow to follow the image shape */
+    filter: drop-shadow(0 12px 15px rgba(0,0,0,0.1));
+}
+
+/* --- Desktop Positioning for Hero Items (Replaces Inline Styles) --- */
+@media (min-width: 992px) {
+    .hero-drag-layer .drag-item:nth-of-type(1) { /* Hi, I'm Dimas! */
+        top: 87px; left: 2%; transform: rotate(-5deg);
+    }
+    .hero-drag-layer .drag-item:nth-of-type(2) { /* Latest Work */
+        bottom: 5%; right: 2%; transform: rotate(3deg);
+    }
+    .hero-drag-layer .drag-item:nth-of-type(3) { /* Sticker Pill */
+        top: 86%; right: 38%; transform: rotate(5deg);
+    }
+    .hero-drag-layer .drag-item:nth-of-type(4) { /* Sticker Circle */
+        bottom: 8%; left: 5%; transform: rotate(-10deg);
+    }
+    .hero-drag-layer .drag-item:nth-of-type(5) { /* Star Icon */
+        top: 12%; left: 48%; transform: rotate(15deg);
+    }
+    .hero-drag-layer .drag-item:nth-of-type(6) { /* Sticker Placeholder */
+        top: 25%; left: 78%; transform: rotate(-8deg);
+    }
+}
+
+/* Tablet Adjustments (iPad/Portrait Tablets) */
+/* Refactored for Mobile-First: Applies to Tablet and Mobile */
+@media (max-width: 991px) {
+    .hero-playground-section {
+        height: auto;
+        min-height: 90dvh; /* Use dynamic viewport height for better fit */
+    }
+
+    .hero-huge-title {
+        font-size: clamp(3.5rem, 14vw, 5.5rem); /* Adjust for tablet */
+    }
+
+    .card-item {
+        width: 180px; /* Slightly smaller cards */
+    }
+    .drag-item { cursor: default !important; } /* Disable grab cursor on touch devices */
+
+    /* --- REPOSITION ITEMS TO EDGES for Tablet (Clear Center Text) --- */
+    .hero-drag-layer .drag-item:nth-of-type(1) {
+        top: 5%; left: 2%;
+        transform: rotate(-5deg) scale(0.9);
+    }
+
+    .hero-drag-layer .drag-item:nth-of-type(2) {
+        bottom: 122; right: 2%;
+        transform: rotate(3deg) scale(0.9);
+    }
+
+    .hero-drag-layer .drag-item:nth-of-type(3) {
+        top: 171px; right: 38%;
+        transform: rotate(5deg) scale(0.9);
+    }
+
+    .hero-drag-layer .drag-item:nth-of-type(4) {
+        bottom: 8%; left: 5%;
+        transform: rotate(-10deg) scale(0.9);
+    }
+
+    .hero-drag-layer .drag-item:nth-of-type(5) {
+        top: 211px; left: 48%;
+        transform: rotate(15deg) scale(0.9);
+    }
+
+    .hero-drag-layer .drag-item:nth-of-type(6) {
+        top: 220px; left: 78%;
+        transform: rotate(-8deg) scale(0.9);
+    }
+}
+
+/* Mobile-Only Adjustments (Phones) */
+@media (max-width: 767px) {
+    /* Revert to vertical stack layout for mobile */
+    .hero-playground-section {
+        height: auto;
+        min-height: auto;
+        padding-top: 120px;
+        padding-bottom: 80px;
+    }
+
+    .hero-playground-container {
+        position: static;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 48px;
+    }
+
+    .hero-static-layer {
+        position: static;
+        transform: none;
+        z-index: auto;
+    }
+
+    .hero-drag-layer {
+        position: static;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .drag-item {
+        position: static !important; /* Override absolute positioning from tablet */
+        /* transform: none; <-- This is removed to allow animations to apply their own transform. */
+    }
+
+    /* Apply floating animation to the visible cards on mobile */
+    .hero-drag-layer .card-item:nth-of-type(1) {
+        animation: float-left-animation 6s ease-in-out infinite;
+    }
+
+    /* Stagger the animation for a more natural effect */
+    .hero-drag-layer .card-item:nth-of-type(2) {
+        animation: float-right-animation 6s ease-in-out infinite -3s; /* Staggered start */
+    }
+
+    .hero-huge-title { 
+        font-size: 3.2rem; 
+        margin-bottom: 16px;
+    }
+    .hero-subtitle {
+        font-size: 1rem;
+        padding: 0 20px;
+        line-height: 1.5;
+    }
+
+    /* Hide smaller decorative items for a cleaner look on mobile */
+    .sticker-pill,
+    .sticker-circle,
+    .sticker-icon,
+    .sticker-item {
+        display: none !important;
+    }
+}
+
+/* #region 27. REFACTORED EXPERIENCE SECTION */
+/* =========================================
+   27. EXPERIENCE SECTION (PREMIUM LIST)
+   ========================================= */
+.experience-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-top: 1px solid #e5e5e5; /* Top border for the list */
+}
+
+.experience-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Align to top for multi-line titles */
+    gap: var(--space-6);
+    padding: var(--space-6) var(--space-4);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    text-decoration: none;
+    color: var(--text-primary);
+    position: relative;
+    overflow: hidden;
+    transition: background-color 0.3s ease, padding-left 0.3s ease;
+    /* Initial state for new GSAP animation */
+    opacity: 0;
+    transform: translateX(-30px);
+    will-change: transform; /* Performance boost for animations */
+}
+
+.experience-item:hover {
+    background-color: #f9f9f9;
+    padding-left: var(--space-6); /* Micro-interaction: nudge content right */
+}
+
+.experience-item__info {
+    flex-grow: 1;
+}
+
+.experience-item__title {
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    font-weight: 600;
+    line-height: 1.3;
+    margin: 0 0 8px 0;
+    color: #111;
+}
+
+.experience-item__company {
+    font-size: 1rem;
+    color: #555;
+    font-weight: 500;
+}
+
+.experience-item__meta {
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.experience-item__year {
+    font-size: 1rem;
+    color: #555;
+    font-weight: 500;
+}
+
+.experience-item:hover {
+    background-color: #fcfcfc;
+}
+/* #endregion */
+
+/* #region 28. CASE STUDY RESPONSIVE FIXES */
+/* =========================================
+   28. CASE STUDY RESPONSIVE FIXES
+   ========================================= */
+@media (max-width: 767px) {
+    /* Fix for Hero Meta Info on Case Study Page */
+    .about-meta-grid {
+        grid-template-columns: 1fr; /* Force single column on mobile */
+        gap: 32px; /* Increase gap for vertical stacking */
+    }
+
+    .meta-item {
+        align-items: center; /* Center the text content within each item */
+        text-align: center;
+    }
+}
+/* #endregion */
+
+/* #region 29. LOGO MARQUEE */
+/* =========================================
+   29. INFINITE LOGO MARQUEE
+   ========================================= */
+.logo-marquee-section {
+    width: 100%;
+    overflow: hidden;
+    background-color: transparent;
+    padding-top: var(--space-8);
+    padding-bottom: var(--space-8);
+}
+
+.marquee-wrapper {
+    width: 100%;
+    overflow: hidden;
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.marquee-track {
+    display: flex;
+    width: max-content; /* Ganti fit-content ke max-content agar tidak wrapping */
+    gap: 0; /* Pastikan gap 0 */
+    animation: marquee-scroll 30s linear infinite;
+    will-change: transform;
+    transform: translate3d(0, 0, 0); /* Force Hardware Acceleration */
+}
+
+.marquee-content {
+    display: flex;
+    align-items: center;
+    gap: 0; /* Hapus gap container */
+    padding-right: 0; /* Hapus padding container */
+    flex-shrink: 0;
+}
+
+.marquee-logo {
+    height: 40px; /* Mobile height */
+    width: auto;
+    object-fit: contain;
+    margin-right: 4rem; /* Spacing dipindah ke margin item agar presisi */
+    filter: grayscale(100%) brightness(0); /* Black silhouettes */
+    opacity: 0.6;
+    transition: filter 0.3s ease, opacity 0.3s ease;
+    cursor: pointer;
+}
+
+.marquee-logo:hover {
+    filter: grayscale(0%) brightness(100%); /* Original color */
+    opacity: 1;
+}
+
+/* Adjust specific wide logo height */
+.marquee-logo.logo-berka {
+    height: 24px;
+}
+
+@keyframes marquee-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); /* Moves exactly half the total width */ }
+}
+
+@media (min-width: 992px) {
+    .marquee-logo { 
+        height: 60px; /* Desktop height */ 
+        margin-right: 6rem; /* Spacing desktop */
+    }
+    .marquee-logo.logo-berka {
+        height: 36px;
+    }
+    .marquee-content { gap: 0; padding-right: 0; }
+    .marquee-wrapper { mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent); }
+}
+/* #endregion */
+
+/* #region 30. DATA VALIDATION (THE NUMBERS) */
+/* =========================================
+   30. DATA VALIDATION
+   ========================================= */
+.data-validation-section {
+    width: 100%;
+    padding: 140px 0; /* Generous vertical padding */
+    background-color: #FAFAFA; /* Subtle off-white for contrast against white body */
+    border-top: 1px solid rgba(0,0,0,0.03);
+    border-bottom: 1px solid rgba(0,0,0,0.03);
+}
+
+.data-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    width: 100%;
+    text-align: center;
+}
+
+.data-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.data-number {
+    font-family: var(--font-primary);
+    font-size: clamp(4rem, 8vw, 7rem); /* Massive responsive text */
+    font-weight: 800; /* Black/ExtraBold */
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: #000000;
+    margin-bottom: 24px;
+}
+
+.data-label {
+    font-family: var(--font-primary);
+    font-size: 0.875rem; /* ~14px */
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #000000;
+    opacity: 0.6;
+    font-weight: 500;
+}
+
+@media (max-width: 767px) {
+    .data-validation-section { padding: 80px 0; }
+    .data-grid { grid-template-columns: 1fr; gap: 80px; }
+}
+/* #endregion */
+
+/* #region 31. WHY WORK WITH ME */
+/* =========================================
+   31. WHY WORK WITH ME
+   ========================================= */
+.why-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px; /* Reduced gap for compactness */
+}
+
+.why-item {
+    background: #fbfbfb; /* Very subtle grey for premium feel */
+    padding: 24px 20px; /* Significantly reduced padding to save space */
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.04);
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.why-item:hover {
+    background: #fff;
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px -5px rgba(0,0,0,0.08);
+    border-color: rgba(0,0,0,0.08);
+}
+
+.why-number {
+    display: inline-block;
+    font-family: var(--font-primary);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #999;
+    background: #eee;
+    padding: 4px 10px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.why-title {
+    font-family: var(--font-primary);
+    font-size: 1.25rem; /* Smaller title */
+    font-weight: 700;
+    line-height: 1.2;
+    color: #111;
+    letter-spacing: -0.03em;
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 10px; /* Align icon */
+}
+
+.why-desc {
+    font-family: var(--font-primary);
+    font-size: 0.9375rem; /* Slightly smaller body text */
+    line-height: 1.6;
+    color: #666;
+    font-weight: 400;
+    margin: 0;
+}
+
+.why-icon {
+    width: 20px; /* Smaller icon */
+    height: 20px;
+    color: #000;
+    opacity: 0.8;
+    transition: transform 0.4s ease;
+}
+
+.why-item:hover .why-icon {
+    transform: scale(1.2) rotate(5deg);
+}
+
+@media (max-width: 991px) {
+    .why-grid {
+        /* [UPDATED] Horizontal Scroll (Swipe) Layout */
+        display: flex;
+        overflow-x: auto;
+        gap: 24px; /* Jarak antar kartu lebih lega */
+        padding: 10px 5% 40px 5%; /* Padding samping agar kartu pertama/terakhir tidak mepet, bawah besar untuk shadow */
+        scroll-snap-type: x mandatory; /* Efek magnet saat swipe */
+        -webkit-overflow-scrolling: touch; /* Smooth scroll di iOS */
+        scrollbar-width: none; /* Hide scrollbar Firefox */
+        /* [FIX] Full bleed 100% layar tanpa sisa */
+        width: 100vw;
+        margin-left: calc(-50vw + 50%);
+        margin-right: calc(-50vw + 50%);
+    }
+    /* Hide scrollbar Chrome/Safari/Edge */
+    .why-grid::-webkit-scrollbar { display: none; }
+
+    .why-item {
+        min-width: 280px;
+        width: 80vw; /* 80% layar: memberikan ruang intip untuk kartu selanjutnya (UX cues) */
+        max-width: 400px; /* Batas lebar di tablet */
+        flex: 0 0 auto; /* Mencegah kartu mengecil */
+        scroll-snap-align: center; /* Snap ke TENGAH layar (Premium feel) */
+        padding: 32px 24px;
+        margin: 0;
+    }
+    
+    /* Make typography compact on mobile to save vertical space */
+    .why-number { margin-bottom: 12px; padding: 2px 8px; font-size: 0.7rem; }
+    .why-title { font-size: 1.1rem; margin-bottom: 8px; }
+    .why-desc { font-size: 0.9rem; line-height: 1.5; }
+}
+/* #endregion */
+
+/* #region 32. CASE STUDY SPECIFIC */
+/* =========================================
+   32. CASE STUDY LAYOUTS
+   ========================================= */
+
+/* --- Selected Works Slider --- */
+.works-slider {
+    width: 100%;
+    padding: 40px 0 80px;
+    overflow: visible !important; /* Memastikan overflow kiri-kanan tembus meluber batas layar */
+}
+.works-slider .swiper-slide {
+    width: 80%;
+    max-width: 420px;
+    height: auto;
+    opacity: 0.3; /* Kontras kedalaman 3D */
+    transform: scale(0.8); /* Efek 3D ditekankan */
+    transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.works-slider .swiper-slide-active {
+    opacity: 1;
+    transform: scale(1.05); /* Pop-up (keluar) untuk slide tengah */
+    z-index: 10;
+}
+.works-slider .swiper-pagination { bottom: 20px !important; }
+.works-slider .swiper-pagination-bullet { background: #ccc; opacity: 1; }
+.works-slider .swiper-pagination-bullet-active { background: #000; }
+.works-slider .swiper-button-next, .works-slider .swiper-button-prev {
+    color: #000; background: rgba(255,255,255,0.8);
+    width: 50px; height: 50px; border-radius: 16px;
+    backdrop-filter: blur(5px); box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.works-slider .swiper-button-next:after, .works-slider .swiper-button-prev:after { font-size: 20px; font-weight: 800; }
+@media (max-width: 767px) {
+    .works-slider .swiper-button-next, .works-slider .swiper-button-prev { display: none; }
+}
+
+/* --- Premium Video Showcase (Solution Section) --- */
+.solution-showcase {
+    display: flex;
+    flex-direction: column;
+    gap: 100px;
+}
+
+.solution-video-item {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    align-items: center;
+}
+
+@media (min-width: 992px) {
+    .solution-video-item {
+        grid-template-columns: 1fr 1.5fr; /* 40% text, 60% video */
+    }
+    /* Reverse order for second item */
+    .solution-video-item:nth-child(even) {
+        grid-template-columns: 1.5fr 1fr;
+    }
+    .solution-video-item:nth-child(even) .solution-video-content {
+        grid-column: 2;
+        grid-row: 1;
+    }
+}
+
+.solution-video-content {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.solution-video-item.is-visible .solution-video-content {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.solution-video-player {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s;
+}
+.solution-video-item.is-visible .solution-video-player {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.sol-number {
+    display: block;
+    font-family: var(--font-primary);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #999;
+    margin-bottom: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.sol-title {
+    font-family: var(--font-primary);
+    font-size: var(--text-h3);
+    font-weight: 700;
+    margin-bottom: 24px;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+}
+
+.sol-desc {
+    font-family: var(--font-primary);
+    font-size: clamp(1rem, 1.5vw, 1.25rem); /* Disamakan dengan .about-paragraph */
+    color: #555;
+    line-height: 1.6;
+    max-width: 55ch; /* Lebar disesuaikan agar flow bacaan lebih enak */
+    font-weight: 400;
+}
+
+/* --- Key Takeaways Grid --- */
+.takeaways-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+}
+@media (min-width: 768px) {
+    .takeaways-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+    }
+}
+.takeaway-item {
+    background-color: #f9f9f9;
+    padding: 32px;
+    border-radius: 16px;
+    border: 1px solid #f0f0f0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.takeaway-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.07);
+}
+.takeaway-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: #111;
+}
+.takeaway-text {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+    max-width: none;
+    font-weight: 400;
+}
+
+/* --- Reusable Video Player & Grids --- */
+.video-player-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #000;
+    border-radius: 16px;
+    box-shadow: 0 20px 50px -10px rgba(0,0,0,0.15);
+    aspect-ratio: 16/9;
+}
+.video-element { width: 100%; height: 100%; object-fit: cover; }
+.video-hover-overlay {
+    position: absolute; inset: 0;
+    opacity: 0; transition: opacity 0.3s ease;
+    z-index: 2; pointer-events: none;
+}
+.video-player-wrapper:hover .video-hover-overlay,
+.video-player-wrapper.is-user-active .video-hover-overlay {
+    opacity: 1; pointer-events: auto;
+}
+.video-controls-bar {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 12px 16px;
+    background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+    display: flex; align-items: center; gap: 12px;
+}
+.video-play-pause-btn, .video-fullscreen-btn {
+    background: none; border: none; color: white; padding: 0;
+    cursor: pointer; width: 20px; height: 20px; flex-shrink: 0;
+}
+.video-play-pause-btn .icon-pause, .video-play-pause-btn.is-playing .icon-play { display: none; }
+.video-play-pause-btn.is-playing .icon-pause { display: block; }
+.video-mute-btn {
+    position: absolute; top: 16px; right: 16px;
+    width: 36px; height: 36px; background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px; color: #fff; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+}
+.video-mute-btn svg { width: 18px; height: 18px; }
+.video-mute-btn .icon-muted { display: none; }
+.video-mute-btn.is-muted .icon-muted { display: block; }
+.video-mute-btn.is-muted .icon-unmuted { display: none; }
+.video-timeline {
+    -webkit-appearance: none; width: 100%; height: 4px;
+    background: rgba(255,255,255,0.3); border-radius: 2px;
+    outline: none; cursor: pointer;
+}
+.video-timeline::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none; width: 14px; height: 14px;
+    background: #fff; border-radius: 50%;
+}
+.video-time { display: flex; gap: 4px; font-size: 0.75rem; color: white; font-weight: 500; font-variant-numeric: tabular-nums; }
+
+/* Works Filter Tabs */
+.works-filter-tabs {
+    display: flex; gap: 8px; margin-bottom: 32px; border-bottom: 1px solid #eee;
+}
+.works-filter-tabs .tab-btn {
+    padding: 12px 20px; font-size: 0.9rem; font-weight: 600; color: #666;
+    border: none; background: none; cursor: pointer;
+    border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.2s;
+}
+.works-filter-tabs .tab-btn:hover, .works-filter-tabs .tab-btn.active { color: #000; }
+.works-filter-tabs .tab-btn.active { border-bottom-color: #000; }
+/* #endregion */
+
+/* --- Next Project Navigator --- */
+.next-project-section {
+    padding: 120px 0;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    background: #fff;
+    transition: background-color 0.4s ease;
+}
+.next-project-section:hover {
+    background: #fafafa;
+}
+.next-project-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+.next-label {
+    font-family: var(--font-primary);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #999;
+    margin-bottom: 24px;
+    font-weight: 600;
+}
+.next-title {
+    font-family: var(--font-primary);
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 800;
+    line-height: 1;
+    margin: 0;
+    letter-spacing: -0.04em;
+    color: #111;
+    transition: transform 0.4s var(--ease-smooth), opacity 0.4s ease;
+}
+.next-project-link:hover .next-title {
+    transform: scale(1.02);
+    opacity: 0.8;
+}
+
+/* [NEW] Vertical Video (Reels) Support for Case Studies */
+.video-player-wrapper.is-reel {
+    aspect-ratio: 9/16;
+    max-width: 380px; /* Batasi lebar agar tidak terlalu tinggi di desktop */
+    margin: 0 auto;
+}
+
+@media (min-width: 992px) {
+    /* Layout khusus Reels: Teks lebih lebar (1.5), Video lebih ramping (1) */
+    .solution-video-item.has-reel {
+        grid-template-columns: 1.5fr 1fr;
+    }
+    .solution-video-item.has-reel:nth-child(even) {
+        grid-template-columns: 1fr 1.5fr; /* Video di kiri, Teks di kanan */
+    }
+}
+
+/* [NEW] Video Center Play/Pause Feedback Animation */
+.video-center-feedback {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.video-feedback-icon {
+    width: 64px; height: 64px;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; opacity: 0; transform: scale(0.5);
+    position: absolute; /* Stack icons on top of each other */
+}
+
+.video-feedback-icon.animate {
+    animation: centerIconPop 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes centerIconPop {
+    0% { opacity: 0; transform: scale(0.5); }
+    20% { opacity: 1; transform: scale(1.1); }
+    100% { opacity: 0; transform: scale(1.3); }
+}
+
+/* [NEW] Audio Narrator Player (Premium Minimalist) */
+.audio-narrator-wrapper {
+    margin-bottom: 32px;
+}
+
+.audio-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #999;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.audio-player-container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #f5f5f7;
+    border: 1px solid rgba(0,0,0,0.05);
+    padding: 12px 20px;
+    border-radius: 20px; /* Squircle shape */
+    max-width: 480px;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.audio-player-container:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    transform: translateY(-2px);
+}
+
+.audio-control-btn {
+    background: none; border: none; padding: 0; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: #111; transition: opacity 0.2s;
+}
+.audio-control-btn:hover { opacity: 0.7; }
+
+.play-pause-btn svg { width: 24px; height: 24px; }
+
+.audio-time-current, .audio-time-total {
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: #555;
+    min-width: 35px;
+    text-align: center;
+}
+
+.audio-progress-container {
+    flex-grow: 1;
+    height: 4px;
+    background: rgba(0,0,0,0.1);
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    overflow: visible; /* Changed from hidden to visible for tooltip */
+}
+
+.audio-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: #111;
+    border-radius: 4px;
+    transition: width 0.1s linear;
+}
+
+.speed-btn {
+    font-size: 0.75rem; 
+    font-weight: 700; 
+    min-width: 32px; /* Gunakan min-width agar fleksibel */
+    flex-shrink: 0; /* Mencegah tombol gepeng/terpotong */
+}
+
+/* [NEW] Audio Progress Tooltip */
+.audio-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    transform: translateX(-50%) translateY(-8px);
+    background: #111;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    white-space: nowrap;
+}
+
+.audio-progress-container:hover .audio-tooltip {
+    opacity: 1;
+}
+
+/* [NEW] Sticky Audio Player State */
+.audio-player-container.is-sticky {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: auto;
+    min-width: 320px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    background: rgba(255, 255, 255, 0.65); /* Lebih transparan agar efek kaca terlihat */
+    backdrop-filter: blur(20px) saturate(180%); /* Blur lebih kuat & saturasi tinggi */
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-color: rgba(0,0,0,0.1);
+    animation: slideUpSticky 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+@keyframes slideUpSticky {
+    from { transform: translate(-50%, 100%); opacity: 0; }
+    to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+/* [NEW] Mobile Sticky Player Adjustments (Smaller & No Collision) */
+@media (max-width: 767px) {
+    .audio-player-container.is-sticky {
+        bottom: 90px; /* Diangkat ke atas agar tidak menabrak widget MDKG */
+        width: 90%; /* Lebar responsif */
+        min-width: auto;
+        max-width: 320px; /* [FIX] Diperkecil agar lebih ringkas di layar HP */
+        padding: 6px 16px; /* [FIX] Mengurangi ketebalan pill */
+        gap: 6px;
+        box-sizing: border-box; /* Pastikan padding tidak 'meledak' keluar container */
+    }
+
+    /* [FIX] Rapatkan visualizer di mobile agar tidak mendorong elemen lain */
+    .audio-player-container.is-sticky .audio-progress-container.waveform-mode {
+        height: 18px; /* [FIX] Tinggi gelombang diturunkan */
+        gap: 1px;
+        padding: 0 2px;
+    }
+    .audio-player-container.is-sticky .waveform-bar {
+        min-width: 2px; /* Pastikan bar tetap terlihat tapi compact */
+    }
+
+    .audio-player-container.is-sticky .play-pause-btn svg {
+        width: 16px; height: 16px; /* Ikon lebih kecil */
+    }
+
+    .audio-player-container.is-sticky .audio-time-current,
+    .audio-player-container.is-sticky .audio-time-total,
+    .audio-player-container.is-sticky .speed-btn {
+        font-size: 0.65rem; /* Font lebih kecil */
+    }
+}
+
+/* [NEW] Waveform Progress Bar Style */
+.audio-progress-container.waveform-mode {
+    height: 24px; /* Lebih tinggi untuk menampung gelombang */
+    background: transparent;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 0 4px;
+}
+
+.waveform-bar {
+    flex-grow: 1;
+    background-color: rgba(0, 0, 0, 0.15); /* Warna inactive */
+    border-radius: 4px;
+    transition: background-color 0.1s ease, height 0.2s ease;
+    min-width: 2px;
+    pointer-events: none; /* Biarkan container yang menangani klik */
+    will-change: height; /* Performance optimization for JS animation */
+}
+
+.waveform-bar.active {
+    background-color: #111; /* Warna saat sudah diputar */
+}
+/* #endregion */
+
+/* #region 33. CREDITS SECTION */
+/* =========================================
+   33. CREDITS SECTION (PREMIUM)
+   ========================================= */
+.credits-divider {
+    width: 100%;
+    height: 1px;
+    background-color: rgba(0, 0, 0, 0.08); /* Ultra subtle line */
+    margin-bottom: 60px; /* Generous spacing */
+}
+
+.credits-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 Cols Mobile */
+    gap: 48px 24px;
+}
+
+@media (min-width: 992px) {
+    .credits-grid {
+        grid-template-columns: repeat(4, 1fr); /* 4 Cols Desktop */
+        gap: 60px 40px;
+    }
+}
+
+.credits-group {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.credits-role {
+    font-family: var(--font-primary);
+    font-size: 0.75rem; /* 12px */
+    line-height: 1.4;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em; /* Premium tracking */
+    color: #999;
+    margin: 0;
+}
+
+.credits-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* Breathing room between names */
+}
+
+.credits-list li {
+    font-family: var(--font-primary);
+    font-size: 1rem; /* 16px */
+    font-weight: 500;
+    color: #111;
+    line-height: 1.5;
+}
+
+/* Sub-text styling (e.g. roles in brackets) */
+.credits-list li span {
+    color: #888;
+    font-weight: 400;
+    margin-left: 4px;
+}
+/* #endregion */
+
+/* #region 34. CASE STUDY HERO (PREMIUM LAYOUT) */
+/* =========================================
+   34. CASE STUDY HERO
+   ========================================= */
+.cs-hero-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* [UPDATED] Force Center Alignment */
+    justify-content: center;
+    text-align: center; /* Ensure text is centered */
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto; /* Center wrapper horizontally */
+    position: relative;
+    z-index: 5;
+}
+
+.cs-hero-title {
+    font-family: var(--font-primary);
+    /* [UPDATED] Ukuran Editorial: Elegan, tidak terlalu raksasa, tetap punchy */
+    font-size: clamp(2.5rem, 8vw, 6rem); 
+    font-weight: 800 !important; /* ExtraBold (lebih bersih daripada Black/900) */
+    text-transform: uppercase;
+    letter-spacing: -0.03em; /* Rapat tapi tidak berhimpitan */
+    line-height: 1.0 !important; /* Jarak baris 'mahal' (tight but readable) */
+    color: rgba(255, 255, 255, 0.95); /* Sedikit transparan agar blending lebih halus */
+    margin: 0 0 20px 0;
+    word-spacing: 0.1em;
+    text-align: center;
+    
+    /* [UPDATED] Artistic Blending Effect */
+    mix-blend-mode: normal; /* Normal untuk keterbacaan maksimal di background terang/gelap */
+    text-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.2); /* Lighter cinematic shadow */
+    position: relative;
+    z-index: 10;
+}
+
+.cs-hero-subtitle {
+    font-family: var(--font-primary);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3em; /* Wide tracking (Anti-Plain) */
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+.cs-hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* [UPDATED] Center metadata */
+    gap: 16px;
+    font-size: 0.75rem; /* [PREMIUM] Jauh lebih kecil dan subtle */
+    text-transform: uppercase; /* [PREMIUM] Estetika film credit */
+    letter-spacing: 0.15em; /* [PREMIUM] Tracking lebar */
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: 600;
+    line-height: 1.5;
+    align-items: center;
+}
+
+.cs-meta-separator {
+    font-size: 0.8em;
+    opacity: 0.3;
+    transform: translateY(-1px);
+}
+
+/* [NEW] Class untuk memastikan section full screen & center vertikal */
+.portfolio-hero-section-center {
+    min-height: 100vh;        /* Full viewport height */
+    display: flex !important;
+    align-items: center;      /* Vertically center */
+    justify-content: center;  /* Horizontally center */
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+/* Desktop Adjustments */
+@media (min-width: 992px) {
+    .cs-hero-title {
+        line-height: 0.8 !important; /* Sedikit lebih lega di desktop tapi tetap rapat */
+    }
+}
+
+/* [NEW] Case Study Share Button */
+.cs-share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.6);
+    border: none;
+    padding: 8px 0;
+    font-family: var(--font-primary);
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.cs-share-btn:hover {
+    color: #ffffff;
+}
+.cs-share-btn svg {
+    transition: transform 0.3s ease;
+}
+.cs-share-btn:hover svg {
+    transform: translateY(-2px);
+}
+/* #endregion */
+
+/* #region 35. UNIVERSAL HOVER (FOOTER & SOCIAL) */
+/* =========================================
+   35. UNIVERSAL HOVER (REPLACES WEBFLOW IX2)
+   ========================================= */
+/* Target common social icon setups in Webflow */
+#footer-container a.w-inline-block img,
+.footer-social-link img,
+a.social-icon img {
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1) !important;
+    will-change: transform, opacity;
+}
+
+#footer-container a.w-inline-block:hover img,
+.footer-social-link:hover img,
+a.social-icon:hover img {
+    transform: translateY(-3px) scale(1.05) !important;
+    opacity: 0.7 !important;
+}
+
+/* Pengecualian agar Logo Brand tidak ikut ter-invert secara tidak sengaja */
+#footer-container a.brand img,
+#footer-container a.logo img,
+#footer-container a.w-nav-brand img {
+    transform: none !important;
+    opacity: 1 !important;
+}
+/* #endregion */
+
+/* #region 36. PREMIUM SOCIAL ICONS */
+/* =========================================
+   36. PREMIUM SOCIAL ICONS
+   ========================================= */
+.contact-social {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.premium-social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background-color: #f5f5f7;
+    color: #111;
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+    border: 1px solid rgba(0,0,0,0.04);
+    text-decoration: none;
+}
+
+.premium-social-link:hover {
+    background-color: #111;
+    color: #fff;
+    transform: translateY(-4px);
+}
+.premium-social-link:hover svg {
+    transform: scale(1.1);
+}
+.premium-social-link svg {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
+}
+/* #endregion */
+
+/* #region 45. SOFTWARE BADGE */
+/* =========================================
+   45. INTERACTIVE SOFTWARE BADGE (3D)
+   ========================================= */
+.software-badge-container {
+    margin-top: 32px;
+    perspective: 1200px;
+    display: inline-block;
+}
+
+.software-badge {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    background: #111;
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 12px 28px 12px 16px;
+    border-radius: 100px;
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow: 0 10px 30px -10px rgba(0,0,0,0.3);
+    transform-style: preserve-3d;
+    will-change: transform;
+}
+
+.badge-glow {
+    position: absolute;
+    top: 0; left: 0;
+    width: 150px; height: 150px;
+    background: radial-gradient(circle, rgba(255, 120, 50, 0.4) 0%, transparent 70%); /* DaVinci Warm Glow */
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+    mix-blend-mode: screen;
+}
+
+.software-badge:hover .badge-glow { opacity: 1; }
+
+.badge-content {
+    position: relative; z-index: 2; display: flex; align-items: center; gap: 16px; pointer-events: none;
+    transform: translateZ(30px); /* 3D Pop Out Effect */
+}
+
+.badge-icon {
+    width: 36px; height: 36px; object-fit: contain;
+    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.4));
+    transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.software-badge:hover .badge-icon { transform: scale(1.15) rotate(10deg); }
+
+.badge-text { display: flex; flex-direction: column; justify-content: center; }
+.badge-label { font-family: var(--font-primary); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.6); font-weight: 700; line-height: 1; margin-bottom: 6px; }
+.badge-name { font-family: var(--font-primary); font-size: 1.05rem; font-weight: 600; color: #fff; line-height: 1; letter-spacing: -0.01em; }
+/* #endregion */
+
+/* #region 46. SERVICES PAGE SPECIFIC */
+/* =========================================
+   46. SERVICES PRICING CARDS
+   ========================================= */
+.pricing-tier {
+    padding: 28px;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 20px;
+    margin-bottom: 16px;
+    background-color: #fcfcfc;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.6s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.4s ease, border-color 0.4s ease;
+    position: relative;
+    z-index: 1;
+    will-change: transform, box-shadow;
+    transform: translateZ(0); /* Mencegah efek blur sub-pixel saat awal hover */
+}
+
+.pricing-tier:hover {
+    background-color: #fff;
+    border-color: rgba(0,0,0,0.08);
+    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.08);
+    transform: translate3d(0, -6px, 0); /* Mengangkat lebih perlahan dan elegan tanpa merusak ketajaman font */
+}
+
+.pricing-tier-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 16px; flex-wrap: wrap; gap: 12px;
+}
+.pricing-tier-title { font-size: 1.15rem; font-weight: 600; color: #111; margin: 0; letter-spacing: -0.02em; }
+.pricing-tier-price { font-size: 0.85rem; font-weight: 600; color: #333; background: #f5f5f7; padding: 6px 12px; border-radius: 8px; letter-spacing: 0.02em; }
+.pricing-tier-scope { font-size: 0.95rem; color: #555; margin: 0; line-height: 1.65; font-weight: 400; }
+
+/* Premium CTA Button Glow Override */
+.premium-soft-cta-btn {
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+.premium-soft-cta-btn:hover {
+    transform: translate3d(0, -4px, 0) scale(1.02);
+    box-shadow: 0 0 20px rgba(255,255,255,0.4), 0 0 40px rgba(255,255,255,0.1);
+    background: #fff;
+    color: #000;
+}
+
+/* #region 47. PREMIUM SERVICE ACCORDION */
+/* =========================================
+   47. PREMIUM SERVICE ACCORDION
+   ========================================= */
+.service-accordion {
+    border-top: 1px solid rgba(0,0,0,0.1);
+}
+.service-accordion__item {
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+.service-accordion__trigger {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: opacity 0.3s ease;
+}
+.service-accordion__trigger:hover {
+    opacity: 0.7;
+}
+.service-accordion__title {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    font-family: var(--font-primary);
+    font-size: clamp(1.25rem, 3vw, 2.5rem);
+    font-weight: 600;
+    color: #111;
+    letter-spacing: -0.02em;
+}
+.service-accordion__num {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #888;
+    transform: translateY(-4px);
+}
+.service-accordion__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1), background 0.3s, color 0.3s;
+    flex-shrink: 0;
+}
+.service-accordion__item.is-active .service-accordion__icon {
+    transform: rotate(135deg);
+    background: #111;
+    color: #fff;
+    border-color: #111;
+}
+.service-accordion__content {
+    height: 0;
+    overflow: hidden;
+}
+.service-accordion__inner {
+    padding-bottom: 40px;
+}
+.pricing-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+@media (min-width: 768px) {
+    .pricing-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+}
+/* #endregion */
+/* #endregion */
+
+/* #region 37. SHOWREEL SECTION */
+/* =========================================
+   37. SHOWREEL SECTION (4:3 Ratio)
+   ========================================= */
+.showreel-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 1600px; /* Batas maksimal ukuran desktop */
+    margin: 0 auto;
+    aspect-ratio: 4/3; /* Memastikan rasio 1600x1200 terjaga di semua ukuran layar */
+    overflow: hidden;
+    background-color: #f5f5f7;
+    border-radius: var(--radius-lg); /* Mengikuti radius premium dari tema */
+    box-shadow: var(--shadow-soft);
+    transform: translateZ(0); /* Akselerasi hardware untuk performa video */
+    border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.showreel-video,
+.showreel-lottie {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none; /* Mencegah interaksi tidak sengaja karena ini looping otomatis */
+}
+/* #endregion */
+
+/* #region 38. ARCHIVE BANNER */
+/* =========================================
+   38. PROJECT ARCHIVE BANNER
+   ========================================= */
+.archive-banner {
+    background-color: #f5f5f7;
+    border-radius: var(--radius-lg);
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    box-shadow: var(--shadow-soft);
+    align-items: flex-start;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.archive-banner:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.08);
+}
+
+@media (min-width: 992px) {
+    .archive-banner {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 48px 64px;
+    }
+}
+
+.archive-banner__content {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+}
+
+@media (max-width: 767px) {
+    .archive-banner__content {
+        flex-direction: column;
+        gap: 16px;
+    }
+}
+
+.archive-banner__icon {
+    width: 56px;
+    height: 56px;
+    background-color: #fff;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    flex-shrink: 0;
+}
+
+.archive-banner__text {
+    max-width: 600px;
+}
+
+.archive-banner__title {
+    font-family: var(--font-primary);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+}
+
+.archive-banner__desc {
+    font-family: var(--font-primary);
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+    margin: 0;
+    font-weight: 400;
+}
+
+.archive-banner__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background-color: #111;
+    color: #fff;
+    padding: 16px 32px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.archive-banner__btn:hover {
+    background-color: #333;
+    transform: scale(1.05);
+}
+
+.archive-banner__btn svg {
+    transition: transform 0.3s ease;
+}
+
+.archive-banner__btn:hover svg {
+    transform: translateX(4px);
+}
+
+/* Premium Link Hover for Credits */
+.credits-list li a {
+    color: inherit;
+    text-decoration: none;
+    position: relative;
+    display: inline-block;
+    transition: color 0.3s ease;
+}
+
+.credits-list li a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    bottom: 0px;
+    left: 0;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.credits-list li a:hover {
+    color: #555;
+}
+
+.credits-list li a:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+/* #endregion */
+
+/* #region 39. JOURNAL MASONRY */
+/* =========================================
+   39. JOURNAL MASONRY LAYOUT
+   ========================================= */
+.masonry-grid {
+    column-count: 1;
+    column-gap: 40px;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .masonry-grid {
+        column-count: 2;
+    }
+}
+
+@media (min-width: 1024px) {
+    .masonry-grid {
+        column-count: 3;
+    }
+}
+
+.masonry-item {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 40px;
+    display: inline-block; /* Fix for some browsers ignoring break-inside */
+    width: 100%;
+}
+
+.journal-card {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--text-primary);
+    box-shadow: var(--shadow-soft);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    transition: all 0.5s var(--ease-smooth);
+    will-change: transform, box-shadow;
+    height: 100%;
+}
+
+.journal-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.1);
+    border-color: rgba(0,0,0,0.08);
+}
+
+.journal-card__image-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background-color: #f5f5f7;
+    aspect-ratio: 16/10;
+}
+
+.journal-card__image {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    transition: transform 1.2s var(--ease-smooth);
+}
+
+.journal-card:hover .journal-card__image {
+    transform: scale(1.05);
+}
+
+.journal-card__content {
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.journal-card.text-only-card {
+    background-color: #f9f9f9;
+}
+
+.journal-card.text-only-card .journal-card__content {
+    justify-content: center;
+    padding: 48px 32px;
+}
+
+.journal-card.text-only-card .journal-card__title {
+    font-size: 2rem;
+}
+
+@media (max-width: 767px) {
+    .journal-card__content {
+        padding: 20px 16px;
+    }
+    .journal-card.text-only-card .journal-card__content {
+        padding: 32px 24px;
+    }
+    .journal-card__title {
+        font-size: 1.25rem;
+        margin-bottom: 8px;
+    }
+    .journal-card.text-only-card .journal-card__title {
+        font-size: 1.5rem;
+    }
+    .journal-card__excerpt {
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+    .journal-card__meta {
+        margin-bottom: 12px;
+        font-size: 0.75rem;
+    }
+}
+
+.journal-card__meta {
+    display: flex;
+    gap: 16px;
+    font-family: var(--font-primary);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #888;
+    margin-bottom: 16px;
+}
+
+.journal-card__title {
+    font-family: var(--font-primary);
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+}
+
+.journal-card__excerpt {
+    font-family: var(--font-primary);
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+    font-weight: 400;
+    margin: 0;
+}
+/* #endregion */
+
+/* #region 40. INSIGHTS GRID (HOME) */
+/* =========================================
+   40. INSIGHTS GRID LAYOUT & MOBILE SLIDER
+   ========================================= */
+.insights-home-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    width: 100%; /* Mengisi kontainer dengan wajar */
+    align-items: stretch;
+}
+
+@media (max-width: 767px) {
+    .insights-home-grid {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 16px; /* Jarak antar kartu */
+        /* [FIX] Full bleed trick agar menempel layar 100% tanpa margin gap */
+        width: 100vw;
+        margin-left: calc(-50vw + 50%);
+        margin-right: calc(-50vw + 50%);
+        /* Padding kiri & kanan (100vw - 75vw) / 2 = 12.5vw agar tepat di tengah */
+        padding: 20px 12.5vw 40px 12.5vw;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; /* Hide scrollbar Firefox */
+    }
+    .insights-home-grid::-webkit-scrollbar { 
+        display: none; /* Hide scrollbar Chrome/Safari */
+    }
+    .latest-insight-card-wrap {
+        flex: 0 0 auto;
+        width: clamp(280px, 80vw, 400px); /* Perubahan ukuran dinamis */
+        scroll-snap-align: center;
+        height: auto;
+        align-self: stretch;
+        
+        filter: blur(5px); /* Kembalikan efek blur pinggir */
+        transition: filter 0.4s ease;
+        will-change: filter;
+    }
+
+    /* State aktif saat di-snap ke tengah (Di-trigger oleh JS IntersectionObserver) */
+    .latest-insight-card-wrap.is-center {
+        filter: blur(0px);
+    }
+}
+/* #endregion */
+
+/* #region 41. SINGLE ARTICLE (EDITORIAL) */
+/* =========================================
+   41. SINGLE ARTICLE TYPOGRAPHY
+   ========================================= */
+.article-container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 60px 20px 80px;
+}
+
+.article-header {
+    text-align: center;
+    margin-bottom: 60px;
+    padding-top: 80px;
+    border-bottom: 1px solid rgba(0,0,0,0.08); /* Garis batas ala koran */
+    padding-bottom: 40px;
+}
+
+.article-title {
+    font-family: var(--font-primary);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    color: #111;
+    margin-bottom: 32px;
+}
+
+.article-hero-image {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto 60px;
+    border-radius: 24px;
+    overflow: hidden;
+    aspect-ratio: 16/9;
+    box-shadow: var(--shadow-soft);
+}
+
+@media (max-width: 767px) {
+    .article-hero-image {
+        border-radius: 0;
+        /* [FIX] Pastikan membentang 100% layar HP tanpa menimbulkan scrollbar */
+        width: 100vw;
+        margin-left: calc(-50vw + 50%);
+        margin-right: calc(-50vw + 50%);
+        max-width: 100vw;
+    }
+}
+
+.article-hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.article-content p {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: #444;
+    margin-bottom: 24px;
+    max-width: 65ch; /* Constrain width for optimal reading */
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 400;
+}
+
+/* [PREMIUM] Lead Paragraph (First Paragraph) */
+.article-content > p.lead-paragraph {
+    font-size: 1.25rem; /* Lebih besar dari teks biasa */
+    line-height: 1.7;
+    color: #111; /* Lebih hitam */
+    font-weight: 500; /* Sedikit lebih tebal */
+}
+
+.article-content h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 60px auto 24px;
+    max-width: 65ch;
+    letter-spacing: -0.02em;
+    color: #111;
+}
+
+.article-content blockquote {
+    margin: 40px auto;
+    max-width: 65ch;
+    padding: 0;
+    border: none;
+    text-align: center;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 500;
+    font-style: italic;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    color: #111;
+}
+
+.article-content blockquote::before {
+    content: "“";
+    display: block;
+    font-size: 4rem;
+    color: rgba(0,0,0,0.1);
+    line-height: 0;
+    margin-bottom: 24px;
+    font-style: normal;
+}
+
+/* [PREMIUM] Drop Cap untuk paragraf pertama */
+.article-content > p:first-of-type::first-letter {
+    float: left;
+    font-size: 4.5rem;
+    line-height: 0.8;
+    padding-top: 4px;
+    padding-right: 12px;
+    font-weight: 800;
+    color: #111;
+    text-transform: uppercase;
+}
+
+/* [PREMIUM] Author Byline & Image Caption */
+.article-author-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.article-author-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.article-author-name {
+    font-weight: 600;
+    color: #111;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.article-meta {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #888;
+}
+
+.article-image-caption {
+    text-align: center;
+    font-size: 0.7rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-top: 16px;
+}
+
+.article-content ul, .article-content ol {
+    max-width: 65ch;
+    margin: 0 auto 32px;
+    padding-left: 20px;
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: #444;
+}
+
+.article-content li {
+    margin-bottom: 12px;
+    max-width: 100%;
+}
+
+
+.back-to-journal {
+    position: fixed;
+    top: 120px;
+    left: 4%; /* Posisi strategis di kiri layar */
+    z-index: 900; /* Bebas dari halangan Navbar */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    color: #111;
+    text-decoration: none;
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 10px; /* Minimalist Squircle */
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.back-text {
+    display: none; /* Sembunyikan teks */
+}
+
+.back-to-journal:hover {
+    background-color: #111;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.back-to-journal svg {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.back-to-journal:hover svg {
+    transform: translateX(-2px);
+}
+
+@media (max-width: 767px) {
+    .back-to-journal {
+        top: 90px;
+        left: 5%;
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* [PREMIUM] Tombstone Mark (Akhir Artikel) */
+.end-mark {
+    display: inline-block;
+    margin-left: 6px;
+    color: #111;
+    font-size: 0.75em;
+    vertical-align: baseline;
+}
+
+/* [PREMIUM] Article Footer (Tags & Share) */
+.article-footer {
+    margin-top: 60px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.article-tags { display: flex; gap: 8px; }
+.article-tags .tag {
+    background: #f5f5f7; padding: 6px 12px; border-radius: 8px;
+    font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 1px; color: #555; border: 1px solid rgba(0,0,0,0.04);
+}
+
+.article-share { display: flex; align-items: center; gap: 16px; font-size: 0.85rem; font-weight: 600; color: #111; }
+.article-share span { color: #999; text-transform: uppercase; letter-spacing: 1px; font-size: 0.75rem; }
+.article-share a { color: #111; text-decoration: none; }
+
+/* [PREMIUM] Article Summary (TL;DR & TOC) */
+.article-summary-block {
+    background-color: #f9f9f9;
+    border: 1px solid rgba(0,0,0,0.04);
+    border-radius: 16px;
+    padding: 32px;
+    margin: 0 auto 48px auto;
+    max-width: 65ch;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+@media (min-width: 768px) {
+    .article-summary-block {
+        flex-direction: row;
+        gap: 40px;
+    }
+    .tldr-section {
+        flex: 3;
+        border-right: 1px solid rgba(0,0,0,0.08);
+        padding-right: 40px;
+    }
+    .toc-section {
+        flex: 2;
+    }
+}
+
+.summary-label {
+    display: block;
+    font-family: var(--font-primary);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #111;
+    margin-bottom: 12px;
+}
+
+.tldr-section p { font-size: 0.95rem; line-height: 1.6; color: #555; margin: 0; font-weight: 500; }
+.toc-section ul { list-style: none !important; padding: 0 !important; margin: 0 !important; }
+.toc-section li { margin-bottom: 12px !important; }
+.toc-section a {
+    font-size: 0.9rem;
+    color: #555;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    display: inline-block;
+}
+.toc-section a:hover {
+    color: #111;
+    text-decoration: underline; text-decoration-color: #111;
+    text-decoration-thickness: 1px; text-underline-offset: 4px;
+}
+/* #endregion */
+
+/* #region 42. METRIC TOOLTIPS & PREMIUM CTA */
+/* =========================================
+   42. DATA TOOLTIP & PREMIUM SOFT CTA
+   ========================================= */
+.data-item {
+    position: relative;
+    cursor: help;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+}
+
+.metric-tooltip {
+    position: absolute;
+    bottom: calc(100% + 15px);
+    left: 50%;
+    transform: translateX(-50%) translateY(10px) scale(0.95);
+    background: #111;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-family: var(--font-primary);
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.4;
+    width: max-content;
+    max-width: 240px;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+    z-index: 10;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    pointer-events: none;
+}
+
+.data-item:hover .metric-tooltip,
+.data-item:focus .metric-tooltip,
+.data-item:active .metric-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0) scale(1);
+}
+
+.metric-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: #111 transparent transparent transparent;
+}
+
+/* Premium CTA Section */
+.premium-soft-cta {
+    position: relative;
+    background-color: #050505;
+    background-image: radial-gradient(circle at top right, rgba(255,255,255,0.05) 0%, transparent 60%);
+    color: #fff;
+    border-radius: 24px;
+    padding: 80px 40px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    box-shadow: 0 30px 60px -15px rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.05);
+    overflow: hidden;
+    z-index: 1;
+}
+
+.premium-soft-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.premium-soft-cta-title {
+    font-family: var(--font-primary);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: -0.03em;
+    color: #fff;
+}
+
+.premium-soft-cta-desc {
+    font-family: var(--font-primary);
+    font-size: 1.125rem;
+    color: #a1a1aa;
+    max-width: 50ch;
+    margin: 0;
+    line-height: 1.6;
+    font-weight: 400;
+}
+
+.premium-soft-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: #fff;
+    color: #000;
+    padding: 16px 36px;
+    border-radius: 12px;
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.6s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.4s ease;
+    margin-top: 12px;
+    will-change: transform, box-shadow;
+    transform: translateZ(0); /* Anti-blur fix */
+}
+
+.premium-soft-cta-btn:hover {
+    transform: translate3d(0, -4px, 0) scale(1.02); /* Hardware accelerated lift */
+    box-shadow: 0 15px 30px rgba(255,255,255,0.2);
+    background: #f0f0f0;
+}
+
+.premium-soft-cta-btn svg {
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.premium-soft-cta-btn:hover svg {
+    transform: translate3d(4px, 0, 0);
+}
+/* #endregion */
+
+/* #region 44. BENTO GRID */
+/* =========================================
+   44. BENTO GRID (TOP CONTENT)
+   ========================================= */
+.bento-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+}
+
+@media (min-width: 768px) {
+    .bento-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 992px) {
+    .bento-grid {
+        grid-template-columns: repeat(3, 1fr);
+        grid-auto-rows: 320px;
+    }
+    .bento-item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+    .bento-item:nth-child(2) { grid-column: span 1; grid-row: span 1; }
+    .bento-item:nth-child(3) { grid-column: span 1; grid-row: span 1; }
+    .bento-item:nth-child(4) { grid-column: span 3; grid-row: span 1; }
+}
+
+.bento-item {
+    position: relative;
+    border-radius: 24px;
+    overflow: hidden;
+    background-color: #111;
+    min-height: 320px;
+    box-shadow: 0 10px 30px -10px rgba(0,0,0,0.15), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    display: flex;
+    flex-direction: column;
+    will-change: transform, box-shadow;
+    transform: translateZ(0); /* Anti-blur fix untuk teks di dalam kartu */
+}
+
+.bento-item:hover {
+    transform: translate3d(0, -8px, 0); /* Animasi lebih halus & didukung akselerasi hardware */
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), 0 0 0 1px rgba(255, 255, 255, 0.3), 0 0 30px rgba(255, 255, 255, 0.15);
+}
+
+/* [NEW] Shimmer Effect on Hover */
+.bento-item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -200%;
+    width: 150%;
+    height: 100%;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03), transparent);
+    transform: skewX(-25deg);
+    z-index: 5;
+    pointer-events: none;
+}
+.bento-item:hover::after {
+    animation: bentoShimmer 2.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+@keyframes bentoShimmer {
+    0% { left: -200%; }
+    100% { left: 200%; }
+}
+
+.bento-video {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; 
+    height: 100%;
+    object-fit: cover; /* Fill the bento box, cropping if necessary */
+    transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.4s ease;
+    opacity: 0.7;
+}
+
+.bento-item:hover .bento-video {
+    transform: scale(1.05);
+    opacity: 0.4;
+}
+
+.bento-overlay {
+    position: relative;
+    flex: 1;
+    width: 100%;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.2) 60%, transparent 100%);
+    z-index: 2;
+}
+
+.bento-icon-wrapper {
+    width: 48px; 
+    height: 48px; 
+    background: rgba(255,255,255,0.1); 
+    border-radius: 12px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    color: #fff; 
+    margin-bottom: 24px;
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.bento-icon-wrapper svg {
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.bento-item:hover .bento-icon-wrapper {
+    background: rgba(255,255,255,0.15);
+}
+.bento-item:hover .bento-icon-wrapper svg {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.6));
+}
+
+.bento-title {
+    color: #fff;
+    font-family: var(--font-primary);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    transform: translateY(10px);
+    transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+@media (min-width: 992px) {
+    .bento-item:nth-child(1) .bento-title {
+        font-size: 2.5rem;
+    }
+}
+
+.bento-item:hover .bento-title {
+    transform: translateY(0);
+}
+
+.bento-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    transform: translateY(10px);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.bento-item:hover .bento-actions,
+.bento-item.stats-open .bento-actions {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.bento-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    color: #fff;
+    font-family: var(--font-primary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.bento-btn:hover {
+    background: #fff;
+    color: #000;
+}
+
+.bento-btn svg {
+    transition: transform 0.3s ease;
+}
+
+.bento-stats-toggle.active svg {
+    transform: rotate(180deg);
+}
+
+.bento-stats-panel {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+    gap: 12px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 16px;
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.bento-item.stats-open .bento-stats-panel {
+    padding: 16px;
+    max-height: 400px;
+    opacity: 1;
+}
+
+.bento-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.stat-val {
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.stat-label {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+}
+
+/* Mobile Specific Refinements for Bento Grid */
+@media (max-width: 767px) {
+    .bento-overlay { padding: 24px; }
+    .bento-stats-panel { gap: 8px; }
+    .stat-val { font-size: 1rem; }
+    .bento-title { font-size: 1.25rem; }
+}
+/* #endregion */
+
+/* #region 43. ABOUT PAGE (STICKY FLIP) */
+/* =========================================
+   43. ABOUT PAGE (STICKY FLIP)
+   ========================================= */
+.about-sticky-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    position: relative;
+}
+
+@media (min-width: 992px) {
+    .about-sticky-layout {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+}
+
+.about-visual-col {
+    flex: 1;
+    position: sticky;
+    top: 20vh;
+    height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1500px;
+    z-index: 10;
+}
+
+.about-text-col {
+    flex: 1;
+    padding: 50vh 0 40vh 0; /* Memberi ruang scroll awal agar kartu bisa berputar utuh dulu */
+    display: flex;
+    flex-direction: column;
+    gap: 35vh; /* Sedikit dirapatkan agar user tidak kelelahan scroll */
+}
+
+@media (max-width: 991px) {
+    .about-visual-col {
+        top: 10vh;
+        height: 40vh;
+        margin-bottom: 20px;
+    }
+    .about-text-col {
+        padding: 40vh 0 20vh 0; /* Ruang scroll flip khusus untuk mobile */
+        gap: 30vh;
+    }
+}
+
+.about-scroll-step {
+    opacity: 0.2;
+    transform: translateY(20px);
+    transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+    max-width: 500px;
+}
+
+.about-scroll-step.is-active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.flip-card-container { width: 100%; max-width: 420px; aspect-ratio: 4/5; position: relative; }
+@media (max-width: 991px) { .flip-card-container { max-width: 280px; } }
+
+.flip-card-inner {
+    width: 100%; height: 100%; position: relative; transform-style: preserve-3d;
+    border-radius: 24px; box-shadow: var(--shadow-hover); will-change: transform;
+}
+
+.flip-card-front, .flip-card-back {
+    width: 100%; height: 100%; position: absolute; top: 0; left: 0; backface-visibility: hidden;
+    border-radius: 24px; overflow: hidden; background-color: #f5f5f7; border: 1px solid rgba(0,0,0,0.04);
+}
+
+.flip-card-back { transform: rotateY(180deg); background: #000; }
+.flip-img, .flip-video { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* #endregion */
