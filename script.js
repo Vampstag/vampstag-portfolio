@@ -423,6 +423,21 @@ function loadFooter() {
                 if (window.ScrollTrigger) {
                     ScrollTrigger.refresh();
                 }
+
+                // 4. Initialize Formspree AJAX
+                if (!document.getElementById('formspree-sdk')) {
+                    const script = document.createElement('script');
+                    script.id = 'formspree-sdk';
+                    script.src = "https://unpkg.com/@formspree/ajax@1";
+                    script.defer = true;
+                    script.onload = () => {
+                        window.formspree = window.formspree || function () { (window.formspree.q = window.formspree.q || []).push(arguments); };
+                        window.formspree('initForm', { formElement: '#wf-form-Email-Form', formId: 'xqenneyy' });
+                    };
+                    document.body.appendChild(script);
+                } else if (window.formspree) {
+                    window.formspree('initForm', { formElement: '#wf-form-Email-Form', formId: 'xqenneyy' });
+                }
             });
         })
         .catch(err => {
