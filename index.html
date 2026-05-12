@@ -385,10 +385,16 @@
                             <!-- 2. Refactored Latest Work Section -->
                             <a href="/portfolio/torch" class="work-card">
                                 <div class="work-card__image-wrapper">
-                                    <!-- Video Player Element -->
-                                    <video class="work-card__video" autoplay loop muted playsinline>
-                                        <source src="assets/videos/project/torch/campaign_launch.webm" type="video/webm">
-                                    </video>
+                                    <!-- Lottie Player Element -->
+                                    <lottie-player 
+                                        src="assets/videos/project/torch/lottie/showreel(placeholder).json" 
+                                        background="transparent" 
+                                        speed="1" 
+                                        loop 
+                                        autoplay 
+                                        class="work-card__video"
+                                        preserveAspectRatio="xMidYMid slice">
+                                    </lottie-player>
                                     <!-- Existing Overlay -->
                                     <div class="work-card__overlay"> 
                                         <div class="work-card__metrics">
