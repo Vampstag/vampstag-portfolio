@@ -1,3 +1,16 @@
+//#region CLEAN URL MANAGER
+// =========================================
+// 0. CLEAN URL MANAGER (ADDRESS BAR ONLY)
+// =========================================
+(function() {
+    if (window.location.pathname.endsWith('.html')) {
+        let cleanPath = window.location.pathname.replace(/\.html$/, '');
+        if (cleanPath.endsWith('/index')) cleanPath = cleanPath.replace(/\/index$/, '/');
+        window.history.replaceState(null, '', cleanPath + window.location.search + window.location.hash);
+    }
+})();
+//#endregion
+
 //#region GLOBAL INITIALIZATION
 // =========================================
 // 1. CORE SETUP & EVENT LISTENERS
@@ -13,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
             title: "Kenapa Banyak UMKM Gagal di Sosial Media?",
             excerpt: "Menganalisis kesalahan umum dalam strategi visual UMKM dan bagaimana cara memperbaikinya dengan pendekatan data-driven.",
             image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=800&auto=format&fit=crop", // Placeholder: Optimal untuk rasio potret 4:5
-            link: "journal/umkm-gagal",
+            link: "journal/umkm-gagal.html",
             isTextOnly: false,
             aspectRatio: "4/5"
         },
