@@ -339,6 +339,17 @@ function loadNavbar() {
                     }
                 });
             }
+            
+            // [FIX] Update "Insights" to "Journal" and correct the href link dynamically
+            container.querySelectorAll('a').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && href.includes('/journal/journal')) {
+                    link.setAttribute('href', href.replace('/journal/journal', '/journal'));
+                }
+                if (link.textContent.trim().toLowerCase() === 'insights') {
+                    link.textContent = 'Journal';
+                }
+            });
 
                 // [NEW] Smart Dynamic Active State for Navbar Links
                 const pathname = window.location.pathname;
