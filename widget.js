@@ -131,43 +131,6 @@ class MdkgWidget {
         lightbox.classList.add('active');
     }
 
-    // --- Ekstraksi Warna Dominan Gambar ---
-    getAverageRGB(imgEl) {
-        const blockSize = 5; // Hanya cek setiap 5 pixel agar ringan di performa
-        const defaultRGB = { r: 255, g: 255, b: 255 }; // Default fallback (Putih)
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext && canvas.getContext('2d');
-        let data, width, height;
-        let i = -4, count = 0;
-        let rgb = { r: 0, g: 0, b: 0 };
-
-        if (!context) return defaultRGB;
-
-        height = canvas.height = imgEl.naturalHeight || imgEl.offsetHeight || 100;
-        width = canvas.width = imgEl.naturalWidth || imgEl.offsetWidth || 100;
-
-        try {
-            context.drawImage(imgEl, 0, 0);
-            data = context.getImageData(0, 0, width, height);
-        } catch(e) {
-            // Fallback aman jika terkena blokir keamanan browser (CORS)
-            return defaultRGB;
-        }
-
-        const length = data.data.length;
-        while ((i += blockSize * 4) < length) {
-            ++count;
-            rgb.r += data.data[i];
-            rgb.g += data.data[i+1];
-            rgb.b += data.data[i+2];
-        }
-
-        rgb.r = Math.floor(rgb.r / count);
-        rgb.g = Math.floor(rgb.g / count);
-        rgb.b = Math.floor(rgb.b / count);
-        return rgb;
-    }
-
     // --- Render HTML ---
     render(container) {
         const currentTrack = this.playlist[this.currentTrackIndex];
@@ -263,35 +226,30 @@ class MdkgWidget {
     initTyping() {
         const statusText = document.querySelector('.mdkg-status-text');
         if (!statusText) return;
-
-        const text = statusText.textContent;
-        let index = 0;
-        let isDeleting = false;
         
-        const type = () => {
-            const currentText = text.substring(0, index);
-            statusText.textContent = currentText;
+        const textToType = "Open for 2 Selected Projects";
+        let i = 0;
+        let isDeleting = false;
 
-            let speed = 100;
+        const typeWriter = () => {
+            const currentText = textToType.substring(0, i);
+            statusText.innerHTML = currentText + '<span class="mdkg-typing-cursor">|</span>';
 
-            if (isDeleting) {
-                speed = 50;
-                index--;
-            } else {
-                index++;
-            }
+            let typeSpeed = isDeleting ? 30 : 80;
 
-            if (!isDeleting && index === text.length + 1) {
+            if (!isDeleting && i === textToType.length) {
+                typeSpeed = 4000; // Jeda lama saat teks sudah lengkap
                 isDeleting = true;
-                speed = 3000;
-            } else if (isDeleting && index === 0) {
+            } else if (isDeleting && i === 0) {
                 isDeleting = false;
-                speed = 500;
+                typeSpeed = 1000; // Jeda sebelum mengetik ulang
             }
 
-            setTimeout(type, speed);
+            i += isDeleting ? -1 : 1;
+            setTimeout(typeWriter, typeSpeed);
         };
-        type();
+        
+        typeWriter();
     }
 
     // --- Feature: Music Player ---
@@ -351,21 +309,7 @@ class MdkgWidget {
                     trackArtist.title = track.artist; // [NEW] Memunculkan full band saat di-hover
                 }
                 if (coverImg && track.cover) {
-                    coverImg.crossOrigin = "Anonymous"; // Mencegah error keamanan canvas
-                    
-                    coverImg.onload = () => {
-                        const rgb = this.getAverageRGB(coverImg);
-                        // Kalkulasi kecerahan warna (Luminance formula)
-                        const brightness = Math.round(((rgb.r * 299) + (rgb.g * 587) + (rgb.b * 114)) / 1000);
-                        const isDark = brightness < 125; // Jika warna gelap, teks akan diputihkan
-                        
-                        // Inject CSS Variables langsung ke elemen Widget
-                        player.style.setProperty('--w-bg', `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.65)`);
-                        player.style.setProperty('--w-text', isDark ? '#ffffff' : '#111111');
-                        player.style.setProperty('--w-sub', isDark ? 'rgba(255, 255, 255, 0.7)' : '#666666');
-                    };
                     coverImg.src = track.cover;
-                    if (coverImg.complete) coverImg.onload(); // Panggil manual jika gambar dari cache
                 }
             };
             
