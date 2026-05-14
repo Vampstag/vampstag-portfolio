@@ -3114,6 +3114,11 @@ html.lenis, html.lenis body { height: auto; }
     aspect-ratio: 16/9;
 }
 .video-element { width: 100%; height: 100%; object-fit: cover; }
+/* [FIX] Mencegah video portrait terpotong saat Full Screen */
+.video-player-wrapper:fullscreen { border-radius: 0; }
+.video-player-wrapper:-webkit-full-screen { border-radius: 0; }
+.video-player-wrapper:fullscreen .video-element { object-fit: contain; }
+.video-player-wrapper:-webkit-full-screen .video-element { object-fit: contain; }
 .video-hover-overlay {
     position: absolute; inset: 0;
     opacity: 0; transition: opacity 0.3s ease;
