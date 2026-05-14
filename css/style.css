@@ -1545,18 +1545,21 @@ html.lenis, html.lenis body { height: auto; }
 /* Custom Navigation Arrows for Bits Slider */
 .bits-slider .swiper-button-next, 
 .bits-slider .swiper-button-prev {
-    color: #111;
-    background: rgba(255, 255, 255, 0.85);
+    color: #fff;
+    background: #111; /* Kontras gelap agar terlihat jelas di atas background putih */
     width: 56px;
     height: 56px;
     border-radius: 50%;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
     z-index: 20;
 }
+
+.bits-slider .swiper-button-prev { left: 8vw; } /* Digeser lebih ke tengah */
+.bits-slider .swiper-button-next { right: 8vw; }
 
 .bits-slider .swiper-button-next:after, 
 .bits-slider .swiper-button-prev:after {
@@ -1566,9 +1569,9 @@ html.lenis, html.lenis body { height: auto; }
 
 .bits-slider .swiper-button-next:hover, 
 .bits-slider .swiper-button-prev:hover {
-    background: #ffffff;
+    background: #000;
     transform: scale(1.08);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
 }
 
 .bits-slider .swiper-button-next:active, 
