@@ -127,6 +127,29 @@ p, li, span, .paragraph, .about-text {
     line-height: 1.6;
     max-width: 60ch;
 }
+
+/* [NEW] Text Focus/Hover Readability Enhancement */
+.about-paragraph, 
+.sol-desc, 
+.takeaway-text, 
+.why-desc, 
+.faq__answer p,
+.article-content p {
+    transition: color 0.4s ease;
+}
+.about-paragraph:hover, 
+.sol-desc:hover, 
+.takeaway-text:hover, 
+.why-desc:hover, 
+.faq__answer p:hover,
+.article-content p:hover {
+    color: #111 !important; /* Berubah menjadi hitam pekat */
+}
+
+/* Khusus untuk teks dengan background gelap (seperti di Bento Grid) */
+.bento-desc:hover {
+    color: #ffffff !important; /* Berubah menjadi putih solid */
+}
 /* #endregion */
 
 /* #region 1. GLOBAL & UTILITIES */
@@ -4893,7 +4916,7 @@ a.social-icon:hover img {
     flex-wrap: wrap;
     transform: translateY(10px);
     opacity: 0;
-    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    transition: opacity 0.4s cubic-bezier(0.19, 1, 0.22, 1), transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
     margin-top: 20px;
 }
 
@@ -4919,18 +4942,28 @@ a.social-icon:hover img {
     font-family: var(--font-primary);
     font-size: 0.85rem;
     font-weight: 600;
-    text-decoration: none;
+    text-decoration: none !important;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s cubic-bezier(0.19, 1, 0.22, 1);
+    transform: translateZ(0); /* Mencegah glitch render dari backdrop-filter */
+    will-change: transform, background-color;
+    outline: none;
 }
 
 .bento-btn:hover {
-    background: #fff;
+    background-color: #fff;
     color: #000;
+    border-color: #fff;
+}
+
+.bento-btn:active {
+    opacity: 1 !important; /* Menimpa efek global opacity: 0.8 yang membuat layar berkedip */
+    transform: scale(0.96); /* Efek tombol fisik membal */
 }
 
 .bento-btn svg {
     transition: transform 0.3s ease;
+    pointer-events: none; /* Mencegah SVG mem-block event interaksi mouse */
 }
 
 .bento-stats-toggle.active svg {
@@ -4979,6 +5012,16 @@ a.social-icon:hover img {
     text-transform: uppercase;
     letter-spacing: 1px;
     margin-top: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.stat-label svg {
+    width: 12px;
+    height: 12px;
+    opacity: 0.8;
 }
 
 /* Mobile Specific Refinements for Bento Grid */
