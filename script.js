@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <a href="${linkPath}" class="journal-card ${post.isTextOnly ? 'text-only-card' : ''}">
                         ${!post.isTextOnly ? `
                         <div class="journal-card__image-wrapper">
-                            <img src="${imgPath}" alt="${post.title}" class="journal-card__image" loading="lazy">
+                            <img src="${imgPath}" alt="${post.title}" class="journal-card__image" loading="lazy" decoding="async">
                         </div>
                         ` : ''}
                         <div class="journal-card__content">
@@ -154,7 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <a href="${linkPath}" class="journal-card ${post.isTextOnly ? 'text-only-card' : ''}">
                         ${!post.isTextOnly ? `
                         <div class="journal-card__image-wrapper">
-                            <img src="${imgPath}" alt="${post.title}" class="journal-card__image" loading="lazy">
+                            <img src="${imgPath}" alt="${post.title}" class="journal-card__image" loading="lazy" decoding="async">
                         </div>
                         ` : ''}
                         <div class="journal-card__content">
