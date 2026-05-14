@@ -46,7 +46,7 @@
     border-radius: 50%; /* [UPDATE] Diubah menjadi lingkaran penuh */
     flex-shrink: 0;
     /* [UPDATE] Shadow dan outline hitam untuk efek pinggiran piringan hitam */
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3), 0 0 0 4px #111; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3), 0 0 0 2px #111; 
     margin-right: 0;
     position: relative;
     background-color: #111;
@@ -75,10 +75,10 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 6px;
-    height: 6px;
+    width: 4px;
+    height: 4px;
     background: #e0e0e0;
-    border: 2px solid #111;
+    border: 1px solid #111;
     border-radius: 50%;
     transform: translate(-50%, -50%);
     z-index: 3;
@@ -379,21 +379,50 @@
     opacity: 0;
 }
 
+/* --- TABLET RESPONSIVE --- */
+@media (max-width: 991px) {
+    .mdkg-widget-player {
+        bottom: 30px;
+        right: 30px;
+    }
+    .mdkg-widget-status {
+        bottom: 30px;
+        left: 30px;
+    }
+}
+
 /* --- MOBILE RESPONSIVE --- */
 @media (max-width: 767px) {
     .mdkg-widget-player {
         bottom: 20px;
         right: 20px;
-        padding: 10px 14px;
-        padding: 8px 10px;
+        padding: 8px 12px;
         gap: 8px;
+        border-radius: 16px;
     }
     .mdkg-player-text {
         display: none; /* Hide text on mobile */
     }
 
-    .mdkg-track-info {
-        max-width: 100px; /* Lebar lebih kecil di mobile agar tidak mentok tepi */
+    .mdkg-widget-player.playing .mdkg-track-info {
+        max-width: 90px; /* Lebar lebih kecil di mobile agar tidak mentok tepi */
+    }
+
+    .mdkg-track-title {
+        font-size: 12px;
+    }
+
+    .mdkg-track-artist {
+        font-size: 10px;
+    }
+
+    .mdkg-player-cover {
+        height: 32px;
+    }
+
+    .mdkg-widget-player.playing .mdkg-player-cover {
+        width: 32px;
+        margin-right: 6px;
     }
 
     /* Compact Live Status Widget */
@@ -405,12 +434,13 @@
         z-index: 990;
         width: auto;
         min-width: 0;
-        max-width: calc(100% - 100px); /* Prevent overlap with music player */
-        padding: 10px 14px;
+        max-width: calc(100% - 150px); /* Jarak aman agar tidak nabrak music player */
+        padding: 8px 12px;
+        border-radius: 16px;
         display: flex;
         flex-direction: row;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
         box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     }
     .mdkg-widget-header { display: none; } /* Hide clock on mobile */
