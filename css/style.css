@@ -4798,8 +4798,10 @@ a.social-icon:hover img {
 .bento-title {
     color: #fff;
     font-family: var(--font-primary);
-    font-size: 1.75rem;
-    font-weight: 700;
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
     margin-bottom: 0px;
     transform: translateY(10px);
     transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1), margin-bottom 0.4s cubic-bezier(0.19, 1, 0.22, 1);
@@ -4841,8 +4843,8 @@ a.social-icon:hover img {
 
 .bento-desc {
     color: rgba(255,255,255,0.7);
-    font-size: 1.15rem; /* [FIX] Diperbesar agar lebih mudah dibaca */
-    line-height: 1.6;
+    font-size: 0.95rem; /* Ukuran lebih premium dan elegan */
+    line-height: 1.5;
     margin: 0;
     font-weight: 400;
     max-height: 0;
@@ -4852,25 +4854,27 @@ a.social-icon:hover img {
     transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
+.bento-item:hover .bento-desc, 
+.bento-item.is-active .bento-desc,
 .bento-item.is-expanded .bento-desc {
     max-height: 200px;
     opacity: 1;
-    margin-top: 16px;
+    margin-top: 8px;
     transform: translateY(0);
 }
 
 @media (min-width: 992px) {
     .bento-title {
-        font-size: 2.25rem; /* Semua judul menjadi lebih besar di desktop */
+        font-size: 1.5rem; /* Lebih proporsional */
     }
     .bento-item:nth-child(1) .bento-title {
-        font-size: 3.25rem; /* Judul utama ekstra besar */
+        font-size: 2.25rem; /* Judul utama slightly larger */
     }
     .bento-desc {
-        font-size: 1.25rem; /* Teks deskripsi lebih besar di desktop */
+        font-size: 1rem;
     }
     .bento-item:nth-child(1) .bento-desc {
-        font-size: 1.35rem; /* Deskripsi utama ekstra besar */
+        font-size: 1.1rem;
     }
     .bento-plus-icon {
         width: 44px;
@@ -4890,6 +4894,7 @@ a.social-icon:hover img {
     transform: translateY(10px);
     opacity: 0;
     transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    margin-top: 20px;
 }
 
 .bento-item:hover .bento-actions,
@@ -4983,8 +4988,8 @@ a.social-icon:hover img {
     .bento-icon-wrapper { width: 48px; height: 48px; margin-bottom: 32px; }
     .bento-stats-panel { gap: 8px; }
     .stat-val { font-size: 1rem; }
-    .bento-title { font-size: 1.6rem; }
-    .bento-desc { font-size: 1.05rem; }
+    .bento-title { font-size: 1.25rem; }
+    .bento-desc { font-size: 0.9rem; }
     .bento-plus-icon { width: 32px; height: 32px; }
 }
 /* #endregion */
