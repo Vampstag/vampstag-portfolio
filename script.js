@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
             title: "The Weight of Atmosphere",
             excerpt: "A personal reflection on cinematic storytelling, emotional gravity, and the unseen details in creative work.",
             image: "assets/images/project/torch/bts-5.webp",
-            link: "journal/weight-of-atmosphere.html",
+            link: "journal/weight-of-atmosphere",
             isTextOnly: false,
             aspectRatio: "4/5"
         }

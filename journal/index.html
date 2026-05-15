@@ -144,7 +144,11 @@
                         <div class="home-hero-wrapper">
                             <div class="home-hero-headline-wrapper page-portfolio journal-hero-anim" style="opacity: 0; transform: translateY(30px);">
                                 <h1 class="home-hero-headline-text-2">Journal</h1>
-                                <p class="subtitle">Thoughts on visual strategy, industry breakdowns, and my creative process.</p>
+                                <p id="jack-quote" style="font-family: var(--font-primary); font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 300; font-style: italic; color: #333; letter-spacing: -0.02em; line-height: 1.3; max-width: 650px; margin: 0 auto; min-height: 3.2rem;">"Not all treasure is silver and gold, mate."</p>
+                                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; margin-top: 32px;">
+                                    <img src="../assets/images/journal/jack-sparrow.avif" alt="Jack Sparrow" style="width: 120px; height: 150px; border-radius: 12px; object-fit: cover; box-shadow: 0 20px 40px -10px rgba(0,0,0,0.15); border: 1px solid rgba(0,0,0,0.04);">
+                                    <span style="font-family: var(--font-primary); font-size: 0.75rem; font-weight: 600; color: #999; letter-spacing: 0.2em; text-transform: uppercase;">— Jack Sparrow</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -197,12 +201,37 @@
             window.addEventListener('preloaderDone', () => {
                 if (typeof gsap === 'undefined') return;
                 
+                // Typing effect function
+                function startTyping() {
+                    const quoteEl = document.getElementById('jack-quote');
+                    if (quoteEl && !quoteEl.classList.contains('is-typing')) {
+                        quoteEl.classList.add('is-typing');
+                        const text = '"Not all treasure is silver and gold, mate."';
+                        quoteEl.innerHTML = ''; // Kosongkan teks awal
+                        
+                        let i = 0;
+                        function typeWriter() {
+                            if (i < text.length) {
+                                quoteEl.innerHTML = text.substring(0, i + 1) + '<span style="font-weight: 300; font-style: normal; animation: mdkgBlink 0.8s step-end infinite;">|</span>';
+                                i++;
+                                let speed = Math.random() * 50 + 30; // Kecepatan acak natural
+                                if (text.charAt(i - 1) === ',') speed += 250; // Jeda ekstra saat ada koma
+                                setTimeout(typeWriter, speed);
+                            } else {
+                                setTimeout(() => { quoteEl.innerHTML = text; }, 2500); // Hilangkan kursor setelah berkedip sebentar
+                            }
+                        }
+                        setTimeout(typeWriter, 400); // Delay tipis sebelum mulai ngetik
+                    }
+                }
+
                 // Animate Hero
                 gsap.to('.journal-hero-anim', {
                     opacity: 1,
                     y: 0,
                     duration: 1.2,
-                    ease: "power3.out"
+                    ease: "power3.out",
+                    onStart: startTyping
                 });
                 
                 // Stagger animate masonry items
@@ -221,6 +250,7 @@
                 if(document.querySelector('.journal-hero-anim').style.opacity == 0) {
                     gsap.to('.journal-hero-anim', { opacity: 1, y: 0, duration: 1 });
                     gsap.to('.journal-anim-item', { opacity: 1, y: 0, stagger: 0.1, duration: 1 });
+                    startTyping();
                 }
             }, 1500);
         </script>
