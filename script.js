@@ -14,68 +14,24 @@ if ('serviceWorker' in navigator) {
 
 document.addEventListener("DOMContentLoaded", () => {
     // --- CENTRALIZED JOURNAL DATA (HEADLESS CMS) ---
-    // Tambahkan artikel baru di bawah ini, urutan bebas karena akan di-sort otomatis by date!
     const journalData = [
         {
-            date: "2025-12-20", // Format wajib YYYY-MM-DD untuk sorting logis
-            displayDate: "Dec 20, 2025",
-            readTime: "5 Min Read",
-            title: "Kenapa Banyak UMKM Gagal di Sosial Media?",
-            excerpt: "Menganalisis kesalahan umum dalam strategi visual UMKM dan bagaimana cara memperbaikinya dengan pendekatan data-driven.",
-            image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=800&auto=format&fit=crop", // Placeholder: Optimal untuk rasio potret 4:5
-            link: "/journal/umkm-gagal",
+            date: "2025-05-15", // Format wajib YYYY-MM-DD untuk sorting logis
+            displayDate: "May 15, 2025",
+            readTime: "3 Min Read",
+            title: "The Weight of Atmosphere",
+            excerpt: "A personal reflection on cinematic storytelling, emotional gravity, and the unseen details in creative work.",
+            image: "assets/images/project/torch/bts-5.webp",
+            link: "journal/weight-of-atmosphere.html",
             isTextOnly: false,
             aspectRatio: "4/5"
-        },
-        {
-            date: "2025-11-12",
-            displayDate: "Nov 12, 2025",
-            readTime: "Opinion",
-            title: "The Illusion of Viral Content",
-            excerpt: "Why chasing virality often destroys brand consistency, and what you should focus on instead to build long-term audience trust.",
-            image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=800&auto=format&fit=crop",
-            link: "#",
-            isTextOnly: false,
-            aspectRatio: "16/9"
-        },
-        // --- TAMBAHAN ARTIKEL DUMMY UNTUK PATOKAN MASONRY GRID ---
-        {
-            date: "2025-12-08",
-            displayDate: "Dec 08, 2025",
-            readTime: "Case Breakdown",
-            title: "Decoding Spotify Wrapped 2025",
-            excerpt: "A deep dive into why people love being quantified and how Spotify uses UI/UX to make sharing addictive.",
-            image: "https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?q=80&w=800&auto=format&fit=crop", // Placeholder: Optimal untuk rasio landscape 16:9
-            link: "#",
-            isTextOnly: false,
-            aspectRatio: "16/9"
-        },
-        {
-            date: "2025-10-24",
-            displayDate: "Oct 24, 2025",
-            readTime: "4 Min Read",
-            title: "Cara Menjaga Kreativitas di Tengah Tuntutan Harian",
-            excerpt: "Sistem manajemen waktu dan ide yang saya gunakan untuk menghindari burnout saat menangani multiple project komersial.",
-            image: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=800&auto=format&fit=crop", // Placeholder: Optimal untuk rasio persegi 1:1
-            link: "#",
-            isTextOnly: false,
-            aspectRatio: "1/1"
-        },
-        {
-            date: "2025-09-10",
-            displayDate: "Sep 10, 2025",
-            readTime: "Brand Design",
-            title: "Brand Anatomy: Netflix (2025)",
-            excerpt: "A closer look at Netflix’s branding DNA and their latest subtle visual identity shifts.",
-            image: "https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?q=80&w=800&auto=format&fit=crop", // Placeholder: Optimal untuk rasio potret 3:4
-            link: "#",
-            isTextOnly: false,
-            aspectRatio: "3/4"
         }
     ];
 
     // Sort artikel dari yang terbaru ke yang terlama secara otomatis
-    journalData.sort((a, b) => new Date(b.date) - new Date(a.date));
+    if (journalData.length > 1) {
+        journalData.sort((a, b) => new Date(b.date) - new Date(a.date));
+    }
 
     // [NEW] Injeksi JSON-LD (SEO Meta Tags) Dinamis untuk daftar artikel Journal
     function injectJournalSchema() {
@@ -145,16 +101,19 @@ document.addEventListener("DOMContentLoaded", () => {
         // 2. Render untuk Halaman Journal (Semua)
         if (journalGrid) {
             let html = '';
-            journalData.forEach(post => {
+            journalData.forEach((post, index) => {
                 const imgPath = post.image ? (post.image.startsWith('http') ? post.image : prefix + post.image) : '';
                 const linkPath = post.link.startsWith('http') || post.link.startsWith('/') || post.link === '#' ? post.link : prefix + post.link;
                 
+                // [OPTIMIZATION] Artikel pertama selalu prioritas LCP di halaman Journal
+                const imgLoading = index === 0 ? 'fetchpriority="high"' : 'loading="lazy" decoding="async"';
+
                 html += `
                 <div class="masonry-item journal-anim-item" style="opacity: 0; transform: translateY(40px);">
                     <a href="${linkPath}" class="journal-card ${post.isTextOnly ? 'text-only-card' : ''}">
                         ${!post.isTextOnly ? `
                         <div class="journal-card__image-wrapper">
-                            <img src="${imgPath}" alt="${post.title}" class="journal-card__image" loading="lazy" decoding="async">
+                            <img src="${imgPath}" alt="${post.title}" class="journal-card__image" ${imgLoading}>
                         </div>
                         ` : ''}
                         <div class="journal-card__content">
@@ -183,7 +142,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!container) return;
 
         const cards = container.querySelectorAll('.latest-journal-card-wrap');
-        if (!cards.length) return;
+        
+        // [OPTIMIZATION] Batalkan observer snap mobile jika artikel <= 1 (karena tidak bisa di-scroll)
+        if (cards.length <= 1) return;
 
         // Use IntersectionObserver to detect which card is in the center
         const observer = new IntersectionObserver((entries) => {
