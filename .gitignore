@@ -1,0 +1,16 @@
+# System Files
+.DS_Store
+Thumbs.db
+
+# Dependencies
+node_modules/
+
+# Build & Cache Folders
+.next/
+dist/
+build/
+.cache/
+
+# Secrets / Environment Variables
+.env
+.env.local
