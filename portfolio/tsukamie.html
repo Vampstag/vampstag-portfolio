@@ -2,12 +2,14 @@
 <html data-wf-domain="mdkg.webflow.io" data-wf-page="6933c25b0996b0f96f5c2c8e" data-wf-site="6933c25a0996b0f96f5c2bc3" data-wf-status="1" lang="en">
     <head>
         <meta charset="utf-8"/>
-        <title>Tsukamie Noodle Bar | Case Study | MDKG Portfolio</title>
-        <meta content="Case study: Revitalizing a stagnant F&B digital presence by shifting from hard-selling content toward a more community-driven storytelling approach for Tsukamie." name="description"/>
-        <meta content="Tsukamie Noodle Bar | Case Study" property="og:title"/>
-        <meta content="Case study: Revitalizing a stagnant F&B digital presence by shifting from hard-selling content toward a more community-driven storytelling approach for Tsukamie." property="og:description"/>
-        <meta content="https://hellodimas.my.id/assets/images/open-graphimage.png" property="og:image"/>
-        <meta content="https://hellodimas.my.id/assets/images/open-graphimage.png" name="twitter:image"/>
+        <title>Tsukamie Noodle Bar Case Study | Social Media Strategy | MDKG Portfolio</title>
+        <meta content="Case study: Discover how a community-driven social media strategy and TikTok content marketing revitalized Tsukamie Noodle Bar's F&B digital presence, boosting impressions by over 10,000%." name="description"/>
+        <meta content="Tsukamie Noodle Bar Case Study | Social Media Strategy | MDKG Portfolio" property="og:title"/>
+        <meta content="Case study: Discover how a community-driven social media strategy and TikTok content marketing revitalized Tsukamie Noodle Bar's F&B digital presence, boosting impressions by over 10,000%." property="og:description"/>
+        <meta content="https://hellodimas.my.id/assets/images/portfolio/tsukamie/tsukamie-1.webp" property="og:image"/>
+        <meta content="Tsukamie Noodle Bar Case Study | Social Media Strategy | MDKG Portfolio" property="twitter:title"/>
+        <meta content="Case study: Discover how a community-driven social media strategy and TikTok content marketing revitalized Tsukamie Noodle Bar's F&B digital presence, boosting impressions by over 10,000%." property="twitter:description"/>
+        <meta content="https://hellodimas.my.id/assets/images/portfolio/tsukamie/tsukamie-1.webp" name="twitter:image"/>
         <meta property="og:type" content="website"/>
         <meta content="summary_large_image" name="twitter:card"/>
         <meta content="width=device-width, initial-scale=1" name="viewport"/>
@@ -28,6 +30,41 @@
           gtag('js', new Date());
 
           gtag('config', 'G-57RMNL3S4P');
+        </script>
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "CreativeWork",
+          "name": "Tsukamie Noodle Bar Content Strategy",
+          "author": {
+            "@type": "Person",
+            "name": "M. Dimas K. G."
+          },
+          "description": "A portfolio case study on revitalizing Tsukamie Noodle Bar's digital presence through community-driven social media strategy and TikTok content marketing.",
+          "url": "https://hellodimas.my.id/portfolio/tsukamie"
+        }
+        </script>
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://hellodimas.my.id"
+          },{
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Portfolio",
+            "item": "https://hellodimas.my.id/portfolio"
+          },{
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Tsukamie Noodle Bar",
+            "item": "https://hellodimas.my.id/portfolio/tsukamie"
+          }]
+        }
         </script>
         <link href="https://cdn.prod.website-files.com/6933c25a0996b0f96f5c2bc3/css/mdkg.webflow.shared.4d3ebba11.css" rel="stylesheet" type="text/css" crossorigin="anonymous"/>
         <link href="../css/style.css" rel="stylesheet" type="text/css"/>
@@ -241,6 +278,120 @@
                 .workflow-line-bg { background: linear-gradient(to right, #111, rgba(0,0,0,0.05)); }
             }
 
+            /* [NEW] Solution Section Slider */
+            .solution-slider {
+                width: 100vw;
+                margin-left: calc(-50vw + 50%);
+                margin-right: calc(-50vw + 50%);
+                padding: 60px 0 100px;
+                overflow: visible !important;
+            }
+            .solution-slider .swiper-wrapper {
+                padding-top: 20px;
+                padding-bottom: 70px;
+            }
+            .solution-slider .swiper-slide {
+                width: clamp(260px, 70vw, 400px);
+                filter: blur(5px);
+                transition: filter 0.4s ease;
+                height: auto;
+                will-change: filter;
+            }
+            @media (min-width: 992px) {
+                .solution-slider .swiper-slide {
+                    width: clamp(300px, 30vw, 450px);
+                }
+            }
+            .solution-slider .swiper-slide-active {
+                filter: blur(0px);
+                z-index: 10;
+            }
+            .solution-slider .photo-card {
+                background-color: #ffffff;
+                padding: 16px;
+                border-radius: 20px;
+                box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.1);
+                border: 1px solid rgba(0, 0, 0, 0.03);
+                overflow: hidden;
+                transition: box-shadow 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            }
+            .solution-slider .swiper-slide-active .photo-card {
+                box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.2);
+            }
+            .solution-slider .photo-img {
+                display: block;
+                width: 100%;
+                height: 100%;
+                aspect-ratio: 3/4;
+                object-fit: cover;
+                border-radius: 10px;
+            }
+            .solution-slider .swiper-slide-active .photo-img {
+                cursor: zoom-in;
+            }
+            .solution-slider .swiper-pagination {
+                position: relative !important;
+                bottom: auto !important;
+                margin-top: 10px;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 12px;
+                z-index: 10;
+            }
+            .solution-slider .swiper-pagination-bullet {
+                background: rgba(0, 0, 0, 0.2);
+                opacity: 1;
+                width: 8px;
+                height: 8px;
+                transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+                border-radius: 50%;
+                margin: 0 !important;
+            }
+            .solution-slider .swiper-pagination-bullet-active {
+                background: #111111;
+                width: 32px;
+                border-radius: 100px;
+            }
+            .solution-slider .swiper-button-next, 
+            .solution-slider .swiper-button-prev {
+                color: #fff;
+                background: #111;
+                width: 56px;
+                height: 56px;
+                border-radius: 50%;
+                backdrop-filter: none;
+                -webkit-backdrop-filter: none;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+                z-index: 20;
+            }
+            .solution-slider .swiper-button-prev { left: 8vw; }
+            .solution-slider .swiper-button-next { right: 8vw; }
+            .solution-slider .swiper-button-next:after, 
+            .solution-slider .swiper-button-prev:after {
+                font-size: 18px;
+                font-weight: 700;
+            }
+            .solution-slider .swiper-button-next:hover, 
+            .solution-slider .swiper-button-prev:hover {
+                background: #000;
+                transform: scale(1.08);
+                box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
+            }
+            .solution-slider .swiper-button-next:active, 
+            .solution-slider .swiper-button-prev:active {
+                transform: scale(0.95);
+            }
+            @media (max-width: 767px) {
+                .solution-slider .swiper-button-next, 
+                .solution-slider .swiper-button-prev {
+                    display: none;
+                }
+            }
+
             /* Balanced 2x2 Grid for 4 Impact items */
             @media (min-width: 768px) {
                 #impact .data-grid {
@@ -266,8 +417,8 @@
                 /* [NEW] Responsive Bento Grid adjustments for Tablet */
                 @media (min-width: 768px) and (max-width: 991px) {
                     #outputs-tiktok .bento-item { grid-column: span 1; min-height: 540px; }
-                    #ig-carousel .bento-item { grid-column: span 1; min-height: 420px; }
-                    #ig-carousel .bento-item:nth-child(1) { grid-column: span 2; min-height: 480px; }
+                    #ig-carousel .bento-item { grid-column: span 2; min-height: 420px; } /* [FIX] Stack items vertically on tablet */
+                    #ig-carousel .bento-item:nth-child(1) { min-height: 480px; } /* First item is taller */
                     #ig-reels .bento-item { grid-column: span 1; min-height: 560px; }
                     #ig-reels .bento-item:nth-child(3) { grid-column: span 2; min-height: 560px; }
                 }
@@ -341,11 +492,11 @@
                     <div class="global-padding">
                         <div class="cs-hero-wrapper">
                             <h1 class="cs-hero-title cs-anim-el" style="opacity: 0;">TSUKAMIE NOODLE BAR</h1>
-                            <div class="cs-hero-subtitle cs-anim-el" style="opacity: 0;">BRAND & CONTENT STRATEGY</div>
+                            <div class="cs-hero-subtitle cs-anim-el" style="opacity: 0;">Content Strategy & Social Media Execution</div>
                             <div class="cs-hero-meta cs-anim-el" style="opacity: 0;">
                                 <span>2025</span>
                                 <span class="cs-meta-separator">•</span>
-                                <span>Digital Marketing / Video / Feed Design</span>
+                                <span>Digital Content / Video / Visual System</span>
                             </div>
                             
                             <div class="cs-anim-el" style="opacity: 0; margin-top: 32px;">
@@ -571,21 +722,27 @@
                             </div>
 
                             <!-- Item 2: Feed Design (Image Grid Layout) -->
-                            <div class="solution-video-item">
+                            <div class="solution-video-item is-fullwidth">
                                 <div class="solution-video-content">
                                     <span class="sol-number">[02]</span>
                                     <h3 class="sol-title">Content Pillar System</h3>
                                     <p class="sol-desc">Defined clear content categories to maintain consistency in messaging, balancing brand communication, engagement content, and informational posts.</p>
                                 </div>
-                                <div class="solution-video-player" style="box-shadow: none; border-radius: 0;">
-                                    <!-- CSS Grid representation of an Instagram Feed -->
-                                    <div class="feed-grid-wrapper">
-                                        <img src="https://images.unsplash.com/photo-1569718212165-3a8278d5f624?q=80&w=400&auto=format&fit=crop" alt="Feed Item 1" loading="lazy">
-                                        <img src="https://images.unsplash.com/photo-1614563637806-1d0e645e0940?q=80&w=400&auto=format&fit=crop" alt="Feed Item 2" loading="lazy">
-                                        <img src="https://images.unsplash.com/photo-1553621042-f6e147245754?q=80&w=400&auto=format&fit=crop" alt="Feed Item 3" loading="lazy">
-                                        <img src="https://images.unsplash.com/photo-1582878826629-29b7ad1cb431?q=80&w=400&auto=format&fit=crop" alt="Feed Item 4" loading="lazy">
-                                        <img src="https://images.unsplash.com/photo-1600803907087-f56d462fd26b?q=80&w=400&auto=format&fit=crop" alt="Feed Item 5" loading="lazy">
-                                        <img src="https://images.unsplash.com/photo-1525648199074-cee30ba79a4a?q=80&w=400&auto=format&fit=crop" alt="Feed Item 6" loading="lazy">
+                                <div class="solution-video-player" style="box-shadow: none; border-radius: 0; background: transparent;">
+                                    <div class="bits-and-pieces-wrapper">
+                                        <div class="slider-wrapper">
+                                            <div class="swiper solution-slider">
+                                                <div class="swiper-wrapper">
+                                                    <div class="swiper-slide"><div class="photo-card"><img src="https://images.unsplash.com/photo-1569718212165-3a8278d5f624?q=80&w=800&auto=format&fit=crop" alt="Feed Item 1" class="photo-img" loading="lazy"></div></div>
+                                                    <div class="swiper-slide"><div class="photo-card"><img src="https://images.unsplash.com/photo-1614563637806-1d0e645e0940?q=80&w=800&auto=format&fit=crop" alt="Feed Item 2" class="photo-img" loading="lazy"></div></div>
+                                                    <div class="swiper-slide"><div class="photo-card"><img src="https://images.unsplash.com/photo-1553621042-f6e147245754?q=80&w=800&auto=format&fit=crop" alt="Feed Item 3" class="photo-img" loading="lazy"></div></div>
+                                                    <div class="swiper-slide"><div class="photo-card"><img src="https://images.unsplash.com/photo-1582878826629-29b7ad1cb431?q=80&w=800&auto=format&fit=crop" alt="Feed Item 4" class="photo-img" loading="lazy"></div></div>
+                                                </div>
+                                                <div class="swiper-pagination"></div>
+                                                <div class="swiper-button-next"></div>
+                                                <div class="swiper-button-prev"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1180,39 +1337,109 @@
                 }, { threshold: 0.2, rootMargin: "0px 0px -100px 0px" });
                 items.forEach(item => observer.observe(item));
                 
-                // Horizontal Workflow Scroll (Desktop Only - Sticky Reveal)
-                let mm = gsap.matchMedia();
-                mm.add("(min-width: 992px)", () => {
-                    const workflowWrapper = document.getElementById('workflow-wrapper');
-                    const workflowTrack = document.getElementById('workflow-track');
-                    const lineProgress = document.getElementById('workflow-line-progress');
+                // Horizontal Workflow Scroll (All Devices - Sticky Reveal)
+                const workflowWrapper = document.getElementById('workflow-wrapper');
+                const workflowTrack = document.getElementById('workflow-track');
+                const lineProgress = document.getElementById('workflow-line-progress');
+                
+                if (workflowWrapper && workflowTrack && typeof gsap !== 'undefined') {
+                    // Menghitung berapa banyak track harus digeser ke kiri (Sisa lebar track dikurangi layar + padding)
+                    const getScrollAmount = () => -(workflowTrack.scrollWidth - window.innerWidth + (window.innerWidth * 0.1));
                     
-                    if (workflowWrapper && workflowTrack) {
-                        // Menghitung berapa banyak track harus digeser ke kiri (Sisa lebar track dikurangi layar + padding)
-                        const getScrollAmount = () => -(workflowTrack.scrollWidth - window.innerWidth + (window.innerWidth * 0.1));
-                        
-                        gsap.to(workflowTrack, {
-                            x: getScrollAmount,
+                    gsap.to(workflowTrack, {
+                        x: getScrollAmount,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: workflowWrapper,
+                            start: "center center",
+                            end: () => `+=${workflowTrack.scrollWidth - window.innerWidth}`,
+                            pin: true,
+                            scrub: 1,
+                            invalidateOnRefresh: true
+                        }
+                    });
+
+                    if (lineProgress) {
+                        gsap.to(lineProgress, {
+                            scaleX: 1,
                             ease: "none",
-                            scrollTrigger: {
-                                trigger: workflowWrapper,
-                                start: "center center",
-                                end: () => `+=${workflowTrack.scrollWidth - window.innerWidth}`,
-                                pin: true,
-                                scrub: 1,
-                                invalidateOnRefresh: true
+                            scrollTrigger: { trigger: workflowWrapper, start: "center center", end: () => `+=${workflowTrack.scrollWidth - window.innerWidth}`, scrub: 1 }
+                        });
+                    }
+                }
+
+                // [NEW] Initialize Solution Slider
+                if (typeof Swiper !== 'undefined') {
+                    new Swiper('.solution-slider', {
+                        loop: false,
+                        slidesPerView: 'auto',
+                        centeredSlides: true,
+                        spaceBetween: 20,
+                        grabCursor: true,
+                        speed: 350,
+                        keyboard: { enabled: true },
+                        pagination: {
+                            el: '.solution-slider .swiper-pagination',
+                            clickable: true,
+                        },
+                        navigation: {
+                            nextEl: '.solution-slider .swiper-button-next',
+                            prevEl: '.solution-slider .swiper-button-prev',
+                        },
+                        breakpoints: {
+                            768: {
+                                slidesPerView: "auto",
+                                spaceBetween: 30
+                            }
+                        }
+                    });
+
+                    // Tilt Effect Logic
+                    const sliderEl = document.querySelector('.solution-slider');
+                    if (sliderEl) {
+                        sliderEl.addEventListener('mousemove', (e) => {
+                            const activeSlide = sliderEl.querySelector('.swiper-slide-active');
+                            if (!activeSlide) return;
+                            const card = activeSlide.querySelector('.photo-card');
+                            if (!card) return;
+                            const rect = card.getBoundingClientRect();
+                            const isOver = (e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom);
+                            if (isOver) {
+                                const centerX = rect.width / 2;
+                                const centerY = rect.height / 2;
+                                const mouseX = e.clientX - rect.left;
+                                const mouseY = e.clientY - rect.top;
+                                const rotateX = ((mouseY - centerY) / centerY) * -10;
+                                const rotateY = ((mouseX - centerX) / centerX) * 10;
+                                if(typeof gsap !== 'undefined') gsap.to(card, { rotationX: rotateX, rotationY: rotateY, scale: 1.03, transformPerspective: 1200, duration: 0.6, ease: "power3.out" });
+                            } else {
+                                if(typeof gsap !== 'undefined') gsap.to(card, { rotationX: 0, rotationY: 0, scale: 1, duration: 0.8, ease: "power3.out" });
                             }
                         });
-
-                        if (lineProgress) {
-                            gsap.to(lineProgress, {
-                                scaleX: 1,
-                                ease: "none",
-                                scrollTrigger: { trigger: workflowWrapper, start: "center center", end: () => `+=${workflowTrack.scrollWidth - window.innerWidth}`, scrub: 1 }
-                            });
-                        }
+                        sliderEl.addEventListener('mouseleave', () => {
+                            const activeSlide = sliderEl.querySelector('.swiper-slide-active');
+                            if (activeSlide) {
+                                const card = activeSlide.querySelector('.photo-card');
+                                if (card && typeof gsap !== 'undefined') gsap.to(card, { rotationX: 0, rotationY: 0, scale: 1, duration: 0.8, ease: "power3.out" });
+                            }
+                        });
                     }
-                });
+
+                    // Lightbox logic for the new slider
+                    document.querySelectorAll('.solution-slider .swiper-slide').forEach(slide => {
+                        slide.addEventListener('click', (e) => {
+                            if (!slide.classList.contains('swiper-slide-active')) return;
+                            const img = slide.querySelector('img');
+                            const lightboxModal = document.getElementById('lightbox-modal');
+                            const lightboxImg = document.getElementById('lightbox-img');
+                            if (img && lightboxModal && lightboxImg) {
+                                lightboxImg.src = img.currentSrc || img.src;
+                                lightboxModal.classList.add('active');
+                                document.body.style.overflow = 'hidden';
+                            }
+                        });
+                    });
+                }
             });
         </script>
         <script>

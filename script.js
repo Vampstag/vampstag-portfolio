@@ -16,6 +16,17 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- CENTRALIZED JOURNAL DATA (HEADLESS CMS) ---
     const journalData = [
         {
+            date: "2025-05-20", // Format YYYY-MM-DD
+            displayDate: "May 20, 2025",
+            readTime: "4 Min Read",
+            title: "Strategy Beneath The Surface",
+            excerpt: "A reflection on why brand architecture and visual systems are less like decoration and more like infrastructure.",
+            image: "https://placehold.co/800x1000/e2e2e2/666666.webp?text=Thumbnail+4:5",
+            link: "journal/strategy-beneath-the-surface",
+            isTextOnly: false, // Diubah ke false agar gambar placeholder muncul di grid
+            aspectRatio: "4/5"
+        },
+        {
             date: "2025-05-15", // Format wajib YYYY-MM-DD untuk sorting logis
             displayDate: "May 15, 2025",
             readTime: "3 Min Read",
