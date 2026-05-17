@@ -4487,6 +4487,36 @@ a.social-icon:hover img {
     margin-top: 16px;
 }
 
+.article-image-caption a {
+    position: relative;
+    display: inline-block;
+    color: #111;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.article-image-caption a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    bottom: -2px;
+    left: 0;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.article-image-caption a:hover {
+    color: #555;
+}
+
+.article-image-caption a:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
 .article-content ul, .article-content ol {
     max-width: 65ch;
     margin: 0 auto 32px;

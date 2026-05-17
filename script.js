@@ -28,6 +28,8 @@ document.addEventListener("DOMContentLoaded", () => {
             title: "Strategy Beneath The Surface",
             excerpt: "A reflection on why brand architecture and visual systems are less like decoration and more like infrastructure.",
             image: "assets/images/journal/poster-journal-2.webp",
+            altText: "Illustration of a person holding a giant pencil representing brand strategy",
+            imgTitle: "Strategy Beneath The Surface - Brand Architecture Illustration",
             link: "journal/strategy-beneath-the-surface",
             isTextOnly: false, // Diubah ke false agar gambar placeholder muncul di grid
             aspectRatio: "4/5"
@@ -39,6 +41,8 @@ document.addEventListener("DOMContentLoaded", () => {
             title: "The Weight of Atmosphere",
             excerpt: "Maybe creative life is simply learning how to leave traces of feeling inside the things we make.",
             image: "assets/images/project/torch/bts-5.webp",
+            altText: "Behind the scenes shot of Torch x Gundam campaign capturing cinematic atmosphere",
+            imgTitle: "The Weight of Atmosphere - Torch x Gundam BTS",
             link: "journal/weight-of-atmosphere",
             isTextOnly: false,
             aspectRatio: "4/5"
@@ -96,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <a href="${linkPath}" class="journal-card ${post.isTextOnly ? 'text-only-card' : ''}">
                         ${!post.isTextOnly ? `
                         <div class="journal-card__image-wrapper">
-                            <img src="${imgPath}" alt="${post.title}" class="journal-card__image" loading="lazy" decoding="async">
+                            <img src="${imgPath}" alt="${post.altText || post.title}" title="${post.imgTitle || post.title}" class="journal-card__image" loading="lazy" decoding="async">
                         </div>
                         ` : ''}
                         <div class="journal-card__content">
@@ -130,7 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <a href="${linkPath}" class="journal-card ${post.isTextOnly ? 'text-only-card' : ''}">
                         ${!post.isTextOnly ? `
                         <div class="journal-card__image-wrapper">
-                            <img src="${imgPath}" alt="${post.title}" class="journal-card__image" ${imgLoading}>
+                            <img src="${imgPath}" alt="${post.altText || post.title}" title="${post.imgTitle || post.title}" class="journal-card__image" ${imgLoading}>
                         </div>
                         ` : ''}
                         <div class="journal-card__content">
