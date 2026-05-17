@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 industry: "F&B",
                 roles: ["Creative Content Support"],
                 link: "/portfolio/tsukamie",
-                description: "Content strategy, short-form production, and visual direction for Tsukamie’s social media growth.",
+                description: "Short-form video production, visual design, and structured content execution for Tsukamie’s social media growth.",
                 brandInfo: "Established in 2022, Tsukamie is a Halal-certified Asian fusion noodle bar in Bandung that positions itself as a lifestyle ecosystem rather than just an F&B brand.",
                 image: "../assets/images/project/tsukamie/tsukamie1.webp",
                 srcset: ""

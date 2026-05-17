@@ -231,9 +231,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Refresh ScrollTrigger when preloader is done to ensure correct positions
     window.addEventListener('preloaderDone', () => {
         if (document.readyState === 'complete') {
-            ScrollTrigger.refresh();
+            requestAnimationFrame(() => ScrollTrigger.refresh());
         } else {
-            window.addEventListener('load', () => ScrollTrigger.refresh());
+            window.addEventListener('load', () => requestAnimationFrame(() => ScrollTrigger.refresh()));
         }
     });
 
