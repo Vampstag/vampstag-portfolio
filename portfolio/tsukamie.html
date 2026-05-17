@@ -198,17 +198,19 @@
             
             .workflow-sticky-wrapper {
                 width: 100vw;
-                margin-left: calc(-50vw + 50%);
+                position: relative;
+                left: 50%;
+                transform: translateX(-50%);
                 background-color: #fcfcfc;
                 border-top: 1px solid rgba(0,0,0,0.04);
                 border-bottom: 1px solid rgba(0,0,0,0.04);
                 padding: 40px 0;
-                overflow: hidden; /* Dikelola GSAP di Desktop */
+                overflow: hidden;
             }
             .workflow-horizontal-track {
                 display: flex;
                 gap: 32px;
-                padding: 0 5vw;
+                padding: 0 max(5vw, 40px);
                 width: max-content;
                 position: relative;
             }
@@ -216,8 +218,8 @@
                 content: '';
                 position: absolute;
                 top: 24px;
-                left: 5vw;
-                right: 5vw;
+                left: max(5vw, 40px);
+                right: max(5vw, 40px);
                 height: 2px;
                 background: #e5e5e5;
                 z-index: 0;
@@ -270,18 +272,12 @@
                     margin: 0 0 32px 0;
                 }
                 .workflow-sticky-wrapper {
-                    overflow-x: auto;
-                    -webkit-overflow-scrolling: touch;
-                    scroll-snap-type: x mandatory;
-                    scrollbar-width: none;
                     padding: 32px 0;
+                    overflow: hidden;
                 }
-                .workflow-sticky-wrapper::-webkit-scrollbar { display: none; }
-                .workflow-horizontal-track { padding: 0 5vw; gap: 20px; width: max-content; }
-                .workflow-h-node { scroll-snap-align: start; width: 85vw; max-width: 320px; flex-shrink: 0; }
-                .workflow-line-bg, .workflow-line-progress { left: 5vw; right: 5vw; }
-                .workflow-line-progress { display: none; } /* Nonaktifkan garis progres di mobile */
-                .workflow-line-bg { background: linear-gradient(to right, #111, rgba(0,0,0,0.05)); }
+                .workflow-horizontal-track { padding: 0 max(8vw, 32px); gap: 20px; width: max-content; }
+                .workflow-h-node { width: 85vw; max-width: 320px; flex-shrink: 0; }
+                .workflow-line-bg, .workflow-line-progress { left: max(8vw, 32px); right: max(8vw, 32px); }
             }
             @media (max-width: 767px) {
                 .solution-video-item.is-fullwidth .solution-video-content {
@@ -1505,8 +1501,7 @@
                 const workflowPinTarget = document.getElementById('workflow-pin-target');
                 
                 if (workflowWrapper && workflowTrack && workflowPinTarget && typeof gsap !== 'undefined') {
-                    // Menghitung berapa banyak track harus digeser ke kiri (Sisa lebar track dikurangi layar + padding)
-                    const getScrollAmount = () => -(workflowTrack.scrollWidth - window.innerWidth + (window.innerWidth * 0.05));
+                    const getScrollAmount = () => -(workflowTrack.scrollWidth - window.innerWidth);
                     
                     gsap.to(workflowTrack, {
                         x: getScrollAmount,
