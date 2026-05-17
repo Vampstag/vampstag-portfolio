@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
             readTime: "4 Min Read",
             title: "Strategy Beneath The Surface",
             excerpt: "A reflection on why brand architecture and visual systems are less like decoration and more like infrastructure.",
-            image: "https://placehold.co/800x1000/e2e2e2/666666.webp?text=Thumbnail+4:5",
+            image: "assets/images/journal/poster-journal-2.webp",
             link: "journal/strategy-beneath-the-surface",
             isTextOnly: false, // Diubah ke false agar gambar placeholder muncul di grid
             aspectRatio: "4/5"

@@ -3048,6 +3048,12 @@ html.lenis, html.lenis body { height: auto; }
     flex-direction: column;
     gap: 100px;
 }
+@media (max-width: 991px) {
+    .solution-showcase { gap: 72px; }
+}
+@media (max-width: 767px) {
+    .solution-showcase { gap: 48px; }
+}
 
 .solution-video-item {
     display: grid;

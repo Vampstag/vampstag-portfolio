@@ -34,19 +34,19 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 image: "../assets/images/project/torch/torch-model-backpack.webp", // Ganti dengan URL gambar Anda
                 srcset: "" // Kosongkan jika tidak ada srcset
             },
-            {
-                id: 6,
-                title: "Studio Berka",
-                year: "2025",
-                category: "Web Design",
-                industry: "Agency",
-                roles: ["Web Solutions & Support", "Brand & Visual Design"],
-                link: "/portfolio/studi-berka",
-                description: "Custom UI/UX and web development powered by GSAP for a high-performance digital presence.",
-                brandInfo: "Forward-thinking creative agency specializing in innovative design and brand strategy.",
-                image: "../assets/images/project/studi-berka/hero-bg.webp",
-                srcset: ""
-            },
+            // {
+            //     id: 6,
+            //     title: "Studio Berka",
+            //     year: "2025",
+            //     category: "Web Design",
+            //     industry: "Agency",
+            //     roles: ["Web Solutions & Support", "Brand & Visual Design"],
+            //     link: "/portfolio/berka",
+            //     description: "Custom UI/UX and web development powered by GSAP for a high-performance digital presence.",
+            //     brandInfo: "Forward-thinking creative agency specializing in innovative design and brand strategy.",
+            //     image: "../assets/images/project/studi-berka/hero-bg.webp",
+            //     srcset: ""
+            // },
             {
                 id: 5,
                 title: "Tsukamie Noodle Bar",
@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 roles: ["Creative Content Support"],
                 link: "/portfolio/tsukamie",
                 description: "Content strategy, short-form production, and visual direction for Tsukamie’s social media growth.",
-                brandInfo: "Authentic Japanese noodle bar delivering premium taste wrapped in a modern dining experience.",
+                brandInfo: "Established in 2022, Tsukamie is a Halal-certified Asian fusion noodle bar in Bandung that positions itself as a lifestyle ecosystem rather than just an F&B brand.",
                 image: "../assets/images/project/tsukamie/tsukamie1.webp",
                 srcset: ""
             },
